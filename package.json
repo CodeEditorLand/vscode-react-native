@@ -3,123 +3,57 @@
   "displayName": "React Native Tools",
   "version": "0.0.1",
   "private": "false",
-  "publisher": "msjsdiag",
-  "icon": "resources/images/icon.png",
-  "galleryBanner": {
-    "color": "#3B3738",
-    "theme": "dark"
-  },
   "description": "%reactNative.description%",
+  "categories": [
+    "Debuggers",
+    "Other"
+  ],
   "keywords": [
     "react-native",
     "expo",
     "multi-root ready"
   ],
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
   "bugs": {
     "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
   },
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
   },
-  "engines": {
-    "vscode": "1.46.0"
+  "license": "MIT",
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
   },
-  "categories": [
-    "Debuggers",
-    "Other"
-  ],
-  "activationEvents": [
-    "workspaceContains:node_modules/react-native",
-    "onDebugResolve:reactnative",
-    "onDebugResolve:reactnativedirect",
-    "onDebugDynamicConfigurations:reactnative",
-    "onDebugInitialConfigurations",
-    "onCommand:reactNative.runAndroidSimulator",
-    "onCommand:reactNative.runAndroidDevice",
-    "onCommand:reactNative.runIosSimulator",
-    "onCommand:reactNative.runIosDevice",
-    "onCommand:reactNative.runExponent",
-    "onCommand:reactNative.startPackager",
-    "onCommand:reactNative.stopPackager",
-    "onCommand:reactNative.restartPackager",
-    "onCommand:reactNative.publishToExpHost",
-    "onCommand:reactNative.showDevMenu",
-    "onCommand:reactNative.reloadApp",
-    "onCommand:reactNative.runInspector",
-    "onCommand:reactNative.testDevEnvironment"
-  ],
+  "publisher": "playform",
+  "type": "module",
   "main": "./src/extension/rn-extension",
+  "scripts": {
+    "build": "gulp build",
+    "prepare": "husky install",
+    "prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
+    "quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
+    "smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
+    "test": "node ./test/runTest.js",
+    "test-localization": "node ./test/localization/runTest.js",
+    "vscode:prepublish": "gulp"
+  },
   "contributes": {
-    "walkthroughs": [
+    "breakpoints": [
       {
-        "id": "RNTGetStarted",
-        "title": "Get started with React Native development",
-        "description": "Your first steps to set up the environment for React Native development and explore the extension functionality",
-        "steps": [
-          {
-            "id": "settingUpCommonEnvironment",
-            "title": "Set up RN development environment",
-            "description": "To develop React Native applications in the React Native Tools extension, you need to set up your development environment in accordance with the requirements of React Native.\n[Learn more](https://reactnative.dev/docs/environment-setup)",
-            "media": {
-              "markdown": "resources/walkthougths/setup-env-common.md"
-            }
-          },
-          {
-            "id": "settingUpExpoEnvironment",
-            "title": "Prepare for Expo development",
-            "description": "The extension provides functionality for developing Expo applications. To get started, you need to set up the development environment in accordance with the extension requirements.\n[Learn more](https://github.com/microsoft/vscode-react-native#expo-applications)",
-            "media": {
-              "markdown": "resources/walkthougths/setup-env-expo.md"
-            }
-          },
-          {
-            "id": "settingUpWindowsEnvironment",
-            "title": "Prepare for React Native for Windows",
-            "description": "To develop React Native for Windows applications, you need to set up your dev environment in accordance with the [official requirements](https://microsoft.github.io/react-native-windows/docs/rnw-dependencies).",
-            "when": "isWindows",
-            "media": {
-              "image": "resources/images/rnw-set-up.png",
-              "altText": "React Native for Windows app view"
-            }
-          },
-          {
-            "id": "settingUpMacOsEnvironment",
-            "title": "Prepare for React Native for macOS",
-            "description": "To develop React Native for macOS applications, you need to set up your dev environment in accordance with the [official requirements](https://microsoft.github.io/react-native-windows/docs/rnm-dependencies).",
-            "when": "isMac",
-            "media": {
-              "image": "resources/images/rnm-set-up.png",
-              "altText": "React Native for macOS app view"
-            }
-          },
-          {
-            "id": "hermesEngine",
-            "title": "Hermes Engine",
-            "description": "The Hermes engine is an open source JavaScript engine created by Facebook to optimize building and running React Native applications. It improves app performance and decreases app size.\n[Learn more](https://github.com/microsoft/vscode-react-native#hermes-engine)",
-            "media": {
-              "image": "resources/images/hermeslogo.svg",
-              "altText": "Hermes logo"
-            }
-          },
-          {
-            "id": "runAndDebugReactNativeApp",
-            "title": "Run and Debug your React Native application",
-            "description": "Create a debug configuration and start debugging your React Native application.\n[Learn more](https://github.com/microsoft/vscode-react-native#debugging-react-native-applications)",
-            "media": {
-              "markdown": "resources/walkthougths/debug-tutor.md"
-            }
-          },
-          {
-            "id": "exploreExtensionFeatures",
-            "title": "Explore extension features",
-            "description": "The extension provides useful features to facilitate the development of React Native applications.\n[Learn more](https://github.com/microsoft/vscode-react-native#customization)",
-            "media": {
-              "markdown": "resources/walkthougths/features-tutor.md"
-            }
-          }
-        ]
+        "language": "javascript"
+      },
+      {
+        "language": "typescript"
+      },
+      {
+        "language": "javascriptreact"
+      },
+      {
+        "language": "typescriptreact"
       }
     ],
     "commands": [
@@ -421,190 +355,184 @@
         "icon": "$(play)"
       }
     ],
-    "menus": {
-      "editor/title/run": [
-        {
-          "command": "reactNative.debugScenario.attachHermesApplicationExperimental",
-          "when": "isRNProject && isRNHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
+    "configuration": {
+      "type": "object",
+      "title": "%reactNative.configuration.title%",
+      "properties": {
+        "react-native.ios.runArguments.simulator": {
+          "description": "%reactNative.configuration.properties.react-native.ios.runArguments.simulator.description%",
+          "type": "array",
+          "default": [],
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.attachDirectIosExperimental",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.ios.runArguments.device": {
+          "description": "%reactNative.configuration.properties.react-native.ios.runArguments.device.description%",
+          "type": "array",
+          "default": [],
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.attachToPackager",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.ios.env.simulator": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "%reactNative.configuration.properties.react-native.ios.env.simulator.description%",
+          "default": {},
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugAndroid",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.ios.env.device": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "%reactNative.configuration.properties.react-native.ios.env.device.description%",
+          "default": {},
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugIos",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.ios.envFile.simulator": {
+          "type": "string",
+          "description": "%reactNative.configuration.properties.react-native.ios.envFile.simulator.description%",
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugWindows",
-          "when": "isRNProject && isRNWindowsProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.ios.envFile.device": {
+          "type": "string",
+          "description": "%reactNative.configuration.properties.react-native.ios.envFile.device.description%",
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugMacos",
-          "when": "isRNProject && isRNMacOSProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.android.runArguments.simulator": {
+          "description": "%reactNative.configuration.properties.react-native.android.runArguments.simulator.description%",
+          "type": "array",
+          "default": [],
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugInExponent",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.android.runArguments.device": {
+          "description": "%reactNative.configuration.properties.react-native.android.runArguments.device.description%",
+          "type": "array",
+          "default": [],
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugInHermesExponentExperimental",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.android.env.simulator": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "%reactNative.configuration.properties.react-native.android.env.simulator.description%",
+          "default": {},
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugInExponentWebExperimental",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.android.env.device": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "%reactNative.configuration.properties.react-native.android.env.device.description%",
+          "default": {},
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugAndroidHermesExperimental",
-          "when": "isRNProject && isRNAndroidHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.android.envFile.simulator": {
+          "type": "string",
+          "description": "%reactNative.configuration.properties.react-native.android.envFile.simulator.description%",
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugDirectIosExperimental",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.android.envFile.device": {
+          "type": "string",
+          "description": "%reactNative.configuration.properties.react-native.android.envFile.device.description%",
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugIosHermesExperimental",
-          "when": "isRNProject && isRNIosHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.android.logCatArguments": {
+          "type": "array",
+          "description": "%reactNative.launch.logCatArguments.description%",
+          "scope": "resource",
+          "default": [
+            "*:S",
+            "ReactNative:V",
+            "ReactNativeJS:V"
+          ]
         },
-        {
-          "command": "reactNative.debugScenario.debugMacosHermesExperimental",
-          "when": "isRNProject && isRNMacosHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.packager.port": {
+          "description": "%reactNative.configuration.properties.react-native.packager.port.description%",
+          "type": "number",
+          "default": 8081,
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.debugWindowsHermesExperimental",
-          "when": "isRNProject && isRNWindowsHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.packager.status-indicator": {
+          "description": "%reactNative.configuration.properties.react-native.packager.status-indicator.description%",
+          "type": "string",
+          "enum": [
+            "Full",
+            "Short"
+          ],
+          "default": "Full",
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.runAndroid",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native.workspace.exclude": {
+          "type": "array",
+          "description": "%reactNative.workspace.exclude.description%",
+          "scope": "resource",
+          "default": []
         },
-        {
-          "command": "reactNative.debugScenario.runIos",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native-tools.reactNativeGlobalCommandName": {
+          "description": "%reactNative.configuration.properties.react-native-tools.reactNativeGlobalCommandName.description%",
+          "type": "string",
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.runAndroidHermesExperimental",
-          "when": "isRNProject && isRNAndroidHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native-tools.projectRoot": {
+          "description": "%reactNative.configuration.properties.react-native-tools.projectRoot.description%",
+          "type": "string",
+          "scope": "resource",
+          "default": ""
         },
-        {
-          "command": "reactNative.debugScenario.runIosHermesExperimental",
-          "when": "isRNProject && isRNIosHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native-tools.logLevel": {
+          "description": "%reactNative.configuration.properties.react-native-tools.logLevel.description%",
+          "type": "string",
+          "enum": [
+            "Trace",
+            "Debug",
+            "Info",
+            "Warning",
+            "Error",
+            "None"
+          ],
+          "default": "Info",
+          "scope": "resource"
         },
-        {
-          "command": "reactNative.debugScenario.runDirectIosExperimental",
-          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
+        "react-native-tools.networkInspector.consoleLogsColorTheme": {
+          "description": "%reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description%",
+          "type": "string",
+          "enum": [
+            "Light",
+            "Dark"
+          ],
+          "default": "Light",
+          "scope": "resource"
+        },
+        "react-native.expo.dependencies": {
+          "description": "%reactNative.configuration.properties.react-native.expo.dependencies.description%",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {
+            "xdl": "59.2.31",
+            "@expo/metro-config": "0.3.13",
+            "@expo/ngrok": "4.1.0"
+          },
+          "scope": "resource"
+        },
+        "react-native-tools.showUserTips": {
+          "description": "%reactNative.configuration.properties.react-native-tools.showUserTips.description%",
+          "type": "boolean",
+          "scope": "resource",
+          "default": true
+        },
+        "react-native-tools.displayDebuggingCommandsButton": {
+          "description": "%reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description%",
+          "type": "boolean",
+          "scope": "resource",
+          "default": true
         }
-      ],
-      "commandPalette": [
-        {
-          "command": "reactNative.selectAndInsertDebugConfiguration",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.attachHermesApplicationExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.attachDirectIosExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.attachToPackager",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugAndroid",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugIos",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugWindows",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugMacos",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugInExponent",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugInHermesExponentExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugInExponentWebExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugAndroidHermesExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugDirectIosExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugIosHermesExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugMacosHermesExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.debugWindowsHermesExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.runAndroid",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.runIos",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.runAndroidHermesExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.runIosHermesExperimental",
-          "when": "false"
-        },
-        {
-          "command": "reactNative.debugScenario.runDirectIosExperimental",
-          "when": "false"
-        }
-      ]
-    },
-    "breakpoints": [
-      {
-        "language": "javascript"
-      },
-      {
-        "language": "typescript"
-      },
-      {
-        "language": "javascriptreact"
-      },
-      {
-        "language": "typescriptreact"
       }
-    ],
+    },
     "debuggers": [
       {
         "type": "reactnative",
@@ -1129,206 +1057,267 @@
         }
       }
     ],
-    "configuration": {
-      "type": "object",
-      "title": "%reactNative.configuration.title%",
-      "properties": {
-        "react-native.ios.runArguments.simulator": {
-          "description": "%reactNative.configuration.properties.react-native.ios.runArguments.simulator.description%",
-          "type": "array",
-          "default": [],
-          "scope": "resource"
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "reactNative.debugScenario.attachHermesApplicationExperimental",
+          "when": "isRNProject && isRNHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.ios.runArguments.device": {
-          "description": "%reactNative.configuration.properties.react-native.ios.runArguments.device.description%",
-          "type": "array",
-          "default": [],
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.attachDirectIosExperimental",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.ios.env.simulator": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "%reactNative.configuration.properties.react-native.ios.env.simulator.description%",
-          "default": {},
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.attachToPackager",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.ios.env.device": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "%reactNative.configuration.properties.react-native.ios.env.device.description%",
-          "default": {},
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugAndroid",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.ios.envFile.simulator": {
-          "type": "string",
-          "description": "%reactNative.configuration.properties.react-native.ios.envFile.simulator.description%",
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugIos",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.ios.envFile.device": {
-          "type": "string",
-          "description": "%reactNative.configuration.properties.react-native.ios.envFile.device.description%",
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugWindows",
+          "when": "isRNProject && isRNWindowsProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.android.runArguments.simulator": {
-          "description": "%reactNative.configuration.properties.react-native.android.runArguments.simulator.description%",
-          "type": "array",
-          "default": [],
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugMacos",
+          "when": "isRNProject && isRNMacOSProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.android.runArguments.device": {
-          "description": "%reactNative.configuration.properties.react-native.android.runArguments.device.description%",
-          "type": "array",
-          "default": [],
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugInExponent",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.android.env.simulator": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "%reactNative.configuration.properties.react-native.android.env.simulator.description%",
-          "default": {},
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugInHermesExponentExperimental",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.android.env.device": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "%reactNative.configuration.properties.react-native.android.env.device.description%",
-          "default": {},
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugInExponentWebExperimental",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.android.envFile.simulator": {
-          "type": "string",
-          "description": "%reactNative.configuration.properties.react-native.android.envFile.simulator.description%",
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugAndroidHermesExperimental",
+          "when": "isRNProject && isRNAndroidHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.android.envFile.device": {
-          "type": "string",
-          "description": "%reactNative.configuration.properties.react-native.android.envFile.device.description%",
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugDirectIosExperimental",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.android.logCatArguments": {
-          "type": "array",
-          "description": "%reactNative.launch.logCatArguments.description%",
-          "scope": "resource",
-          "default": [
-            "*:S",
-            "ReactNative:V",
-            "ReactNativeJS:V"
-          ]
+        {
+          "command": "reactNative.debugScenario.debugIosHermesExperimental",
+          "when": "isRNProject && isRNIosHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.packager.port": {
-          "description": "%reactNative.configuration.properties.react-native.packager.port.description%",
-          "type": "number",
-          "default": 8081,
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugMacosHermesExperimental",
+          "when": "isRNProject && isRNMacosHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.packager.status-indicator": {
-          "description": "%reactNative.configuration.properties.react-native.packager.status-indicator.description%",
-          "type": "string",
-          "enum": [
-            "Full",
-            "Short"
-          ],
-          "default": "Full",
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.debugWindowsHermesExperimental",
+          "when": "isRNProject && isRNWindowsHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native.workspace.exclude": {
-          "type": "array",
-          "description": "%reactNative.workspace.exclude.description%",
-          "scope": "resource",
-          "default": []
+        {
+          "command": "reactNative.debugScenario.runAndroid",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native-tools.reactNativeGlobalCommandName": {
-          "description": "%reactNative.configuration.properties.react-native-tools.reactNativeGlobalCommandName.description%",
-          "type": "string",
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.runIos",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native-tools.projectRoot": {
-          "description": "%reactNative.configuration.properties.react-native-tools.projectRoot.description%",
-          "type": "string",
-          "scope": "resource",
-          "default": ""
+        {
+          "command": "reactNative.debugScenario.runAndroidHermesExperimental",
+          "when": "isRNProject && isRNAndroidHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native-tools.logLevel": {
-          "description": "%reactNative.configuration.properties.react-native-tools.logLevel.description%",
-          "type": "string",
-          "enum": [
-            "Trace",
-            "Debug",
-            "Info",
-            "Warning",
-            "Error",
-            "None"
-          ],
-          "default": "Info",
-          "scope": "resource"
+        {
+          "command": "reactNative.debugScenario.runIosHermesExperimental",
+          "when": "isRNProject && isRNIosHermesProject && config.react-native-tools.displayDebuggingCommandsButton"
         },
-        "react-native-tools.networkInspector.consoleLogsColorTheme": {
-          "description": "%reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description%",
-          "type": "string",
-          "enum": [
-            "Light",
-            "Dark"
-          ],
-          "default": "Light",
-          "scope": "resource"
-        },
-        "react-native.expo.dependencies": {
-          "description": "%reactNative.configuration.properties.react-native.expo.dependencies.description%",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "default": {
-            "xdl": "59.2.31",
-            "@expo/metro-config": "0.3.13",
-            "@expo/ngrok": "4.1.0"
-          },
-          "scope": "resource"
-        },
-        "react-native-tools.showUserTips": {
-          "description": "%reactNative.configuration.properties.react-native-tools.showUserTips.description%",
-          "type": "boolean",
-          "scope": "resource",
-          "default": true
-        },
-        "react-native-tools.displayDebuggingCommandsButton": {
-          "description": "%reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description%",
-          "type": "boolean",
-          "scope": "resource",
-          "default": true
+        {
+          "command": "reactNative.debugScenario.runDirectIosExperimental",
+          "when": "isRNProject && config.react-native-tools.displayDebuggingCommandsButton"
         }
-      }
-    }
-  },
-  "capabilities": {
-    "virtualWorkspaces": {
-      "supported": false,
-      "description": "%reactNative.virtualWorkspaces.description%"
+      ],
+      "commandPalette": [
+        {
+          "command": "reactNative.selectAndInsertDebugConfiguration",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.attachHermesApplicationExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.attachDirectIosExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.attachToPackager",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugAndroid",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugIos",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugWindows",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugMacos",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugInExponent",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugInHermesExponentExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugInExponentWebExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugAndroidHermesExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugDirectIosExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugIosHermesExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugMacosHermesExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.debugWindowsHermesExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.runAndroid",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.runIos",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.runAndroidHermesExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.runIosHermesExperimental",
+          "when": "false"
+        },
+        {
+          "command": "reactNative.debugScenario.runDirectIosExperimental",
+          "when": "false"
+        }
+      ]
     },
-    "untrustedWorkspaces": {
-      "supported": "limited",
-      "description": "%reactNative.workspaceTrust.description%"
-    }
+    "walkthroughs": [
+      {
+        "id": "RNTGetStarted",
+        "title": "Get started with React Native development",
+        "description": "Your first steps to set up the environment for React Native development and explore the extension functionality",
+        "steps": [
+          {
+            "id": "settingUpCommonEnvironment",
+            "title": "Set up RN development environment",
+            "description": "To develop React Native applications in the React Native Tools extension, you need to set up your development environment in accordance with the requirements of React Native.\n[Learn more](https://reactnative.dev/docs/environment-setup)",
+            "media": {
+              "markdown": "resources/walkthougths/setup-env-common.md"
+            }
+          },
+          {
+            "id": "settingUpExpoEnvironment",
+            "title": "Prepare for Expo development",
+            "description": "The extension provides functionality for developing Expo applications. To get started, you need to set up the development environment in accordance with the extension requirements.\n[Learn more](https://github.com/microsoft/vscode-react-native#expo-applications)",
+            "media": {
+              "markdown": "resources/walkthougths/setup-env-expo.md"
+            }
+          },
+          {
+            "id": "settingUpWindowsEnvironment",
+            "title": "Prepare for React Native for Windows",
+            "description": "To develop React Native for Windows applications, you need to set up your dev environment in accordance with the [official requirements](https://microsoft.github.io/react-native-windows/docs/rnw-dependencies).",
+            "when": "isWindows",
+            "media": {
+              "image": "resources/images/rnw-set-up.png",
+              "altText": "React Native for Windows app view"
+            }
+          },
+          {
+            "id": "settingUpMacOsEnvironment",
+            "title": "Prepare for React Native for macOS",
+            "description": "To develop React Native for macOS applications, you need to set up your dev environment in accordance with the [official requirements](https://microsoft.github.io/react-native-windows/docs/rnm-dependencies).",
+            "when": "isMac",
+            "media": {
+              "image": "resources/images/rnm-set-up.png",
+              "altText": "React Native for macOS app view"
+            }
+          },
+          {
+            "id": "hermesEngine",
+            "title": "Hermes Engine",
+            "description": "The Hermes engine is an open source JavaScript engine created by Facebook to optimize building and running React Native applications. It improves app performance and decreases app size.\n[Learn more](https://github.com/microsoft/vscode-react-native#hermes-engine)",
+            "media": {
+              "image": "resources/images/hermeslogo.svg",
+              "altText": "Hermes logo"
+            }
+          },
+          {
+            "id": "runAndDebugReactNativeApp",
+            "title": "Run and Debug your React Native application",
+            "description": "Create a debug configuration and start debugging your React Native application.\n[Learn more](https://github.com/microsoft/vscode-react-native#debugging-react-native-applications)",
+            "media": {
+              "markdown": "resources/walkthougths/debug-tutor.md"
+            }
+          },
+          {
+            "id": "exploreExtensionFeatures",
+            "title": "Explore extension features",
+            "description": "The extension provides useful features to facilitate the development of React Native applications.\n[Learn more](https://github.com/microsoft/vscode-react-native#customization)",
+            "media": {
+              "markdown": "resources/walkthougths/features-tutor.md"
+            }
+          }
+        ]
+      }
+    ]
   },
-  "scripts": {
-    "build": "gulp build",
-    "vscode:prepublish": "gulp",
-    "test": "node ./test/runTest.js",
-    "test-localization": "node ./test/localization/runTest.js",
-    "prepare": "husky install",
-    "prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
-    "smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
-    "quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
-  },
+  "activationEvents": [
+    "workspaceContains:node_modules/react-native",
+    "onDebugResolve:reactnative",
+    "onDebugResolve:reactnativedirect",
+    "onDebugDynamicConfigurations:reactnative",
+    "onDebugInitialConfigurations",
+    "onCommand:reactNative.runAndroidSimulator",
+    "onCommand:reactNative.runAndroidDevice",
+    "onCommand:reactNative.runIosSimulator",
+    "onCommand:reactNative.runIosDevice",
+    "onCommand:reactNative.runExponent",
+    "onCommand:reactNative.startPackager",
+    "onCommand:reactNative.stopPackager",
+    "onCommand:reactNative.restartPackager",
+    "onCommand:reactNative.publishToExpHost",
+    "onCommand:reactNative.showDevMenu",
+    "onCommand:reactNative.reloadApp",
+    "onCommand:reactNative.runInspector",
+    "onCommand:reactNative.testDevEnvironment"
+  ],
   "dependencies": {
     "@vscode/debugadapter": "1.64.0",
     "command-exists": "1.2.9",
@@ -1427,23 +1416,34 @@
     "through2": "4.0.2",
     "ts-loader": "9.5.0",
     "typescript": "5.2.2",
+    "typescript-esbuild": "0.3.1",
     "vscode-debugprotocol": "1.51.0",
     "vscode-nls-dev": "4.0.4",
     "webpack": "5.89.0",
-    "webpack-bundle-analyzer": "4.9.1",
-    "typescript-esbuild": "0.3.1"
+    "webpack-bundle-analyzer": "4.9.1"
   },
   "extensionDependencies": [
     "ms-vscode.js-debug"
   ],
-  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
-  "type": "module",
+  "engines": {
+    "vscode": "1.46.0"
+  },
   "publishConfig": {
     "access": "public"
   },
-  "author": {
-    "name": "Nikola Hristov",
-    "email": "nikola@nikolahristov.tech",
-    "url": "https://nikolahristov.tech"
+  "icon": "resources/images/icon.png",
+  "galleryBanner": {
+    "color": "#3B3738",
+    "theme": "dark"
+  },
+  "capabilities": {
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "%reactNative.virtualWorkspaces.description%"
+    },
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "%reactNative.workspaceTrust.description%"
+    }
   }
 }

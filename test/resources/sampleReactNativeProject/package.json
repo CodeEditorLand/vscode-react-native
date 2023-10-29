@@ -2,15 +2,6 @@
   "name": "sampleReactNativeProject",
   "version": "0.0.1",
   "private": "false",
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
-  },
-  "dependencies": {
-    "react": "18.2.0",
-    "react-native": "0.72.6",
-    "react-native-windows": "0.72.16"
-  },
   "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
   "bugs": {
     "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
@@ -20,16 +11,26 @@
     "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
   },
   "license": "MIT",
-  "type": "module",
-  "publishConfig": {
-    "access": "public"
-  },
   "author": {
     "name": "Nikola Hristov",
     "email": "nikola@nikolahristov.tech",
     "url": "https://nikolahristov.tech"
   },
+  "publisher": "playform",
+  "type": "module",
+  "scripts": {
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-native": "0.72.6",
+    "react-native-windows": "0.72.16"
+  },
   "devDependencies": {
     "typescript-esbuild": "0.3.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

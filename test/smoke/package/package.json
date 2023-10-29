@@ -1,12 +1,32 @@
 {
   "name": "vscode-react-native-smoke-test",
   "version": "0.0.1",
+  "private": "false",
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  },
+  "publisher": "playform",
+  "type": "module",
   "main": "./src/main.js",
   "scripts": {
     "postinstall": "tsc",
-    "watch": "tsc --watch",
     "mocha": "tsc && node ./node_modules/mocha/bin/_mocha --config ./.mocharc.js --reporter mocha-multi-reporters --reporter-options configFile=./mochaReporterConfig.json",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
+    "watch": "tsc --watch"
+  },
+  "resolutions": {
+    "lodash": "4.17.21"
   },
   "devDependencies": {
     "@types/clipboardy": "2.0.1",
@@ -39,33 +59,14 @@
     "tree-kill": "1.2.2",
     "ts-node": "10.9.1",
     "typescript": "5.2.2",
+    "typescript-esbuild": "0.3.1",
     "url-parse": "1.5.10",
     "vinyl-fs": "4.0.0",
     "vinyl-source-stream": "2.0.0",
     "webdriverio": "8.20.4",
-    "xdl": "60.0.12",
-    "typescript-esbuild": "0.3.1"
+    "xdl": "60.0.12"
   },
-  "resolutions": {
-    "lodash": "4.17.21"
-  },
-  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
-  "bugs": {
-    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
-  },
-  "license": "MIT",
-  "type": "module",
-  "private": "false",
   "publishConfig": {
     "access": "public"
-  },
-  "author": {
-    "name": "Nikola Hristov",
-    "email": "nikola@nikolahristov.tech",
-    "url": "https://nikolahristov.tech"
   }
 }
