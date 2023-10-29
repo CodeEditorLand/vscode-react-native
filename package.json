@@ -1,8 +1,8 @@
 {
   "name": "vscode-react-native",
   "displayName": "React Native Tools",
-  "version": "1.12.1",
-  "private": true,
+  "version": "0.0.1",
+  "private": "false",
   "publisher": "msjsdiag",
   "icon": "resources/images/icon.png",
   "galleryBanner": {
@@ -15,11 +15,13 @@
     "expo",
     "multi-root ready"
   ],
-  "bugs": "https://github.com/microsoft/vscode-react-native/issues",
-  "license": "%reactNative.license%",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  },
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/vscode-react-native"
+    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
   },
   "engines": {
     "vscode": "1.46.0"
@@ -1324,25 +1326,8 @@
     "prepare": "husky install",
     "prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
     "smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
-    "quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup"
-  },
-  "prettier": {
-    "trailingComma": "all",
-    "arrowParens": "avoid",
-    "printWidth": 100,
-    "tabWidth": 4,
-    "endOfLine": "auto",
-    "overrides": [
-      {
-        "files": [
-          "*.md"
-        ],
-        "options": {
-          "tabWidth": 2,
-          "printWidth": 80
-        }
-      }
-    ]
+    "quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
   },
   "dependencies": {
     "@vscode/debugadapter": "1.64.0",
@@ -1445,9 +1430,20 @@
     "vscode-debugprotocol": "1.51.0",
     "vscode-nls-dev": "4.0.4",
     "webpack": "5.89.0",
-    "webpack-bundle-analyzer": "4.9.1"
+    "webpack-bundle-analyzer": "4.9.1",
+    "typescript-esbuild": "0.3.1"
   },
   "extensionDependencies": [
     "ms-vscode.js-debug"
-  ]
+  ],
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  }
 }

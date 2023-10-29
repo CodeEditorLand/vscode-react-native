@@ -1,14 +1,35 @@
 {
   "name": "test-express-server",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "The Express project for testing the Network inspector feature",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  },
+  "license": "MIT",
   "dependencies": {
     "express": "4.18.2"
+  },
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
+  },
+  "type": "module",
+  "private": "false",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "typescript-esbuild": "0.3.1"
   }
 }

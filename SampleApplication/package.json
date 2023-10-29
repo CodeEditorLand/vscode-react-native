@@ -1,11 +1,33 @@
 {
   "name": "SampleApplication",
   "version": "0.0.1",
-  "private": true,
+  "private": "false",
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
   },
   "dependencies": {
     "react-native": "0.72.6"
+  },
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  },
+  "devDependencies": {
+    "typescript-esbuild": "0.3.1"
   }
 }
