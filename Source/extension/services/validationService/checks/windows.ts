@@ -7,33 +7,36 @@ import * as semver from "semver";
 import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 const toLocale = nls.loadMessageBundle();
 
 const label = "Windows version > 10.0.16299.0";
 
 async function test(): Promise<ValidationResultT> {
-    const version = os.release();
+	const version = os.release();
 
-    if (semver.gte(version, "10.0.16299")) {
-        return {
-            status: "success",
-        };
-    }
-    return {
-        status: "failure",
-        comment: `Unsupported version of Windows detected - ${version}. Please, update Windows in case of errors.`,
-    };
+	if (semver.gte(version, "10.0.16299")) {
+		return {
+			status: "success",
+		};
+	}
+	return {
+		status: "failure",
+		comment: `Unsupported version of Windows detected - ${version}. Please, update Windows in case of errors.`,
+	};
 }
 
 const main: IValidation = {
-    label,
-    platform: ["win32"],
-    description: toLocale("RNWBuildTestDescription", "Required for running RNW apps"),
-    category: ValidationCategoryE.Windows,
-    exec: test,
+	label,
+	platform: ["win32"],
+	description: toLocale(
+		"RNWBuildTestDescription",
+		"Required for running RNW apps"
+	),
+	category: ValidationCategoryE.Windows,
+	exec: test,
 };
 
 export default main;

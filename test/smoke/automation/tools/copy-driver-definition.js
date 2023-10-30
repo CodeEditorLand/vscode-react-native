@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const root = path.dirname(path.dirname(path.dirname(__dirname)));
-const driverPath = path.join(root, 'src/vs/platform/driver/common/driver.ts');
+const driverPath = path.join(root, "src/vs/platform/driver/common/driver.ts");
 
-let contents = fs.readFileSync(driverPath, 'utf8');
-contents = /\/\/\*START([\s\S]*)\/\/\*END/mi.exec(contents)[1].trim();
-contents = contents.replace(/\bTPromise\b/g, 'Promise');
+let contents = fs.readFileSync(driverPath, "utf8");
+contents = /\/\/\*START([\s\S]*)\/\/\*END/im.exec(contents)[1].trim();
+contents = contents.replace(/\bTPromise\b/g, "Promise");
 
 contents = `/*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -42,8 +42,8 @@ export interface IDisposable {
 export function connect(outPath: string, handle: string): Promise<{ client: IDisposable, driver: IDriver }>;
 `;
 
-const srcPath = path.join(path.dirname(__dirname), 'src');
-const outPath = path.join(path.dirname(__dirname), 'out');
+const srcPath = path.join(path.dirname(__dirname), "src");
+const outPath = path.join(path.dirname(__dirname), "out");
 
-fs.writeFileSync(path.join(srcPath, 'driver.d.ts'), contents);
-fs.writeFileSync(path.join(outPath, 'driver.d.ts'), contents);
+fs.writeFileSync(path.join(srcPath, "driver.d.ts"), contents);
+fs.writeFileSync(path.join(outPath, "driver.d.ts"), contents);

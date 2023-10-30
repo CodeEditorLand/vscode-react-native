@@ -5,24 +5,24 @@ import { ClientOS } from "../clientUtils";
 import { BaseClientDevice } from "./baseClientDevice";
 
 export class IOSClienDevice extends BaseClientDevice {
-    private _isOnline: boolean;
+	private _isOnline: boolean;
 
-    constructor(
-        id: string,
-        isVirtualTarget: boolean,
-        os: ClientOS,
-        isOnline: boolean,
-        name?: string,
-    ) {
-        super(id, isVirtualTarget, os, name);
-        this._isOnline = isOnline;
-    }
+	constructor(
+		id: string,
+		isVirtualTarget: boolean,
+		os: ClientOS,
+		isOnline: boolean,
+		name?: string
+	) {
+		super(id, isVirtualTarget, os, name);
+		this._isOnline = isOnline;
+	}
 
-    get isOnline(): boolean {
-        return this._isOnline;
-    }
+	get isOnline(): boolean {
+		return this._isOnline;
+	}
 
-    set isOnline(isOnline: boolean) {
-        this._isOnline = isOnline;
-    }
+	set isOnline(isOnline: boolean) {
+		this._isOnline = isOnline;
+	}
 }

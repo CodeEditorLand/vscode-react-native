@@ -3,13 +3,16 @@
 
 import * as rimraf from "rimraf";
 
-export function rimrafAsync(path: string, options: rimraf.Options): Promise<void> {
-    return new Promise((resolve, reject) => {
-        rimraf(path, options, error => {
-            if (error) {
-                return reject(error);
-            }
-            return resolve();
-        });
-    });
+export function rimrafAsync(
+	path: string,
+	options: rimraf.Options
+): Promise<void> {
+	return new Promise((resolve, reject) => {
+		rimraf(path, options, (error) => {
+			if (error) {
+				return reject(error);
+			}
+			return resolve();
+		});
+	});
 }

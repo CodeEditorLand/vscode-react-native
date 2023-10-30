@@ -5,50 +5,55 @@ import { ITarget } from "../../mobileTarget";
 import { ClientOS } from "../clientUtils";
 
 export enum DeviceStatus {
-    Prepared,
-    NotPrepared,
+	Prepared,
+	NotPrepared,
 }
 
 export class BaseClientDevice implements ITarget {
-    // operating system of this device
-    protected _os: ClientOS;
-    // human readable name for this device
-    protected _name?: string;
-    // type of this device
-    protected _isVirtualTarget: boolean;
-    // serial number for this device
-    protected _id: string;
-    protected _deviceStatus: DeviceStatus;
+	// operating system of this device
+	protected _os: ClientOS;
+	// human readable name for this device
+	protected _name?: string;
+	// type of this device
+	protected _isVirtualTarget: boolean;
+	// serial number for this device
+	protected _id: string;
+	protected _deviceStatus: DeviceStatus;
 
-    constructor(id: string, isVirtualTarget: boolean, os: ClientOS, name?: string) {
-        this._id = id;
-        this._name = name;
-        this._isVirtualTarget = isVirtualTarget;
-        this._os = os;
-        this._deviceStatus = DeviceStatus.NotPrepared;
-    }
+	constructor(
+		id: string,
+		isVirtualTarget: boolean,
+		os: ClientOS,
+		name?: string
+	) {
+		this._id = id;
+		this._name = name;
+		this._isVirtualTarget = isVirtualTarget;
+		this._os = os;
+		this._deviceStatus = DeviceStatus.NotPrepared;
+	}
 
-    get id(): string {
-        return this._id;
-    }
+	get id(): string {
+		return this._id;
+	}
 
-    get os(): ClientOS {
-        return this._os;
-    }
+	get os(): ClientOS {
+		return this._os;
+	}
 
-    get name(): string | undefined {
-        return this._name;
-    }
+	get name(): string | undefined {
+		return this._name;
+	}
 
-    get isVirtualTarget(): boolean {
-        return this._isVirtualTarget;
-    }
+	get isVirtualTarget(): boolean {
+		return this._isVirtualTarget;
+	}
 
-    get deviceStatus(): DeviceStatus {
-        return this._deviceStatus;
-    }
+	get deviceStatus(): DeviceStatus {
+		return this._deviceStatus;
+	}
 
-    set deviceStatus(deviceStatus: DeviceStatus) {
-        this._deviceStatus = deviceStatus;
-    }
+	set deviceStatus(deviceStatus: DeviceStatus) {
+		this._deviceStatus = deviceStatus;
+	}
 }

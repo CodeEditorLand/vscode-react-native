@@ -2,23 +2,23 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 export enum ValidationCategoryE {
-    Common = "Common",
-    Android = "Android",
-    iOS = "iOS",
-    Expo = "Expo",
-    Windows = "Windows",
-    macOS = "macOS",
+	Common = "Common",
+	Android = "Android",
+	iOS = "iOS",
+	Expo = "Expo",
+	Windows = "Windows",
+	macOS = "macOS",
 }
 
 export type ValidationResultT = {
-    status: "failure" | "success" | "partial-success";
-    comment?: string;
+	status: "failure" | "success" | "partial-success";
+	comment?: string;
 };
 
 export interface IValidation {
-    label: string;
-    description: string;
-    platform?: typeof process.platform[];
-    category: ValidationCategoryE;
-    exec: () => Promise<ValidationResultT>;
+	label: string;
+	description: string;
+	platform?: (typeof process.platform)[];
+	category: ValidationCategoryE;
+	exec: () => Promise<ValidationResultT>;
 }

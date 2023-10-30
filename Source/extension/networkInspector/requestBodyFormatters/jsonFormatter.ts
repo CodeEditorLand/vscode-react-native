@@ -21,32 +21,38 @@ import { IFormatter, decodeBody, FormattedBody } from "./requestBodyFormatter";
  */
 
 export class JSONFormatter implements IFormatter {
-    constructor(private logger: OutputChannelLogger) {}
+	constructor(private logger: OutputChannelLogger) {}
 
-    public formatRequest(request: Request, contentType: string): FormattedBody | null {
-        return this.format(decodeBody(request, this.logger), contentType);
-    }
+	public formatRequest(
+		request: Request,
+		contentType: string
+	): FormattedBody | null {
+		return this.format(decodeBody(request, this.logger), contentType);
+	}
 
-    public formatResponse(response: Response, contentType: string): FormattedBody | null {
-        return this.format(decodeBody(response, this.logger), contentType);
-    }
+	public formatResponse(
+		response: Response,
+		contentType: string
+	): FormattedBody | null {
+		return this.format(decodeBody(response, this.logger), contentType);
+	}
 
-    private format(body: string, contentType: string): FormattedBody | null {
-        if (
-            contentType.startsWith("application/json") ||
-            contentType.startsWith("application/hal+json") ||
-            contentType.startsWith("text/javascript") ||
-            contentType.startsWith("application/x-fb-flatbuffer")
-        ) {
-            try {
-                return JSON.parse(body);
-            } catch (SyntaxError) {
-                // Multiple top level JSON roots, map them one by one
-                return body.split("\n").map(json => JSON.parse(json));
-            }
-        }
-        return null;
-    }
+	private format(body: string, contentType: string): FormattedBody | null {
+		if (
+			contentType.startsWith("application/json") ||
+			contentType.startsWith("application/hal+json") ||
+			contentType.startsWith("text/javascript") ||
+			contentType.startsWith("application/x-fb-flatbuffer")
+		) {
+			try {
+				return JSON.parse(body);
+			} catch (SyntaxError) {
+				// Multiple top level JSON roots, map them one by one
+				return body.split("\n").map((json) => JSON.parse(json));
+			}
+		}
+		return null;
+	}
 }
 
 /**

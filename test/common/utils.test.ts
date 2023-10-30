@@ -4,9 +4,9 @@ import * as assert from "assert";
 import { stripJsonTrailingComma } from "../../src/common/utils";
 
 suite("utilHelper", function () {
-    suite("stripJsonTrailingComma", function () {
-        test("should remove trailing comma from a JSON", (done: Mocha.Done) => {
-            const strWithTrailingComma = `
+	suite("stripJsonTrailingComma", function () {
+		test("should remove trailing comma from a JSON", (done: Mocha.Done) => {
+			const strWithTrailingComma = `
             {
                 "runtimeArgs": [
                     "--inspect-brk=9237",
@@ -19,8 +19,8 @@ suite("utilHelper", function () {
                 "timeout": 300000
             }
             `;
-            const strObject = stripJsonTrailingComma(strWithTrailingComma);
-            const strippedStr = `{
+			const strObject = stripJsonTrailingComma(strWithTrailingComma);
+			const strippedStr = `{
                 "runtimeArgs": [
                     "--inspect-brk=9237",
                     "start"
@@ -31,13 +31,16 @@ suite("utilHelper", function () {
                 "name": "some-project",
                 "timeout": 300000
             }`;
-            const strippedStrObject = JSON.parse(strippedStr);
-            assert.strictEqual(JSON.stringify(strObject), JSON.stringify(strippedStrObject));
-            done();
-        });
+			const strippedStrObject = JSON.parse(strippedStr);
+			assert.strictEqual(
+				JSON.stringify(strObject),
+				JSON.stringify(strippedStrObject)
+			);
+			done();
+		});
 
-        test("should manage string contains end of string trailing comma", (done: Mocha.Done) => {
-            const strWithTrailingComma = `
+		test("should manage string contains end of string trailing comma", (done: Mocha.Done) => {
+			const strWithTrailingComma = `
             {
               "version": "0.2.0",
               "configurations": [
@@ -55,8 +58,8 @@ suite("utilHelper", function () {
               ]
             },
             `;
-            const strObject = stripJsonTrailingComma(strWithTrailingComma);
-            const strippedStr = `
+			const strObject = stripJsonTrailingComma(strWithTrailingComma);
+			const strippedStr = `
             {
               "version": "0.2.0",
               "configurations": [
@@ -74,9 +77,12 @@ suite("utilHelper", function () {
               ]
             }
             `;
-            const strippedStrObject = JSON.parse(strippedStr);
-            assert.strictEqual(JSON.stringify(strObject), JSON.stringify(strippedStrObject));
-            done();
-        });
-    });
+			const strippedStrObject = JSON.parse(strippedStr);
+			assert.strictEqual(
+				JSON.stringify(strObject),
+				JSON.stringify(strippedStrObject)
+			);
+			done();
+		});
+	});
 });
