@@ -1,4 +1,4 @@
 {
-	"react-native-tools.logLevel": "Trace",
-	"react-native-tools.networkInspector.consoleLogsColorTheme": "Light"
+    "react-native-tools.logLevel": "Trace",
+    "react-native-tools.networkInspector.consoleLogsColorTheme": "Light"
 }
