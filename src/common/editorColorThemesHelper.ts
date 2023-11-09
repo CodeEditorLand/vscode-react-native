@@ -4,26 +4,31 @@
 import * as vscode from "vscode";
 
 export enum SystemColorTheme {
-    Light = "Light",
-    Dark = "Dark",
+	Light = "Light",
+	Dark = "Dark",
 }
 
 export class EditorColorThemesHelper {
-    public static isAutoDetectColorSchemeEnabled(): boolean {
-        return !!vscode.workspace.getConfiguration("window").get("autoDetectColorScheme");
-    }
+	public static isAutoDetectColorSchemeEnabled(): boolean {
+		return !!vscode.workspace
+			.getConfiguration("window")
+			.get("autoDetectColorScheme");
+	}
 
-    public static getCurrentSystemColorTheme(): SystemColorTheme {
-        if (EditorColorThemesHelper.isAutoDetectColorSchemeEnabled()) {
-            const workbenchConfiguration = vscode.workspace.getConfiguration("workbench");
-            const currentTheme = workbenchConfiguration.get("colorTheme");
-            const preferredDarkColorTheme = workbenchConfiguration.get("preferredDarkColorTheme");
-            return currentTheme === preferredDarkColorTheme
-                ? SystemColorTheme.Dark
-                : SystemColorTheme.Light;
-        }
-        throw new Error(
-            "Couldn't detect the current system color theme: 'window.autoDetectColorScheme' parameter is disabled",
-        );
-    }
+	public static getCurrentSystemColorTheme(): SystemColorTheme {
+		if (EditorColorThemesHelper.isAutoDetectColorSchemeEnabled()) {
+			const workbenchConfiguration =
+				vscode.workspace.getConfiguration("workbench");
+			const currentTheme = workbenchConfiguration.get("colorTheme");
+			const preferredDarkColorTheme = workbenchConfiguration.get(
+				"preferredDarkColorTheme"
+			);
+			return currentTheme === preferredDarkColorTheme
+				? SystemColorTheme.Dark
+				: SystemColorTheme.Light;
+		}
+		throw new Error(
+			"Couldn't detect the current system color theme: 'window.autoDetectColorScheme' parameter is disabled"
+		);
+	}
 }

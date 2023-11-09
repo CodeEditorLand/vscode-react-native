@@ -12,18 +12,18 @@ const XDL_PACKAGE = "xdl";
 const METRO_CONFIG_PACKAGE = "@expo/metro-config";
 
 const xdlPackageConfig = new PackageConfig(
-    XDL_PACKAGE,
-    SettingsHelper.getExpoDependencyVersion(XDL_PACKAGE),
+	XDL_PACKAGE,
+	SettingsHelper.getExpoDependencyVersion(XDL_PACKAGE)
 );
 const metroConfigPackageConfig = new PackageConfig(
-    METRO_CONFIG_PACKAGE,
-    SettingsHelper.getExpoDependencyVersion(METRO_CONFIG_PACKAGE),
+	METRO_CONFIG_PACKAGE,
+	SettingsHelper.getExpoDependencyVersion(METRO_CONFIG_PACKAGE)
 );
 
 const ngrokPackageConfig = new PackageConfig(
-    xdlPackageConfig.getPackageName(),
-    xdlPackageConfig.getVersion(),
-    "build/start/resolveNgrok",
+	xdlPackageConfig.getPackageName(),
+	xdlPackageConfig.getVersion(),
+	"build/start/resolveNgrok"
 );
 
 // There is the problem with '--no-save' flag for 'npm install' command for npm v6.
@@ -33,120 +33,130 @@ const ngrokPackageConfig = new PackageConfig(
 const EXPO_DEPS: PackageConfig[] = [xdlPackageConfig, metroConfigPackageConfig];
 
 export const getXDLPackage: () => Promise<typeof XDLPackage> =
-    PackageLoader.getInstance().generateGetPackageFunction<typeof XDLPackage>(
-        xdlPackageConfig,
-        ...EXPO_DEPS,
-    );
+	PackageLoader.getInstance().generateGetPackageFunction<typeof XDLPackage>(
+		xdlPackageConfig,
+		...EXPO_DEPS
+	);
 export const getMetroConfigPackage: () => Promise<typeof MetroConfigPackage> =
-    PackageLoader.getInstance().generateGetPackageFunction<typeof MetroConfigPackage>(
-        metroConfigPackageConfig,
-        ...EXPO_DEPS,
-    );
+	PackageLoader.getInstance().generateGetPackageFunction<
+		typeof MetroConfigPackage
+	>(metroConfigPackageConfig, ...EXPO_DEPS);
 export const getNgrokResolver: () => Promise<XDLPackage.ResolveNgrok> =
-    PackageLoader.getInstance().generateGetPackageFunction<XDLPackage.ResolveNgrok>(
-        ngrokPackageConfig,
-        ...EXPO_DEPS,
-    );
+	PackageLoader.getInstance().generateGetPackageFunction<XDLPackage.ResolveNgrok>(
+		ngrokPackageConfig,
+		...EXPO_DEPS
+	);
 
 export type IUser = XDLPackage.IUser;
 
 export async function configReactNativeVersionWarnings(): Promise<void> {
-    const xdlPackage = await getXDLPackage();
-    if (xdlPackage.Config.validation !== undefined) {
-        xdlPackage.Config.validation.reactNativeVersionWarnings = false;
-    }
+	const xdlPackage = await getXDLPackage();
+	if (xdlPackage.Config.validation !== undefined) {
+		xdlPackage.Config.validation.reactNativeVersionWarnings = false;
+	}
 }
 
 export async function attachLoggerStream(
-    rootPath: string,
-    options?: XDLPackage.IBunyanStream | any,
+	rootPath: string,
+	options?: XDLPackage.IBunyanStream | any
 ): Promise<void> {
-    (await getXDLPackage()).ProjectUtils.attachLoggerStream(rootPath, options);
+	(await getXDLPackage()).ProjectUtils.attachLoggerStream(rootPath, options);
 }
 
 export async function currentUser(): Promise<XDLPackage.IUser> {
-    const xdl = await getXDLPackage();
-    return await (xdl.User
-        ? xdl.User.getCurrentUserAsync()
-        : xdl.UserManager.getCurrentUserAsync());
+	const xdl = await getXDLPackage();
+	return await (xdl.User
+		? xdl.User.getCurrentUserAsync()
+		: xdl.UserManager.getCurrentUserAsync());
 }
 
-export async function login(username: string, password: string): Promise<XDLPackage.IUser> {
-    const xdl = await getXDLPackage();
-    return await (xdl.User
-        ? xdl.User.loginAsync("user-pass", { username, password })
-        : xdl.UserManager.loginAsync("user-pass", {
-              username,
-              password,
-          }));
+export async function login(
+	username: string,
+	password: string
+): Promise<XDLPackage.IUser> {
+	const xdl = await getXDLPackage();
+	return await (xdl.User
+		? xdl.User.loginAsync("user-pass", { username, password })
+		: xdl.UserManager.loginAsync("user-pass", {
+				username,
+				password,
+		  }));
 }
 
 export async function getExpoSdkVersions(): Promise<XDLPackage.SDKVersions> {
-    return (await getXDLPackage()).Versions.sdkVersionsAsync();
+	return (await getXDLPackage()).Versions.sdkVersionsAsync();
 }
 
 export async function getReleasedExpoSdkVersions(): Promise<XDLPackage.SDKVersions> {
-    return (await getXDLPackage()).Versions.releasedSdkVersionsAsync();
+	return (await getXDLPackage()).Versions.releasedSdkVersionsAsync();
 }
 
 export async function publish(
-    projectRoot: string,
-    options?: XDLPackage.IPublishOptions,
+	projectRoot: string,
+	options?: XDLPackage.IPublishOptions
 ): Promise<XDLPackage.IPublishResponse> {
-    return (await getXDLPackage()).Project.publishAsync(projectRoot, options);
+	return (await getXDLPackage()).Project.publishAsync(projectRoot, options);
 }
 
-export async function setOptions(projectRoot: string, options: XDLPackage.IOptions): Promise<void> {
-    await (await getXDLPackage()).ProjectSettings.setPackagerInfoAsync(projectRoot, options);
+export async function setOptions(
+	projectRoot: string,
+	options: XDLPackage.IOptions
+): Promise<void> {
+	await (
+		await getXDLPackage()
+	).ProjectSettings.setPackagerInfoAsync(projectRoot, options);
 }
 
 export async function startExponentServer(projectRoot: string): Promise<void> {
-    await (await getXDLPackage()).Project.startExpoServerAsync(projectRoot);
+	await (await getXDLPackage()).Project.startExpoServerAsync(projectRoot);
 }
 
 export async function startTunnels(projectRoot: string): Promise<void> {
-    await (await getXDLPackage()).Project.startTunnelsAsync(projectRoot);
+	await (await getXDLPackage()).Project.startTunnelsAsync(projectRoot);
 }
 
 export async function getUrl(
-    projectRoot: string,
-    options?: XDLPackage.IUrlOptions,
+	projectRoot: string,
+	options?: XDLPackage.IUrlOptions
 ): Promise<string> {
-    return (await getXDLPackage()).UrlUtils.constructManifestUrlAsync(projectRoot, options);
+	return (await getXDLPackage()).UrlUtils.constructManifestUrlAsync(
+		projectRoot,
+		options
+	);
 }
 
 export async function stopAll(projectRoot: string): Promise<void> {
-    await (await getXDLPackage()).Project.stopAsync(projectRoot);
+	await (await getXDLPackage()).Project.stopAsync(projectRoot);
 }
 
 export async function startAdbReverse(projectRoot: string): Promise<boolean> {
-    return (await getXDLPackage()).Android.startAdbReverseAsync(projectRoot);
+	return (await getXDLPackage()).Android.startAdbReverseAsync(projectRoot);
 }
 
 export async function stopAdbReverse(projectRoot: string): Promise<void> {
-    await (await getXDLPackage()).Android.stopAdbReverseAsync(projectRoot);
+	await (await getXDLPackage()).Android.stopAdbReverseAsync(projectRoot);
 }
 
 export async function getMetroConfig(
-    projectRoot: string,
+	projectRoot: string
 ): Promise<MetroConfigPackage.IMetroConfig> {
-    return (await getMetroConfigPackage()).loadAsync(projectRoot);
+	return (await getMetroConfigPackage()).loadAsync(projectRoot);
 }
 
 export async function isNgrokInstalled(projectRoot: string): Promise<boolean> {
-    const ngrokResolver = await getNgrokResolver();
-    try {
-        const ngrok = await ngrokResolver.resolveNgrokAsync(projectRoot, {
-            shouldPrompt: false,
-            autoInstall: false,
-        });
-        return !!ngrok;
-    } catch (err) {
-        // If unsupported version of the "@expo/ngrok" package was detected, we need to update the package.
-        // Since the "require" method used to parse the "ngrok⁄package.json" file in the "xdl" package caches
-        // all processed modules, we have to remove this file from cache to be able to require a new version
-        // of that file after the update of the "@expo/ngrok" package
-        removeModuleFromRequireCacheByName(pathJoin("ngrok", "package.json"));
-        throw err;
-    }
+	const ngrokResolver = await getNgrokResolver();
+	try {
+		const ngrok = await ngrokResolver.resolveNgrokAsync(projectRoot, {
+			shouldPrompt: false,
+			autoInstall: false,
+		});
+		return !!ngrok;
+	} catch (err) {
+		// If unsupported version of the "@expo/ngrok" package was detected, we need to update the package.
+		// Since the "require" method used to parse the "ngrok⁄package.json" file in the "xdl" package caches
+		// all processed modules, we have to remove this file from cache to be able to require a new version
+		// of that file after the update of the "@expo/ngrok" package
+		removeModuleFromRequireCacheByName(pathJoin("ngrok", "package.json"));
+		throw err;
+	}
 }

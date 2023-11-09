@@ -15,8 +15,8 @@
 */
 
 if (process.argv.length < 3) {
-    console.error("Missing filename");
-    process.exit(1);
+	console.error("Missing filename");
+	process.exit(1);
 }
 
 require("../src/extension/openFileAtLocation");

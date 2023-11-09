@@ -1,24 +1,24 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "javascript.validate.enable": false,
-    "editor.formatOnSaveMode": "modifications",
-    "files.trimTrailingWhitespace": true,
-    "editor.insertSpaces": true,
-    "editor.tabSize": 4,
-    "files.exclude": {
-        // "**/node_modules": true,
-        "nls.*.json": true,
-        "**/*.js": {
-            "when": "$(basename).ts"
-        },
-        // "**/out": true,
-        "**/*.js.map": true
-    },
-    "[typescript]": {
-        // Need to install extension 'esbenp.prettier-vscode'
-        //"editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
-    // "gulp.autoDetect": "on",
-    "typescript.tsdk": "./node_modules/typescript/lib"
+	"javascript.validate.enable": false,
+	"editor.formatOnSaveMode": "modifications",
+	"files.trimTrailingWhitespace": true,
+	"editor.insertSpaces": true,
+	"editor.tabSize": 4,
+	"files.exclude": {
+		// "**/node_modules": true,
+		"nls.*.json": true,
+		"**/*.js": {
+			"when": "$(basename).ts"
+		},
+		// "**/out": true,
+		"**/*.js.map": true
+	},
+	"[typescript]": {
+		// Need to install extension 'esbenp.prettier-vscode'
+		//"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "vscode.typescript-language-features"
+	},
+	// "gulp.autoDetect": "on",
+	"typescript.tsdk": "./node_modules/typescript/lib"
 }

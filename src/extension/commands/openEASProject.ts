@@ -10,58 +10,65 @@ import { InternalErrorCode } from "../../common/error/internalErrorCode";
 import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 const localize = nls.loadMessageBundle();
 const logger = OutputChannelLogger.getMainChannel();
 
 export class OpenEASProject extends ReactNativeCommand {
-    nodeModulesRoot: string;
-    codeName = "openEASProjectInWebPage";
-    label = "Open the eas project in a web page";
-    error = ErrorHelper.getInternalError(InternalErrorCode.FailedToOpenProjectPage);
+	nodeModulesRoot: string;
+	codeName = "openEASProjectInWebPage";
+	label = "Open the eas project in a web page";
+	error = ErrorHelper.getInternalError(
+		InternalErrorCode.FailedToOpenProjectPage
+	);
 
-    async baseFn(): Promise<void> {
-        assert(this.project);
-        const expoHelper = this.project.getExponentHelper();
-        logger.info(localize("CheckExpoEnvironment", "Checking Expo project environment."));
-        const isExpo = await expoHelper.isExpoManagedApp(true);
+	async baseFn(): Promise<void> {
+		assert(this.project);
+		const expoHelper = this.project.getExponentHelper();
+		logger.info(
+			localize(
+				"CheckExpoEnvironment",
+				"Checking Expo project environment."
+			)
+		);
+		const isExpo = await expoHelper.isExpoManagedApp(true);
 
-        if (isExpo) {
-            try {
-                let id = null;
-                await expoHelper.getExpoEasProjectId().then(result => {
-                    id = result;
-                });
-                let owner = null;
-                await expoHelper.getExpoEasProjectOwner().then(result => {
-                    owner = result;
-                });
-                let name = null;
-                await expoHelper.getExpoEasProjectName().then(result => {
-                    name = result;
-                });
-                if (id == null || owner == null) {
-                    const error = localize(
-                        "ExpoProjectNotLinkToEAS",
-                        "Your app not link to EAS project. Please run 'eas init' firstly to bind your app to EAS project.",
-                    );
-                    void vscode.window.showErrorMessage(error);
-                    logger.error(error);
-                } else if (name != null) {
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    const url = `https://expo.dev/accounts/${owner}/projects/${name}`;
-                    await vscode.env.openExternal(vscode.Uri.parse(url));
-                }
-            } catch {
-                logger.error(
-                    localize(
-                        "NoExistingEASProject",
-                        "Unable to find existing EAS project. Please run 'eas init' firstly to bind your app to EAS project.",
-                    ),
-                );
-            }
-        }
-    }
+		if (isExpo) {
+			try {
+				let id = null;
+				await expoHelper.getExpoEasProjectId().then((result) => {
+					id = result;
+				});
+				let owner = null;
+				await expoHelper.getExpoEasProjectOwner().then((result) => {
+					owner = result;
+				});
+				let name = null;
+				await expoHelper.getExpoEasProjectName().then((result) => {
+					name = result;
+				});
+				if (id == null || owner == null) {
+					const error = localize(
+						"ExpoProjectNotLinkToEAS",
+						"Your app not link to EAS project. Please run 'eas init' firstly to bind your app to EAS project."
+					);
+					void vscode.window.showErrorMessage(error);
+					logger.error(error);
+				} else if (name != null) {
+					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+					const url = `https://expo.dev/accounts/${owner}/projects/${name}`;
+					await vscode.env.openExternal(vscode.Uri.parse(url));
+				}
+			} catch {
+				logger.error(
+					localize(
+						"NoExistingEASProject",
+						"Unable to find existing EAS project. Please run 'eas init' firstly to bind your app to EAS project."
+					)
+				);
+			}
+		}
+	}
 }

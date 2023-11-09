@@ -4,8 +4,8 @@
 import { BaseClientDevice } from "./baseClientDevice";
 
 export class DeviceStorage {
-    public static readonly devices: Map<string, BaseClientDevice> = new Map<
-        string,
-        BaseClientDevice
-    >();
+	public static readonly devices: Map<string, BaseClientDevice> = new Map<
+		string,
+		BaseClientDevice
+	>();
 }
