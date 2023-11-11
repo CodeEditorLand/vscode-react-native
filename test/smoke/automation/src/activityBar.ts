@@ -4,26 +4,25 @@
 import { Code } from "./code";
 
 export const enum ActivityBarPosition {
-	LEFT = 0,
-	RIGHT = 1,
+    LEFT = 0,
+    RIGHT = 1,
 }
 
 export class ActivityBar {
-	constructor(private code: Code) {}
 
-	public async waitForActivityBar(
-		position: ActivityBarPosition
-	): Promise<void> {
-		let positionClass: string;
+    constructor(private code: Code) { }
 
-		if (position === ActivityBarPosition.LEFT) {
-			positionClass = "left";
-		} else if (position === ActivityBarPosition.RIGHT) {
-			positionClass = "right";
-		} else {
-			throw new Error("No such position for activity bar defined.");
-		}
+    public async waitForActivityBar(position: ActivityBarPosition): Promise<void> {
+        let positionClass: string;
 
-		await this.code.waitForElement(`.part.activitybar.${positionClass}`);
-	}
+        if (position === ActivityBarPosition.LEFT) {
+            positionClass = "left";
+        } else if (position === ActivityBarPosition.RIGHT) {
+            positionClass = "right";
+        } else {
+            throw new Error("No such position for activity bar defined.");
+        }
+
+        await this.code.waitForElement(`.part.activitybar.${positionClass}`);
+    }
 }

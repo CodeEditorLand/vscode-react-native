@@ -16,68 +16,52 @@ import { SmokeTestLogger } from "./helpers/smokeTestLogger";
 
 // Check tests environments
 if (parseInt(process.version.substr(1), 10) < 10) {
-	smokeTestFail(
-		"Please update your Node version to greater than 10 to run the smoke test."
-	);
+    smokeTestFail("Please update your Node version to greater than 10 to run the smoke test.");
 }
 
 //Paths
 const repoRoot = path.join(__dirname, "..", "..", "..", "..", "..", "..");
-const envConfigFilePath = path.resolve(
-	__dirname,
-	"..",
-	SmokeTestsConstants.EnvConfigFileName
-);
+const envConfigFilePath = path.resolve(__dirname, "..", SmokeTestsConstants.EnvConfigFileName);
 const envConfigFilePathDev = path.resolve(
-	__dirname,
-	"..",
-	SmokeTestsConstants.EnvDevConfigFileName
+    __dirname,
+    "..",
+    SmokeTestsConstants.EnvDevConfigFileName,
 );
 const vscodeTestPath = path.resolve(__dirname, "..", ".vscode-test");
 const resourcesPath = path.resolve(__dirname, "..", "resources");
 const cachePath = path.resolve(os.homedir(), "SmokeTestsCache");
 
-const configProcessor = new TestConfigProcessor(
-	envConfigFilePath,
-	envConfigFilePathDev
-);
+const configProcessor = new TestConfigProcessor(envConfigFilePath, envConfigFilePathDev);
 export const testApplicationSetupManager = new TestApplicationSetupManager(
-	resourcesPath,
-	cachePath
+    resourcesPath,
+    cachePath,
 );
 export const androidEmulatorManager = new AndroidEmulatorManager();
 export const iosSimulatorManager = new IosSimulatorManager();
-export const vscodeManager = new VsCodeManager(
-	vscodeTestPath,
-	resourcesPath,
-	cachePath,
-	repoRoot
-);
+export const vscodeManager = new VsCodeManager(vscodeTestPath, resourcesPath, cachePath, repoRoot);
 
 startSmokeTests(configProcessor.parseTestArguments(), setUp, cleanUp);
 
 async function setUp(useCachedApplications: boolean): Promise<void> {
-	await vscodeManager.downloadVSCodeExecutable();
-	vscodeManager.installExtensionFromVSIX();
-	await testApplicationSetupManager.prepareTestApplications(
-		useCachedApplications
-	);
-	AppiumHelper.runAppium(vscodeManager.getAppiumLogDir());
+    await vscodeManager.downloadVSCodeExecutable();
+    vscodeManager.installExtensionFromVSIX();
+    await testApplicationSetupManager.prepareTestApplications(useCachedApplications);
+    AppiumHelper.runAppium(vscodeManager.getAppiumLogDir());
 
-	SmokeTestLogger.info("*** Preparing Android emulator...");
-	await androidEmulatorManager.runAndroidEmulator();
-	await androidEmulatorManager.installExpoAppOnAndroid();
+    SmokeTestLogger.info("*** Preparing Android emulator...");
+    await androidEmulatorManager.runAndroidEmulator();
+    await androidEmulatorManager.installExpoAppOnAndroid();
 
-	if (process.platform === "darwin") {
-		SmokeTestLogger.info("*** Preparing iOS simulator...");
-		await iosSimulatorManager.runIosSimulator();
-		// Waiting for all services to start
-		await sleep(60_000);
-		await iosSimulatorManager.installExpoAppOnIos();
-	}
+    if (process.platform === "darwin") {
+        SmokeTestLogger.info("*** Preparing iOS simulator...");
+        await iosSimulatorManager.runIosSimulator();
+        // Waiting for all services to start
+        await sleep(60_000);
+        await iosSimulatorManager.installExpoAppOnIos();
+    }
 }
 
 async function cleanUp(saveCache: boolean): Promise<void> {
-	vscodeManager.cleanUp();
-	testApplicationSetupManager.cleanUp(saveCache);
+    vscodeManager.cleanUp();
+    testApplicationSetupManager.cleanUp(saveCache);
 }

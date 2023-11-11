@@ -1,27 +1,27 @@
 trigger:
-    - none
+  - none
 pr:
-    - none
+  - none
 
 variables:
-    vswdbotLogin: vswdbot
-    appiumVersion: 1.21.0
-    expoCLIVersion: latest
-    smokeTestDirectory: test/smoke
+  vswdbotLogin: vswdbot
+  appiumVersion: 1.21.0
+  expoCLIVersion: latest
+  smokeTestDirectory: test/smoke
 
 jobs:
-    - job: Windows
-      pool:
-          name: "React Native smoke tests - Windows"
-      timeoutInMinutes: 85
-      steps:
-          - checkout: self
-            clean: true
-          - bash: |
-                cd $APPDATA && cd ../Local
-                rm -rf ./Temp/metro-cache
-                rm -rf ./Temp/haste-map-metro-*
-                rm -rf ./Temp/react-native-*
-                rm -rf ./Yarn/Cache
-            displayName: Clear RN, Yarn cache
-          - template: smoke-tests-common-validation.yml
+  - job: Windows
+    pool:
+      name: "React Native smoke tests - Windows"
+    timeoutInMinutes: 85
+    steps:
+      - checkout: self
+        clean: true
+      - bash: |
+          cd $APPDATA && cd ../Local
+          rm -rf ./Temp/metro-cache
+          rm -rf ./Temp/haste-map-metro-*
+          rm -rf ./Temp/react-native-*
+          rm -rf ./Yarn/Cache
+        displayName: Clear RN, Yarn cache
+      - template: smoke-tests-common-validation.yml

@@ -17,114 +17,108 @@ export const yarnCommand = process.platform === "win32" ? "yarn.cmd" : "yarn";
 
 // eslint-disable-next-line
 export function nfcall<R>(fn: Function, ...args): Promise<R> {
-	return new Promise<R>((c, e) =>
-		fn(...args, (err, r) => (err ? e(err) : c(r)))
-	);
+    return new Promise<R>((c, e) => fn(...args, (err, r) => (err ? e(err) : c(r))));
 }
 
 export async function mkdirp(path: string, mode?: number): Promise<boolean> {
-	const mkdir = async () => {
-		try {
-			await nfcall(fs.mkdir, path, mode);
-		} catch (err) {
-			if (err.code === "EEXIST") {
-				const stat = await nfcall<fs.Stats>(fs.stat, path);
+    const mkdir = async () => {
+        try {
+            await nfcall(fs.mkdir, path, mode);
+        } catch (err) {
+            if (err.code === "EEXIST") {
+                const stat = await nfcall<fs.Stats>(fs.stat, path);
 
-				if (stat.isDirectory()) {
-					return;
-				}
+                if (stat.isDirectory()) {
+                    return;
+                }
 
-				throw new Error(`'${path}' exists and is not a directory.`);
-			}
+                throw new Error(`'${path}' exists and is not a directory.`);
+            }
 
-			throw err;
-		}
-	};
+            throw err;
+        }
+    };
 
-	// is root?
-	if (path === dirname(path)) {
-		return true;
-	}
+    // is root?
+    if (path === dirname(path)) {
+        return true;
+    }
 
-	try {
-		await mkdir();
-	} catch (err) {
-		if (err.code !== "ENOENT") {
-			throw err;
-		}
+    try {
+        await mkdir();
+    } catch (err) {
+        if (err.code !== "ENOENT") {
+            throw err;
+        }
 
-		await mkdirp(dirname(path), mode);
-		await mkdir();
-	}
+        await mkdirp(dirname(path), mode);
+        await mkdir();
+    }
 
-	return true;
+    return true;
 }
 
 export function sanitize(name: string): string {
-	return name.replace(/[&*:\/]/g, "");
+    return name.replace(/[&*:\/]/g, "");
 }
 
-export function spawnSync(
-	command: string,
-	args?: string[],
-	options?: SpawnSyncOptions
-): void {
-	const result = cp.spawnSync(command, args, options);
-	if (result.stdout) {
-		SmokeTestLogger.log(result.stdout.toString());
-	}
-	if (result.stderr) {
-		SmokeTestLogger.error(result.stderr.toString());
-	}
-	if (result.error) {
-		throw result.error;
-	}
+export function spawnSync(command: string, args?: string[], options?: SpawnSyncOptions): void {
+    const result = cp.spawnSync(command, args, options);
+    if (result.stdout) {
+        SmokeTestLogger.log(result.stdout.toString());
+    }
+    if (result.stderr) {
+        SmokeTestLogger.error(result.stderr.toString());
+    }
+    if (result.error) {
+        throw result.error;
+    }
 }
 
 export function isLoggedInExpo(): boolean {
-	const loginPattern = /^\w+\s?$/g;
-	const unloggedPattern = "Not logged in";
-	const command = "expo w";
-	const commandResult = execSync(command);
-	if (commandResult.includes(unloggedPattern)) {
-		SmokeTestLogger.warn(`Expo account is not logged in`);
-		return false;
-	}
-	const matches = commandResult.match(loginPattern);
-	if (matches && matches.length) {
-		const login = matches[0].trim();
-		SmokeTestLogger.success(`Logged in Expo as ${login}`);
-		return true;
-	}
-	SmokeTestLogger.error(
-		`There is an unrecognized command '${command}' result. Output of command: ${commandResult}`
-	);
-	return false;
+    const loginPattern = /^\w+\s?$/g;
+    const unloggedPattern = "Not logged in";
+    const command = "expo w";
+    const commandResult = execSync(command);
+    if (commandResult.includes(unloggedPattern)) {
+        SmokeTestLogger.warn(`Expo account is not logged in`);
+        return false;
+    }
+    const matches = commandResult.match(loginPattern);
+    if (matches && matches.length) {
+        const login = matches[0].trim();
+        SmokeTestLogger.success(`Logged in Expo as ${login}`);
+        return true;
+    }
+    SmokeTestLogger.error(
+        `There is an unrecognized command '${command}' result. Output of command: ${commandResult}`,
+    );
+    return false;
 }
 
 export function execSync(
-	command: string,
-	options: cp.ExecSyncOptions = {},
-	logFilePath?: string
+    command: string,
+    options: cp.ExecSyncOptions = {},
+    logFilePath?: string,
 ): string {
-	options = Object.assign(options, { stdio: "pipe" });
-	let output = "";
-	try {
-		output = cp.execSync(command, options).toString();
-	} catch (err) {
-		output += err.stdout && err.stdout.toString();
-		output += err.stderr && err.stderr.toString();
-		if (logFilePath) {
-			SmokeTestLogger.saveLogsInFile(output, logFilePath);
-		}
-		throw err;
-	}
+    options = Object.assign(options, { stdio: "pipe" });
+    let output = "";
+    try {
+        output = cp.execSync(command, options).toString();
+    } catch (err) {
+        output += err.stdout && err.stdout.toString();
+        output += err.stderr && err.stderr.toString();
+        if (logFilePath) {
+            SmokeTestLogger.saveLogsInFile(output, logFilePath);
+        }
+        throw err;
+    }
 
-	if (logFilePath) {
-		SmokeTestLogger.saveLogsInFile(output, logFilePath);
-	}
+    if (logFilePath) {
+        SmokeTestLogger.saveLogsInFile(output, logFilePath);
+    }
 
-	return output;
+    return output;
 }
 
 /**
@@ -133,173 +127,165 @@ export function execSync(
  * @param promises Array of promises to run
  */
 export function runInParallel(promises: Promise<any>[]): Promise<any[]> {
-	return new Promise<any[]>((resolve, reject) => {
-		let total = promises.length;
-		let count = 0;
-		let results: any[] = [];
-		const saveResult = (result: any) => {
-			results.push(result);
-			++count;
-			if (count === total) {
-				resolve(results);
-			}
-		};
-		promises.forEach((promise) => {
-			promise
-				.then((result) => {
-					saveResult(result);
-				})
-				.catch((e) => {
-					reject(e);
-				});
-		});
-	});
+    return new Promise<any[]>((resolve, reject) => {
+        let total = promises.length;
+        let count = 0;
+        let results: any[] = [];
+        const saveResult = (result: any) => {
+            results.push(result);
+            ++count;
+            if (count === total) {
+                resolve(results);
+            }
+        };
+        promises.forEach(promise => {
+            promise
+                .then(result => {
+                    saveResult(result);
+                })
+                .catch(e => {
+                    reject(e);
+                });
+        });
+    });
 }
 
 // Await function
 export async function sleep(time: number): Promise<void> {
-	await new Promise<void>((resolve) => {
-		const timer = setTimeout(() => {
-			clearTimeout(timer);
-			resolve();
-		}, time);
-	});
+    await new Promise<void>(resolve => {
+        const timer = setTimeout(() => {
+            clearTimeout(timer);
+            resolve();
+        }, time);
+    });
 }
 
-export function findFile(
-	directoryToSearch: string,
-	filePattern: RegExp
-): string | null {
-	const dirFiles = fs.readdirSync(directoryToSearch);
-	let extensionFile = dirFiles.find((elem) => {
-		return filePattern.test(elem);
-	});
-	if (extensionFile) {
-		return extensionFile;
-	}
-	return null;
+export function findFile(directoryToSearch: string, filePattern: RegExp): string | null {
+    const dirFiles = fs.readdirSync(directoryToSearch);
+    let extensionFile = dirFiles.find(elem => {
+        return filePattern.test(elem);
+    });
+    if (extensionFile) {
+        return extensionFile;
+    }
+    return null;
 }
 
 export function filterProgressBarChars(str: string): string {
-	const filterRegExp = /\||\/|\-|\\/;
-	str = str.replace(filterRegExp, "");
-	return str;
+    const filterRegExp = /\||\/|\-|\\/;
+    str = str.replace(filterRegExp, "");
+    return str;
 }
 
 export function findStringInFile(filePath: string, strToFind: string): boolean {
-	if (fs.existsSync(filePath)) {
-		const content = fs.readFileSync(filePath).toString().trim();
-		return content.includes(strToFind);
-	}
-	return false;
+    if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath).toString().trim();
+        return content.includes(strToFind);
+    }
+    return false;
 }
 
 export async function findStringInFileWithTimeout(
-	filePath: string,
-	strToFind: string,
-	timeout?: number
+    filePath: string,
+    strToFind: string,
+    timeout?: number,
 ): Promise<boolean> {
-	const condition = () => findStringInFile(filePath, strToFind);
-	return waitUntil(condition, timeout, 3000);
+    const condition = () => findStringInFile(filePath, strToFind);
+    return waitUntil(condition, timeout, 3000);
 }
 
 export function retrieveStringsFromLogFile(
-	filePath: string,
-	pattern: RegExp
+    filePath: string,
+    pattern: RegExp,
 ): RegExpMatchArray | null {
-	if (fs.existsSync(filePath)) {
-		const content = fs.readFileSync(filePath).toString().trim();
-		return content.match(pattern);
-	}
-	return null;
+    if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath).toString().trim();
+        return content.match(pattern);
+    }
+    return null;
 }
 
 export async function retrieveStringsFromLogFileWithTimeout(
-	filePath: string,
-	pattern: RegExp,
-	timeout?: number
+    filePath: string,
+    pattern: RegExp,
+    timeout?: number,
 ): Promise<RegExpMatchArray | null> {
-	let result: RegExpMatchArray | null = null;
-	const condition = () => {
-		result = retrieveStringsFromLogFile(filePath, pattern);
-		return !!result;
-	};
-	await waitUntil(condition, timeout, 3000);
-	return result;
+    let result: RegExpMatchArray | null = null;
+    const condition = () => {
+        result = retrieveStringsFromLogFile(filePath, pattern);
+        return !!result;
+    };
+    await waitUntil(condition, timeout, 3000);
+    return result;
 }
 
 export function objectsContains(object: any, subObject: any): boolean {
-	for (let i = 0; i < Object.keys(subObject).length; i++) {
-		const key = Object.keys(subObject)[i];
-		if (typeof subObject[key] === "object" && subObject[key] !== null) {
-			if (typeof object[key] === "object" && object[key] !== null) {
-				if (!objectsContains(object[key], subObject[key])) {
-					return false;
-				}
-			} else {
-				return false;
-			}
-		} else if (subObject[key] !== object[key]) {
-			return false;
-		}
-	}
-	return true;
+    for (let i = 0; i < Object.keys(subObject).length; i++) {
+        const key = Object.keys(subObject)[i];
+        if (typeof subObject[key] === "object" && subObject[key] !== null) {
+            if (typeof object[key] === "object" && object[key] !== null) {
+                if (!objectsContains(object[key], subObject[key])) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if (subObject[key] !== object[key]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 export function waitUntil(
-	condition: () => boolean,
-	timeout: number = 30000,
-	interval: number = 1000
+    condition: () => boolean,
+    timeout: number = 30000,
+    interval: number = 1000,
 ): Promise<boolean> {
-	return new Promise((resolve) => {
-		const rejectTimeout = setTimeout(() => {
-			cleanup();
-			resolve(false);
-		}, timeout);
+    return new Promise(resolve => {
+        const rejectTimeout = setTimeout(() => {
+            cleanup();
+            resolve(false);
+        }, timeout);
 
-		const сheckInterval = setInterval(async () => {
-			if (condition()) {
-				cleanup();
-				resolve(true);
-			}
-		}, interval);
+        const сheckInterval = setInterval(async () => {
+            if (condition()) {
+                cleanup();
+                resolve(true);
+            }
+        }, interval);
 
-		const cleanup = () => {
-			clearTimeout(rejectTimeout);
-			clearInterval(сheckInterval);
-		};
-	});
+        const cleanup = () => {
+            clearTimeout(rejectTimeout);
+            clearInterval(сheckInterval);
+        };
+    });
 }
 
-export async function waitForRunningPackager(
-	filePath: string
-): Promise<boolean> {
-	const condition = () => {
-		return findStringInFile(
-			filePath,
-			SmokeTestsConstants.PackagerStartedPattern
-		);
-	};
+export async function waitForRunningPackager(filePath: string): Promise<boolean> {
+    const condition = () => {
+        return findStringInFile(filePath, SmokeTestsConstants.PackagerStartedPattern);
+    };
 
-	const result = await waitUntil(condition);
-	if (result) {
-		SmokeTestLogger.success(`Packager started pattern is found`);
-	} else {
-		SmokeTestLogger.warn(`Packager started logging pattern is not found`);
-	}
-	return result;
+    const result = await waitUntil(condition);
+    if (result) {
+        SmokeTestLogger.success(`Packager started pattern is found`);
+    } else {
+        SmokeTestLogger.warn(`Packager started logging pattern is not found`);
+    }
+    return result;
 }
 
 export async function smokeTestFail(message: string): Promise<void> {
-	SmokeTestLogger.error(message);
-	await AndroidEmulatorManager.terminateAllAndroidEmulators();
-	if (process.platform === "darwin") {
-		try {
-			await IosSimulatorManager.shutdownAllSimulators();
-		} catch (e) {
-			SmokeTestLogger.error(e.toString());
-		}
-	}
-	await AppiumHelper.terminateAppium();
-	process.exit(1);
+    SmokeTestLogger.error(message);
+    await AndroidEmulatorManager.terminateAllAndroidEmulators();
+    if (process.platform === "darwin") {
+        try {
+            await IosSimulatorManager.shutdownAllSimulators();
+        } catch (e) {
+            SmokeTestLogger.error(e.toString());
+        }
+    }
+    await AppiumHelper.terminateAppium();
+    process.exit(1);
 }

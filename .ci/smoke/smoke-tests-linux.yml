@@ -1,20 +1,20 @@
 trigger:
-    - none
+  - none
 pr:
-    - none
+  - none
 
 variables:
-    vswdbotLogin: vswdbot
-    appiumVersion: 1.22.2
-    expoCLIVersion: latest
-    smokeTestDirectory: test/smoke
+  vswdbotLogin: vswdbot
+  appiumVersion: 1.22.2
+  expoCLIVersion: latest
+  smokeTestDirectory: test/smoke
 
 jobs:
-    - job: Linux
-      pool:
-          name: "React Native smoke tests - Linux"
-      timeoutInMinutes: 50
-      steps:
-          - checkout: self
-            clean: true
-          - template: smoke-tests-common-validation.yml
+  - job: Linux
+    pool:
+      name: "React Native smoke tests - Linux"
+    timeoutInMinutes: 50
+    steps:
+      - checkout: self
+        clean: true
+      - template: smoke-tests-common-validation.yml

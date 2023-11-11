@@ -9,58 +9,49 @@ import * as sinon from "sinon";
 import { homedir } from "os";
 
 suite("macOSDebugModeManager", function () {
-	suite("extensionContext", function () {
-		test("findPlistFile should correctly find the NSUserDefaults plist file for an app", async function () {
-			const projectRoot = path.join("/", "tmp");
-			const macosProjectRoot = path.join(projectRoot, "myProject");
-			const bundleId = "org.reactjs.native.rn-macos";
+    suite("extensionContext", function () {
+        test("findPlistFile should correctly find the NSUserDefaults plist file for an app", async function () {
+            const projectRoot = path.join("/", "tmp");
+            const macosProjectRoot = path.join(projectRoot, "myProject");
+            const bundleId = "org.reactjs.native.rn-macos";
 
-			const existingPlistFilePath = path.join(
-				homedir(),
-				"Library",
-				"Preferences",
-				`${bundleId}.plist`
-			);
+            const existingPlistFilePath = path.join(
+                homedir(),
+                "Library",
+                "Preferences",
+                `${bundleId}.plist`,
+            );
 
-			// "exists" only finds existingPlistFile file
-			const mockExists = sinon.stub();
-			mockExists
-				.withArgs(existingPlistFilePath)
-				.returns(Promise.resolve(true));
-			mockExists.returns(Promise.resolve(false));
+            // "exists" only finds existingPlistFile file
+            const mockExists = sinon.stub();
+            mockExists.withArgs(existingPlistFilePath).returns(Promise.resolve(true));
+            mockExists.returns(Promise.resolve(false));
 
-			const mockFS: any = {
-				exists: mockExists,
-			};
+            const mockFS: any = {
+                exists: mockExists,
+            };
 
-			// getBundleId returns bundleId
-			const bundleIdStub = sinon.stub();
-			bundleIdStub
-				.withArgs(macosProjectRoot)
-				.returns(Promise.resolve(bundleId));
-			bundleIdStub.returns(Promise.reject("Incorrect project root"));
+            // getBundleId returns bundleId
+            const bundleIdStub = sinon.stub();
+            bundleIdStub.withArgs(macosProjectRoot).returns(Promise.resolve(bundleId));
+            bundleIdStub.returns(Promise.reject("Incorrect project root"));
 
-			const mockPlistBuddy: any = {
-				getBundleId: bundleIdStub,
-			};
+            const mockPlistBuddy: any = {
+                getBundleId: bundleIdStub,
+            };
 
-			let macOSDebugModeManager = new MacOSDebugModeManager(
-				macosProjectRoot,
-				projectRoot,
-				undefined,
-				{
-					nodeFileSystem: mockFS,
-					plistBuddy: mockPlistBuddy,
-				}
-			);
+            let macOSDebugModeManager = new MacOSDebugModeManager(
+                macosProjectRoot,
+                projectRoot,
+                undefined,
+                {
+                    nodeFileSystem: mockFS,
+                    plistBuddy: mockPlistBuddy,
+                },
+            );
 
-			const plistFile = await (
-				macOSDebugModeManager as any
-			).findPlistFile();
-			assert(
-				plistFile === existingPlistFilePath,
-				"Returned incorrect value"
-			);
-		});
-	});
+            const plistFile = await (macOSDebugModeManager as any).findPlistFile();
+            assert(plistFile === existingPlistFilePath, "Returned incorrect value");
+        });
+    });
 });

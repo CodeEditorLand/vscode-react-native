@@ -6,117 +6,96 @@ import { Code } from "./code";
 import { QuickInput } from "./quickinput";
 
 export class QuickAccess {
-	constructor(
-		private code: Code,
-		private editors: Editors,
-		private quickInput: QuickInput
-	) {}
 
-	public async openQuickAccess(value: string): Promise<void> {
-		let retries = 0;
+    constructor(private code: Code, private editors: Editors, private quickInput: QuickInput) { }
 
-		// other parts of code might steal focus away from quickinput :(
-		while (retries < 5) {
-			if (process.platform === "darwin") {
-				await this.code.dispatchKeybinding("cmd+p");
-			} else {
-				await this.code.dispatchKeybinding("ctrl+p");
-			}
+    public async openQuickAccess(value: string): Promise<void> {
+        let retries = 0;
 
-			try {
-				await this.quickInput.waitForQuickInputOpened(/*10*/);
-				break;
-			} catch (err) {
-				if (++retries > 5) {
-					throw err;
-				}
+        // other parts of code might steal focus away from quickinput :(
+        while (retries < 5) {
+            if (process.platform === "darwin") {
+                await this.code.dispatchKeybinding("cmd+p");
+            } else {
+                await this.code.dispatchKeybinding("ctrl+p");
+            }
 
-				await this.code.dispatchKeybinding("escape");
-			}
-		}
+            try {
+                await this.quickInput.waitForQuickInputOpened(/*10*/);
+                break;
+            } catch (err) {
+                if (++retries > 5) {
+                    throw err;
+                }
 
-		if (value) {
-			await this.code.waitForSetValue(
-				QuickInput.QUICK_INPUT_INPUT,
-				value
-			);
-		}
-	}
+                await this.code.dispatchKeybinding("escape");
+            }
+        }
 
-	public async openFile(fileName: string): Promise<void> {
-		await this.openQuickAccess(fileName);
+        if (value) {
+            await this.code.waitForSetValue(QuickInput.QUICK_INPUT_INPUT, value);
+        }
+    }
 
-		await this.quickInput.waitForQuickInputElements(
-			(names) => names[0] === fileName
-		);
-		await this.code.dispatchKeybinding("enter");
-		await this.editors.waitForActiveTab(fileName);
-		await this.editors.waitForEditorFocus(fileName);
-	}
+    public async openFile(fileName: string): Promise<void> {
+        await this.openQuickAccess(fileName);
 
-	public async runCommand(commandId: string): Promise<void> {
-		await this.openQuickAccess(`>${commandId}`);
+        await this.quickInput.waitForQuickInputElements(names => names[0] === fileName);
+        await this.code.dispatchKeybinding("enter");
+        await this.editors.waitForActiveTab(fileName);
+        await this.editors.waitForEditorFocus(fileName);
+    }
 
-		// wait for best choice to be focused
-		await this.code.waitForTextContent(
-			QuickInput.QUICK_INPUT_FOCUSED_ELEMENT
-		);
+    public async runCommand(commandId: string): Promise<void> {
+        await this.openQuickAccess(`>${commandId}`);
 
-		// wait and click on best choice
-		await this.quickInput.selectQuickInputElement(0);
-	}
+        // wait for best choice to be focused
+        await this.code.waitForTextContent(QuickInput.QUICK_INPUT_FOCUSED_ELEMENT);
 
-	public async openQuickOutline(): Promise<void> {
-		let retries = 0;
+        // wait and click on best choice
+        await this.quickInput.selectQuickInputElement(0);
+    }
 
-		while (++retries < 10) {
-			if (process.platform === "darwin") {
-				await this.code.dispatchKeybinding("cmd+shift+o");
-			} else {
-				await this.code.dispatchKeybinding("ctrl+shift+o");
-			}
+    public async openQuickOutline(): Promise<void> {
+        let retries = 0;
 
-			const text = await this.code.waitForTextContent(
-				QuickInput.QUICK_INPUT_ENTRY_LABEL_SPAN
-			);
+        while (++retries < 10) {
+            if (process.platform === "darwin") {
+                await this.code.dispatchKeybinding("cmd+shift+o");
+            } else {
+                await this.code.dispatchKeybinding("ctrl+shift+o");
+            }
 
-			if (text !== "No symbol information for the file") {
-				return;
-			}
+            const text = await this.code.waitForTextContent(QuickInput.QUICK_INPUT_ENTRY_LABEL_SPAN);
 
-			await this.quickInput.closeQuickInput();
-			await new Promise((c) => setTimeout(c, 250));
-		}
-	}
+            if (text !== "No symbol information for the file") {
+                return;
+            }
 
-	public async runDebugScenario(
-		scenario: string,
-		index?: number
-	): Promise<void> {
-		await this.openQuickAccess(`debug ${scenario}`);
+            await this.quickInput.closeQuickInput();
+            await new Promise(c => setTimeout(c, 250));
+        }
+    }
 
-		if (index) {
-			for (let from = 0; from < index; from++) {
-				await this.code.dispatchKeybinding("down");
-			}
-		}
+    public async runDebugScenario(scenario: string, index?: number): Promise<void> {
+        await this.openQuickAccess(`debug ${scenario}`);
 
-		// wait for the best choice to be focused
-		await this.code.waitForTextContent(
-			QuickInput.QUICK_INPUT_FOCUSED_ELEMENT,
-			scenario
-		);
+        if (index) {
+            for (let from = 0; from < index; from++) {
+                await this.code.dispatchKeybinding("down");
+            }
+        }
 
-		// wait and click on the best choice
-		await this.code.waitAndClick(QuickInput.QUICK_INPUT_FOCUSED_ELEMENT);
-	}
+        // wait for the best choice to be focused
+        await this.code.waitForTextContent(QuickInput.QUICK_INPUT_FOCUSED_ELEMENT, scenario);
 
-	public async openDynamicDebugScenarios(
-		scenario: string,
-		index: number
-	): Promise<void> {
-		await this.openQuickAccess(`debug ${scenario}`);
-		// wait and click on needed item
-		await this.quickInput.selectQuickInputElement(index, false);
-	}
+        // wait and click on the best choice
+        await this.code.waitAndClick(QuickInput.QUICK_INPUT_FOCUSED_ELEMENT);
+    }
+
+    public async openDynamicDebugScenarios(scenario: string, index: number): Promise<void> {
+        await this.openQuickAccess(`debug ${scenario}`);
+        // wait and click on needed item
+        await this.quickInput.selectQuickInputElement(index, false);
+    }
 }

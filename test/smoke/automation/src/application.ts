@@ -10,7 +10,7 @@ import { Logger } from "./logger";
 export const enum Quality {
 	Dev,
 	Insiders,
-	Stable,
+	Stable
 }
 
 export interface ApplicationOptions extends SpawnOptions {
@@ -21,6 +21,7 @@ export interface ApplicationOptions extends SpawnOptions {
 }
 
 export class Application {
+
 	private _code: Code | undefined;
 	private _workbench: Workbench | undefined;
 
@@ -72,29 +73,24 @@ export class Application {
 		await this.code.waitForElement(".explorer-folders-view");
 	}
 
-	async restart(options: {
-		workspaceOrFolder?: string;
-		extraArgs?: string[];
-	}): Promise<any> {
+	async restart(options: { workspaceOrFolder?: string, extraArgs?: string[] }): Promise<any> {
 		await this.stop();
-		await new Promise((c) => setTimeout(c, 1000));
+		await new Promise(c => setTimeout(c, 1000));
 		await this._start(options.workspaceOrFolder, options.extraArgs);
 	}
 
-	private async _start(
-		workspaceOrFolder = this.workspacePathOrFolder,
-		extraArgs: string[] = []
-	): Promise<any> {
+	private async _start(workspaceOrFolder = this.workspacePathOrFolder, extraArgs: string[] = []): Promise<any> {
 		this._workspacePathOrFolder = workspaceOrFolder;
 		await this.startApplication(extraArgs);
 		await this.checkWindowReady();
 	}
 
 	async reload(): Promise<any> {
-		this.code.reload().catch((err) => null); // ignore the connection drop errors
+		this.code.reload()
+			.catch(err => null); // ignore the connection drop errors
 
 		// needs to be enough to propagate the 'Reload Window' command
-		await new Promise((c) => setTimeout(c, 1500));
+		await new Promise(c => setTimeout(c, 1500));
 		await this.checkWindowReady();
 	}
 
@@ -110,10 +106,7 @@ export class Application {
 		if (this.options.screenshotsPath) {
 			const raw = await this.code.capturePage();
 			const buffer = Buffer.from(raw, "base64");
-			const screenshotPath = path.join(
-				this.options.screenshotsPath,
-				`${name}.png`
-			);
+			const screenshotPath = path.join(this.options.screenshotsPath, `${name}.png`);
 			if (this.options.log) {
 				this.logger.log("*** Screenshot recorded:", screenshotPath);
 			}
@@ -136,20 +129,15 @@ export class Application {
 			return;
 		}
 
-		await this.code.waitForWindowIds((ids) => ids.length > 0);
+		await this.code.waitForWindowIds(ids => ids.length > 0);
 		await this.code.waitForElement(".monaco-workbench");
 
 		if (this.remote) {
-			await this.code.waitForTextContent(
-				'.monaco-workbench .statusbar-item[id="status.host"]',
-				" TestResolver",
-				undefined,
-				2000
-			);
+			await this.code.waitForTextContent('.monaco-workbench .statusbar-item[id="status.host"]', " TestResolver", undefined, 2000);
 		}
 
 		// wait a bit, since focus might be stolen off widgets
 		// as soon as they open (e.g. quick access)
-		await new Promise((c) => setTimeout(c, 1000));
+		await new Promise(c => setTimeout(c, 1000));
 	}
 }

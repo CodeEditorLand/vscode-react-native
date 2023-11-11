@@ -11,84 +11,82 @@ import { WebDebugSession } from "../debugger/webDebugSession";
 import { DEBUG_TYPES } from "./debuggingConfiguration/debugConfigTypesAndConstants";
 
 export class ReactNativeSessionManager
-	implements vscode.DebugAdapterDescriptorFactory, vscode.Disposable
+    implements vscode.DebugAdapterDescriptorFactory, vscode.Disposable
 {
-	private servers = new Map<string, Net.Server>();
-	private connections = new Map<string, Net.Socket>();
+    private servers = new Map<string, Net.Server>();
+    private connections = new Map<string, Net.Socket>();
 
-	public createDebugAdapterDescriptor(
-		session: vscode.DebugSession,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		executable: vscode.DebugAdapterExecutable | undefined
-	): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
-		const rnSession = new RNSession(session);
+    public createDebugAdapterDescriptor(
+        session: vscode.DebugSession,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        executable: vscode.DebugAdapterExecutable | undefined,
+    ): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
+        const rnSession = new RNSession(session);
 
-		let debugServer;
-		if (session.configuration.platform != "expoweb") {
-			debugServer = Net.createServer((socket) => {
-				const rnDebugSession =
-					session.type === DEBUG_TYPES.REACT_NATIVE
-						? new RNDebugSession(rnSession)
-						: new DirectDebugSession(rnSession);
+        let debugServer;
+        if (session.configuration.platform != "expoweb") {
+            debugServer = Net.createServer(socket => {
+                const rnDebugSession =
+                    session.type === DEBUG_TYPES.REACT_NATIVE
+                        ? new RNDebugSession(rnSession)
+                        : new DirectDebugSession(rnSession);
 
-				this.connections.set(session.id, socket);
+                this.connections.set(session.id, socket);
 
-				rnDebugSession.setRunAsServer(true);
-				rnDebugSession.start(<NodeJS.ReadableStream>socket, socket);
-			});
-		} else {
-			debugServer = Net.createServer((socket) => {
-				const webDebugSession = new WebDebugSession(rnSession);
-				webDebugSession.setRunAsServer(true);
-				this.connections.set(session.id, socket);
-				webDebugSession.start(<NodeJS.ReadableStream>socket, socket);
-			});
-		}
+                rnDebugSession.setRunAsServer(true);
+                rnDebugSession.start(<NodeJS.ReadableStream>socket, socket);
+            });
+        } else {
+            debugServer = Net.createServer(socket => {
+                const webDebugSession = new WebDebugSession(rnSession);
+                webDebugSession.setRunAsServer(true);
+                this.connections.set(session.id, socket);
+                webDebugSession.start(<NodeJS.ReadableStream>socket, socket);
+            });
+        }
 
-		debugServer.listen(0);
-		this.servers.set(session.id, debugServer);
+        debugServer.listen(0);
+        this.servers.set(session.id, debugServer);
 
-		// make VS Code connect to debug server
-		return new vscode.DebugAdapterServer(
-			(<Net.AddressInfo>debugServer.address()).port
-		);
-	}
+        // make VS Code connect to debug server
+        return new vscode.DebugAdapterServer((<Net.AddressInfo>debugServer.address()).port);
+    }
 
-	public terminate(terminateEvent: TerminateEventArgs): void {
-		this.destroyServer(
-			terminateEvent.debugSession.id,
-			this.servers.get(terminateEvent.debugSession.id)
-		);
+    public terminate(terminateEvent: TerminateEventArgs): void {
+        this.destroyServer(
+            terminateEvent.debugSession.id,
+            this.servers.get(terminateEvent.debugSession.id),
+        );
 
-		const connection = this.connections.get(terminateEvent.debugSession.id);
-		if (connection) {
-			if (terminateEvent.args.forcedStop) {
-				this.destroyConnection(connection);
-			}
-			this.connections.delete(terminateEvent.debugSession.id);
-		}
-	}
+        const connection = this.connections.get(terminateEvent.debugSession.id);
+        if (connection) {
+            if (terminateEvent.args.forcedStop) {
+                this.destroyConnection(connection);
+            }
+            this.connections.delete(terminateEvent.debugSession.id);
+        }
+    }
 
-	public dispose(): void {
-		this.servers.forEach((server, key) => {
-			this.destroyServer(key, server);
-		});
-		this.connections.forEach((conn, key) => {
-			this.destroyConnection(conn);
-			this.connections.delete(key);
-		});
-	}
+    public dispose(): void {
+        this.servers.forEach((server, key) => {
+            this.destroyServer(key, server);
+        });
+        this.connections.forEach((conn, key) => {
+            this.destroyConnection(conn);
+            this.connections.delete(key);
+        });
+    }
 
-	private destroyConnection(connection: Net.Socket) {
-		connection.removeAllListeners();
-		connection.on("error", () => undefined);
-		connection.destroy();
-	}
+    private destroyConnection(connection: Net.Socket) {
+        connection.removeAllListeners();
+        connection.on("error", () => undefined);
+        connection.destroy();
+    }
 
-	private destroyServer(sessionId: string, server?: Net.Server) {
-		if (server) {
-			server.close();
-			this.servers.delete(sessionId);
-		}
-	}
+    private destroyServer(sessionId: string, server?: Net.Server) {
+        if (server) {
+            server.close();
+            this.servers.delete(sessionId);
+        }
+    }
 }

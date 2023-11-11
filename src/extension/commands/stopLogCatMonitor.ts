@@ -10,48 +10,42 @@ import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { Command } from "./util/command";
 
 export class StopLogCatMonitor extends Command {
-	codeName = "stopLogCatMonitor";
-	label = "Stop React Native LogCat Monitor";
+    codeName = "stopLogCatMonitor";
+    label = "Stop React Native LogCat Monitor";
 
-	requiresTrust = false;
-	requiresProject = false;
-	error = ErrorHelper.getInternalError(
-		InternalErrorCode.AndroidCouldNotStopLogCatMonitor
-	);
+    requiresTrust = false;
+    requiresProject = false;
+    error = ErrorHelper.getInternalError(InternalErrorCode.AndroidCouldNotStopLogCatMonitor);
 
-	async baseFn(): Promise<void> {
-		const monitor = await selectLogCatMonitor();
-		LogCatMonitorManager.delMonitor(monitor.deviceId);
-	}
+    async baseFn(): Promise<void> {
+        const monitor = await selectLogCatMonitor();
+        LogCatMonitorManager.delMonitor(monitor.deviceId);
+    }
 }
 
 function selectLogCatMonitor() {
-	const logger = OutputChannelLogger.getMainChannel();
-	const keys = Object.keys(LogCatMonitorManager.logCatMonitorsCache);
+    const logger = OutputChannelLogger.getMainChannel();
+    const keys = Object.keys(LogCatMonitorManager.logCatMonitorsCache);
 
-	if (keys.length === 1) {
-		logger.debug(`Command palette: once LogCat monitor ${keys[0]}`);
-		return LogCatMonitorManager.logCatMonitorsCache[keys[0]];
-	}
+    if (keys.length === 1) {
+        logger.debug(`Command palette: once LogCat monitor ${keys[0]}`);
+        return LogCatMonitorManager.logCatMonitorsCache[keys[0]];
+    }
 
-	if (keys.length > 1) {
-		return new Promise<string | undefined>((res, rej) => {
-			vscode.window.showQuickPick(keys).then(res, rej);
-		}).then(async (selected) => {
-			// #todo!>selectionHandling>
-			if (!selected) {
-				await new Promise(() => {});
-			}
+    if (keys.length > 1) {
+        return new Promise<string | undefined>((res, rej) => {
+            vscode.window.showQuickPick(keys).then(res, rej);
+        }).then(async selected => {
+            // #todo!>selectionHandling>
+            if (!selected) {
+                await new Promise(() => {});
+            }
 
-			assert(selected, "Selection canceled");
-			logger.debug(
-				`Command palette: selected LogCat monitor ${selected}`
-			);
-			return LogCatMonitorManager.logCatMonitorsCache[selected];
-		});
-	}
+            assert(selected, "Selection canceled");
+            logger.debug(`Command palette: selected LogCat monitor ${selected}`);
+            return LogCatMonitorManager.logCatMonitorsCache[selected];
+        });
+    }
 
-	throw ErrorHelper.getInternalError(
-		InternalErrorCode.AndroidCouldNotFindActiveLogCatMonitor
-	);
+    throw ErrorHelper.getInternalError(InternalErrorCode.AndroidCouldNotFindActiveLogCatMonitor);
 }

@@ -22,21 +22,18 @@ import * as querystring from "querystring";
  */
 
 export class FormUrlencodedFormatter implements IFormatter {
-	constructor(private logger: OutputChannelLogger) {}
+    constructor(private logger: OutputChannelLogger) {}
 
-	public formatRequest(
-		request: Request,
-		contentType: string
-	): FormattedBody | null {
-		if (contentType.startsWith("application/x-www-form-urlencoded")) {
-			const decoded = decodeBody(request, this.logger);
-			if (!decoded) {
-				return null;
-			}
-			return querystring.parse(decoded);
-		}
-		return null;
-	}
+    public formatRequest(request: Request, contentType: string): FormattedBody | null {
+        if (contentType.startsWith("application/x-www-form-urlencoded")) {
+            const decoded = decodeBody(request, this.logger);
+            if (!decoded) {
+                return null;
+            }
+            return querystring.parse(decoded);
+        }
+        return null;
+    }
 }
 
 /**
