@@ -3,178 +3,163 @@
 // Definitions by: Patricio Beltran <https://github.com/patobeltran>
 
 declare module xdl {
-	interface ILoginOptions {
-		username: string;
-		password: string;
-	}
+    interface ILoginOptions {
+        username: string,
+        password: string
+    }
 
-	interface IUser {
-		type: string;
-		username: string;
-	}
+    interface IUser {
+        type: string,
+        username: string
+    }
 
-	var User: {
-		loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
-		logoutAsync(): Promise<void>;
-		getCurrentUserAsync(): Promise<IUser>;
-	};
+    var User: {
+        loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
+        logoutAsync(): Promise<void>;
+        getCurrentUserAsync(): Promise<IUser>;
+    }
 
-	var UserManager: {
-		loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
-		logoutAsync(): Promise<void>;
-		getCurrentUserAsync(): Promise<IUser>;
-	};
+    var UserManager: {
+        loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
+        logoutAsync(): Promise<void>;
+        getCurrentUserAsync(): Promise<IUser>;
+    }
 
-	interface IStartOptions {
-		reset?: boolean;
-	}
+    interface IStartOptions {
+        reset?: boolean
+    }
 
-	interface IUrlOptions {
-		urlType?: "exp" | "http" | "redirect";
-		hostType?: "tunnel" | "lan" | "localhost";
-		dev: boolean;
-		minify: boolean;
-	}
+    interface IUrlOptions {
+        urlType?: "exp" | "http" | "redirect",
+        hostType?: "tunnel" | "lan" | "localhost",
+        dev: boolean,
+        minify: boolean
+    }
 
-	interface IPublishOptions {
-		quiet: boolean;
-	}
+    interface IPublishOptions {
+        quiet: boolean
+    }
 
-	interface IReactNativeServerOptions {
-		reset: boolean;
-	}
+    interface IReactNativeServerOptions {
+        reset: boolean
+    }
 
-	interface IOptions {
-		packagerPort: number;
-	}
+    interface IOptions {
+        packagerPort: number
+    }
 
-	interface IPublishResponse {
-		err: any;
-		url: string;
-	}
+    interface IPublishResponse {
+        err: any,
+        url: string
+    }
 
-	interface SDKVersion {
-		androidExpoViewUrl?: string;
-		expoReactNativeTag: string;
-		/* deprecated */ exponentReactNativeTag?: string;
-		expokitNpmPackage?: string;
-		facebookReactNativeVersion: string;
-		facebookReactVersion?: string;
-		iosExpoViewUrl?: string;
-		/* deprecated */ iosExponentViewUrl?: string;
-		iosVersion?: string;
-		isDeprecated?: boolean;
-		packagesToInstallWhenEjecting?: { [name: string]: string };
-		releaseNoteUrl?: string;
-		iosClientUrl?: string;
-		iosClientVersion?: string;
-		androidClientUrl?: string;
-		androidClientVersion?: string;
-		relatedPackages?: { [name: string]: string };
-		beta?: boolean;
-	}
+    interface SDKVersion {
+        androidExpoViewUrl?: string;
+        expoReactNativeTag: string;
+        /* deprecated */ exponentReactNativeTag?: string;
+        expokitNpmPackage?: string;
+        facebookReactNativeVersion: string;
+        facebookReactVersion?: string;
+        iosExpoViewUrl?: string;
+        /* deprecated */ iosExponentViewUrl?: string;
+        iosVersion?: string;
+        isDeprecated?: boolean;
+        packagesToInstallWhenEjecting?: { [name: string]: string };
+        releaseNoteUrl?: string;
+        iosClientUrl?: string;
+        iosClientVersion?: string;
+        androidClientUrl?: string;
+        androidClientVersion?: string;
+        relatedPackages?: { [name: string]: string };
+        beta?: boolean;
+    }
 
-	interface SDKVersions {
-		[version: string]: SDKVersion;
-	}
+    interface SDKVersions {
+        [version: string]: SDKVersion;
+    }
 
-	var Project: {
-		startAsync(projectRoot: string, options?: IStartOptions): Promise<void>;
-		stopAsync(projectRoot: string): Promise<void>;
-		getUrlAsync(
-			projectRoot: string,
-			options?: IUrlOptions
-		): Promise<string>;
-		publishAsync(
-			projectRoot: string,
-			options?: IPublishOptions
-		): Promise<IPublishResponse>;
-		startExpoServerAsync(projectRoot: string): Promise<void>;
-		stopExpoServerAsync(projectRoot: string): Promise<void>;
-		startReactNativeServerAsync(
-			projectRoot: string,
-			options?: IReactNativeServerOptions
-		): Promise<void>;
-		stopReactNativeServerAsync(projectRoot: string): Promise<void>;
-		startTunnelsAsync(projectRoot: string): Promise<void>;
-		stopTunnelsAsync(projectRoot: string): Promise<void>;
-	};
+    var Project: {
+        startAsync(projectRoot: string, options?: IStartOptions): Promise<void>;
+        stopAsync(projectRoot: string): Promise<void>;
+        getUrlAsync(projectRoot: string, options?: IUrlOptions): Promise<string>;
+        publishAsync(projectRoot: string, options?: IPublishOptions): Promise<IPublishResponse>;
+        startExpoServerAsync(projectRoot: string): Promise<void>;
+        stopExpoServerAsync(projectRoot: string): Promise<void>;
+        startReactNativeServerAsync(projectRoot: string, options?: IReactNativeServerOptions): Promise<void>;
+        stopReactNativeServerAsync(projectRoot: string): Promise<void>;
+        startTunnelsAsync(projectRoot: string): Promise<void>;
+        stopTunnelsAsync(projectRoot: string): Promise<void>;
+    }
 
-	var ProjectSettings: {
-		setPackagerInfoAsync(
-			projectRoot: string,
-			json: Partial<IOptions>
-		): Promise<IOptions>;
-	};
+    var ProjectSettings: {
+        setPackagerInfoAsync(projectRoot: string, json: Partial<IOptions>): Promise<IOptions>;
+    }
 
-	var UrlUtils: {
-		constructManifestUrlAsync(
-			projectRoot: string,
-			opts?: any,
-			requestHostname?: string
-		): Promise<string>;
-	};
+    var UrlUtils: {
+        constructManifestUrlAsync(projectRoot: string, opts?: any, requestHostname?: string): Promise<string>;
+    }
 
-	var Versions: {
-		sdkVersionsAsync(): Promise<SDKVersions>;
-		releasedSdkVersionsAsync(): Promise<SDKVersions>;
-	};
+    var Versions: {
+        sdkVersionsAsync(): Promise<SDKVersions>;
+        releasedSdkVersionsAsync(): Promise<SDKVersions>;
+    }
 
-	var Android: {
-		startAdbReverseAsync(projectRoot: string): Promise<boolean>;
-		stopAdbReverseAsync(projectRoot: string): Promise<void>;
-	};
+    var Android: {
+        startAdbReverseAsync(projectRoot: string): Promise<boolean>;
+        stopAdbReverseAsync(projectRoot: string): Promise<void>;
+    }
 
-	interface IApiConfig {
-		scheme: string;
-		host: string;
-		port: number;
-	}
+    interface IApiConfig {
+        scheme: string,
+        host: string,
+        port: number
+    }
 
-	interface INgrokConfig {
-		authToken: string;
-		authTokenPublicId: string;
-		domain: string;
-	}
+    interface INgrokConfig {
+        authToken: string,
+        authTokenPublicId: string,
+        domain: string
+    }
 
-	interface IValidationConfig {
-		reactNativeVersionWarnings: boolean;
-	}
+    interface IValidationConfig {
+        reactNativeVersionWarnings: boolean
+    }
 
-	interface IConfig {
-		api: IApiConfig;
-		ngrok: INgrokConfig;
-		developerTool: any;
-		validation: IValidationConfig;
-	}
+    interface IConfig {
+        api: IApiConfig,
+        ngrok: INgrokConfig,
+        developerTool: any,
+        validation: IValidationConfig
+    }
 
-	var Config: IConfig;
+    var Config: IConfig;
 
-	interface IBunyanStream {
-		type?: string;
-		level?: number | string;
-		path?: string;
-		stream?: NodeJS.WritableStream | IBunyanStream;
-		closeOnExit?: boolean;
-		period?: string;
-		count?: number;
-	}
+    interface IBunyanStream {
+        type?: string;
+        level?: number | string;
+        path?: string;
+        stream?: NodeJS.WritableStream | IBunyanStream;
+        closeOnExit?: boolean;
+        period?: string;
+        count?: number;
+    }
 
-	var ProjectUtils: {
-		attachLoggerStream(rootPath: string, options?: IBunyanStream): void;
-	};
+    var ProjectUtils: {
+        attachLoggerStream(rootPath: string, options?: IBunyanStream): void;
+    }
 
-	interface ResolveNgrok {
-		resolveNgrokAsync(
-			projectRoot: string,
-			{
-				shouldPrompt = true,
-				autoInstall = false,
-			}: { shouldPrompt?: boolean; autoInstall?: boolean } = {}
-		): Promise<any>;
-	}
+    interface ResolveNgrok
+    {
+        resolveNgrokAsync(
+            projectRoot: string,
+            {
+                shouldPrompt = true,
+                autoInstall = false,
+            }: { shouldPrompt?: boolean; autoInstall?: boolean } = {},
+        ): Promise<any>;
+    };
 }
 
 declare module "xdl" {
-	export = xdl;
+    export = xdl;
 }

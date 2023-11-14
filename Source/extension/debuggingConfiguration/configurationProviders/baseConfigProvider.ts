@@ -6,15 +6,15 @@ import { DebugConfigurationState } from "../debugConfigTypesAndConstants";
 import { ConfigurationProviderHelper } from "../../../common/configurationProviderHelper";
 
 export abstract class BaseConfigProvider {
-	protected configurationProviderHelper: ConfigurationProviderHelper;
-	protected maxStepCount: number;
+    protected configurationProviderHelper: ConfigurationProviderHelper;
+    protected maxStepCount: number;
 
-	constructor() {
-		this.configurationProviderHelper = new ConfigurationProviderHelper();
-	}
+    constructor() {
+        this.configurationProviderHelper = new ConfigurationProviderHelper();
+    }
 
-	public abstract buildConfiguration(
-		input: MultiStepInput<DebugConfigurationState>,
-		state: DebugConfigurationState
-	): Promise<InputStep<DebugConfigurationState> | void>;
+    public abstract buildConfiguration(
+        input: MultiStepInput<DebugConfigurationState>,
+        state: DebugConfigurationState,
+    ): Promise<InputStep<DebugConfigurationState> | void>;
 }

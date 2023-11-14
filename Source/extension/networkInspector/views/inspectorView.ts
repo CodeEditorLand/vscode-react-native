@@ -8,28 +8,28 @@ import { RequestBodyFormatter } from "../requestBodyFormatters/requestBodyFormat
 import { OutputChannelLogger } from "../../log/OutputChannelLogger";
 
 export enum InspectorViewType {
-	console,
+    console,
 }
 
 export abstract class InspectorView implements Disposable {
-	protected requestBodyDecoder: RequestBodyFormatter;
-	protected requests: Map<string, Request>;
-	protected responses: Map<string, Response>;
-	protected partialResponses: Map<string, PartialResponse>;
-	protected isInitialized: boolean;
-	protected logger: OutputChannelLogger;
+    protected requestBodyDecoder: RequestBodyFormatter;
+    protected requests: Map<string, Request>;
+    protected responses: Map<string, Response>;
+    protected partialResponses: Map<string, PartialResponse>;
+    protected isInitialized: boolean;
+    protected logger: OutputChannelLogger;
 
-	constructor(logger: OutputChannelLogger) {
-		this.logger = logger;
-		this.requests = new Map();
-		this.responses = new Map();
-		this.partialResponses = new Map();
-		this.isInitialized = false;
-		this.requestBodyDecoder = new RequestBodyFormatter(this.logger);
-	}
+    constructor(logger: OutputChannelLogger) {
+        this.logger = logger;
+        this.requests = new Map();
+        this.responses = new Map();
+        this.partialResponses = new Map();
+        this.isInitialized = false;
+        this.requestBodyDecoder = new RequestBodyFormatter(this.logger);
+    }
 
-	public dispose(): void {}
+    public dispose(): void {}
 
-	public abstract init(): Promise<void>;
-	public abstract handleMessage(data: RequestParams): void;
+    public abstract init(): Promise<void>;
+    public abstract handleMessage(data: RequestParams): void;
 }

@@ -16,99 +16,94 @@ import { InspectorViewFactory } from "../networkInspector/views/inspectorViewFac
 import { Command } from "./util/command";
 
 nls.config({
-	messageFormat: nls.MessageFormat.bundle,
-	bundleFormat: nls.BundleFormat.standalone,
+    messageFormat: nls.MessageFormat.bundle,
+    bundleFormat: nls.BundleFormat.standalone,
 })();
 const localize = nls.loadMessageBundle();
 
 interface NetworkInspectorModule {
-	networkInspector: NetworkInspectorServer;
-	androidDeviceTracker: AndroidDeviceTracker;
-	iOSDeviceTracker: IOSDeviceTracker | undefined;
+    networkInspector: NetworkInspectorServer;
+    androidDeviceTracker: AndroidDeviceTracker;
+    iOSDeviceTracker: IOSDeviceTracker | undefined;
 }
 
 // #todo!> commands should not maintain state
 let networkInspectorModule: NetworkInspectorModule | undefined;
 
 export class StartNetworkInspector extends Command {
-	codeName = "startNetworkInspector";
-	label = "Run Network Inspector";
-	requiresTrust = false;
-	error = ErrorHelper.getInternalError(
-		InternalErrorCode.CouldNotStartNetworkInspector
-	);
+    codeName = "startNetworkInspector";
+    label = "Run Network Inspector";
+    requiresTrust = false;
+    error = ErrorHelper.getInternalError(InternalErrorCode.CouldNotStartNetworkInspector);
 
-	async baseFn(): Promise<void> {
-		assert(this.project);
+    async baseFn(): Promise<void> {
+        assert(this.project);
 
-		const logger = OutputChannelLogger.getMainChannel();
+        const logger = OutputChannelLogger.getMainChannel();
 
-		if (networkInspectorModule) {
-			logger.info(
-				localize(
-					"AnotherNetworkInspectorAlreadyRun",
-					"Another Network inspector is already running"
-				)
-			);
-			return;
-		}
+        if (networkInspectorModule) {
+            logger.info(
+                localize(
+                    "AnotherNetworkInspectorAlreadyRun",
+                    "Another Network inspector is already running",
+                ),
+            );
+            return;
+        }
 
-		const adbHelper = new AdbHelper(
-			this.project.getPackager().getProjectPath(),
-			this.project.getOrUpdateNodeModulesRoot()
-		);
-		const networkInspector = new NetworkInspectorServer();
-		const androidDeviceTracker = new AndroidDeviceTracker(adbHelper);
-		const iOSDeviceTracker =
-			(process.platform === "darwin" && new IOSDeviceTracker()) ||
-			undefined;
+        const adbHelper = new AdbHelper(
+            this.project.getPackager().getProjectPath(),
+            this.project.getOrUpdateNodeModulesRoot(),
+        );
+        const networkInspector = new NetworkInspectorServer();
+        const androidDeviceTracker = new AndroidDeviceTracker(adbHelper);
+        const iOSDeviceTracker =
+            (process.platform === "darwin" && new IOSDeviceTracker()) || undefined;
 
-		networkInspectorModule = {
-			networkInspector,
-			androidDeviceTracker,
-			iOSDeviceTracker,
-		};
+        networkInspectorModule = {
+            networkInspector,
+            androidDeviceTracker,
+            iOSDeviceTracker,
+        };
 
-		try {
-			if (iOSDeviceTracker) {
-				await iOSDeviceTracker.start();
-			}
-			await androidDeviceTracker.start();
-			await networkInspector.start(adbHelper);
-			void vscode.commands.executeCommand(
-				"setContext",
-				CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,
-				true
-			);
-		} catch (err) {
-			await stopNetworkInspector();
-			throw err;
-		}
-	}
+        try {
+            if (iOSDeviceTracker) {
+                await iOSDeviceTracker.start();
+            }
+            await androidDeviceTracker.start();
+            await networkInspector.start(adbHelper);
+            void vscode.commands.executeCommand(
+                "setContext",
+                CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,
+                true,
+            );
+        } catch (err) {
+            await stopNetworkInspector();
+            throw err;
+        }
+    }
 }
 
 export class StopNetworkInspector extends Command {
-	codeName = "stopNetworkInspector";
-	label = "Stop Network Inspector";
-	requiresTrust = false;
-	error = ErrorHelper.getInternalError(
-		InternalErrorCode.CouldNotStopNetworkInspector
-	);
+    codeName = "stopNetworkInspector";
+    label = "Stop Network Inspector";
+    requiresTrust = false;
+    error = ErrorHelper.getInternalError(InternalErrorCode.CouldNotStopNetworkInspector);
 
-	async baseFn(): Promise<void> {
-		await stopNetworkInspector();
-	}
+    async baseFn(): Promise<void> {
+        await stopNetworkInspector();
+    }
 }
 
 async function stopNetworkInspector() {
-	networkInspectorModule?.androidDeviceTracker?.stop();
-	networkInspectorModule?.iOSDeviceTracker?.stop();
-	await networkInspectorModule?.networkInspector?.stop();
-	networkInspectorModule = undefined;
-	InspectorViewFactory.clearCache();
-	void vscode.commands.executeCommand(
-		"setContext",
-		CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,
-		false
-	);
+    networkInspectorModule?.androidDeviceTracker?.stop();
+    networkInspectorModule?.iOSDeviceTracker?.stop();
+    await networkInspectorModule?.networkInspector?.stop();
+    networkInspectorModule = undefined;
+    InspectorViewFactory.clearCache();
+    void vscode.commands.executeCommand(
+        "setContext",
+        CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,
+        false,
+    );
 }
