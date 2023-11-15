@@ -4,80 +4,63 @@
 import { Code } from "./code";
 
 export class Editors {
-	constructor(private code: Code) {}
 
-	public async saveOpenedFile(): Promise<any> {
-		if (process.platform === "darwin") {
-			await this.code.dispatchKeybinding("cmd+s");
-		} else {
-			await this.code.dispatchKeybinding("ctrl+s");
-		}
-	}
+    constructor(private code: Code) { }
 
-	public async selectTab(fileName: string): Promise<void> {
-		await this.code.waitAndClick(
-			`.tabs-container div.tab[data-resource-name$="${fileName}"]`
-		);
-		await this.waitForEditorFocus(fileName);
-	}
+    public async saveOpenedFile(): Promise<any> {
+        if (process.platform === "darwin") {
+            await this.code.dispatchKeybinding("cmd+s");
+        } else {
+            await this.code.dispatchKeybinding("ctrl+s");
+        }
+    }
 
-	public async waitForActiveEditor(fileName: string): Promise<any> {
-		const selector = `.editor-instance .monaco-editor[data-uri$="${fileName}"] textarea`;
-		return this.code.waitForActiveElement(selector);
-	}
+    public async selectTab(fileName: string): Promise<void> {
+        await this.code.waitAndClick(`.tabs-container div.tab[data-resource-name$="${fileName}"]`);
+        await this.waitForEditorFocus(fileName);
+    }
 
-	public async waitForEditorFocus(fileName: string): Promise<void> {
-		await this.waitForActiveTab(fileName);
-		await this.waitForActiveEditor(fileName);
-	}
+    public async waitForActiveEditor(fileName: string): Promise<any> {
+        const selector = `.editor-instance .monaco-editor[data-uri$="${fileName}"] textarea`;
+        return this.code.waitForActiveElement(selector);
+    }
 
-	public async waitForActiveTab(
-		fileName: string,
-		isDirty: boolean = false,
-		isWebview?: boolean,
-		retryCount?: number
-	): Promise<void> {
-		await this.code.waitForElement(
-			`.tabs-container div.tab.active${
-				isDirty ? ".dirty" : ""
-			}[aria-selected="true"][${
-				isWebview ? "title" : "data-resource-name$"
-			}="${fileName}"]`,
-			undefined,
-			retryCount
-		);
-	}
+    public async waitForEditorFocus(fileName: string): Promise<void> {
+        await this.waitForActiveTab(fileName);
+        await this.waitForActiveEditor(fileName);
+    }
 
-	public async waitForTab(
-		fileName: string,
-		isDirty: boolean = false,
-		isWebview?: boolean,
-		retryCount?: number
-	): Promise<void> {
-		await this.code.waitForElement(
-			`.tabs-container div.tab${isDirty ? ".dirty" : ""}[${
-				isWebview ? "title" : "data-resource-name$"
-			}="${fileName}"]`,
-			undefined,
-			retryCount
-		);
-	}
+    public async waitForActiveTab(fileName: string, isDirty: boolean = false, isWebview?: boolean, retryCount?: number): Promise<void> {
+        await this.code.waitForElement(
+            `.tabs-container div.tab.active${isDirty ? ".dirty" : ""}[aria-selected="true"][${isWebview ? "title" : "data-resource-name$"}="${fileName}"]`,
+            undefined,
+            retryCount,
+        );
+    }
 
-	public async newUntitledFile(): Promise<void> {
-		if (process.platform === "darwin") {
-			await this.code.dispatchKeybinding("cmd+n");
-		} else {
-			await this.code.dispatchKeybinding("ctrl+n");
-		}
+    public async waitForTab(fileName: string, isDirty: boolean = false, isWebview?: boolean, retryCount?: number): Promise<void> {
+        await this.code.waitForElement(
+            `.tabs-container div.tab${isDirty ? ".dirty" : ""}[${isWebview ? "title" : "data-resource-name$"}="${fileName}"]`,
+            undefined,
+            retryCount,
+        );
+    }
 
-		await this.waitForEditorFocus("Untitled-1");
-	}
+    public async newUntitledFile(): Promise<void> {
+        if (process.platform === "darwin") {
+            await this.code.dispatchKeybinding("cmd+n");
+        } else {
+            await this.code.dispatchKeybinding("ctrl+n");
+        }
 
-	public async scrollTop(): Promise<void> {
-		if (process.platform === "darwin") {
-			await this.code.dispatchKeybinding("cmd+home");
-		} else {
-			await this.code.dispatchKeybinding("ctrl+home");
-		}
-	}
+        await this.waitForEditorFocus("Untitled-1");
+    }
+
+    public async scrollTop(): Promise<void> {
+        if (process.platform === "darwin") {
+            await this.code.dispatchKeybinding("cmd+home");
+        } else {
+            await this.code.dispatchKeybinding("ctrl+home");
+        }
+    }
 }
