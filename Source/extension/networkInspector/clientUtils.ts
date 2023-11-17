@@ -8,10 +8,10 @@ import { ClientIdConstituents, ClientQuery } from "./clientDevice";
 import { OutputChannelLogger } from "../log/OutputChannelLogger";
 
 export enum ClientOS {
-    iOS = "iOS",
-    Android = "Android",
-    Windows = "Windows",
-    MacOS = "MacOS",
+	iOS = "iOS",
+	Android = "Android",
+	Windows = "Windows",
+	MacOS = "MacOS",
 }
 
 /**
@@ -26,21 +26,25 @@ export enum ClientOS {
  * @format
  */
 export function buildClientId(
-    clientInfo: {
-        app: string;
-        os: ClientOS;
-        device: string;
-        device_id: string;
-    },
-    logger: OutputChannelLogger,
+	clientInfo: {
+		app: string;
+		os: ClientOS;
+		device: string;
+		device_id: string;
+	},
+	logger: OutputChannelLogger
 ): string {
-    for (const key of ["app", "os", "device", "device_id"] as Array<keyof ClientIdConstituents>) {
-        if (!clientInfo[key]) {
-            logger.error(`Attempted to build clientId with invalid ${key}: "${clientInfo[key]}`);
-        }
-    }
-    const escapedName = escape(clientInfo.app);
-    return `${escapedName}#${clientInfo.os}#${clientInfo.device}#${clientInfo.device_id}`;
+	for (const key of ["app", "os", "device", "device_id"] as Array<
+		keyof ClientIdConstituents
+	>) {
+		if (!clientInfo[key]) {
+			logger.error(
+				`Attempted to build clientId with invalid ${key}: "${clientInfo[key]}`
+			);
+		}
+	}
+	const escapedName = escape(clientInfo.app);
+	return `${escapedName}#${clientInfo.os}#${clientInfo.device}#${clientInfo.device_id}`;
 }
 
 /**
@@ -60,14 +64,17 @@ export function buildClientId(
  * @format
  */
 export function appNameWithUpdateHint(query: ClientQuery): string {
-    // in previous version (before 3), app may not appear in correct device
-    // section because it refers to the name given by client which is not fixed
-    // for android emulators, so it is indicated as outdated so that developers
-    // might want to update SDK to get rid of this connection swap problem
-    if (query.os === ClientOS.Android && (!query.sdk_version || query.sdk_version < 3)) {
-        return query.app + " (Outdated SDK)";
-    }
-    return query.app;
+	// in previous version (before 3), app may not appear in correct device
+	// section because it refers to the name given by client which is not fixed
+	// for android emulators, so it is indicated as outdated so that developers
+	// might want to update SDK to get rid of this connection swap problem
+	if (
+		query.os === ClientOS.Android &&
+		(!query.sdk_version || query.sdk_version < 3)
+	) {
+		return query.app + " (Outdated SDK)";
+	}
+	return query.app;
 }
 
 /**
