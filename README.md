@@ -1168,7 +1168,7 @@ file:
 	"react-native.expo.dependencies": {
 		"xdl": "59.2.0",
 		"@expo/metro-config": "0.2.0",
-		"@expo/ngrok": "^4.1.0"
+		"@expo/ngrok": "4.1.0"
 	}
 }
 ```
