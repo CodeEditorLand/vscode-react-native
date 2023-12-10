@@ -23,7 +23,7 @@
 		"start": "node node_modules/react-native/local-cli/cli.js start"
 	},
 	"dependencies": {
-		"react-native": "0.72.7"
+		"react-native": "0.73.0"
 	},
 	"devDependencies": {
 		"typescript-esbuild": "0.3.2"
