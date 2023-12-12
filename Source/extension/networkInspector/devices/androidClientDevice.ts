@@ -5,12 +5,7 @@ import { ClientOS } from "../clientUtils";
 import { BaseClientDevice } from "./baseClientDevice";
 
 export class AndroidClientDevice extends BaseClientDevice {
-	constructor(
-		id: string,
-		isVirtualTarget: boolean,
-		os: ClientOS,
-		name?: string
-	) {
-		super(id, isVirtualTarget, os, name);
-	}
+    constructor(id: string, isVirtualTarget: boolean, os: ClientOS, name?: string) {
+        super(id, isVirtualTarget, os, name);
+    }
 }

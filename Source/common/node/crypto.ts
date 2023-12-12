@@ -4,9 +4,9 @@
 import * as crypto from "crypto";
 
 export class Crypto {
-	public hash(data: string): string {
-		const hasher = crypto.createHash("sha256");
-		hasher.update(data);
-		return hasher.digest("hex");
-	}
+    public hash(data: string): string {
+        const hasher = crypto.createHash("sha256");
+        hasher.update(data);
+        return hasher.digest("hex");
+    }
 }
