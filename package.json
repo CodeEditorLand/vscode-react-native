@@ -10,24 +10,12 @@
     "theme": "dark"
   },
   "description": "%reactNative.description%",
-  "keywords": [
-    "react-native",
-    "expo",
-    "multi-root ready"
-  ],
   "bugs": "https://github.com/microsoft/vscode-react-native/issues",
   "license": "%reactNative.license%",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/vscode-react-native"
   },
-  "engines": {
-    "vscode": "^1.46.0"
-  },
-  "categories": [
-    "Debuggers",
-    "Other"
-  ],
   "activationEvents": [
     "workspaceContains:node_modules/react-native",
     "onDebugResolve:reactnative",
@@ -1332,24 +1320,6 @@
     "smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
     "quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup"
   },
-  "prettier": {
-    "trailingComma": "all",
-    "arrowParens": "avoid",
-    "printWidth": 100,
-    "tabWidth": 4,
-    "endOfLine": "auto",
-    "overrides": [
-      {
-        "files": [
-          "*.md"
-        ],
-        "options": {
-          "tabWidth": 2,
-          "printWidth": 80
-        }
-      }
-    ]
-  },
   "dependencies": {
     "@vscode/debugadapter": "^1.63.0",
     "command-exists": "1.2.9",
@@ -1405,23 +1375,12 @@
     "@types/vscode": "^1.46.0",
     "@types/websocket": "0.0.33",
     "@types/ws": "0.0.39",
-    "@typescript-eslint/eslint-plugin": "4.15.0",
-    "@typescript-eslint/parser": "4.15.0",
     "@vscode/test-electron": "^2.2.2",
     "@vscode/vsce": "^2.19.0",
     "ansi-colors": "3.2.4",
     "copy-webpack-plugin": "6.0.2",
     "del": "2.2.0",
     "devtools-protocol": "0.0.762508",
-    "eslint": "7.19.0",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-import-resolver-node": "^0.3.4",
-    "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-header": "3.1.1",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-unicorn": "^28.0.2",
     "event-stream": "3.3.4",
     "fancy-log": "1.3.3",
     "gulp": "4.0.2",
@@ -1439,7 +1398,6 @@
     "ncp": "2.0.0",
     "nyc": "^15.1.0",
     "plugin-error": "1.0.1",
-    "prettier": "2.4.0",
     "proxyquire": "^2.1.3",
     "rimraf": "3.0.2",
     "should": "8.3.0",
