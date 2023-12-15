@@ -20,12 +20,15 @@ import { Response } from "../networkMessageData";
  */
 
 export class ImageFormatter implements IFormatter {
-    public formatResponse(response: Response, contentType: string): FormattedBody | null {
-        if (contentType.startsWith("image/") && response.data) {
-            return response.data;
-        }
-        return null;
-    }
+	public formatResponse(
+		response: Response,
+		contentType: string,
+	): FormattedBody | null {
+		if (contentType.startsWith("image/") && response.data) {
+			return response.data;
+		}
+		return null;
+	}
 }
 
 /**

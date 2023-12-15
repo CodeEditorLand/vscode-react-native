@@ -14,38 +14,38 @@ import { OutputChannelLogger } from "./log/OutputChannelLogger";
  * We use synchronous operations here because we want to return after the init/cleanup has been done.
  */
 export class ReactDirManager implements vscode.Disposable {
-    public vscodeDirPath: string;
-    public reactDirPath: string;
-    public isDisposed: boolean = false;
+	public vscodeDirPath: string;
+	public reactDirPath: string;
+	public isDisposed: boolean = false;
 
-    constructor(rootPath: string) {
-        this.vscodeDirPath = path.join(rootPath || "", ".vscode");
-        this.reactDirPath = path.join(this.vscodeDirPath, ".react");
-    }
+	constructor(rootPath: string) {
+		this.vscodeDirPath = path.join(rootPath || "", ".vscode");
+		this.reactDirPath = path.join(this.vscodeDirPath, ".react");
+	}
 
-    public async setup(): Promise<void> {
-        this.isDisposed = false;
-        const fs = new FileSystem();
-        /* if the folder exists, remove it, then recreate it */
-        await fs.removePathRecursivelyAsync(this.reactDirPath);
-        if (!fs.existsSync(this.vscodeDirPath)) {
-            await fs.mkDir(this.vscodeDirPath);
-        }
-        await fs.mkDir(this.reactDirPath);
-    }
+	public async setup(): Promise<void> {
+		this.isDisposed = false;
+		const fs = new FileSystem();
+		/* if the folder exists, remove it, then recreate it */
+		await fs.removePathRecursivelyAsync(this.reactDirPath);
+		if (!fs.existsSync(this.vscodeDirPath)) {
+			await fs.mkDir(this.vscodeDirPath);
+		}
+		await fs.mkDir(this.reactDirPath);
+	}
 
-    public dispose(): void {
-        this.isDisposed = true;
-        void new EntryPointHandler(
-            ProcessType.Extension,
-            OutputChannelLogger.getMainChannel(),
-        ).runFunction(
-            "extension.deleteTemporaryFolder",
-            ErrorHelper.getInternalError(
-                InternalErrorCode.RNTempFolderDeletionFailed,
-                this.reactDirPath,
-            ),
-            () => new FileSystem().removePathRecursivelySync(this.reactDirPath),
-        );
-    }
+	public dispose(): void {
+		this.isDisposed = true;
+		void new EntryPointHandler(
+			ProcessType.Extension,
+			OutputChannelLogger.getMainChannel(),
+		).runFunction(
+			"extension.deleteTemporaryFolder",
+			ErrorHelper.getInternalError(
+				InternalErrorCode.RNTempFolderDeletionFailed,
+				this.reactDirPath,
+			),
+			() => new FileSystem().removePathRecursivelySync(this.reactDirPath),
+		);
+	}
 }

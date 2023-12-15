@@ -4,99 +4,99 @@
 import { MultiStepInput, InputStep } from "../multiStepInput";
 import { ILaunchRequestArgs } from "../../../debugger/debugSessionBase";
 import {
-    DebugConfigurationState,
-    platformTypeDirectPickConfig,
-    DEBUG_TYPES,
-    DebugScenarioType,
+	DebugConfigurationState,
+	platformTypeDirectPickConfig,
+	DEBUG_TYPES,
+	DebugScenarioType,
 } from "../debugConfigTypesAndConstants";
 import { BaseConfigProvider } from "./baseConfigProvider";
 
 export class AttachConfigProvider extends BaseConfigProvider {
-    private readonly defaultAddress: string;
+	private readonly defaultAddress: string;
 
-    constructor() {
-        super();
-        this.defaultAddress = "localhost";
-        this.maxStepCount = 3;
-    }
+	constructor() {
+		super();
+		this.defaultAddress = "localhost";
+		this.maxStepCount = 3;
+	}
 
-    public async buildConfiguration(
-        input: MultiStepInput<DebugConfigurationState>,
-        state: DebugConfigurationState,
-    ): Promise<InputStep<DebugConfigurationState> | void> {
-        this.maxStepCount = 3;
-        state.config = {};
-        const config: Partial<ILaunchRequestArgs> = {
-            name: "Attach to application",
-            request: "attach",
-            type: DEBUG_TYPES.REACT_NATIVE,
-            cwd: "${workspaceFolder}",
-        };
+	public async buildConfiguration(
+		input: MultiStepInput<DebugConfigurationState>,
+		state: DebugConfigurationState,
+	): Promise<InputStep<DebugConfigurationState> | void> {
+		this.maxStepCount = 3;
+		state.config = {};
+		const config: Partial<ILaunchRequestArgs> = {
+			name: "Attach to application",
+			request: "attach",
+			type: DEBUG_TYPES.REACT_NATIVE,
+			cwd: "${workspaceFolder}",
+		};
 
-        state.scenarioType = DebugScenarioType.AttachApp;
+		state.scenarioType = DebugScenarioType.AttachApp;
 
-        await this.configurationProviderHelper.selectApplicationType(
-            input,
-            config,
-            1,
-            this.maxStepCount,
-        );
+		await this.configurationProviderHelper.selectApplicationType(
+			input,
+			config,
+			1,
+			this.maxStepCount,
+		);
 
-        Object.assign(state.config, config);
+		Object.assign(state.config, config);
 
-        if (state.config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT) {
-            this.maxStepCount++;
-            return () => this.configureDirectPlatform(input, state.config);
-        }
-        return () => this.configureAddress(input, state.config);
-    }
+		if (state.config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT) {
+			this.maxStepCount++;
+			return () => this.configureDirectPlatform(input, state.config);
+		}
+		return () => this.configureAddress(input, state.config);
+	}
 
-    private async configureDirectPlatform(
-        input: MultiStepInput<DebugConfigurationState>,
-        config: Partial<ILaunchRequestArgs>,
-    ): Promise<InputStep<DebugConfigurationState> | void> {
-        delete config.platform;
-        await this.configurationProviderHelper.selectPlatform(
-            input,
-            config,
-            platformTypeDirectPickConfig,
-            2,
-            this.maxStepCount,
-        );
+	private async configureDirectPlatform(
+		input: MultiStepInput<DebugConfigurationState>,
+		config: Partial<ILaunchRequestArgs>,
+	): Promise<InputStep<DebugConfigurationState> | void> {
+		delete config.platform;
+		await this.configurationProviderHelper.selectPlatform(
+			input,
+			config,
+			platformTypeDirectPickConfig,
+			2,
+			this.maxStepCount,
+		);
 
-        if (!config.platform) {
-            delete config.platform;
-            delete config.useHermesEngine;
-        } else {
-            config.useHermesEngine = false;
-        }
+		if (!config.platform) {
+			delete config.platform;
+			delete config.useHermesEngine;
+		} else {
+			config.useHermesEngine = false;
+		}
 
-        return () => this.configureAddress(input, config);
-    }
+		return () => this.configureAddress(input, config);
+	}
 
-    private async configureAddress(
-        input: MultiStepInput<DebugConfigurationState>,
-        config: Partial<ILaunchRequestArgs>,
-    ): Promise<InputStep<DebugConfigurationState> | void> {
-        await this.configurationProviderHelper.configureAddress(
-            input,
-            config,
-            config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT ? 3 : 2,
-            this.maxStepCount,
-            this.defaultAddress,
-        );
-        return () => this.configurePort(input, config);
-    }
+	private async configureAddress(
+		input: MultiStepInput<DebugConfigurationState>,
+		config: Partial<ILaunchRequestArgs>,
+	): Promise<InputStep<DebugConfigurationState> | void> {
+		await this.configurationProviderHelper.configureAddress(
+			input,
+			config,
+			config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT ? 3 : 2,
+			this.maxStepCount,
+			this.defaultAddress,
+		);
+		return () => this.configurePort(input, config);
+	}
 
-    private async configurePort(
-        input: MultiStepInput<DebugConfigurationState>,
-        config: Partial<ILaunchRequestArgs>,
-    ): Promise<InputStep<DebugConfigurationState> | void> {
-        await this.configurationProviderHelper.configurePort(
-            input,
-            config,
-            config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT ? 4 : 3,
-            this.maxStepCount,
-        );
-    }
+	private async configurePort(
+		input: MultiStepInput<DebugConfigurationState>,
+		config: Partial<ILaunchRequestArgs>,
+	): Promise<InputStep<DebugConfigurationState> | void> {
+		await this.configurationProviderHelper.configurePort(
+			input,
+			config,
+			config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT ? 4 : 3,
+			this.maxStepCount,
+		);
+	}
 }

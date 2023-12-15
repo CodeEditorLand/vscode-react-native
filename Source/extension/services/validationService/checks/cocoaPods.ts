@@ -6,8 +6,8 @@ import { basicCheck, createNotFoundMessage } from "../util";
 import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 
 const toLocale = nls.loadMessageBundle();
@@ -15,31 +15,31 @@ const toLocale = nls.loadMessageBundle();
 const label = "CocoaPods";
 
 async function test(): Promise<ValidationResultT> {
-    const result = await basicCheck({
-        command: "pod",
-    });
+	const result = await basicCheck({
+		command: "pod",
+	});
 
-    if (!result.exists) {
-        return {
-            status: "failure",
-            comment: createNotFoundMessage(label),
-        };
-    }
+	if (!result.exists) {
+		return {
+			status: "failure",
+			comment: createNotFoundMessage(label),
+		};
+	}
 
-    return {
-        status: "success",
-    };
+	return {
+		status: "success",
+	};
 }
 
 const main: IValidation = {
-    label,
-    platform: ["darwin"],
-    description: toLocale(
-        "CocoaPodsTestDescription",
-        "Required for managing library dependencies of XCode projects",
-    ),
-    category: ValidationCategoryE.iOS,
-    exec: test,
+	label,
+	platform: ["darwin"],
+	description: toLocale(
+		"CocoaPodsTestDescription",
+		"Required for managing library dependencies of XCode projects",
+	),
+	category: ValidationCategoryE.iOS,
+	exec: test,
 };
 
 export default main;

@@ -9,8 +9,8 @@ import { ErrorHelper } from "../common/error/errorHelper";
 import { AppLauncher } from "./appLauncher";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 const localize = nls.loadMessageBundle();
 
@@ -22,77 +22,82 @@ const localize = nls.loadMessageBundle();
 */
 
 {
-    if (process.argv.length < 3) {
-        throw localize(
-            "WrongNumberOfParametersProvidedReferToTheUsageOfThisScript",
-            "Wrong number of parameters provided. Please refer to the usage of this script for proper use.",
-        );
-    }
+	if (process.argv.length < 3) {
+		throw localize(
+			"WrongNumberOfParametersProvidedReferToTheUsageOfThisScript",
+			"Wrong number of parameters provided. Please refer to the usage of this script for proper use.",
+		);
+	}
 
-    let fullpath: string;
-    let workspace: string;
+	let fullpath: string;
+	let workspace: string;
 
-    if (process.argv.length === 3) {
-        fullpath = process.argv[2];
-        workspace = "";
-    } else {
-        fullpath = process.argv[3];
-        workspace = process.argv[2];
-    }
+	if (process.argv.length === 3) {
+		fullpath = process.argv[2];
+		workspace = "";
+	} else {
+		fullpath = process.argv[3];
+		workspace = process.argv[2];
+	}
 
-    const dirname = path.normalize(path.dirname(fullpath));
+	const dirname = path.normalize(path.dirname(fullpath));
 
-    // In Windows this should make sure c:\ is always lowercase and in
-    // Unix '/'.toLowerCase() = '/'
-    const normalizedDirname = dirname.toLowerCase();
-    const filenameAndNumber = path.basename(fullpath);
-    const fileInfo = filenameAndNumber.split(":");
-    const filename = path.join(normalizedDirname, fileInfo[0]);
-    let lineNumber = 1;
+	// In Windows this should make sure c:\ is always lowercase and in
+	// Unix '/'.toLowerCase() = '/'
+	const normalizedDirname = dirname.toLowerCase();
+	const filenameAndNumber = path.basename(fullpath);
+	const fileInfo = filenameAndNumber.split(":");
+	const filename = path.join(normalizedDirname, fileInfo[0]);
+	let lineNumber = 1;
 
-    if (fileInfo.length >= 2) {
-        lineNumber = parseInt(fileInfo[1], 10);
-    }
+	if (fileInfo.length >= 2) {
+		lineNumber = parseInt(fileInfo[1], 10);
+	}
 
-    getReactNativeWorkspaceForFile(filename, workspace)
-        .then(projectRootPath => {
-            const appLauncher = AppLauncher.getAppLauncherByProjectRootPath(projectRootPath);
-            return appLauncher.openFileAtLocation(filename, lineNumber);
-        })
-        .catch(reason => {
-            throw ErrorHelper.getNestedError(
-                reason,
-                InternalErrorCode.CommandFailed,
-                "Unable to communicate with VSCode. Please make sure it is open in the appropriate workspace.",
-            );
-        });
+	getReactNativeWorkspaceForFile(filename, workspace)
+		.then((projectRootPath) => {
+			const appLauncher =
+				AppLauncher.getAppLauncherByProjectRootPath(projectRootPath);
+			return appLauncher.openFileAtLocation(filename, lineNumber);
+		})
+		.catch((reason) => {
+			throw ErrorHelper.getNestedError(
+				reason,
+				InternalErrorCode.CommandFailed,
+				"Unable to communicate with VSCode. Please make sure it is open in the appropriate workspace.",
+			);
+		});
 }
 
-async function getReactNativeWorkspaceForFile(file: string, workspace: string): Promise<string> {
-    if (workspace) {
-        return workspace;
-    }
-    try {
-        return await getPathForRNParentWorkspace(path.dirname(file));
-    } catch (reason) {
-        throw ErrorHelper.getNestedError(
-            reason,
-            InternalErrorCode.WorkspaceNotFound,
-            `Error while looking at workspace for file: ${file}.`,
-        );
-    }
+async function getReactNativeWorkspaceForFile(
+	file: string,
+	workspace: string,
+): Promise<string> {
+	if (workspace) {
+		return workspace;
+	}
+	try {
+		return await getPathForRNParentWorkspace(path.dirname(file));
+	} catch (reason) {
+		throw ErrorHelper.getNestedError(
+			reason,
+			InternalErrorCode.WorkspaceNotFound,
+			`Error while looking at workspace for file: ${file}.`,
+		);
+	}
 }
 
 async function getPathForRNParentWorkspace(dir: string): Promise<string> {
-    const isRNProject = await ReactNativeProjectHelper.isReactNativeProject(dir);
-    if (isRNProject) {
-        return dir;
-    }
-    if (dir === "" || dir === "." || dir === "/" || dir === path.dirname(dir)) {
-        throw ErrorHelper.getInternalError(
-            InternalErrorCode.WorkspaceNotFound,
-            "React Native project workspace not found.",
-        );
-    }
-    return getPathForRNParentWorkspace(path.dirname(dir));
+	const isRNProject =
+		await ReactNativeProjectHelper.isReactNativeProject(dir);
+	if (isRNProject) {
+		return dir;
+	}
+	if (dir === "" || dir === "." || dir === "/" || dir === path.dirname(dir)) {
+		throw ErrorHelper.getInternalError(
+			InternalErrorCode.WorkspaceNotFound,
+			"React Native project workspace not found.",
+		);
+	}
+	return getPathForRNParentWorkspace(path.dirname(dir));
 }

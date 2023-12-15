@@ -13,19 +13,22 @@
 import * as child_process from "child_process";
 import { exec as opensslWithCallback, Action } from "openssl-wrapper";
 
-export function openssl(action: Action, options: Record<string, any>): Promise<string> {
-    return new Promise((resolve, reject) => {
-        opensslWithCallback(action, options, (err, buffer) => {
-            if (err) {
-                reject(err);
-            } else if (buffer) {
-                resolve(buffer.toString());
-            }
-        });
-    });
+export function openssl(
+	action: Action,
+	options: Record<string, any>,
+): Promise<string> {
+	return new Promise((resolve, reject) => {
+		opensslWithCallback(action, options, (err, buffer) => {
+			if (err) {
+				reject(err);
+			} else if (buffer) {
+				resolve(buffer.toString());
+			}
+		});
+	});
 }
 
 export function isInstalled(): boolean {
-    return !child_process.spawnSync("openssl", ["version"]).error;
+	return !child_process.spawnSync("openssl", ["version"]).error;
 }
 /* eslint-enable header/header */

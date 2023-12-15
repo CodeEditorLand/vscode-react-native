@@ -4,17 +4,17 @@
 import { Request } from "./node/request";
 
 export async function ensurePackagerRunning(
-    packagerAddress: string,
-    packagerPort: number,
-    error: any,
+	packagerAddress: string,
+	packagerPort: number,
+	error: any,
 ): Promise<void> {
-    const statusURL = `http://${packagerAddress}:${packagerPort}/status`;
-    try {
-        const body = await Request.request(statusURL, true);
-        if (body !== "packager-status:running") {
-            return Promise.reject();
-        }
-    } catch {
-        throw error;
-    }
+	const statusURL = `http://${packagerAddress}:${packagerPort}/status`;
+	try {
+		const body = await Request.request(statusURL, true);
+		if (body !== "packager-status:running") {
+			return Promise.reject();
+		}
+	} catch {
+		throw error;
+	}
 }

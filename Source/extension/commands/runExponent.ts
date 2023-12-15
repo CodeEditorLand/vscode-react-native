@@ -11,31 +11,35 @@ import { getRunOptions, loginToExponent } from "./util";
 import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class RunExponent extends ReactNativeCommand {
-    codeName = "runExponent";
-    label = "Run Expo";
-    error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunExponent);
+	codeName = "runExponent";
+	label = "Run Expo";
+	error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunExponent);
 
-    async baseFn(): Promise<void> {
-        assert(this.project);
+	async baseFn(): Promise<void> {
+		assert(this.project);
 
-        const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
-        const versions = await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
-            nodeModulesRoot,
-        );
-        this.project.setReactNativeVersions(versions);
+		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
+		const versions =
+			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
+				nodeModulesRoot,
+			);
+		this.project.setReactNativeVersions(versions);
 
-        const platform = new ExponentPlatform(getRunOptions(this.project, PlatformType.Exponent), {
-            packager: this.project.getPackager(),
-        });
+		const platform = new ExponentPlatform(
+			getRunOptions(this.project, PlatformType.Exponent),
+			{
+				packager: this.project.getPackager(),
+			},
+		);
 
-        await platform.beforeStartPackager();
-        await platform.startPackager();
-        await platform.runApp();
-    }
+		await platform.beforeStartPackager();
+		await platform.startPackager();
+		await platform.runApp();
+	}
 
-    async onBeforeExecute(): Promise<void> {
-        await super.onBeforeExecute();
-        assert(this.project);
-        await loginToExponent(this.project);
-    }
+	async onBeforeExecute(): Promise<void> {
+		await super.onBeforeExecute();
+		assert(this.project);
+		await loginToExponent(this.project);
+	}
 }

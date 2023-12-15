@@ -12,41 +12,47 @@ import { getRunOptions } from "./util";
 import { Command } from "./util/command";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 const localize = nls.loadMessageBundle();
 
 export class ShowDevMenu extends Command {
-    codeName = "showDevMenu";
-    requiresTrust = false;
-    label = "Show Dev Menu";
-    error = ErrorHelper.getInternalError(
-        InternalErrorCode.CommandFailed,
-        localize("ReactNativeShowDevMenu", "React Native: Show Developer Menu for app"),
-    );
+	codeName = "showDevMenu";
+	requiresTrust = false;
+	label = "Show Dev Menu";
+	error = ErrorHelper.getInternalError(
+		InternalErrorCode.CommandFailed,
+		localize(
+			"ReactNativeShowDevMenu",
+			"React Native: Show Developer Menu for app",
+		),
+	);
 
-    async baseFn(): Promise<void> {
-        assert(this.project);
+	async baseFn(): Promise<void> {
+		assert(this.project);
 
-        const androidPlatform = new AndroidPlatform(
-            getRunOptions(this.project, PlatformType.Android),
-            {
-                packager: this.project.getPackager(),
-            },
-        ) as AndroidPlatform;
+		const androidPlatform = new AndroidPlatform(
+			getRunOptions(this.project, PlatformType.Android),
+			{
+				packager: this.project.getPackager(),
+			},
+		) as AndroidPlatform;
 
-        androidPlatform.showDevMenu().catch(() => {});
+		androidPlatform.showDevMenu().catch(() => {});
 
-        if (process.platform === "darwin") {
-            const iosPlatform = new IOSPlatform(getRunOptions(this.project, PlatformType.iOS), {
-                packager: this.project.getPackager(),
-            });
+		if (process.platform === "darwin") {
+			const iosPlatform = new IOSPlatform(
+				getRunOptions(this.project, PlatformType.iOS),
+				{
+					packager: this.project.getPackager(),
+				},
+			);
 
-            iosPlatform.showDevMenu(this.project).catch(() => {});
-        }
-        if (process.platform === "win32") {
-            // TODO: implement Show DevMenu command for RNW
-        }
-    }
+			iosPlatform.showDevMenu(this.project).catch(() => {});
+		}
+		if (process.platform === "win32") {
+			// TODO: implement Show DevMenu command for RNW
+		}
+	}
 }

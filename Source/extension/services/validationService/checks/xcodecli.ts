@@ -6,37 +6,37 @@ import { basicCheck, createNotFoundMessage } from "../util";
 import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 const toLocale = nls.loadMessageBundle();
 
 const label = "Xcode CLI";
 
 async function test(): Promise<ValidationResultT> {
-    const result = await basicCheck({
-        command: "xcode-select",
-    });
-    if (result.exists) {
-        return {
-            status: "success",
-        };
-    }
-    return {
-        status: "failure",
-        comment: createNotFoundMessage(label),
-    };
+	const result = await basicCheck({
+		command: "xcode-select",
+	});
+	if (result.exists) {
+		return {
+			status: "success",
+		};
+	}
+	return {
+		status: "failure",
+		comment: createNotFoundMessage(label),
+	};
 }
 
 const main: IValidation = {
-    label,
-    platform: ["darwin"],
-    description: toLocale(
-        "xcodeCLICheckDescription",
-        "Required for building and testing RN macOS apps",
-    ),
-    category: ValidationCategoryE.macOS,
-    exec: test,
+	label,
+	platform: ["darwin"],
+	description: toLocale(
+		"xcodeCLICheckDescription",
+		"Required for building and testing RN macOS apps",
+	),
+	category: ValidationCategoryE.macOS,
+	exec: test,
 };
 
 export default main;

@@ -6,8 +6,8 @@ import { basicCheck, createNotFoundMessage } from "../util";
 import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 
 const toLocale = nls.loadMessageBundle();
@@ -15,31 +15,31 @@ const toLocale = nls.loadMessageBundle();
 const label = "ios-deploy";
 
 async function test(): Promise<ValidationResultT> {
-    const result = await basicCheck({
-        command: "ios-deploy",
-    });
+	const result = await basicCheck({
+		command: "ios-deploy",
+	});
 
-    if (!result.exists) {
-        return {
-            status: "partial-success", // not necessary required
-            comment: createNotFoundMessage(label),
-        };
-    }
+	if (!result.exists) {
+		return {
+			status: "partial-success", // not necessary required
+			comment: createNotFoundMessage(label),
+		};
+	}
 
-    return {
-        status: "success",
-    };
+	return {
+		status: "success",
+	};
 }
 
 const main: IValidation = {
-    label,
-    platform: ["darwin"],
-    description: toLocale(
-        "IosDeployTestDescription",
-        "Required for installing your app on a physical device with the CLI",
-    ),
-    category: ValidationCategoryE.iOS,
-    exec: test,
+	label,
+	platform: ["darwin"],
+	description: toLocale(
+		"IosDeployTestDescription",
+		"Required for installing your app on a physical device with the CLI",
+	),
+	category: ValidationCategoryE.iOS,
+	exec: test,
 };
 
 export default main;

@@ -14,48 +14,54 @@ import { getRunOptions } from "./util";
 import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 abstract class RunAndroid extends ReactNativeCommand {
-    error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunOnAndroid);
+	error = ErrorHelper.getInternalError(
+		InternalErrorCode.FailedToRunOnAndroid,
+	);
 
-    async onBeforeExecute(): Promise<void> {
-        await super.onBeforeExecute();
-        assert(this.project);
-        const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
-        const versions = await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
-            nodeModulesRoot,
-        );
-        this.project.setReactNativeVersions(versions);
-        TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.Android);
-    }
+	async onBeforeExecute(): Promise<void> {
+		await super.onBeforeExecute();
+		assert(this.project);
+		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
+		const versions =
+			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
+				nodeModulesRoot,
+			);
+		this.project.setReactNativeVersions(versions);
+		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.Android);
+	}
 }
 
 export class RunAndroidDevice extends RunAndroid {
-    codeName = "runAndroidDevice";
-    label = "Run Android on Device";
+	codeName = "runAndroidDevice";
+	label = "Run Android on Device";
 
-    async baseFn(): Promise<void> {
-        assert(this.project);
-        await runAndroid(TargetType.Device, this.project);
-    }
+	async baseFn(): Promise<void> {
+		assert(this.project);
+		await runAndroid(TargetType.Device, this.project);
+	}
 }
 
 export class RunAndroidSimulator extends RunAndroid {
-    codeName = "runAndroidSimulator";
-    label = "Run Android on Emulator";
+	codeName = "runAndroidSimulator";
+	label = "Run Android on Emulator";
 
-    async baseFn(): Promise<void> {
-        assert(this.project);
-        await runAndroid(TargetType.Simulator, this.project);
-    }
+	async baseFn(): Promise<void> {
+		assert(this.project);
+		await runAndroid(TargetType.Simulator, this.project);
+	}
 }
 
 async function runAndroid(target: TargetType, project: AppLauncher) {
-    const platform = new AndroidPlatform(getRunOptions(project, PlatformType.Android, target), {
-        packager: project.getPackager(),
-    });
+	const platform = new AndroidPlatform(
+		getRunOptions(project, PlatformType.Android, target),
+		{
+			packager: project.getPackager(),
+		},
+	);
 
-    await platform.resolveMobileTarget(target);
-    await platform.beforeStartPackager();
-    await platform.startPackager();
-    await platform.runApp(true);
-    await platform.disableJSDebuggingMode();
+	await platform.resolveMobileTarget(target);
+	await platform.beforeStartPackager();
+	await platform.startPackager();
+	await platform.runApp(true);
+	await platform.disableJSDebuggingMode();
 }

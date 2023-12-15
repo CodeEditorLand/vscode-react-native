@@ -16,29 +16,41 @@ const localize = nls.loadMessageBundle();
 const logger = OutputChannelLogger.getMainChannel();
 
 export class launchExpoWeb extends Command {
-    codeName = "launchExpoWeb";
-    label = "Launch ExpoWeb";
-    error = ErrorHelper.getInternalError(InternalErrorCode.FailedToLaunchExpoWeb);
+	codeName = "launchExpoWeb";
+	label = "Launch ExpoWeb";
+	error = ErrorHelper.getInternalError(
+		InternalErrorCode.FailedToLaunchExpoWeb,
+	);
 
-    async baseFn(launchArgs: any): Promise<any> {
-        assert(this.project);
-        const expoHelper = this.project.getExponentHelper();
-        logger.info(localize("CheckExpoEnvironment", "Checking Expo project environment."));
-        const isExpo = await expoHelper.isExpoManagedApp(true);
-        if (!isExpo) {
-            logger.info(localize("NotAnExpoProject", "This is not an Expo project."));
-            return;
-        }
-        await runExpoWeb(this.project);
-    }
+	async baseFn(launchArgs: any): Promise<any> {
+		assert(this.project);
+		const expoHelper = this.project.getExponentHelper();
+		logger.info(
+			localize(
+				"CheckExpoEnvironment",
+				"Checking Expo project environment.",
+			),
+		);
+		const isExpo = await expoHelper.isExpoManagedApp(true);
+		if (!isExpo) {
+			logger.info(
+				localize("NotAnExpoProject", "This is not an Expo project."),
+			);
+			return;
+		}
+		await runExpoWeb(this.project);
+	}
 }
 
 async function runExpoWeb(project: AppLauncher) {
-    const platform = new ExponentPlatform(getRunOptions(project, PlatformType.ExpoWeb), {
-        packager: project.getPackager(),
-    });
-    platform;
+	const platform = new ExponentPlatform(
+		getRunOptions(project, PlatformType.ExpoWeb),
+		{
+			packager: project.getPackager(),
+		},
+	);
+	platform;
 
-    await platform.beforeStartPackager();
-    await platform.startPackager();
+	await platform.beforeStartPackager();
+	await platform.startPackager();
 }
