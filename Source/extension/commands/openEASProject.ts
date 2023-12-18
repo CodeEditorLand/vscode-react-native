@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as assert from "assert";
-import * as nls from "vscode-nls";
 import * as vscode from "vscode";
-import { OutputChannelLogger } from "../log/OutputChannelLogger";
+import * as nls from "vscode-nls";
 import { ErrorHelper } from "../../common/error/errorHelper";
 import { InternalErrorCode } from "../../common/error/internalErrorCode";
+import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 nls.config({
@@ -21,7 +21,7 @@ export class OpenEASProject extends ReactNativeCommand {
 	codeName = "openEASProjectInWebPage";
 	label = "Open the eas project in a web page";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToOpenProjectPage
+		InternalErrorCode.FailedToOpenProjectPage,
 	);
 
 	async baseFn(): Promise<void> {
@@ -30,8 +30,8 @@ export class OpenEASProject extends ReactNativeCommand {
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",
-				"Checking Expo project environment."
-			)
+				"Checking Expo project environment.",
+			),
 		);
 		const isExpo = await expoHelper.isExpoManagedApp(true);
 
@@ -52,7 +52,7 @@ export class OpenEASProject extends ReactNativeCommand {
 				if (id == null || owner == null) {
 					const error = localize(
 						"ExpoProjectNotLinkToEAS",
-						"Your app not link to EAS project. Please run 'eas init' firstly to bind your app to EAS project."
+						"Your app not link to EAS project. Please run 'eas init' firstly to bind your app to EAS project.",
 					);
 					void vscode.window.showErrorMessage(error);
 					logger.error(error);
@@ -65,8 +65,8 @@ export class OpenEASProject extends ReactNativeCommand {
 				logger.error(
 					localize(
 						"NoExistingEASProject",
-						"Unable to find existing EAS project. Please run 'eas init' firstly to bind your app to EAS project."
-					)
+						"Unable to find existing EAS project. Please run 'eas init' firstly to bind your app to EAS project.",
+					),
 				);
 			}
 		}

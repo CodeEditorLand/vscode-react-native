@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as path from "path";
 import * as cp from "child_process";
+import * as path from "path";
 import * as nls from "vscode-nls";
 import { ILogger } from "../extension/log/LogHelper";
 import { NullLogger } from "../extension/log/NullLogger";
-import { ProjectVersionHelper } from "./projectVersionHelper";
-import { ISpawnResult } from "./node/childProcess";
-import { HostPlatform, HostPlatformId } from "./hostPlatform";
 import { ErrorHelper } from "./error/errorHelper";
 import { InternalErrorCode } from "./error/internalErrorCode";
+import { HostPlatform, HostPlatformId } from "./hostPlatform";
+import { ISpawnResult } from "./node/childProcess";
 import { Node } from "./node/node";
+import { ProjectVersionHelper } from "./projectVersionHelper";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -20,9 +20,9 @@ nls.config({
 const localize = nls.loadMessageBundle();
 
 export enum CommandVerbosity {
-	OUTPUT,
-	SILENT,
-	PROGRESS,
+	OUTPUT = 0,
+	SILENT = 1,
+	PROGRESS = 2,
 }
 
 interface EnvironmentOptions {
@@ -47,15 +47,18 @@ export class CommandExecutor {
 	constructor(
 		private nodeModulesRoot: string,
 		private currentWorkingDirectory: string = process.cwd(),
-		private logger: ILogger = new NullLogger()
+		private logger: ILogger = new NullLogger(),
 	) {}
 
 	public async execute(
 		command: string,
-		options: Options = {}
+		options: Options = {},
 	): Promise<void> {
 		this.logger.debug(
-			CommandExecutor.getCommandStatusString(command, CommandStatus.Start)
+			CommandExecutor.getCommandStatusString(
+				command,
+				CommandStatus.Start,
+			),
 		);
 		try {
 			const stdout = await this.childProcess.execToString(command, {
@@ -66,8 +69,8 @@ export class CommandExecutor {
 			this.logger.debug(
 				CommandExecutor.getCommandStatusString(
 					command,
-					CommandStatus.End
-				)
+					CommandStatus.End,
+				),
 			);
 		} catch (reason) {
 			return this.generateRejectionForCommand(command, reason);
@@ -76,7 +79,7 @@ export class CommandExecutor {
 
 	public async executeToString(
 		command: string,
-		options: Options = {}
+		options: Options = {},
 	): Promise<string> {
 		try {
 			const stdout = await this.childProcess.execToString(command, {
@@ -99,7 +102,7 @@ export class CommandExecutor {
 	public spawn(
 		command: string,
 		args: string[],
-		options: Options = {}
+		options: Options = {},
 	): Promise<any> {
 		return this.spawnChildProcess(command, args, options).outcome;
 	}
@@ -109,7 +112,7 @@ export class CommandExecutor {
 	 */
 	public spawnReactPackager(
 		args: string[],
-		options: Options = {}
+		options: Options = {},
 	): ISpawnResult {
 		return this.spawnReactCommand("start", args, options);
 	}
@@ -119,14 +122,14 @@ export class CommandExecutor {
 	 */
 	public spawnExpoPackager(
 		args: string[],
-		options: Options = {}
+		options: Options = {},
 	): ISpawnResult {
 		return this.spawnExpoCommand("start", args, options);
 	}
 
 	public async getReactNativeVersion(): Promise<string> {
 		const versions = await ProjectVersionHelper.getReactNativeVersions(
-			this.currentWorkingDirectory
+			this.currentWorkingDirectory,
 		);
 		return versions.reactNativeVersion;
 	}
@@ -135,12 +138,12 @@ export class CommandExecutor {
 	 * Kills the React Native packager in a child process.
 	 */
 	public async killReactPackager(
-		packagerProcess?: cp.ChildProcess
+		packagerProcess?: cp.ChildProcess,
 	): Promise<void> {
 		if (packagerProcess) {
 			if (HostPlatform.getPlatformId() === HostPlatformId.WINDOWS) {
 				const res = await this.childProcess.exec(
-					`taskkill /pid ${packagerProcess.pid} /T /F`
+					`taskkill /pid ${packagerProcess.pid} /T /F`,
 				);
 				await res.outcome;
 			} else {
@@ -149,7 +152,7 @@ export class CommandExecutor {
 			this.logger.info(localize("PackagerStopped", "Packager stopped"));
 		} else {
 			this.logger.warning(
-				localize("PackagerNotFound", "Packager not found")
+				localize("PackagerNotFound", "Packager not found"),
 			);
 		}
 	}
@@ -160,15 +163,15 @@ export class CommandExecutor {
 	public spawnReactCommand(
 		command: string,
 		args: string[] = [],
-		options: Options = {}
+		options: Options = {},
 	): ISpawnResult {
 		const reactCommand = HostPlatform.getNpmCliCommand(
-			this.selectReactNativeCLI()
+			this.selectReactNativeCLI(),
 		);
 		return this.spawnChildProcess(
 			reactCommand,
 			[command, ...args],
-			options
+			options,
 		);
 	}
 
@@ -178,7 +181,7 @@ export class CommandExecutor {
 	public spawnExpoCommand(
 		command: string,
 		args: string[] = [],
-		options: Options = {}
+		options: Options = {},
 	): ISpawnResult {
 		const expoCommand = HostPlatform.getNpmCliCommand(this.selectExpoCLI());
 		return this.spawnChildProcess(expoCommand, [command, ...args], options);
@@ -194,12 +197,12 @@ export class CommandExecutor {
 	public async spawnWithProgress(
 		command: string,
 		args: string[],
-		options: Options = { verbosity: CommandVerbosity.OUTPUT }
+		options: Options = { verbosity: CommandVerbosity.OUTPUT },
 	): Promise<void> {
 		const spawnOptions = Object.assign(
 			{},
 			{ cwd: this.currentWorkingDirectory },
-			options
+			options,
 		);
 		const commandWithArgs = `${command} ${args.join(" ")}`;
 		const timeBetweenDots = 1500;
@@ -217,8 +220,8 @@ export class CommandExecutor {
 			this.logger.debug(
 				CommandExecutor.getCommandStatusString(
 					commandWithArgs,
-					CommandStatus.Start
-				)
+					CommandStatus.Start,
+				),
 			);
 		}
 
@@ -246,8 +249,8 @@ export class CommandExecutor {
 				this.logger.debug(
 					CommandExecutor.getCommandStatusString(
 						commandWithArgs,
-						CommandStatus.End
-					)
+						CommandStatus.End,
+					),
 				);
 			}
 			this.logger.logStream("\n", process.stdout);
@@ -263,7 +266,7 @@ export class CommandExecutor {
 				this.nodeModulesRoot,
 				"node_modules",
 				".bin",
-				"react-native"
+				"react-native",
 			)
 		);
 	}
@@ -278,20 +281,20 @@ export class CommandExecutor {
 	private spawnChildProcess(
 		command: string,
 		args: string[],
-		options: Options = {}
+		options: Options = {},
 	): ISpawnResult {
 		const spawnOptions = Object.assign(
 			{},
 			{ cwd: this.currentWorkingDirectory },
-			options
+			options,
 		);
 		const commandWithArgs = `${command} ${args.join(" ")}`;
 
 		this.logger.debug(
 			CommandExecutor.getCommandStatusString(
 				commandWithArgs,
-				CommandStatus.Start
-			)
+				CommandStatus.Start,
+			),
 		);
 		const result = this.childProcess.spawn(command, args, spawnOptions);
 
@@ -308,18 +311,18 @@ export class CommandExecutor {
 				this.logger.debug(
 					CommandExecutor.getCommandStatusString(
 						commandWithArgs,
-						CommandStatus.End
-					)
+						CommandStatus.End,
+					),
 				),
 			(reason) =>
-				this.generateRejectionForCommand(commandWithArgs, reason)
+				this.generateRejectionForCommand(commandWithArgs, reason),
 		);
 		return result;
 	}
 
 	private generateRejectionForCommand(
 		command: string,
-		reason: any
+		reason: any,
 	): Promise<void> {
 		return Promise.reject<void>(
 			reason.errorCode === InternalErrorCode.CommandFailed
@@ -327,14 +330,14 @@ export class CommandExecutor {
 				: ErrorHelper.getNestedError(
 						reason,
 						InternalErrorCode.CommandFailed,
-						command
-					)
+						command,
+				  ),
 		);
 	}
 
 	private static getCommandStatusString(
 		command: string,
-		status: CommandStatus
+		status: CommandStatus,
 	) {
 		switch (status) {
 			case CommandStatus.Start:
@@ -343,7 +346,7 @@ export class CommandExecutor {
 				return `Finished executing: ${command}`;
 			default:
 				throw ErrorHelper.getInternalError(
-					InternalErrorCode.UnsupportedCommandStatus
+					InternalErrorCode.UnsupportedCommandStatus,
 				);
 		}
 	}

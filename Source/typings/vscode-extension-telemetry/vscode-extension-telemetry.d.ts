@@ -34,7 +34,7 @@ declare module "vscode-extension-telemetry" {
 			},
 			measures?: {
 				[key: string]: number;
-			}
+			},
 		): void;
 	}
 }

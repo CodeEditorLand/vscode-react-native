@@ -33,7 +33,7 @@ export class Package {
 	}
 
 	public getPackageVersionFromNodeModules(
-		packageName: string
+		packageName: string,
 	): Promise<string> {
 		return this.dependencyPackage(packageName).version();
 	}
@@ -41,7 +41,7 @@ export class Package {
 	public async parsePackageInformation(): Promise<IPackageInformation> {
 		const data = await this.fileSystem.readFile(
 			this.informationJsonFilePath(),
-			"utf8"
+			"utf8",
 		);
 		return <IPackageInformation>JSON.parse(data.toString());
 	}
@@ -66,7 +66,7 @@ export class Package {
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.CouldNotParsePackageVersion,
 			this.informationJsonFilePath(),
-			version
+			version,
 		);
 	}
 
@@ -75,7 +75,7 @@ export class Package {
 		packageInformation.main = value;
 		return this.fileSystem.writeFile(
 			this.informationJsonFilePath(),
-			JSON.stringify(<Record<string, any>>packageInformation)
+			JSON.stringify(<Record<string, any>>packageInformation),
 		);
 	}
 
@@ -83,7 +83,7 @@ export class Package {
 		return pathModule.resolve(
 			this._path,
 			this.DEPENDENCIES_SUBFOLDER,
-			dependencyName
+			dependencyName,
 		);
 	}
 
@@ -96,7 +96,7 @@ export class Package {
 	public informationJsonFilePath(): string {
 		return pathModule.resolve(
 			this._path,
-			this.INFORMATION_PACKAGE_FILENAME
+			this.INFORMATION_PACKAGE_FILENAME,
 		);
 	}
 

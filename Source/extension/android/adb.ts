@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as path from "path";
 import * as fs from "fs";
 import * as os from "os";
+import * as path from "path";
 import * as nls from "vscode-nls";
-import { ILogger } from "../log/LogHelper";
 import { CommandExecutor } from "../../common/commandExecutor";
 import { ChildProcess, ISpawnResult } from "../../common/node/childProcess";
 import { PromiseUtil } from "../../common/node/promise";
+import { ILogger } from "../log/LogHelper";
 import { IDebuggableMobileTarget } from "../mobileTarget";
 
 nls.config({
@@ -43,7 +43,7 @@ export class AdbHelper {
 	private launchActivity: string;
 	private childProcess: ChildProcess = new ChildProcess();
 	private commandExecutor: CommandExecutor;
-	private adbExecutable: string = "";
+	private adbExecutable = "";
 
 	private static readonly AndroidRemoteTargetPattern =
 		/^((?:\d{1,3}\.){3}\d{1,3}:\d{1,5}|.*_adb-tls-con{2}ect\._tcp.*)$/gm;
@@ -53,7 +53,7 @@ export class AdbHelper {
 		projectRoot: string,
 		nodeModulesRoot: string,
 		logger?: ILogger,
-		launchActivity: string = "MainActivity"
+		launchActivity = "MainActivity",
 	) {
 		this.nodeModulesRoot = nodeModulesRoot;
 		this.adbExecutable = this.getAdbPath(projectRoot, logger);
@@ -66,16 +66,16 @@ export class AdbHelper {
 	 */
 	public async getConnectedTargets(): Promise<IDebuggableMobileTarget[]> {
 		const output = await this.childProcess.execToString(
-			`${this.adbExecutable} devices`
+			`${this.adbExecutable} devices`,
 		);
 		return this.parseConnectedTargets(output);
 	}
 
 	public async findOnlineTargetById(
-		targetId: string
+		targetId: string,
 	): Promise<IDebuggableMobileTarget | undefined> {
 		return (await this.getOnlineTargets()).find(
-			(target) => target.id === targetId
+			(target) => target.id === targetId,
 		);
 	}
 
@@ -99,7 +99,7 @@ export class AdbHelper {
 	public async getAvdNameById(emulatorId: string): Promise<string | null> {
 		try {
 			const output = await this.childProcess.execToString(
-				`${this.adbExecutable} -s ${emulatorId} emu avd name`
+				`${this.adbExecutable} -s ${emulatorId} emu avd name`,
 			);
 			// The command returns the name of avd by id of this running emulator.
 			// Return value example:
@@ -126,15 +126,15 @@ export class AdbHelper {
 		packageName: string,
 		enable: boolean,
 		debugTarget?: string,
-		appIdSuffix?: string
+		appIdSuffix?: string,
 	): Promise<void> {
 		const enableDebugCommand = `${this.adbExecutable} ${
 			debugTarget ? `-s ${debugTarget}` : ""
 		} shell am broadcast -a "${packageName}.RELOAD_APP_ACTION" --ez jsproxy ${String(
-			enable
+			enable,
 		)}`;
 		await new CommandExecutor(this.nodeModulesRoot, projectRoot).execute(
-			enableDebugCommand
+			enableDebugCommand,
 		);
 		// We should stop and start application again after RELOAD_APP_ACTION, otherwise app going to hangs up
 		await PromiseUtil.delay(200); // We need a little delay after broadcast command
@@ -143,7 +143,7 @@ export class AdbHelper {
 			projectRoot,
 			packageName,
 			debugTarget,
-			appIdSuffix
+			appIdSuffix,
 		);
 	}
 
@@ -154,7 +154,7 @@ export class AdbHelper {
 		projectRoot: string,
 		packageName: string,
 		debugTarget?: string,
-		appIdSuffix?: string
+		appIdSuffix?: string,
 	): Promise<void> {
 		const launchAppCommand = `${this.adbExecutable} ${
 			debugTarget ? `-s ${debugTarget}` : ""
@@ -168,7 +168,7 @@ export class AdbHelper {
 		projectRoot: string,
 		packageName: string,
 		debugTarget?: string,
-		appIdSuffix?: string
+		appIdSuffix?: string,
 	): Promise<void> {
 		const stopAppCommand = `${this.adbExecutable} ${
 			debugTarget ? `-s ${debugTarget}` : ""
@@ -181,7 +181,7 @@ export class AdbHelper {
 	public async apiVersion(deviceId: string): Promise<AndroidAPILevel> {
 		const output = await this.executeQuery(
 			deviceId,
-			"shell getprop ro.build.version.sdk"
+			"shell getprop ro.build.version.sdk",
 		);
 		return parseInt(output, 10);
 	}
@@ -212,13 +212,13 @@ export class AdbHelper {
 	public startLogCat(adbParameters: string[]): ISpawnResult {
 		return this.childProcess.spawn(
 			this.adbExecutable.replace(/"/g, ""),
-			adbParameters
+			adbParameters,
 		);
 	}
 
 	public parseSdkLocation(
 		fileContent: string,
-		logger?: ILogger
+		logger?: ILogger,
 	): string | null {
 		const matches = fileContent.match(/^sdk\.dir\s*=(.+)$/m);
 		if (!matches || !matches[1]) {
@@ -226,8 +226,8 @@ export class AdbHelper {
 				logger.info(
 					localize(
 						"NoSdkDirFoundInLocalPropertiesFile",
-						"No sdk.dir value found in local.properties file. Using Android SDK location from PATH."
-					)
+						"No sdk.dir value found in local.properties file. Using Android SDK location from PATH.",
+					),
 				);
 			}
 			return null;
@@ -245,8 +245,8 @@ export class AdbHelper {
 				localize(
 					"UsindAndroidSDKLocationDefinedInLocalPropertiesFile",
 					"Using Android SDK location defined in android/local.properties file: {0}.",
-					sdkLocation
-				)
+					sdkLocation,
+				),
 			);
 		}
 
@@ -256,13 +256,13 @@ export class AdbHelper {
 	public getAdbPath(projectRoot: string, logger?: ILogger): string {
 		const sdkLocation = this.getSdkLocationFromLocalPropertiesFile(
 			projectRoot,
-			logger
+			logger,
 		);
 		if (sdkLocation) {
 			const localPropertiesSdkPath = path.join(
 				sdkLocation as string,
 				"platform-tools",
-				os.platform() === "win32" ? "adb.exe" : "adb"
+				os.platform() === "win32" ? "adb.exe" : "adb",
 			);
 			const isExist = fs.existsSync(localPropertiesSdkPath);
 			if (isExist) {
@@ -272,8 +272,8 @@ export class AdbHelper {
 				logger.warning(
 					localize(
 						"LocalPropertiesAndroidSDKPathNotExistingInLocal",
-						"Local.properties file has Andriod SDK path but cannot find it in your local, will switch to SDK PATH in environment variable. Please check Android SDK path in android/local.properties file."
-					)
+						"Local.properties file has Andriod SDK path but cannot find it in your local, will switch to SDK PATH in environment variable. Please check Android SDK path in android/local.properties file.",
+					),
 				);
 			}
 			return "adb";
@@ -283,7 +283,7 @@ export class AdbHelper {
 
 	public executeShellCommand(
 		deviceId: string,
-		command: string
+		command: string,
 	): Promise<string> {
 		return this.executeQuery(deviceId, `shell "${command}"`);
 	}
@@ -294,13 +294,13 @@ export class AdbHelper {
 
 	public executeQuery(deviceId: string, command: string): Promise<string> {
 		return this.childProcess.execToString(
-			this.generateCommandForTarget(deviceId, command)
+			this.generateCommandForTarget(deviceId, command),
 		);
 	}
 
 	private parseConnectedTargets(input: string): IDebuggableMobileTarget[] {
 		const result: IDebuggableMobileTarget[] = [];
-		const regex = new RegExp("^(\\S+)\\t(\\S+)$", "mg");
+		const regex = /^(\S+)\t(\S+)$/gm;
 		let match = regex.exec(input);
 		while (match != null) {
 			result.push({
@@ -319,33 +319,33 @@ export class AdbHelper {
 
 	private execute(deviceId: string, command: string): Promise<void> {
 		return this.commandExecutor.execute(
-			this.generateCommandForTarget(deviceId, command)
+			this.generateCommandForTarget(deviceId, command),
 		);
 	}
 
 	private generateCommandForTarget(
 		deviceId: string,
-		adbCommand: string
+		adbCommand: string,
 	): string {
 		return `${this.adbExecutable} -s "${deviceId}" ${adbCommand}`;
 	}
 
 	private getSdkLocationFromLocalPropertiesFile(
 		projectRoot: string,
-		logger?: ILogger
+		logger?: ILogger,
 	): string | null {
 		const localPropertiesFilePath = path.join(
 			projectRoot,
 			"android",
-			"local.properties"
+			"local.properties",
 		);
 		if (!fs.existsSync(localPropertiesFilePath)) {
 			if (logger) {
 				logger.info(
 					localize(
 						"LocalPropertiesFileDoesNotExist",
-						"local.properties file doesn't exist. Using Android SDK location from PATH."
-					)
+						"local.properties file doesn't exist. Using Android SDK location from PATH.",
+					),
 				);
 			}
 			return null;
@@ -360,16 +360,16 @@ export class AdbHelper {
 					localize(
 						"CouldNotReadFrom",
 						"Couldn't read from {0}.",
-						localPropertiesFilePath
+						localPropertiesFilePath,
 					),
 					e,
-					e.stack
+					e.stack,
 				);
 				logger.info(
 					localize(
 						"UsingAndroidSDKLocationFromPATH",
-						"Using Android SDK location from PATH."
-					)
+						"Using Android SDK location from PATH.",
+					),
 				);
 			}
 			return null;

@@ -2,23 +2,23 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as nls from "vscode-nls";
-import {
-	MultiStepInput,
-	IQuickPickParameters,
-} from "../extension/debuggingConfiguration/multiStepInput";
 import { ILaunchRequestArgs } from "../debugger/debugSessionBase";
-import { ExpoHostType, PlatformType } from "../extension/launchArgs";
+import { IWDPHelper } from "../debugger/direct/IWDPHelper";
 import {
-	DebugConfigurationState,
+	BROWSER_TYPES,
+	DEBUG_TYPES,
 	DebugConfigurationQuickPickItem,
+	DebugConfigurationState,
 	appTypePickConfig,
+	browserTypePickConfig,
 	expoHostTypePickConfig,
 	shouldUseHermesEngine,
-	DEBUG_TYPES,
-	browserTypePickConfig,
-	BROWSER_TYPES,
 } from "../extension/debuggingConfiguration/debugConfigTypesAndConstants";
-import { IWDPHelper } from "../debugger/direct/IWDPHelper";
+import {
+	IQuickPickParameters,
+	MultiStepInput,
+} from "../extension/debuggingConfiguration/multiStepInput";
+import { ExpoHostType, PlatformType } from "../extension/launchArgs";
 import { Packager } from "./packager";
 
 nls.config({
@@ -33,7 +33,7 @@ export class ConfigurationProviderHelper {
 		config: Partial<ILaunchRequestArgs>,
 		platformTypePickConfig: DebugConfigurationQuickPickItem[],
 		step: number,
-		totalSteps: number
+		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		const pick = await input.showQuickPick<
 			DebugConfigurationQuickPickItem,
@@ -42,7 +42,7 @@ export class ConfigurationProviderHelper {
 			title: localize("PlatformSelectionTitle", "Select platform"),
 			placeholder: localize(
 				"PlatformSelectionPrompt",
-				"Platform to run on"
+				"Platform to run on",
 			),
 			step,
 			totalSteps,
@@ -62,7 +62,7 @@ export class ConfigurationProviderHelper {
 		input: MultiStepInput<DebugConfigurationState>,
 		config: Partial<ILaunchRequestArgs>,
 		step: number,
-		totalSteps: number
+		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		const pick = await input.showQuickPick<
 			DebugConfigurationQuickPickItem,
@@ -70,11 +70,11 @@ export class ConfigurationProviderHelper {
 		>({
 			title: localize(
 				"ApplicationTypeSelectionTitle",
-				"Select type of React Native application"
+				"Select type of React Native application",
 			),
 			placeholder: localize(
 				"ApplicationTypeSelectionPrompt",
-				"Type of React Native application"
+				"Type of React Native application",
 			),
 			step,
 			totalSteps,
@@ -94,7 +94,7 @@ export class ConfigurationProviderHelper {
 		input: MultiStepInput<DebugConfigurationState>,
 		config: Partial<ILaunchRequestArgs>,
 		step: number,
-		totalSteps: number
+		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		const shouldUseHermes = await input.showQuickPick<
 			DebugConfigurationQuickPickItem,
@@ -103,7 +103,7 @@ export class ConfigurationProviderHelper {
 			title: localize("UseHermesEngine", "Use Hermes engine"),
 			placeholder: localize(
 				"UseHermesEnginePrompt",
-				"Use Hermes engine for direct debugging?"
+				"Use Hermes engine for direct debugging?",
 			),
 			step,
 			totalSteps,
@@ -115,8 +115,8 @@ export class ConfigurationProviderHelper {
 			throw new Error(
 				localize(
 					"UseHermesEngineInvalid",
-					"Using Hermes engine is not confirmed"
-				)
+					"Using Hermes engine is not confirmed",
+				),
 			);
 		}
 
@@ -129,7 +129,7 @@ export class ConfigurationProviderHelper {
 		input: MultiStepInput<DebugConfigurationState>,
 		config: Partial<ILaunchRequestArgs>,
 		step: number,
-		totalSteps: number
+		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		const pick = await input.showQuickPick<
 			DebugConfigurationQuickPickItem,
@@ -137,11 +137,11 @@ export class ConfigurationProviderHelper {
 		>({
 			title: localize(
 				"ExpoHostTypeSelectionTitle",
-				"Select type of Expo host parameter"
+				"Select type of Expo host parameter",
 			),
 			placeholder: localize(
 				"ExpoHostTypeSelectionPrompt",
-				"Type of Expo host parameter"
+				"Type of Expo host parameter",
 			),
 			step,
 			totalSteps,
@@ -161,7 +161,7 @@ export class ConfigurationProviderHelper {
 		input: MultiStepInput<DebugConfigurationState>,
 		config: Partial<ILaunchRequestArgs>,
 		step: number,
-		totalSteps: number
+		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		const pick = await input.showQuickPick<
 			DebugConfigurationQuickPickItem,
@@ -169,11 +169,11 @@ export class ConfigurationProviderHelper {
 		>({
 			title: localize(
 				"BrowserTypeSelectionTitle",
-				"Select type of browser"
+				"Select type of browser",
 			),
 			placeholder: localize(
 				"BrowserTypeSelectionPrompt",
-				"Type of browser"
+				"Type of browser",
 			),
 			step,
 			totalSteps,
@@ -185,8 +185,8 @@ export class ConfigurationProviderHelper {
 			throw new Error(
 				localize(
 					"NoBrowserTargetSelected",
-					"Browser target is not selected"
-				)
+					"Browser target is not selected",
+				),
 			);
 		}
 
@@ -199,7 +199,7 @@ export class ConfigurationProviderHelper {
 		config: Partial<ILaunchRequestArgs>,
 		step: number,
 		totalSteps: number,
-		defaultAddress: string
+		defaultAddress: string,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		delete config.address;
 		const address = await input.showInputBox({
@@ -209,7 +209,7 @@ export class ConfigurationProviderHelper {
 			value: defaultAddress,
 			prompt: localize(
 				"AddressInputPrompt",
-				"Enter the address of the host"
+				"Enter the address of the host",
 			),
 			validate: (value) =>
 				Promise.resolve(
@@ -217,8 +217,8 @@ export class ConfigurationProviderHelper {
 						? undefined
 						: localize(
 								"AddressInputInvalid",
-								"Enter a valid host name or IP address"
-							)
+								"Enter a valid host name or IP address",
+						  ),
 				),
 		});
 
@@ -233,15 +233,15 @@ export class ConfigurationProviderHelper {
 		input: MultiStepInput<DebugConfigurationState>,
 		config: Partial<ILaunchRequestArgs>,
 		step: number,
-		totalSteps: number
+		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		delete config.port;
 		const defaultPort = String(
 			config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT &&
-				config.platform === PlatformType.iOS &&
-				!config.useHermesEngine
+			config.platform === PlatformType.iOS &&
+			!config.useHermesEngine
 				? IWDPHelper.iOS_WEBKIT_DEBUG_PROXY_DEFAULT_PORT
-				: Packager.DEFAULT_PORT
+				: Packager.DEFAULT_PORT,
 		);
 		const portRegex = /^\d+$/;
 
@@ -252,7 +252,7 @@ export class ConfigurationProviderHelper {
 			value: defaultPort,
 			prompt: localize(
 				"PortInputPrompt",
-				"Enter the port number that the debug server is listening on"
+				"Enter the port number that the debug server is listening on",
 			),
 			validate: (value) =>
 				Promise.resolve(
@@ -260,8 +260,8 @@ export class ConfigurationProviderHelper {
 						? undefined
 						: localize(
 								"PortInputInvalid",
-								"Enter a valid port number"
-							)
+								"Enter a valid port number",
+						  ),
 				),
 		});
 

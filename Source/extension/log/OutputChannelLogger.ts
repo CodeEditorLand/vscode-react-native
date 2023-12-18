@@ -9,12 +9,12 @@ import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 import { getFormattedDatetimeString } from "../../common/utils";
-import { ILogger, LogLevel, LogHelper, getLoggingDirectory } from "./LogHelper";
+import { ILogger, LogHelper, LogLevel, getLoggingDirectory } from "./LogHelper";
 
 const channels: { [channelName: string]: OutputChannelLogger } = {};
 
 export class OutputChannelLogger implements ILogger {
-	public static MAIN_CHANNEL_NAME: string = "React Native";
+	public static MAIN_CHANNEL_NAME = "React Native";
 	private readonly channelLogFilePath: string | undefined;
 	private channelLogFileStream: fs.WriteStream;
 	private outputChannel: vscode.OutputChannel;
@@ -39,14 +39,14 @@ export class OutputChannelLogger implements ILogger {
 		channelName: string,
 		lazy?: boolean,
 		preserveFocus?: boolean,
-		logTimestamps?: boolean
+		logTimestamps?: boolean,
 	): OutputChannelLogger {
 		if (!channels[channelName]) {
 			channels[channelName] = new OutputChannelLogger(
 				channelName,
 				lazy,
 				preserveFocus,
-				logTimestamps
+				logTimestamps,
 			);
 		}
 		return channels[channelName];
@@ -54,29 +54,29 @@ export class OutputChannelLogger implements ILogger {
 
 	constructor(
 		public readonly channelName: string,
-		lazy: boolean = false,
-		private preserveFocus: boolean = false,
-		logTimestamps: boolean = false
+		lazy = false,
+		private preserveFocus = false,
+		logTimestamps = false,
 	) {
 		this.logTimestamps = logTimestamps;
 		const channelLogFolder = getLoggingDirectory();
 		if (channelLogFolder) {
 			const filename = channelName.replace(
 				OutputChannelLogger.forbiddenFileNameSymbols,
-				""
+				"",
 			);
 			this.channelLogFilePath = path.join(
 				channelLogFolder,
-				`${filename}.txt`
+				`${filename}.txt`,
 			);
 			this.channelLogFileStream = fs.createWriteStream(
-				this.channelLogFilePath
+				this.channelLogFilePath,
 			);
 			this.channelLogFileStream.on("error", (err) => {
 				this.error(
 					`Error writing to log file at path: ${String(
-						this.channelLogFilePath
-					)}. Error: ${String(err.toString())}\n`
+						this.channelLogFilePath,
+					)}. Error: ${String(err.toString())}\n`,
 				);
 			});
 		}
@@ -95,7 +95,7 @@ export class OutputChannelLogger implements ILogger {
 			message = OutputChannelLogger.getFormattedMessage(
 				message,
 				LogLevel[level],
-				this.logTimestamps
+				this.logTimestamps,
 			);
 			this.channel.appendLine(message);
 			if (this.channelLogFileStream) {
@@ -107,7 +107,7 @@ export class OutputChannelLogger implements ILogger {
 	public logWithCustomTag(
 		tag: string,
 		message: string,
-		level: LogLevel
+		level: LogLevel,
 	): void {
 		if (LogHelper.LOG_LEVEL === LogLevel.None) {
 			return;
@@ -117,7 +117,7 @@ export class OutputChannelLogger implements ILogger {
 			message = OutputChannelLogger.getFormattedMessage(
 				message,
 				tag,
-				this.logTimestamps
+				this.logTimestamps,
 			);
 			this.channel.appendLine(message);
 			if (this.channelLogFileStream) {
@@ -134,15 +134,11 @@ export class OutputChannelLogger implements ILogger {
 		this.log(message.toString(), LogLevel.Warning);
 	}
 
-	public error(
-		errorMessage: string,
-		error?: Error,
-		logStack: boolean = true
-	): void {
+	public error(errorMessage: string, error?: Error, logStack = true): void {
 		const message = OutputChannelLogger.getFormattedMessage(
 			errorMessage,
 			LogLevel[LogLevel.Error],
-			this.logTimestamps
+			this.logTimestamps,
 		);
 		this.channel.appendLine(message);
 		if (this.channelLogFileStream) {
@@ -176,13 +172,13 @@ export class OutputChannelLogger implements ILogger {
 	protected static getFormattedMessage(
 		message: string,
 		tag: string,
-		prependTimestamp: boolean = false
+		prependTimestamp = false,
 	): string {
 		let formattedMessage = `[${tag}] ${message}\n`;
 
 		if (prependTimestamp) {
 			formattedMessage = `[${getFormattedDatetimeString(
-				new Date()
+				new Date(),
 			)}] ${formattedMessage}`;
 		}
 
@@ -202,7 +198,7 @@ export class OutputChannelLogger implements ILogger {
 			return this.outputChannel;
 		}
 		this.outputChannel = vscode.window.createOutputChannel(
-			this.channelName
+			this.channelName,
 		);
 		this.outputChannel.show(this.preserveFocus);
 		return this.outputChannel;

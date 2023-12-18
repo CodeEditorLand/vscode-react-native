@@ -43,7 +43,7 @@ const generateSrcLocBundle = () => {
 				"**/nls.metadata.header.json",
 				"**/nls.metadata.json",
 				"!src/**",
-			])
+			]),
 		)
 		.pipe(gulp.dest("dist"));
 };
@@ -81,8 +81,8 @@ function build(failOnError, buildNls) {
 	let gotError = false;
 	log(
 		`Building with preprocessor context: ${JSON.stringify(
-			preprocessorContext
-		)}`
+			preprocessorContext,
+		)}`,
 	);
 	const tsResult = tsProject
 		.src()
@@ -97,14 +97,14 @@ function build(failOnError, buildNls) {
 				? nls.createAdditionalLanguageFiles(
 						defaultLanguages,
 						"i18n",
-						"."
-					)
-				: es.through()
+						".",
+				  )
+				: es.through(),
 		)
 		.pipe(
 			buildNls
 				? nls.bundleMetaDataFiles(fullExtensionName, ".")
-				: es.through()
+				: es.through(),
 		)
 		.pipe(buildNls ? nls.bundleLanguageFiles() : es.through())
 		.pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "." }))
@@ -137,7 +137,7 @@ function buildDev(done) {
 const buildProd = series(
 	getCleaner.clean,
 	getWebpackBundle.webpackBundle,
-	generateSrcLocBundle
+	generateSrcLocBundle,
 );
 
 module.exports = {

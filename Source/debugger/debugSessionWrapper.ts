@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import { DebugSession } from "vscode";
 import { v4 as uuidv4 } from "uuid";
+import { DebugSession } from "vscode";
 
 export class RNSession {
 	private _sessionId: string;

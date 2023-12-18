@@ -5,10 +5,10 @@ import * as assert from "assert";
 import * as nls from "vscode-nls";
 import { ErrorHelper } from "../../common/error/errorHelper";
 import { InternalErrorCode } from "../../common/error/internalErrorCode";
-import { PlatformType } from "../launchArgs";
 import { AppLauncher } from "../appLauncher";
-import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { ExponentPlatform } from "../exponent/exponentPlatform";
+import { PlatformType } from "../launchArgs";
+import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { getRunOptions } from "./util";
 import { Command } from "./util/command";
 
@@ -19,7 +19,7 @@ export class launchExpoWeb extends Command {
 	codeName = "launchExpoWeb";
 	label = "Launch ExpoWeb";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToLaunchExpoWeb
+		InternalErrorCode.FailedToLaunchExpoWeb,
 	);
 
 	async baseFn(launchArgs: any): Promise<any> {
@@ -28,13 +28,13 @@ export class launchExpoWeb extends Command {
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",
-				"Checking Expo project environment."
-			)
+				"Checking Expo project environment.",
+			),
 		);
 		const isExpo = await expoHelper.isExpoManagedApp(true);
 		if (!isExpo) {
 			logger.info(
-				localize("NotAnExpoProject", "This is not an Expo project.")
+				localize("NotAnExpoProject", "This is not an Expo project."),
 			);
 			return;
 		}
@@ -47,7 +47,7 @@ async function runExpoWeb(project: AppLauncher) {
 		getRunOptions(project, PlatformType.ExpoWeb),
 		{
 			packager: project.getPackager(),
-		}
+		},
 	);
 	platform;
 

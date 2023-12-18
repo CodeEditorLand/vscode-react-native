@@ -2,14 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import {
-	ExperimentResult,
 	ExperimentConfig,
 	ExperimentParameters,
+	ExperimentResult,
 } from "./experimentService";
 
 export interface IExperiment {
 	run: (
 		newExpConfig: ExperimentConfig,
-		curExpParameters?: ExperimentParameters
+		curExpParameters?: ExperimentParameters,
 	) => Promise<ExperimentResult>;
 }

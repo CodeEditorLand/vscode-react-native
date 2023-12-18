@@ -3,7 +3,7 @@
 
 import * as nls from "vscode-nls";
 import { basicCheck, createNotFoundMessage } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -34,7 +34,7 @@ const main: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"WatchmanTestDescription",
-		"Required for watching file changes"
+		"Required for watching file changes",
 	),
 	category: ValidationCategoryE.Common,
 	exec: test,

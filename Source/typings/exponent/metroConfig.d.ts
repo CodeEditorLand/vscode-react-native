@@ -1,7 +1,7 @@
 // Type definitions for @expo/metro-config v0.1.54
 // Project: https://github.com/expo/expo-cli/tree/master/packages/metro-config
 
-declare module metroConfig {
+declare namespace metroConfig {
 	interface ILoadOptions {
 		config?: string;
 		maxWorkers?: number;
@@ -21,7 +21,7 @@ declare module metroConfig {
 
 	var loadAsync: (
 		projectRoot: string,
-		{ reporter, target, ...metroOptions }?: ILoadOptions
+		{ reporter, target, ...metroOptions }?: ILoadOptions,
 	) => Promise<IMetroConfig>;
 }
 

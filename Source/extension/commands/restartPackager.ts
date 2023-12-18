@@ -12,22 +12,22 @@ export class RestartPackager extends ReactNativeCommand {
 	codeName = "restartPackager";
 	label = "Restart Packager";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToRestartPackager
+		InternalErrorCode.FailedToRestartPackager,
 	);
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
 		await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
-			nodeModulesRoot
+			nodeModulesRoot,
 		);
 
 		return await this.project
 			.getPackager()
 			.restart(
 				SettingsHelper.getPackagerPort(
-					this.project.getWorkspaceFolderUri().fsPath
-				)
+					this.project.getWorkspaceFolderUri().fsPath,
+				),
 			);
 	}
 }

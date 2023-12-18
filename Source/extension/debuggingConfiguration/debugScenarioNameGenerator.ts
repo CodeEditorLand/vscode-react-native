@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import { PlatformType } from "../launchArgs";
-import { DebugScenarioType, DEBUG_TYPES } from "./debugConfigTypesAndConstants";
+import { DEBUG_TYPES, DebugScenarioType } from "./debugConfigTypesAndConstants";
 
 interface DebugScenarioName {
 	debugScenarioType: string;
@@ -17,8 +17,8 @@ export class DebugScenarioNameGenerator {
 		debugScenarioType: DebugScenarioType,
 		debugType: string,
 		platformType?: PlatformType | string,
-		useHermesEngine: boolean = false,
-		isExperimental: boolean = false
+		useHermesEngine = false,
+		isExperimental = false,
 	): string {
 		const debugScenarioName: DebugScenarioName =
 			this.createScenarioAccordingToDebugScenarioType(debugScenarioType);
@@ -28,7 +28,7 @@ export class DebugScenarioNameGenerator {
 				debugScenarioName,
 				debugScenarioType,
 				debugType,
-				platformType
+				platformType,
 			);
 		} else {
 			this.configureDirectModeScenario(
@@ -36,7 +36,7 @@ export class DebugScenarioNameGenerator {
 				debugScenarioType,
 				debugType,
 				useHermesEngine,
-				platformType
+				platformType,
 			);
 		}
 
@@ -52,7 +52,7 @@ export class DebugScenarioNameGenerator {
 	}
 
 	private static createScenarioAccordingToDebugScenarioType(
-		debugScenarioType: DebugScenarioType
+		debugScenarioType: DebugScenarioType,
 	): DebugScenarioName {
 		switch (debugScenarioType) {
 			case DebugScenarioType.RunApp:
@@ -74,7 +74,7 @@ export class DebugScenarioNameGenerator {
 		debugScenarioName: DebugScenarioName,
 		debugScenarioType: DebugScenarioType,
 		debugType: string,
-		platformType?: PlatformType | string
+		platformType?: PlatformType | string,
 	): void {
 		if (debugScenarioType === DebugScenarioType.AttachApp) {
 			debugScenarioName.platformType = "packager";
@@ -89,7 +89,7 @@ export class DebugScenarioNameGenerator {
 		debugScenarioType: DebugScenarioType,
 		debugType: string,
 		useHermesEngine: boolean,
-		platformType?: PlatformType | string
+		platformType?: PlatformType | string,
 	) {
 		if (useHermesEngine) {
 			debugScenarioName.postPlatformTypeDescription =
@@ -107,7 +107,7 @@ export class DebugScenarioNameGenerator {
 	}
 
 	private static getPlatformTypeName(
-		platformType?: PlatformType | string
+		platformType?: PlatformType | string,
 	): string {
 		switch (platformType) {
 			case PlatformType.Android:
@@ -128,7 +128,7 @@ export class DebugScenarioNameGenerator {
 	}
 
 	private static debugScenarioNameToString(
-		debugScenarioName: DebugScenarioName
+		debugScenarioName: DebugScenarioName,
 	): string {
 		let debugScenarioNameStr = debugScenarioName.debugScenarioType;
 		if (debugScenarioName.prePlatformTypeDescription) {

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as nls from "vscode-nls";
 import * as semver from "semver";
+import * as nls from "vscode-nls";
 import { createNotFoundMessage, executeCommand, normizeStr } from "../util";
 import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
@@ -36,7 +36,7 @@ async function test(): Promise<ValidationResultT> {
 		if (versions.some(valid)) {
 			for (const comp of components) {
 				const pathToComponent = await executeCommand(
-					`${vswherePath}  -requires ${comp}  -property productPath`
+					`${vswherePath}  -requires ${comp}  -property productPath`,
 				);
 				if (!pathToComponent.stdout) {
 					return {
@@ -67,7 +67,7 @@ const main: IValidation = {
 	platform: ["win32"],
 	description: toLocale(
 		"VisualStudioCheckDescription",
-		"Required for building RNW apps"
+		"Required for building RNW apps",
 	),
 	category: ValidationCategoryE.Windows,
 	exec: test,

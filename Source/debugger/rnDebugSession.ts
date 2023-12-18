@@ -2,17 +2,17 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as path from "path";
-import * as vscode from "vscode";
-import * as mkdirp from "mkdirp";
 import { logger } from "@vscode/debugadapter";
+import * as mkdirp from "mkdirp";
+import * as vscode from "vscode";
 import { DebugProtocol } from "vscode-debugprotocol";
 import * as nls from "vscode-nls";
-import { ProjectVersionHelper } from "../common/projectVersionHelper";
-import { TelemetryHelper } from "../common/telemetryHelper";
 import { RnCDPMessageHandler } from "../cdp-proxy/CDPMessageHandlers/rnCDPMessageHandler";
 import { ErrorHelper } from "../common/error/errorHelper";
 import { InternalErrorCode } from "../common/error/internalErrorCode";
+import { ProjectVersionHelper } from "../common/projectVersionHelper";
 import { ReactNativeProjectHelper } from "../common/reactNativeProjectHelper";
+import { TelemetryHelper } from "../common/telemetryHelper";
 import { ExponentHelper } from "../extension/exponent/exponentHelper";
 import { MultipleLifetimesAppWorker } from "./appWorker";
 import {
@@ -21,8 +21,8 @@ import {
 	IAttachRequestArgs,
 	ILaunchRequestArgs,
 } from "./debugSessionBase";
-import { JsDebugConfigAdapter } from "./jsDebugConfigAdapter";
 import { RNSession } from "./debugSessionWrapper";
+import { JsDebugConfigAdapter } from "./jsDebugConfigAdapter";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -43,12 +43,12 @@ export class RNDebugSession extends DebugSessionBase {
 
 		this.onDidStartDebugSessionHandler =
 			vscode.debug.onDidStartDebugSession(
-				this.handleStartDebugSession.bind(this)
+				this.handleStartDebugSession.bind(this),
 			);
 
 		this.onDidTerminateDebugSessionHandler =
 			vscode.debug.onDidTerminateDebugSession(
-				this.handleTerminateDebugSession.bind(this)
+				this.handleTerminateDebugSession.bind(this),
 			);
 	}
 
@@ -56,13 +56,13 @@ export class RNDebugSession extends DebugSessionBase {
 		response: DebugProtocol.LaunchResponse,
 		launchArgs: ILaunchRequestArgs,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		try {
 			try {
 				if (launchArgs.platform != "exponent") {
 					await ReactNativeProjectHelper.verifyMetroConfigFile(
-						launchArgs.cwd
+						launchArgs.cwd,
 					);
 				}
 				await this.initializeSettings(launchArgs);
@@ -71,8 +71,8 @@ export class RNDebugSession extends DebugSessionBase {
 					`Launching the application: ${JSON.stringify(
 						launchArgs,
 						null,
-						2
-					)}`
+						2,
+					)}`,
 				);
 
 				await this.appLauncher.launch(launchArgs);
@@ -85,7 +85,7 @@ export class RNDebugSession extends DebugSessionBase {
 			} catch (error) {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.ApplicationLaunchFailed,
-					error.message || error
+					error.message || error,
 				);
 			}
 			// if debugging is enabled start attach request
@@ -100,7 +100,7 @@ export class RNDebugSession extends DebugSessionBase {
 		response: DebugProtocol.AttachResponse,
 		attachArgs: IAttachRequestArgs,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		let extProps = {
 			platform: {
@@ -116,12 +116,12 @@ export class RNDebugSession extends DebugSessionBase {
 				if (attachArgs.request === "attach") {
 					const expoHelper = new ExponentHelper(
 						attachArgs.cwd,
-						attachArgs.cwd
+						attachArgs.cwd,
 					);
 					const isExpo = await expoHelper.isExpoManagedApp(true);
 					if (!isExpo) {
 						await ReactNativeProjectHelper.verifyMetroConfigFile(
-							attachArgs.cwd
+							attachArgs.cwd,
 						);
 					}
 				}
@@ -131,22 +131,22 @@ export class RNDebugSession extends DebugSessionBase {
 					`Attaching to the application: ${JSON.stringify(
 						attachArgs,
 						null,
-						2
-					)}`
+						2,
+					)}`,
 				);
 
 				const versions =
 					await ProjectVersionHelper.getReactNativeVersions(
 						this.projectRootPath,
 						ProjectVersionHelper.generateAdditionalPackagesToCheckByPlatform(
-							attachArgs
-						)
+							attachArgs,
+						),
 					);
 				extProps =
 					TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 						attachArgs,
 						versions,
-						extProps
+						extProps,
 					);
 
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -163,27 +163,27 @@ export class RNDebugSession extends DebugSessionBase {
 						await cdpProxy.initializeServer(
 							new RnCDPMessageHandler(),
 							this.cdpProxyLogLevel,
-							this.cancellationTokenSource.token
+							this.cancellationTokenSource.token,
 						);
 
 						if (attachArgs.request === "attach") {
 							await this.preparePackagerBeforeAttach(
 								attachArgs,
-								versions
+								versions,
 							);
 						}
 
 						logger.log(
 							localize(
 								"StartingDebuggerAppWorker",
-								"Starting debugger app worker."
-							)
+								"Starting debugger app worker.",
+							),
 						);
 
 						const sourcesStoragePath = path.join(
 							this.projectRootPath,
 							".vscode",
-							".react"
+							".react",
 						);
 						// Create folder if not exist to avoid problems if
 						// RN project root is not a ${workspaceFolder}
@@ -195,7 +195,7 @@ export class RNDebugSession extends DebugSessionBase {
 							sourcesStoragePath,
 							this.projectRootPath,
 							this.cancellationTokenSource.token,
-							undefined
+							undefined,
 						);
 						this.appLauncher.setAppWorker(this.appWorker);
 
@@ -211,8 +211,8 @@ export class RNDebugSession extends DebugSessionBase {
 								localize(
 									"DebuggerWorkerLoadedRuntimeOnPort",
 									"Debugger worker loaded runtime on port {0}",
-									port
-								)
+									port,
+								),
 							);
 
 							cdpProxy.setApplicationTargetPort(port);
@@ -239,7 +239,7 @@ export class RNDebugSession extends DebugSessionBase {
 									this.debugSessionStatus =
 										DebugSessionStatus.ConnectionPending;
 									void this.nodeSession.customRequest(
-										this.terminateCommand
+										this.terminateCommand,
 									);
 								}
 							}
@@ -252,7 +252,7 @@ export class RNDebugSession extends DebugSessionBase {
 							return this.appWorker.stop();
 						}
 						return await this.appWorker.start();
-					}
+					},
 				);
 			} catch (error) {
 				reject(error);
@@ -265,17 +265,17 @@ export class RNDebugSession extends DebugSessionBase {
 				this.terminateWithErrorResponse(
 					ErrorHelper.getInternalError(
 						InternalErrorCode.CouldNotAttachToDebugger,
-						err.message || err
+						err.message || err,
 					),
-					response
-				)
+					response,
+				),
 			);
 	}
 
 	protected async disconnectRequest(
 		response: DebugProtocol.DisconnectResponse,
 		args: DebugProtocol.DisconnectArguments,
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		// The client is about to disconnect so first we need to stop app worker
 		if (this.appWorker) {
@@ -290,13 +290,13 @@ export class RNDebugSession extends DebugSessionBase {
 
 	protected establishDebugSession(
 		attachArgs: IAttachRequestArgs,
-		resolve?: (value?: void | PromiseLike<void> | undefined) => void
+		resolve?: (value?: void | PromiseLike<void> | undefined) => void,
 	): void {
 		const attachConfiguration =
 			JsDebugConfigAdapter.createDebuggingConfigForPureRN(
 				attachArgs,
 				this.appLauncher.getCdpProxyPort(),
-				this.rnSession.sessionId
+				this.rnSession.sessionId,
 			);
 
 		vscode.debug
@@ -306,7 +306,7 @@ export class RNDebugSession extends DebugSessionBase {
 				{
 					parentSession: this.vsCodeDebugSession,
 					consoleMode: vscode.DebugConsoleMode.MergeWithParent,
-				}
+				},
 			)
 			.then(
 				(childDebugSessionStarted: boolean) => {
@@ -333,7 +333,7 @@ export class RNDebugSession extends DebugSessionBase {
 					this.setConnectionAllowedIfPossible();
 					this.resetFirstConnectionStatus();
 					throw err;
-				}
+				},
 			);
 	}
 
@@ -348,7 +348,7 @@ export class RNDebugSession extends DebugSessionBase {
 	}
 
 	private handleTerminateDebugSession(
-		debugSession: vscode.DebugSession
+		debugSession: vscode.DebugSession,
 	): void {
 		if (
 			debugSession.configuration.rnDebugSessionId ===

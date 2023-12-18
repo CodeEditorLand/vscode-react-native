@@ -23,7 +23,7 @@ async function runWebpack({
 	compileInPlace = false,
 	mode = process.argv.includes("watch") ? "development" : "production",
 } = options) {
-	let configs = [];
+	const configs = [];
 	for (const { entry, library, filename } of packages) {
 		const config = {
 			mode,
@@ -102,7 +102,7 @@ async function runWebpack({
 					analyzerMode: "static",
 					reportFilename: path.resolve(
 						distSrcDir,
-						path.basename(entry) + ".html"
+						path.basename(entry) + ".html",
 					),
 				}),
 			];
@@ -120,7 +120,7 @@ async function runWebpack({
 			} else {
 				resolve();
 			}
-		})
+		}),
 	);
 }
 

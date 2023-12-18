@@ -35,7 +35,7 @@ const main: IValidation = {
 	platform: ["win32"],
 	description: toLocale(
 		"DeveloperModeTestDescription",
-		"Required for launching and debugging RNW apps"
+		"Required for launching and debugging RNW apps",
 	),
 	category: ValidationCategoryE.Windows,
 	exec: test,

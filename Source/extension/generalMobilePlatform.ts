@@ -6,9 +6,9 @@ import { ErrorHelper } from "../common/error/errorHelper";
 import { InternalErrorCode } from "../common/error/internalErrorCode";
 import { TelemetryHelper } from "../common/telemetryHelper";
 import { GeneralPlatform, TargetType } from "./generalPlatform";
+import { IOSPlatform } from "./ios/iOSPlatform";
 import { IMobileTarget, MobileTarget } from "./mobileTarget";
 import { MobileTargetManager } from "./mobileTargetManager";
-import { IOSPlatform } from "./ios/iOSPlatform";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -21,13 +21,13 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 	protected target?: MobileTarget;
 
 	public async getTargetsCountByFilter(
-		filter?: (el: IMobileTarget) => boolean
+		filter?: (el: IMobileTarget) => boolean,
 	): Promise<number> {
 		return this.targetManager.getTargetsCountWithFilter(filter);
 	}
 
 	public async resolveMobileTarget(
-		targetString: string
+		targetString: string,
 	): Promise<MobileTarget | undefined> {
 		let collectTargetsCalled = false;
 
@@ -48,7 +48,7 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 
 		if (!collectTargetsCalled) {
 			await this.targetManager.collectTargets(
-				isVirtualTarget ? TargetType.Simulator : TargetType.Device
+				isVirtualTarget ? TargetType.Simulator : TargetType.Device,
 			);
 		}
 
@@ -66,31 +66,16 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 					const conditionForNotAnyTarget = isAnyTarget
 						? true
 						: target.name === targetString ||
-							target.id === targetString;
+						  target.id === targetString;
 					const conditionForVirtualTarget =
 						isVirtualTarget === target.isVirtualTarget;
 					return (
 						conditionForVirtualTarget && conditionForNotAnyTarget
 					);
-				}
+				},
 			);
 
-			if (!this.target) {
-				this.logger.warning(
-					localize(
-						"CouldNotFindAnyDebuggableTarget",
-						"Could not find any debuggable target by specified target: {0}",
-						targetString
-					)
-				);
-				this.logger.warning(
-					localize(
-						"ContinueWithRnCliWorkflow",
-						"Continue using standard RN CLI workflow."
-					)
-				);
-				cleanupTargetModifications();
-			} else {
+			if (this.target) {
 				// For iOS we should pass exact target id,
 				// because the “react-native run-ios” command does not check booted devices
 				// and just launches the first device
@@ -102,6 +87,21 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 				} else {
 					cleanupTargetModifications();
 				}
+			} else {
+				this.logger.warning(
+					localize(
+						"CouldNotFindAnyDebuggableTarget",
+						"Could not find any debuggable target by specified target: {0}",
+						targetString,
+					),
+				);
+				this.logger.warning(
+					localize(
+						"ContinueWithRnCliWorkflow",
+						"Continue using standard RN CLI workflow.",
+					),
+				);
+				cleanupTargetModifications();
 			}
 		} catch (error) {
 			if (
@@ -112,16 +112,16 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 				TelemetryHelper.sendErrorEvent(
 					"TargetSelectionError",
 					ErrorHelper.getInternalError(
-						InternalErrorCode.TargetSelectionError
-					)
+						InternalErrorCode.TargetSelectionError,
+					),
 				);
 
 				this.logger.warning(error);
 				this.logger.warning(
 					localize(
 						"ContinueWithRnCliWorkflow",
-						"Continue using standard RN CLI workflow."
-					)
+						"Continue using standard RN CLI workflow.",
+					),
 				);
 
 				cleanupTargetModifications();

@@ -25,7 +25,7 @@ export class MobileTarget implements IDebuggableMobileTarget {
 		isOnline: boolean,
 		isVirtualTarget: boolean,
 		id: string,
-		name?: string
+		name?: string,
 	) {
 		this._isOnline = isOnline;
 		this._isVirtualTarget = isVirtualTarget;

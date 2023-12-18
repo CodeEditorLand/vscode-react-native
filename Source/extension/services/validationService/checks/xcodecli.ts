@@ -33,7 +33,7 @@ const main: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"xcodeCLICheckDescription",
-		"Required for building and testing RN macOS apps"
+		"Required for building and testing RN macOS apps",
 	),
 	category: ValidationCategoryE.macOS,
 	exec: test,

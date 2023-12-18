@@ -2,13 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import { Disposable } from "vscode";
-import { RequestParams } from "../clientDevice";
-import { Request, Response, PartialResponse } from "../networkMessageData";
-import { RequestBodyFormatter } from "../requestBodyFormatters/requestBodyFormatter";
 import { OutputChannelLogger } from "../../log/OutputChannelLogger";
+import { RequestParams } from "../clientDevice";
+import { PartialResponse, Request, Response } from "../networkMessageData";
+import { RequestBodyFormatter } from "../requestBodyFormatters/requestBodyFormatter";
 
 export enum InspectorViewType {
-	console,
+	console = 0,
 }
 
 export abstract class InspectorView implements Disposable {

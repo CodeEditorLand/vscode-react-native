@@ -62,12 +62,9 @@ async function test(inspectCodeCoverage = false) {
 
 const testTask = gulp.series(getBuilder.buildTask, getFormatter.lint, test);
 
-const testCoverage = gulp.series(
-	gulp.series(getBuilder.buildDev),
-	async function () {
-		await test(true);
-	}
-);
+const testCoverage = gulp.series(gulp.series(getBuilder.buildDev), async () => {
+	await test(true);
+});
 
 module.exports = {
 	test,

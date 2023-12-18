@@ -8,7 +8,7 @@ import {
 	createVersionErrorMessage,
 	parseVersion,
 } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -56,7 +56,7 @@ const main: IValidation = {
 	label,
 	description: toLocale(
 		"NodejsCheckDescription",
-		"Required for code execution. Minimal version is 12"
+		"Required for code execution. Minimal version is 12",
 	),
 	category: ValidationCategoryE.Common,
 	exec: test,

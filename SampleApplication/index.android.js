@@ -1,12 +1,11 @@
-"use strict";
-import React, {
+import {
+	Alert,
 	AppRegistry,
 	Component,
 	StyleSheet,
 	Text,
-	View,
 	TouchableNativeFeedback,
-	Alert,
+	View,
 } from "react-native";
 
 // import {SampleApplication} from './sampleApplication';

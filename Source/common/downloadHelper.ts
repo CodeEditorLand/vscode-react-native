@@ -22,20 +22,20 @@ export async function downloadFile(url: any, targetFile: any) {
 				const file = fs.createWriteStream(targetFile);
 				const totalLength = parseInt(
 					response.headers["content-length"] as string,
-					10
+					10,
 				);
 
 				response.pipe(file);
-				response.on("data", async function (chunk) {
+				response.on("data", async (chunk) => {
 					newProgress += chunk.length;
 					const currentProgress =
 						parseFloat(
-							getDownloadProgress(newProgress, totalLength)
+							getDownloadProgress(newProgress, totalLength),
 						) * 100;
 					if (currentProgress - progress >= 5) {
 						progress = currentProgress;
 						logger.logStream(
-							`Current progress: ${currentProgress}%, please wait... \n`
+							`Current progress: ${currentProgress}%, please wait... \n`,
 						);
 					}
 				});
@@ -43,14 +43,16 @@ export async function downloadFile(url: any, targetFile: any) {
 				file.on("finish", async () => {
 					file.close();
 					logger.logStream(
-						`Download Expo Go Completed: ${targetFile as string} \n`
+						`Download Expo Go Completed: ${
+							targetFile as string
+						} \n`,
 					);
 					void vscode.window.showInformationMessage(
-						"Download Expo Go Completed."
+						"Download Expo Go Completed.",
 					);
 				});
 
-				response.on("end", function () {
+				response.on("end", () => {
 					resolve(() => {
 						console.log("Progress end.");
 					});
@@ -70,7 +72,7 @@ export async function downloadExpoGo(url: string, targetFile: string) {
 
 function getDownloadProgress(
 	currentLength: number,
-	totalLength: number
+	totalLength: number,
 ): string {
 	return (currentLength / totalLength).toFixed(2);
 }

@@ -2,17 +2,17 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as assert from "assert";
-import * as nls from "vscode-nls";
 import * as vscode from "vscode";
+import * as nls from "vscode-nls";
 import { ErrorHelper } from "../../common/error/errorHelper";
 import { InternalErrorCode } from "../../common/error/internalErrorCode";
 import { AdbHelper } from "../android/adb";
 import { AndroidTargetManager } from "../android/androidTargetManager";
 import { LogCatMonitor } from "../android/logCatMonitor";
 import { LogCatMonitorManager } from "../android/logCatMonitorManager";
+import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { TipNotificationService } from "../services/tipsNotificationsService/tipsNotificationService";
 import { SettingsHelper } from "../settingsHelper";
-import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { Command } from "./util/command";
 
 nls.config({
@@ -26,7 +26,7 @@ export class StartLogCatMonitor extends Command {
 	label = "Run React Native LogCat Monitor";
 	requiresTrust = false;
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.AndroidCouldNotStartLogCatMonitor
+		InternalErrorCode.AndroidCouldNotStartLogCatMonitor,
 	);
 
 	async baseFn(): Promise<void> {
@@ -34,7 +34,7 @@ export class StartLogCatMonitor extends Command {
 		const logger = OutputChannelLogger.getMainChannel();
 
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
-			"logCatMonitor"
+			"logCatMonitor",
 		);
 		const projectPath = this.project.getPackager().getProjectPath();
 		const nodeModulesRoot: string =
@@ -42,28 +42,28 @@ export class StartLogCatMonitor extends Command {
 		const adbHelper = new AdbHelper(projectPath, nodeModulesRoot);
 		const targetManager = new AndroidTargetManager(adbHelper);
 		const target = await targetManager.selectAndPrepareTarget(
-			(target) => target.isOnline
+			(target) => target.isOnline,
 		);
 
 		if (!target) {
 			void vscode.window.showErrorMessage(
 				localize(
 					"OnlineAndroidDeviceNotFound",
-					"Could not find a proper online Android device to start a LogCat monitor"
-				)
+					"Could not find a proper online Android device to start a LogCat monitor",
+				),
 			);
 			return;
 		}
 
 		LogCatMonitorManager.delMonitor(target.id); // Stop previous logcat monitor if it's running
 		const logCatArguments = SettingsHelper.getLogCatFilteringArgs(
-			this.project.getWorkspaceFolderUri()
+			this.project.getWorkspaceFolderUri(),
 		);
 		// this.logCatMonitor can be mutated, so we store it locally too
 		const logCatMonitor = new LogCatMonitor(
 			target.id,
 			adbHelper,
-			logCatArguments
+			logCatArguments,
 		);
 		LogCatMonitorManager.addMonitor(logCatMonitor);
 		logCatMonitor
@@ -72,9 +72,9 @@ export class StartLogCatMonitor extends Command {
 				logger.warning(
 					localize(
 						"ErrorWhileMonitoringLogCat",
-						"Error while monitoring LogCat"
-					)
-				)
+						"Error while monitoring LogCat",
+					),
+				),
 			);
 	}
 }

@@ -1,36 +1,36 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as path from "path";
 import * as fs from "fs";
-import * as vscode from "vscode";
+import * as path from "path";
 import {
-	LoggingDebugSession,
-	Logger,
-	logger,
 	ErrorDestination,
+	Logger,
+	LoggingDebugSession,
+	logger,
 } from "@vscode/debugadapter";
+import * as vscode from "vscode";
 import { DebugProtocol } from "vscode-debugprotocol";
 import * as nls from "vscode-nls";
-import { stripJsonTrailingComma } from "../common/utils";
-import {
-	getLoggingDirectory,
-	LogHelper,
-	LogLevel,
-} from "../extension/log/LogHelper";
-import { ReactNativeProjectHelper } from "../common/reactNativeProjectHelper";
 import { ErrorHelper } from "../common/error/errorHelper";
-import { InternalErrorCode } from "../common/error/internalErrorCode";
 import { InternalError, NestedError } from "../common/error/internalError";
+import { InternalErrorCode } from "../common/error/internalErrorCode";
+import { RNPackageVersions } from "../common/projectVersionHelper";
+import { ReactNativeProjectHelper } from "../common/reactNativeProjectHelper";
+import { stripJsonTrailingComma } from "../common/utils";
+import { AppLauncher } from "../extension/appLauncher";
 import {
 	ILaunchArgs,
 	IRunOptions,
 	PlatformType,
 } from "../extension/launchArgs";
-import { AppLauncher } from "../extension/appLauncher";
-import { RNPackageVersions } from "../common/projectVersionHelper";
-import { SettingsHelper } from "../extension/settingsHelper";
+import {
+	LogHelper,
+	LogLevel,
+	getLoggingDirectory,
+} from "../extension/log/LogHelper";
 import { OutputChannelLogger } from "../extension/log/OutputChannelLogger";
+import { SettingsHelper } from "../extension/settingsHelper";
 import { RNSession } from "./debugSessionWrapper";
 
 nls.config({
@@ -44,21 +44,21 @@ const localize = nls.loadMessageBundle();
  */
 export enum DebugSessionStatus {
 	/** A session has been just created */
-	FirstConnection,
+	FirstConnection = 0,
 	/** This status is required in order to exclude the possible creation of several debug sessions at the first start */
-	FirstConnectionPending,
+	FirstConnectionPending = 1,
 	/** This status means that an application can be reloaded */
-	ConnectionAllowed,
+	ConnectionAllowed = 2,
 	/** This status means that an application is reloading now, and we shouldn't terminate the current debug session */
-	ConnectionPending,
+	ConnectionPending = 3,
 	/** A debuggee connected successfully */
-	ConnectionDone,
+	ConnectionDone = 4,
 	/** A debuggee failed to connect */
-	ConnectionFailed,
+	ConnectionFailed = 5,
 	/** The session is handling disconnect request now */
-	Stopping,
+	Stopping = 6,
 	/** The session is stopped */
-	Stopped,
+	Stopped = 7,
 }
 
 export interface TerminateEventArgs {
@@ -130,7 +130,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 	protected initializeRequest(
 		response: DebugProtocol.InitializeResponse,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		args: DebugProtocol.InitializeRequestArguments
+		args: DebugProtocol.InitializeRequestArguments,
 	): void {
 		response.body = response.body || {};
 
@@ -144,7 +144,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 
 	protected abstract establishDebugSession(
 		attachArgs: IAttachRequestArgs,
-		resolve?: (value?: void | PromiseLike<void> | undefined) => void
+		resolve?: (value?: void | PromiseLike<void> | undefined) => void,
 	): void;
 
 	protected async initializeSettings(args: any): Promise<void> {
@@ -153,18 +153,18 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			if (chromeDebugCoreLogs) {
 				chromeDebugCoreLogs = path.join(
 					chromeDebugCoreLogs,
-					"DebugSessionLogs.txt"
+					"DebugSessionLogs.txt",
 				);
 			}
 			let logLevel: string = args.trace;
 			if (logLevel) {
 				logLevel = logLevel.replace(
 					logLevel[0],
-					logLevel[0].toUpperCase()
+					logLevel[0].toUpperCase(),
 				);
 				logger.setup(
 					Logger.LogLevel[logLevel],
-					chromeDebugCoreLogs || false
+					chromeDebugCoreLogs || false,
 				);
 				this.cdpProxyLogLevel =
 					LogLevel[logLevel] === LogLevel.Verbose
@@ -193,21 +193,21 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			}
 
 			const projectRootPath = SettingsHelper.getReactNativeProjectRoot(
-				args.cwd
+				args.cwd,
 			);
 			const isReactProject =
 				await ReactNativeProjectHelper.isReactNativeProject(
-					projectRootPath
+					projectRootPath,
 				);
 			if (!isReactProject) {
 				throw ErrorHelper.getInternalError(
-					InternalErrorCode.NotInReactNativeFolderError
+					InternalErrorCode.NotInReactNativeFolderError,
 				);
 			}
 
 			const appLauncher =
 				await AppLauncher.getOrCreateAppLauncherByProjectRootPath(
-					projectRootPath
+					projectRootPath,
 				);
 			this.appLauncher = appLauncher;
 			this.projectRootPath = projectRootPath;
@@ -215,7 +215,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			this.appLauncher.getOrUpdateNodeModulesRoot(true);
 			if (this.vsCodeDebugSession.workspaceFolder) {
 				this.appLauncher.updateDebugConfigurationRoot(
-					this.vsCodeDebugSession.workspaceFolder.uri.fsPath
+					this.vsCodeDebugSession.workspaceFolder.uri.fsPath,
 				);
 			}
 			const settingsPort =
@@ -230,7 +230,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 		response: DebugProtocol.DisconnectResponse,
 		args: DebugProtocol.DisconnectArguments,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		if (this.appLauncher) {
 			await this.appLauncher.getRnCdpProxy().stopServer();
@@ -251,8 +251,8 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 					localize(
 						"CouldNotStopMonitoringLogcat",
 						"Couldn't stop monitoring logcat: {0}",
-						err.message || err
-					)
+						err.message || err,
+					),
 				);
 			}
 		}
@@ -272,7 +272,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 
 	protected terminateWithErrorResponse(
 		error: Error,
-		response: DebugProtocol.Response
+		response: DebugProtocol.Response,
 	): void {
 		// We can't print error messages after the debugging session is stopped. This could break the extension work.
 		if (
@@ -289,18 +289,18 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			{ format: error.message, id: 1 },
 			undefined,
 			undefined,
-			ErrorDestination.User
+			ErrorDestination.User,
 		);
 	}
 
 	protected async preparePackagerBeforeAttach(
 		args: IAttachRequestArgs,
-		reactNativeVersions: RNPackageVersions
+		reactNativeVersions: RNPackageVersions,
 	): Promise<void> {
 		if (!(await this.appLauncher.getPackager().isRunning())) {
 			const runOptions: ILaunchArgs = Object.assign(
 				{ reactNativeVersions },
-				this.appLauncher.prepareBaseRunOptions(args)
+				this.appLauncher.prepareBaseRunOptions(args),
 			);
 			this.appLauncher.getPackager().setRunOptions(runOptions);
 			await this.appLauncher.getPackager().start();
@@ -343,7 +343,7 @@ export function getProjectRoot(args: any): string {
 		return path.resolve(vsCodeRoot, projectRootPath);
 	} catch (e) {
 		logger.verbose(
-			`${settingsPath} file doesn't exist or its content is incorrect. This file will be ignored.`
+			`${settingsPath} file doesn't exist or its content is incorrect. This file will be ignored.`,
 		);
 		return args.cwd
 			? path.resolve(args.cwd)

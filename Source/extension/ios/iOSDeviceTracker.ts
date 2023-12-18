@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import { ChildProcess, execFile } from "child_process";
-import { AbstractDeviceTracker } from "../abstractDeviceTracker";
-import { DeviceStorage } from "../networkInspector/devices/deviceStorage";
-import { ClientOS } from "../networkInspector/clientUtils";
-import { IOSClienDevice } from "../networkInspector/devices/iOSClienDevice";
 import { findFileInFolderHierarchy } from "../../common/extensionHelper";
+import { AbstractDeviceTracker } from "../abstractDeviceTracker";
+import { ClientOS } from "../networkInspector/clientUtils";
+import { DeviceStorage } from "../networkInspector/devices/deviceStorage";
+import { IOSClienDevice } from "../networkInspector/devices/iOSClienDevice";
 import iosUtil, { DeviceTarget, isXcodeDetected } from "./iOSContainerUtility";
 import { IDebuggableIOSTarget, IOSTargetManager } from "./iOSTargetManager";
 
@@ -20,7 +20,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 		this.portForwardingClientPath = `${
 			findFileInFolderHierarchy(
 				__dirname,
-				"static/PortForwardingMacApp.app"
+				"static/PortForwardingMacApp.app",
 			) || __dirname
 		}/Contents/MacOS/PortForwardingMacApp`;
 		this.iOSTargetManager = new IOSTargetManager();
@@ -50,16 +50,16 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 
 	private processDevices(
 		activeDevices: Array<DeviceTarget>,
-		isVirtualTarget: boolean
+		isVirtualTarget: boolean,
 	): void {
 		const currentDevicesIds = new Set(
 			[...DeviceStorage.devices.entries()]
 				.filter(
 					(entry) =>
 						entry[1] instanceof IOSClienDevice &&
-						entry[1].isVirtualTarget === isVirtualTarget
+						entry[1].isVirtualTarget === isVirtualTarget,
 				)
-				.map((entry) => entry[0])
+				.map((entry) => entry[0]),
 		);
 
 		for (const activeDevice of activeDevices) {
@@ -71,7 +71,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 					isVirtualTarget,
 					ClientOS.iOS,
 					activeDevice.isOnline,
-					activeDevice.name
+					activeDevice.name,
 				);
 				DeviceStorage.devices.set(iosDevice.id, iosDevice);
 			}
@@ -123,7 +123,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 	 */
 	private forwardPort(
 		port: number,
-		multiplexChannelPort: number
+		multiplexChannelPort: number,
 	): ChildProcess {
 		const childProcess = execFile(
 			this.portForwardingClientPath,
@@ -135,11 +135,11 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 				if (!err?.killed) {
 					this.logger.error(
 						`Port forwarding app failed to start: ${String(
-							err?.message
-						)}, ${stdout}, ${stderr}`
+							err?.message,
+						)}, ${stdout}, ${stderr}`,
 					);
 				}
-			}
+			},
 		);
 		this.logger.debug(`Port forwarding app started for ${port} port`);
 		childProcess.addListener("error", (err) => {
@@ -147,7 +147,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 		});
 		childProcess.addListener("exit", (code) => {
 			this.logger.debug(
-				`Port forwarding app exited with code ${String(code)}`
+				`Port forwarding app exited with code ${String(code)}`,
 			);
 		});
 		return childProcess;
@@ -160,7 +160,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 
 	private async getRunningSimulators(): Promise<IDebuggableIOSTarget[]> {
 		return (await this.iOSTargetManager.getTargetList(
-			(target) => target.isOnline
+			(target) => target.isOnline,
 		)) as IDebuggableIOSTarget[];
 	}
 

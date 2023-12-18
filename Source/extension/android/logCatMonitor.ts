@@ -4,9 +4,9 @@
 import * as vscode from "vscode";
 
 import * as nls from "vscode-nls";
+import { ExecutionsFilterBeforeTimestamp } from "../../common/executionsLimiter";
 import { ISpawnResult } from "../../common/node/childProcess";
 import { OutputChannelLogger } from "../log/OutputChannelLogger";
-import { ExecutionsFilterBeforeTimestamp } from "../../common/executionsLimiter";
 import { AdbHelper } from "./adb";
 
 nls.config({
@@ -40,7 +40,7 @@ export class LogCatMonitor implements vscode.Disposable {
 	constructor(
 		deviceId: string,
 		adbHelper: AdbHelper,
-		userProvidedLogCatArguments?: string[]
+		userProvidedLogCatArguments?: string[],
 	) {
 		this.deviceId = deviceId;
 		this._userProvidedLogCatArguments = userProvidedLogCatArguments;
@@ -52,12 +52,12 @@ export class LogCatMonitor implements vscode.Disposable {
 	public async start(): Promise<void> {
 		const logCatArguments = this.getLogCatArguments();
 		const adbParameters = ["-s", this.deviceId, "logcat"].concat(
-			logCatArguments
+			logCatArguments,
 		);
 		this._logger.debug(
 			`Monitoring LogCat for device ${
 				this.deviceId
-			} with arguments: ${String(logCatArguments)}`
+			} with arguments: ${String(logCatArguments)}`,
 		);
 
 		this._logCatSpawn = this.adbHelper.startLogCat(adbParameters);
@@ -65,7 +65,7 @@ export class LogCatMonitor implements vscode.Disposable {
 		/* LogCat has a buffer and prints old messages when first called. To ignore them,
             we won't print messages for the first 0.5 seconds */
 		const filter = new ExecutionsFilterBeforeTimestamp(
-			/* delayInSeconds*/ 0.5
+			/* delayInSeconds*/ 0.5,
 		);
 		this._logCatSpawn.stderr.on("data", (data: Buffer) => {
 			filter.execute(() => this._logger.info(data.toString()));
@@ -80,20 +80,20 @@ export class LogCatMonitor implements vscode.Disposable {
 			this._logger.info(
 				localize(
 					"LogCatMonitoringStoppedBecauseTheProcessExited",
-					"LogCat monitoring stopped because the process exited."
-				)
+					"LogCat monitoring stopped because the process exited.",
+				),
 			);
 		} catch (error) {
-			if (!this._logCatSpawn) {
+			if (this._logCatSpawn) {
+				throw error; // Unknown error. Pass it up the promise chain
+			} else {
 				// We stopped log cat ourselves
 				this._logger.info(
 					localize(
 						"LogCatMonitoringStoppedBecauseTheDebuggingSessionFinished",
-						"LogCat monitoring stopped because the debugging session finished"
-					)
+						"LogCat monitoring stopped because the debugging session finished",
+					),
 				);
-			} else {
-				throw error; // Unknown error. Pass it up the promise chain
 			}
 		} finally {
 			this._logCatSpawn = null;

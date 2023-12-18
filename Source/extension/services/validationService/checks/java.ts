@@ -8,7 +8,7 @@ import {
 	createVersionErrorMessage,
 	parseVersion,
 } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -27,7 +27,7 @@ async function test(): Promise<ValidationResultT> {
 			null,
 			"java -version",
 			/version "(.*?)"( |$|\n)/gi,
-			"stderr"
+			"stderr",
 		),
 		versionRange: "1.8.0",
 	});
@@ -60,7 +60,7 @@ const main: IValidation = {
 	label,
 	description: toLocale(
 		"JavaCheckDescription",
-		"Required as part of Anrdoid SDK"
+		"Required as part of Anrdoid SDK",
 	),
 	category: ValidationCategoryE.Android,
 	exec: test,

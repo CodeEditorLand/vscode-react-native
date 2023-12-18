@@ -3,7 +3,7 @@
 
 import * as nls from "vscode-nls";
 import { basicCheck, createNotFoundMessage } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -36,7 +36,7 @@ const main: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"CocoaPodsTestDescription",
-		"Required for managing library dependencies of XCode projects"
+		"Required for managing library dependencies of XCode projects",
 	),
 	category: ValidationCategoryE.iOS,
 	exec: test,

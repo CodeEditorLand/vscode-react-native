@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as vscode from "vscode";
-import { TelemetryHelper } from "../../../common/telemetryHelper";
 import { Telemetry } from "../../../common/telemetry";
+import { TelemetryHelper } from "../../../common/telemetryHelper";
 import { ExtensionConfigManager } from "../../extensionConfigManager";
 import { IConfig, retryDownloadConfig } from "../remoteConfigHelper";
 import { IExperiment } from "./IExperiment";
@@ -57,8 +57,8 @@ export class ExperimentService implements vscode.Disposable {
 
 		const experimentResults: Array<ExperimentResult> = await Promise.all(
 			this.downloadedExperimentsConfig.map((expConfig) =>
-				this.executeExperiment(expConfig)
-			)
+				this.executeExperiment(expConfig),
+			),
 		);
 
 		this.sendExperimentTelemetry(experimentResults);
@@ -77,18 +77,18 @@ export class ExperimentService implements vscode.Disposable {
 
 		this.downloadConfigRequest = retryDownloadConfig<ExperimentConfig[]>(
 			this.endpointURL,
-			this.cancellationTokenSource
+			this.cancellationTokenSource,
 		);
 	}
 
 	private async executeExperiment(
-		expConfig: ExperimentConfig
+		expConfig: ExperimentConfig,
 	): Promise<ExperimentResult> {
 		const curExperimentParameters = ExtensionConfigManager.config.get(
-			expConfig.experimentName
+			expConfig.experimentName,
 		);
 		const expInstance = this.experimentsInstances.get(
-			expConfig.experimentName
+			expConfig.experimentName,
 		);
 
 		let expResult: ExperimentResult;
@@ -96,11 +96,11 @@ export class ExperimentService implements vscode.Disposable {
 			try {
 				expResult = await expInstance.run(
 					expConfig,
-					curExperimentParameters
+					curExperimentParameters,
 				);
 				ExtensionConfigManager.config.set(
 					expConfig.experimentName,
-					expResult.updatedExperimentParameters
+					expResult.updatedExperimentParameters,
 				);
 			} catch (err) {
 				expResult = {
@@ -132,7 +132,7 @@ export class ExperimentService implements vscode.Disposable {
 					);
 					expInstances.set(
 						expConfig.experimentName,
-						new expClass.default()
+						new expClass.default(),
 					);
 				} catch (err) {
 					expConfig.enabled = false;
@@ -144,7 +144,7 @@ export class ExperimentService implements vscode.Disposable {
 	}
 
 	private sendExperimentTelemetry(
-		experimentsResults: ExperimentResult[]
+		experimentsResults: ExperimentResult[],
 	): void {
 		const runExperimentsEvent =
 			TelemetryHelper.createTelemetryEvent("runExperiments");
@@ -158,14 +158,14 @@ export class ExperimentService implements vscode.Disposable {
 					runExperimentsEvent,
 					expResult.error,
 					undefined,
-					`${expResult.updatedExperimentParameters.experimentName}.`
+					`${expResult.updatedExperimentParameters.experimentName}.`,
 				);
 			} else {
 				TelemetryHelper.addTelemetryEventProperty(
 					runExperimentsEvent,
 					expResult.updatedExperimentParameters.experimentName,
 					expResult.resultStatus,
-					false
+					false,
 				);
 			}
 		});

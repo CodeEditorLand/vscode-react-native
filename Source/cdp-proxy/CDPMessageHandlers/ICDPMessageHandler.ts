@@ -3,8 +3,8 @@
 
 import {
 	IProtocolCommand,
-	IProtocolSuccess,
 	IProtocolError,
+	IProtocolSuccess,
 } from "vscode-cdp-proxy";
 
 export declare type ProtocolMessage =

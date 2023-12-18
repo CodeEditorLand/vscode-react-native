@@ -18,9 +18,9 @@ const watchBuildTest = gulp.series(
 	function runWatch() {
 		return gulp.watch(
 			sources,
-			gulp.series(getBuilder.buildTask, getTester.testTask)
+			gulp.series(getBuilder.buildTask, getTester.testTask),
 		);
-	}
+	},
 );
 
 module.exports = {

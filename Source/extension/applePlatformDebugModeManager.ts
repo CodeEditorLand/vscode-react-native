@@ -30,21 +30,21 @@ export abstract class ApplePlatformDebugModeManager {
 	public abstract setAppRemoteDebuggingSetting(
 		enable: boolean,
 		configuration?: string,
-		productName?: string
+		productName?: string,
 	): Promise<void>;
 
 	public abstract getAppRemoteDebuggingSetting(
 		configuration?: string,
-		productName?: string
+		productName?: string,
 	): Promise<boolean>;
 
 	public async findPListFileWithRetry(
 		configuration?: string,
-		productName?: string
+		productName?: string,
 	): Promise<string> {
 		const failureString = localize(
 			"UnableToFindPlistFileToConfigureDebugging",
-			"Unable to find a plist file to configure debugging"
+			"Unable to find a plist file to configure debugging",
 		);
 
 		return PromiseUtil.retryAsync(
@@ -52,12 +52,12 @@ export abstract class ApplePlatformDebugModeManager {
 			(file: string) => file !== "", // Condition to check if the operation was successful, and this logic is done
 			ApplePlatformDebugModeManager.MAX_RETRIES,
 			ApplePlatformDebugModeManager.DELAY_UNTIL_RETRY,
-			failureString
+			failureString,
 		); // Error to show in case all retries fail
 	}
 
 	protected abstract tryOneAttemptToFindPListFile(
 		configuration?: string,
-		productName?: string
+		productName?: string,
 	): Promise<string>;
 }

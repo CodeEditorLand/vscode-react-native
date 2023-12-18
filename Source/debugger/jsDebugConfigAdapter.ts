@@ -7,7 +7,7 @@ export class JsDebugConfigAdapter {
 	public static createDebuggingConfigForPureRN(
 		attachArgs: IAttachRequestArgs,
 		cdpProxyPort: number,
-		sessionId: string
+		sessionId: string,
 	): any {
 		return Object.assign(
 			{},
@@ -24,14 +24,14 @@ export class JsDebugConfigAdapter {
 				rnDebugSessionId: sessionId,
 				// Fixes https://github.com/microsoft/vscode/issues/102042
 				resolveSourceMapLocations: ["!**/debuggerWorker.js"],
-			}
+			},
 		);
 	}
 
 	public static createDebuggingConfigForRNHermes(
 		attachArgs: IAttachRequestArgs,
 		cdpProxyPort: number,
-		sessionId: string
+		sessionId: string,
 	): any {
 		return Object.assign(
 			{},
@@ -52,7 +52,7 @@ export class JsDebugConfigAdapter {
 					"**",
 					"!**/node_modules/!(expo)/**",
 				],
-			}
+			},
 		);
 	}
 
@@ -60,7 +60,7 @@ export class JsDebugConfigAdapter {
 		attachArgs: IAttachRequestArgs,
 		cdpProxyPort: number,
 		pwaSessionName: string,
-		sessionId: string
+		sessionId: string,
 	): any {
 		const extraArgs: any = {};
 
@@ -75,7 +75,7 @@ export class JsDebugConfigAdapter {
 				port: cdpProxyPort,
 				webRoot: attachArgs.cwd,
 				rnDebugSessionId: sessionId,
-			}
+			},
 		);
 	}
 

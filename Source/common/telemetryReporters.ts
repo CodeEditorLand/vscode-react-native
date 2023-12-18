@@ -16,7 +16,7 @@ export class RemoteTelemetryReporter implements Telemetry.ITelemetryReporter {
 	public sendTelemetryEvent(
 		eventName: string,
 		properties?: Telemetry.ITelemetryEventProperties,
-		measures?: Telemetry.ITelemetryEventMeasures
+		measures?: Telemetry.ITelemetryEventMeasures,
 	): void {
 		try {
 			Telemetry.sendExtensionTelemetry(
@@ -25,7 +25,7 @@ export class RemoteTelemetryReporter implements Telemetry.ITelemetryReporter {
 				this.appInsightsKey,
 				eventName,
 				properties,
-				measures
+				measures,
 			);
 		} catch (err) {
 			// don't notify a user
@@ -38,7 +38,7 @@ export class NullTelemetryReporter implements Telemetry.ITelemetryReporter {
 	public sendTelemetryEvent(
 		eventName: string,
 		properties?: Telemetry.ITelemetryEventProperties,
-		measures?: Telemetry.ITelemetryEventMeasures
+		measures?: Telemetry.ITelemetryEventMeasures,
 	): void {
 		// Don't do anything
 	}
@@ -61,7 +61,7 @@ export class ReassignableTelemetryReporter
 	public sendTelemetryEvent(
 		eventName: string,
 		properties?: Telemetry.ITelemetryEventProperties,
-		measures?: Telemetry.ITelemetryEventMeasures
+		measures?: Telemetry.ITelemetryEventMeasures,
 	): void {
 		this.reporter.sendTelemetryEvent(eventName, properties, measures);
 	}

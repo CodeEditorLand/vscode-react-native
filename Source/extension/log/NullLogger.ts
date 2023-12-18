@@ -11,12 +11,12 @@ export class NullLogger implements ILogger {
 	public error(
 		errorMessage: string,
 		error?: Error | undefined,
-		stack?: boolean | undefined
+		stack?: boolean | undefined,
 	): void {}
 	public debug(message: string): void {}
 	public logStream(
 		data: string | Buffer,
-		stream?: NodeJS.WritableStream | undefined
+		stream?: NodeJS.WritableStream | undefined,
 	): void {}
 	/* eslint-enable @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function */
 }

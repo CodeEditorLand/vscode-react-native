@@ -8,7 +8,7 @@ import {
 	createVersionErrorMessage,
 	parseVersion,
 } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -25,7 +25,7 @@ async function test(): Promise<ValidationResultT> {
 		getVersion: parseVersion.bind(
 			null,
 			"gradle -version",
-			/gradle (.*?)( |$)/gim
+			/gradle (.*?)( |$)/gim,
 		),
 	});
 
@@ -52,7 +52,7 @@ const main: IValidation = {
 	label,
 	description: toLocale(
 		"GradleTestDescription",
-		"Requried for building android apps"
+		"Requried for building android apps",
 	),
 	category: ValidationCategoryE.Android,
 	exec: test,

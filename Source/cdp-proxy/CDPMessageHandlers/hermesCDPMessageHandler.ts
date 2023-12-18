@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import { Protocol as Cdp } from "devtools-protocol/types/protocol";
-import { ProcessedCDPMessage } from "./ICDPMessageHandler";
 import { CDP_API_NAMES } from "./CDPAPINames";
+import { ProcessedCDPMessage } from "./ICDPMessageHandler";
 import { BaseCDPMessageHandler } from "./baseCDPMessageHandler";
 
 export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
@@ -85,7 +85,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 			(callFrame) =>
 				callFrame.functionName !== this.HERMES_NATIVE_FUNCTION_NAME &&
 				callFrame.location.scriptId !==
-					this.HERMES_NATIVE_FUNCTION_SCRIPT_ID
+					this.HERMES_NATIVE_FUNCTION_SCRIPT_ID,
 		);
 		event.params.callFrames = callFrames;
 

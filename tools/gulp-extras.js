@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
-"use strict";
 
 const child_process = require("child_process");
 const fs = require("fs");
@@ -20,8 +19,8 @@ function logError(pluginName, file, message) {
 	const sourcePath = path.relative(__dirname, file.path).replace("../", ""); // CodeQL [js/incomplete-sanitization] Debugging extension has no need to use global replacement in file path string
 	log(
 		`[${colors.cyan(pluginName)}] ${colors.red(
-			"error"
-		)} ${sourcePath}: ${message}`
+			"error",
+		)} ${sourcePath}: ${message}`,
 	);
 }
 
@@ -35,14 +34,14 @@ function checkCopyright() {
 		"// Copyright (c) Microsoft Corporation. All rights reserved.\n// Licensed under the MIT license. See LICENSE file in the project root for details.";
 
 	return through.obj(
-		function (file, encoding, callback) {
+		(file, encoding, callback) => {
 			if (file.isBuffer()) {
 				let fileContents = file.contents.toString(encoding);
 				fileContents = fileContents.replace("\r\n", "\n");
 				fileContents = fileContents.replace('"use strict";\n', "");
 				fileContents = fileContents.replace(
 					'Object.defineProperty(exports, "__esModule", { value: true });\n',
-					""
+					"",
 				);
 
 				if (fileContents.indexOf(copyrightNotice) !== 0) {
@@ -57,11 +56,11 @@ function checkCopyright() {
 			if (hadErrors) {
 				return this.emit(
 					"error",
-					new PluginError(pluginName, "Failed copyright check")
+					new PluginError(pluginName, "Failed copyright check"),
 				);
 			}
 			callback();
-		}
+		},
 	);
 }
 
@@ -83,7 +82,7 @@ function executeCommand(command, args, callback, opts) {
 	const proc = child_process.spawn(
 		command + (process.platform === "win32" ? ".cmd" : ""),
 		args,
-		opts
+		opts,
 	);
 	let errorSignaled = false;
 

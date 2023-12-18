@@ -16,7 +16,7 @@ export class PackageNameResolver {
 	];
 	private static DefaultManifestLocation: string[] =
 		PackageNameResolver.SourceRootRelPath.concat(
-			PackageNameResolver.ManifestName
+			PackageNameResolver.ManifestName,
 		);
 	private applicationName: string;
 
@@ -31,7 +31,7 @@ export class PackageNameResolver {
 	public resolvePackageName(projectRoot: string): Promise<string> {
 		const expectedAndroidManifestPath = path.join.apply(
 			this,
-			[projectRoot].concat(PackageNameResolver.DefaultManifestLocation)
+			[projectRoot].concat(PackageNameResolver.DefaultManifestLocation),
 		);
 		return this.readPackageName(expectedAndroidManifestPath);
 	}
@@ -47,11 +47,11 @@ export class PackageNameResolver {
 			if (exists) {
 				const manifestContent = await fs.readFile(manifestPath);
 				let packageName = this.parsePackageName(
-					manifestContent.toString()
+					manifestContent.toString(),
 				);
 				if (!packageName) {
 					packageName = this.getDefaultPackageName(
-						this.applicationName
+						this.applicationName,
 					);
 				}
 				return packageName;
@@ -77,7 +77,7 @@ export class PackageNameResolver {
 	private parsePackageName(manifestContents: string) {
 		// first we remove all the comments from the file
 		const match = manifestContents.match(
-			PackageNameResolver.PackageNameRegexp
+			PackageNameResolver.PackageNameRegexp,
 		);
 		return match ? match[1] : null;
 	}

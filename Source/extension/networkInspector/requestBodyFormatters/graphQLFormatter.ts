@@ -4,10 +4,10 @@
 /* eslint-disable */
 /* eslint-enable prettier/prettier*/
 
-import { IFormatter, decodeBody, FormattedBody } from "./requestBodyFormatter";
+import * as querystring from "querystring";
 import { OutputChannelLogger } from "../../log/OutputChannelLogger";
 import { Request, Response } from "../networkMessageData";
-import * as querystring from "querystring";
+import { FormattedBody, IFormatter, decodeBody } from "./requestBodyFormatter";
 
 /**
  * @preserve
@@ -26,7 +26,7 @@ export class GraphQLFormatter implements IFormatter {
 
 	public formatRequest(
 		request: Request,
-		contentType: string
+		contentType: string,
 	): FormattedBody | null {
 		if (request.url.indexOf("graphql") > 0) {
 			const decoded = decodeBody(request, this.logger);
@@ -47,7 +47,7 @@ export class GraphQLFormatter implements IFormatter {
 
 	public formatResponse(
 		response: Response,
-		contentType: string
+		contentType: string,
 	): FormattedBody | null {
 		if (
 			contentType.startsWith("application/json") ||
@@ -56,7 +56,7 @@ export class GraphQLFormatter implements IFormatter {
 			contentType.startsWith("text/html") ||
 			contentType.startsWith("application/x-fb-flatbuffer")
 		) {
-			let decoded = decodeBody(response, this.logger);
+			const decoded = decodeBody(response, this.logger);
 			try {
 				const data = JSON.parse(decoded);
 				return data;

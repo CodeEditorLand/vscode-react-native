@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as path from "path";
 import * as fs from "fs";
+import * as path from "path";
 import { stripJsonTrailingComma } from "../common/utils";
 
 export interface IConfiguration {
@@ -24,7 +24,7 @@ export class LaunchScenariosManager {
 		this.pathToLaunchFile = path.resolve(
 			rootPath,
 			".vscode",
-			"launch.json"
+			"launch.json",
 		);
 	}
 
@@ -47,14 +47,14 @@ export class LaunchScenariosManager {
 		if (launchConfigIndex !== null && launchScenarios.configurations) {
 			Object.assign(
 				launchScenarios.configurations[launchConfigIndex],
-				updates
+				updates,
 			);
 			this.writeLaunchScenarios(launchScenarios);
 		}
 	}
 
 	private getFirstScenarioIndexByParams(
-		scenario: IConfiguration
+		scenario: IConfiguration,
 	): number | null {
 		if (this.launchScenarios.configurations) {
 			for (
@@ -77,12 +77,12 @@ export class LaunchScenariosManager {
 	}
 
 	private writeLaunchScenarios(
-		launch: ILaunchScenarios = this.launchScenarios
+		launch: ILaunchScenarios = this.launchScenarios,
 	): void {
 		if (fs.existsSync(this.pathToLaunchFile)) {
 			fs.writeFileSync(
 				this.pathToLaunchFile,
-				JSON.stringify(launch, null, 4)
+				JSON.stringify(launch, null, 4),
 			);
 		}
 	}

@@ -8,7 +8,7 @@ import {
 	createVersionErrorMessage,
 	parseVersion,
 } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -26,7 +26,7 @@ async function test(): Promise<ValidationResultT> {
 		getVersion: parseVersion.bind(
 			null,
 			"adb --version",
-			/Version \d+\.\d+\.\d+/
+			/Version \d+\.\d+\.\d+/,
 		),
 	});
 
@@ -60,7 +60,7 @@ const adbAndroid: IValidation = {
 	label,
 	description: toLocale(
 		"AdbCheckAndroidDescription",
-		"Required for app installation. Minimal version is 12"
+		"Required for app installation. Minimal version is 12",
 	),
 	category: ValidationCategoryE.Android,
 	exec: test,
@@ -70,7 +70,7 @@ const adbExpo: IValidation = {
 	label,
 	description: toLocale(
 		"AdbCheckExpoDescription",
-		"Required for correct extension integration with Expo"
+		"Required for correct extension integration with Expo",
 	),
 	category: ValidationCategoryE.Expo,
 	exec: test,

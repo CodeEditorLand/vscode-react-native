@@ -4,18 +4,18 @@
 import * as os from "os";
 import { PlatformType } from "../extension/launchArgs";
 import { ErrorHelper } from "./error/errorHelper";
-import { HostPlatform } from "./hostPlatform";
 import { InternalErrorCode } from "./error/internalErrorCode";
+import { HostPlatform } from "./hostPlatform";
 /**
  * Defines the identifiers of all the mobile target platforms React Native supports.
  */
 export enum TargetPlatformId {
-	ANDROID,
-	IOS,
-	EXPONENT,
-	WINDOWS,
-	MACOS,
-	EXPOWEB,
+	ANDROID = 0,
+	IOS = 1,
+	EXPONENT = 2,
+	WINDOWS = 3,
+	MACOS = 4,
+	EXPOWEB = 5,
 }
 
 export class TargetPlatformHelper {
@@ -40,7 +40,7 @@ export class TargetPlatformHelper {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.PlatformNotSupported,
 					platformName,
-					os.platform()
+					os.platform(),
 				);
 		}
 	}
@@ -55,7 +55,7 @@ export class TargetPlatformHelper {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.PlatformNotSupported,
 				platformName,
-				os.platform()
+				os.platform(),
 			);
 		}
 	}

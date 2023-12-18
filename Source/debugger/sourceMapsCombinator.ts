@@ -7,13 +7,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import {
-	SourceMapConsumer,
-	RawSourceMap,
-	SourceMapGenerator,
-	MappingItem,
 	Mapping,
-	Position,
+	MappingItem,
 	NullableMappedPosition,
+	Position,
+	RawSourceMap,
+	SourceMapConsumer,
+	SourceMapGenerator,
 } from "source-map";
 import * as sourceMapResolve from "source-map-resolve";
 
@@ -36,7 +36,7 @@ export class SourceMapsCombinator {
 						return result;
 					}
 				},
-				{}
+				{},
 			);
 
 		if (Object.keys(consumers).length === 0) {
@@ -88,7 +88,7 @@ export class SourceMapsCombinator {
 					tsPosition.source = path.resolve(
 						<string>rawBundleSourcemap.sourceRoot,
 						path.dirname(item.source),
-						tsPosition.source
+						tsPosition.source,
 					);
 				}
 
@@ -112,7 +112,7 @@ export class SourceMapsCombinator {
 	}
 
 	private getSourceMapConsumerFrom(
-		generatedFile: string
+		generatedFile: string,
 	): SourceMapConsumer | null {
 		const code = fs.readFileSync(generatedFile);
 
@@ -122,12 +122,12 @@ export class SourceMapsCombinator {
 
 	private readSourcemap(
 		file: string,
-		code: string
+		code: string,
 	): SourceMapConsumer | null {
 		const result = sourceMapResolve.resolveSync(
 			code,
 			file,
-			readFileSync.bind(null, getDiskLetter(file))
+			readFileSync.bind(null, getDiskLetter(file)),
 		);
 		if (result === null) {
 			return null;

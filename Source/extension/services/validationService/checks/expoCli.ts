@@ -3,7 +3,7 @@
 
 import * as nls from "vscode-nls";
 import { basicCheck, createNotFoundMessage } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -33,7 +33,7 @@ const main: IValidation = {
 	label,
 	description: toLocale(
 		"ExpoCliTestDescription",
-		"Required for installing and managing Expo applications"
+		"Required for installing and managing Expo applications",
 	),
 	category: ValidationCategoryE.Expo,
 	exec: test,

@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as path from "path";
-import { OutputChannelLogger } from "../extension/log/OutputChannelLogger";
 import { AppLauncher } from "../extension/appLauncher";
+import { OutputChannelLogger } from "../extension/log/OutputChannelLogger";
 import { CommandExecutor, CommandVerbosity } from "./commandExecutor";
 import customRequire from "./customRequire";
 import {
@@ -20,7 +20,7 @@ export class PackageConfig {
 	constructor(
 		private packageName: string,
 		private version?: string,
-		private requirePath?: string
+		private requirePath?: string,
 	) {}
 
 	public getPackageName(): string {
@@ -71,14 +71,14 @@ export class PackageLoader {
 
 	public installGlobalPackage(
 		packageConfig: PackageConfig,
-		projectRoot: string
+		projectRoot: string,
 	): Promise<void> {
 		const nodeModulesRoot: string =
 			AppLauncher.getNodeModulesRootByProjectPath(projectRoot);
 		const commandExecutor = new CommandExecutor(
 			nodeModulesRoot,
 			projectRoot,
-			this.logger
+			this.logger,
 		);
 
 		return commandExecutor.spawnWithProgress(
@@ -86,7 +86,7 @@ export class PackageLoader {
 			["install", "-g", packageConfig.getStringForInstall(), "--verbose"],
 			{
 				verbosity: CommandVerbosity.PROGRESS,
-			}
+			},
 		);
 	}
 
@@ -95,7 +95,7 @@ export class PackageLoader {
 		...additionalDependencies: PackageConfig[]
 	): () => Promise<T> {
 		return PromiseUtil.promiseCacheDecorator<T>(() =>
-			this.loadPackage<T>(packageConfig, ...additionalDependencies)
+			this.loadPackage<T>(packageConfig, ...additionalDependencies),
 		);
 	}
 
@@ -106,7 +106,7 @@ export class PackageLoader {
 	private getTryToRequireFunction<T>(
 		packageConfig: PackageConfig,
 		resolve: (value: T | PromiseLike<T>) => void,
-		reject: (reason?: any) => void
+		reject: (reason?: any) => void,
 	): (load?: string[]) => Promise<boolean> {
 		return (load?: string[]) => {
 			let packageWasInstalled = false;
@@ -118,7 +118,7 @@ export class PackageLoader {
 				packageConfig,
 				resolve,
 				reject,
-				packageWasInstalled
+				packageWasInstalled,
 			);
 		};
 	}
@@ -127,7 +127,7 @@ export class PackageLoader {
 		packageConfig: PackageConfig,
 		resolve: (value: T | PromiseLike<T>) => void,
 		reject: (reason?: any) => void,
-		packageWasInstalled: boolean
+		packageWasInstalled: boolean,
 	): Promise<boolean> {
 		const requiredPackage = packageConfig.getStringForRequire();
 		try {
@@ -135,7 +135,7 @@ export class PackageLoader {
 			if (packageConfig.getVersion()) {
 				const installedVersion =
 					await getVersionFromExtensionNodeModules(
-						packageConfig.getPackageName()
+						packageConfig.getPackageName(),
 					);
 
 				if (packageConfig.getVersion() !== installedVersion) {
@@ -143,7 +143,7 @@ export class PackageLoader {
 						throw WRONG_VERSION_ERROR;
 					}
 					this.logger.debug(
-						`Dependency ${requiredPackage} is present with another version. Retry after install this package with specific version...`
+						`Dependency ${requiredPackage} is present with another version. Retry after install this package with specific version...`,
 					);
 					return false;
 				}
@@ -157,7 +157,7 @@ export class PackageLoader {
 				return true;
 			}
 			this.logger.debug(
-				`Dependency ${requiredPackage} is not present. Retry after install...`
+				`Dependency ${requiredPackage} is not present. Retry after install...`,
 			);
 			return false;
 		}
@@ -178,13 +178,13 @@ export class PackageLoader {
 
 			const extensionDirectory: string = path.dirname(
 				findFileInFolderHierarchy(__dirname, "package.json") ||
-					__dirname
+					__dirname,
 			);
 
 			const commandExecutor = new CommandExecutor(
 				path.join(extensionDirectory, "node_modules"),
 				extensionDirectory,
-				this.logger
+				this.logger,
 			);
 
 			while (this.packagesQueue.length) {
@@ -205,11 +205,11 @@ export class PackageLoader {
 					],
 					{
 						verbosity: CommandVerbosity.PROGRESS,
-					}
+					},
 				);
 				// Try to require all pending packages after every 'npm install ...' command
 				const requiresToRemove: ((
-					load?: string[]
+					load?: string[],
 				) => Promise<boolean>)[] = [];
 				for (tryToRequire of this.requireQueue) {
 					if (await tryToRequire(packagesForInstall)) {
@@ -226,7 +226,7 @@ export class PackageLoader {
 				// If we resolved all requires, we should not install any other packages
 				if (this.requireQueue.length) {
 					this.packagesQueue = this.getUniquePackages(
-						this.packagesQueue
+						this.packagesQueue,
 					);
 					packagesForInstall.forEach((module) => {
 						const index = this.packagesQueue.indexOf(module);
@@ -250,13 +250,13 @@ export class PackageLoader {
 			const tryToRequire = this.getTryToRequireFunction(
 				packageConfig,
 				resolve,
-				reject
+				reject,
 			);
 			if (!(await tryToRequire())) {
 				this.tryToRequireAfterInstall(
 					tryToRequire,
 					packageConfig,
-					...additionalDependencies
+					...additionalDependencies,
 				).catch((reason) => reject(reason));
 			}
 		});

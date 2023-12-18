@@ -2,15 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as assert from "assert";
-import * as path from "path";
 import * as fs from "fs";
+import * as path from "path";
 import * as semver from "semver";
 import * as nls from "vscode-nls";
-import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { ErrorHelper } from "../../common/error/errorHelper";
 import { InternalErrorCode } from "../../common/error/internalErrorCode";
-import { ProjectVersionHelper } from "../../common/projectVersionHelper";
 import { findFileInFolderHierarchy } from "../../common/extensionHelper";
+import { ProjectVersionHelper } from "../../common/projectVersionHelper";
+import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 nls.config({
@@ -26,7 +26,7 @@ export class RevertOpenModule extends ReactNativeCommand {
 	codeName = "revertOpenModule";
 	label = "Revert extension input in open package module";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToRevertOpenModule
+		InternalErrorCode.FailedToRevertOpenModule,
 	);
 
 	async baseFn(): Promise<void> {
@@ -36,7 +36,7 @@ export class RevertOpenModule extends ReactNativeCommand {
 
 		const packageJsonPath = findFileInFolderHierarchy(
 			projectRootPath,
-			"package.json"
+			"package.json",
 		);
 		const rnVersion = packageJsonPath
 			? JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"))
@@ -52,7 +52,7 @@ export class RevertOpenModule extends ReactNativeCommand {
 		const openModulePath = path.resolve(
 			projectRootPath,
 			NODE_MODULES_FODLER_NAME,
-			OPN_PACKAGE_NAME
+			OPN_PACKAGE_NAME,
 		);
 
 		if (fs.existsSync(openModulePath)) {
@@ -64,61 +64,61 @@ export class RevertOpenModule extends ReactNativeCommand {
 					logger.error(
 						localize(
 							"FailedToDeleteMainFile",
-							"Failed to delete open-main.js file."
-						)
+							"Failed to delete open-main.js file.",
+						),
 					);
 				}
 			} else {
 				logger.info(
 					localize(
 						"NotFindMainFile",
-						"Not find open-main.js file in open module, skip main file deleting."
-					)
+						"Not find open-main.js file in open module, skip main file deleting.",
+					),
 				);
 			}
 
 			const packageFilePath = path.resolve(
 				openModulePath,
-				"package.json"
+				"package.json",
 			);
 			const packageJson = JSON.parse(
-				fs.readFileSync(packageFilePath, "utf-8")
+				fs.readFileSync(packageFilePath, "utf-8"),
 			);
 			if (packageJson.main == "open-main.js") {
 				try {
 					delete packageJson.main;
 					await fs.writeFileSync(
 						packageFilePath,
-						JSON.stringify(<Record<string, any>>packageJson)
+						JSON.stringify(<Record<string, any>>packageJson),
 					);
 				} catch {
 					logger.error(
 						localize(
 							"FailedToDeleteEntry",
-							"Failed to delete main enrty."
-						)
+							"Failed to delete main enrty.",
+						),
 					);
 				}
 			} else {
 				logger.info(
 					localize(
 						"NotFindMainEntry",
-						"Not find main entry in package.json file, skip entry deleting."
-					)
+						"Not find main entry in package.json file, skip entry deleting.",
+					),
 				);
 			}
 			logger.info(
 				localize(
 					"CompleteOpenModuleCleaUp",
-					"Open module clean up is complete."
-				)
+					"Open module clean up is complete.",
+				),
 			);
 		} else {
 			logger.error(
 				localize(
 					"NotFindOpenModule",
-					"Unable to find open module in your project. Please check it again."
-				)
+					"Unable to find open module in your project. Please check it again.",
+				),
 			);
 		}
 	}

@@ -5,9 +5,9 @@
 /* eslint-enable prettier/prettier*/
 
 import { ReactiveSocket } from "rsocket-types";
+import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { ClientOS } from "./clientUtils";
 import { InspectorView, InspectorViewType } from "./views/inspectorView";
-import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { InspectorViewFactory } from "./views/inspectorViewFactory";
 
 /**
@@ -88,7 +88,7 @@ export class ClientDevice {
 		query: ClientQuery,
 		connection: ReactiveSocket<any, any> | null | undefined,
 		inspectorViewType: InspectorViewType,
-		logger: OutputChannelLogger
+		logger: OutputChannelLogger,
 	) {
 		this.networkInspectorPluginName = "Network";
 
@@ -153,7 +153,7 @@ export class ClientDevice {
 						data.method ? `when calling ${data.method}` : ""
 					}: ${error.message} + \nDevice Stack Trace: ${
 						error.stacktrace
-					}`
+					}`,
 				);
 			} else if (data.method === "execute" && data.params) {
 				this.inspectorView.handleMessage(data.params);
@@ -179,7 +179,7 @@ export class ClientDevice {
 	private async loadPlugins(): Promise<string[]> {
 		const plugins = await this.rawCall<{ plugins: string[] }>(
 			"getPlugins",
-			false
+			false,
 		).then((data) => data.plugins);
 		return plugins;
 	}
@@ -197,7 +197,7 @@ export class ClientDevice {
 	private rawCall<T>(
 		method: string,
 		fromPlugin: boolean,
-		params?: RequestParams
+		params?: RequestParams,
 	): Promise<T> {
 		return new Promise((resolve, reject) => {
 			const id = this.messageIdCounter++;
@@ -252,8 +252,8 @@ export class ClientDevice {
 			} else {
 				reject(
 					new Error(
-						`Cannot send ${method}, client is not accepting messages for plugin ${plugin}`
-					)
+						`Cannot send ${method}, client is not accepting messages for plugin ${plugin}`,
+					),
 				);
 			}
 		});
@@ -265,7 +265,7 @@ export class ClientDevice {
 			error?: ErrorType;
 		},
 		resolve: ((a: any) => any) | undefined,
-		reject: (error: ErrorType) => any
+		reject: (error: ErrorType) => any,
 	): void {
 		if (data.success) {
 			resolve && resolve(data.success);
@@ -279,7 +279,7 @@ export class ClientDevice {
 	}
 
 	private isAcceptingMessagesFromPlugin(
-		plugin: string | null | undefined
+		plugin: string | null | undefined,
 	): boolean {
 		return !!(
 			this._connection &&

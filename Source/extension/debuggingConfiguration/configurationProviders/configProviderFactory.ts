@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import { DebugScenarioType } from "../debugConfigTypesAndConstants";
-import { RunConfigProvider } from "./runConfigProvider";
-import { DebugConfigProvider } from "./debugConfigProvider";
 import { AttachConfigProvider } from "./attachConfigProvider";
 import { BaseConfigProvider } from "./baseConfigProvider";
+import { DebugConfigProvider } from "./debugConfigProvider";
+import { RunConfigProvider } from "./runConfigProvider";
 
 export class ConfigProviderFactory {
 	public static create(configurationType: string): BaseConfigProvider {
@@ -18,7 +18,7 @@ export class ConfigProviderFactory {
 				return new AttachConfigProvider();
 			default:
 				throw new Error(
-					`Couldn't find ${configurationType} config adapter type`
+					`Couldn't find ${configurationType} config adapter type`,
 				);
 		}
 	}

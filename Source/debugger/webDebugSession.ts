@@ -1,20 +1,20 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as path from "path";
 import * as fs from "fs";
-import * as vscode from "vscode";
+import * as path from "path";
 import { logger } from "@vscode/debugadapter";
+import * as vscode from "vscode";
 import { DebugProtocol } from "vscode-debugprotocol";
 import * as nls from "vscode-nls";
-import { TelemetryHelper } from "../common/telemetryHelper";
 import { RnCDPMessageHandler } from "../cdp-proxy/CDPMessageHandlers/rnCDPMessageHandler";
+import { ReactNativeCDPProxy } from "../cdp-proxy/reactNativeCDPProxy";
 import { ErrorHelper } from "../common/error/errorHelper";
 import { InternalErrorCode } from "../common/error/internalErrorCode";
-import { ReactNativeCDPProxy } from "../cdp-proxy/reactNativeCDPProxy";
-import { Request } from "../common/node/request";
 import { PromiseUtil } from "../common/node/promise";
+import { Request } from "../common/node/request";
 import { ReactNativeProjectHelper } from "../common/reactNativeProjectHelper";
+import { TelemetryHelper } from "../common/telemetryHelper";
 import { MultipleLifetimesAppWorker } from "./appWorker";
 import {
 	DebugSessionBase,
@@ -22,8 +22,8 @@ import {
 	IAttachRequestArgs,
 	ILaunchRequestArgs,
 } from "./debugSessionBase";
-import { JsDebugConfigAdapter } from "./jsDebugConfigAdapter";
 import { RNSession } from "./debugSessionWrapper";
+import { JsDebugConfigAdapter } from "./jsDebugConfigAdapter";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -38,7 +38,7 @@ export class WebDebugSession extends DebugSessionBase {
 	private cdpProxy: ReactNativeCDPProxy;
 	private readonly pwaSessionName: string = "pwa-chrome";
 	private cdpProxyErrorHandlerDescriptor?: vscode.Disposable;
-	private attachRetryCount: number = 2;
+	private attachRetryCount = 2;
 
 	constructor(rnSession: RNSession) {
 		super(rnSession);
@@ -48,12 +48,12 @@ export class WebDebugSession extends DebugSessionBase {
 
 		this.onDidStartDebugSessionHandler =
 			vscode.debug.onDidStartDebugSession(
-				this.handleStartDebugSession.bind(this)
+				this.handleStartDebugSession.bind(this),
 			);
 
 		this.onDidTerminateDebugSessionHandler =
 			vscode.debug.onDidTerminateDebugSession(
-				this.handleTerminateDebugSession.bind(this)
+				this.handleTerminateDebugSession.bind(this),
 			);
 	}
 
@@ -61,7 +61,7 @@ export class WebDebugSession extends DebugSessionBase {
 		response: DebugProtocol.LaunchResponse,
 		launchArgs: ILaunchRequestArgs,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		try {
 			try {
@@ -71,8 +71,8 @@ export class WebDebugSession extends DebugSessionBase {
 					`Launching the application: ${JSON.stringify(
 						launchArgs,
 						null,
-						2
-					)}`
+						2,
+					)}`,
 				);
 
 				await this.updateWebpackMetroConfig(launchArgs);
@@ -83,7 +83,7 @@ export class WebDebugSession extends DebugSessionBase {
 			} catch (error) {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.ApplicationLaunchFailed,
-					error.message || error
+					error.message || error,
 				);
 			}
 			// if debugging is enabled start attach request
@@ -97,7 +97,7 @@ export class WebDebugSession extends DebugSessionBase {
 	protected async attachRequest(
 		response: DebugProtocol.AttachResponse,
 		attachArgs: IAttachRequestArgs,
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		const doAttach = async (attachArgs: IAttachRequestArgs) => {
 			try {
@@ -112,7 +112,7 @@ export class WebDebugSession extends DebugSessionBase {
 						generator.add(
 							"browser",
 							attachArgs.browserTarget,
-							false
+							false,
 						);
 
 						this.cdpProxy = this.appLauncher.getRnCdpProxy();
@@ -120,20 +120,20 @@ export class WebDebugSession extends DebugSessionBase {
 						await this.cdpProxy.initializeServer(
 							new RnCDPMessageHandler(),
 							this.cdpProxyLogLevel,
-							this.cancellationTokenSource.token
+							this.cancellationTokenSource.token,
 						);
 
 						logger.log(
-							localize("AttachingToApp", "Attaching to app")
+							localize("AttachingToApp", "Attaching to app"),
 						);
 						const processedAttachArgs = Object.assign(
 							{},
 							attachArgs,
-							{}
+							{},
 						);
 						if (processedAttachArgs.webSocketDebuggerUrl) {
 							this.cdpProxy.setBrowserInspectUri(
-								processedAttachArgs.webSocketDebuggerUrl
+								processedAttachArgs.webSocketDebuggerUrl,
 							);
 						}
 						this.cdpProxyErrorHandlerDescriptor =
@@ -153,7 +153,7 @@ export class WebDebugSession extends DebugSessionBase {
 
 						this.debugSessionStatus =
 							DebugSessionStatus.ConnectionDone;
-					}
+					},
 				);
 			} catch (error) {
 				this.debugSessionStatus = DebugSessionStatus.ConnectionFailed;
@@ -172,7 +172,7 @@ export class WebDebugSession extends DebugSessionBase {
 	protected async disconnectRequest(
 		response: DebugProtocol.DisconnectResponse,
 		args: DebugProtocol.DisconnectArguments,
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		// The client is about to disconnect so first we need to stop app worker
 		if (this.appWorker) {
@@ -187,7 +187,7 @@ export class WebDebugSession extends DebugSessionBase {
 
 	protected establishDebugSession(
 		attachArgs: IAttachRequestArgs,
-		resolve?: (value?: void | PromiseLike<void> | undefined) => void
+		resolve?: (value?: void | PromiseLike<void> | undefined) => void,
 	): void {
 		if (this.cdpProxy) {
 			const attachArguments =
@@ -195,7 +195,7 @@ export class WebDebugSession extends DebugSessionBase {
 					attachArgs,
 					this.appLauncher.getCdpProxyPort(),
 					this.pwaSessionName,
-					this.rnSession.sessionId
+					this.rnSession.sessionId,
 				);
 
 			const childDebugSessionStarted = vscode.debug.startDebugging(
@@ -204,19 +204,19 @@ export class WebDebugSession extends DebugSessionBase {
 				{
 					parentSession: this.vsCodeDebugSession,
 					consoleMode: vscode.DebugConsoleMode.MergeWithParent,
-				}
+				},
 			);
 			if (!childDebugSessionStarted) {
 				const error = localize(
 					"FailedToStartDebugSession",
-					"Cannot start child debug session"
+					"Cannot start child debug session",
 				);
 				throw new Error(error);
 			}
 		} else {
 			const error = localize(
 				"NoReactNativeCdpProxy",
-				"Cannot get react native cdp proxy"
+				"Cannot get react native cdp proxy",
 			);
 			throw new Error(error);
 		}
@@ -233,7 +233,7 @@ export class WebDebugSession extends DebugSessionBase {
 	}
 
 	private handleTerminateDebugSession(
-		debugSession: vscode.DebugSession
+		debugSession: vscode.DebugSession,
 	): void {
 		if (
 			debugSession.configuration.rnDebugSessionId ===
@@ -261,7 +261,7 @@ export class WebDebugSession extends DebugSessionBase {
 			// If Expo SDK >= 49, add web metro bundler in app.json for expo web debugging
 			logger.log("Check and add metro bundler field to app.json.");
 			await ReactNativeProjectHelper.UpdateMertoBundlerForExpoWeb(
-				launchArgs
+				launchArgs,
 			);
 		} else {
 			// If Expo SDK < 49, using @expo/webpack-config for expo web debugging
@@ -269,14 +269,14 @@ export class WebDebugSession extends DebugSessionBase {
 			const expoWebpackConfigPath = path.join(
 				nodeModulePath,
 				"@expo",
-				"webpack-config"
+				"webpack-config",
 			);
 			if (!fs.existsSync(expoWebpackConfigPath)) {
 				logger.log(
-					"@expo/webpack-config is not found in current project."
+					"@expo/webpack-config is not found in current project.",
 				);
 				throw new Error(
-					"Required dependencies not found: Please check and install @expo/webpack-config by running: npx expo install @expo/webpack-config."
+					"Required dependencies not found: Please check and install @expo/webpack-config by running: npx expo install @expo/webpack-config.",
 				);
 			}
 		}
@@ -288,16 +288,16 @@ export class WebDebugSession extends DebugSessionBase {
 		const reactDomPath = path.join(nodeModulePath, "react-dom");
 		const reactNativeWebPath = path.join(
 			nodeModulePath,
-			"react-native-web"
+			"react-native-web",
 		);
 		if (fs.existsSync(reactDomPath) && fs.existsSync(reactNativeWebPath)) {
 			logger.log("All required dependencies installed");
 		} else {
 			logger.log(
-				"react-native-web, react-dom is not found in current project."
+				"react-native-web, react-dom is not found in current project.",
 			);
 			throw new Error(
-				"Required dependencies not found: Please check and install react-native-web, react-dom by running: npx expo install react-native-web react-dom"
+				"Required dependencies not found: Please check and install react-native-web, react-dom by running: npx expo install react-native-web react-dom",
 			);
 		}
 	}
@@ -314,7 +314,7 @@ export class WebDebugSession extends DebugSessionBase {
 	private async waitExpoWebIsRunning(
 		launchArgs: any,
 		retryCount = 60,
-		delay = 3000
+		delay = 3000,
 	): Promise<void> {
 		try {
 			await PromiseUtil.retryAsync(
@@ -324,8 +324,8 @@ export class WebDebugSession extends DebugSessionBase {
 				delay,
 				localize(
 					"ExpoWebIsNotRunning",
-					"Expo web is not running, please check metro status and browser launching url."
-				)
+					"Expo web is not running, please check metro status and browser launching url.",
+				),
 			);
 		} catch (error) {
 			throw error;

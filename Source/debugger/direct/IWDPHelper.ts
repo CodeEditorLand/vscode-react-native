@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as cp from "child_process";
+import { ErrorHelper } from "../../common/error/errorHelper";
+import { InternalErrorCode } from "../../common/error/internalErrorCode";
 import { PromiseUtil } from "../../common/node/promise";
 import { Request } from "../../common/node/request";
 import { IAttachRequestArgs } from "../debugSessionBase";
-import { ErrorHelper } from "../../common/error/errorHelper";
-import { InternalErrorCode } from "../../common/error/internalErrorCode";
 
 /**
  * Helper class to control [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy)
@@ -22,7 +22,7 @@ export class IWDPHelper {
 	public async startiOSWebkitDebugProxy(
 		proxyPort: number,
 		proxyRangeStart: number,
-		proxyRangeEnd: number
+		proxyRangeEnd: number,
 	): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.cleanUp();
@@ -30,13 +30,15 @@ export class IWDPHelper {
 			const portRange = `null:${proxyPort},:${proxyRangeStart}-${proxyRangeEnd}`;
 			this.iOSWebkitDebugProxyProcess = cp.spawn(
 				"ios_webkit_debug_proxy",
-				["-c", portRange]
+				["-c", portRange],
 			);
 			this.iOSWebkitDebugProxyProcess.on("error", (err) => {
 				reject(
 					new Error(
-						`Unable to start ios_webkit_debug_proxy: ${String(err)}`
-					)
+						`Unable to start ios_webkit_debug_proxy: ${String(
+							err,
+						)}`,
+					),
 				);
 			});
 			// Allow some time for the spawned process to error out
@@ -45,11 +47,11 @@ export class IWDPHelper {
 	}
 
 	public async getSimulatorProxyPort(
-		attachArgs: IAttachRequestArgs
+		attachArgs: IAttachRequestArgs,
 	): Promise<{ targetPort: number; iOSVersion: string }> {
 		const response = await Request.request(
 			`http://localhost:${attachArgs.port}/json`,
-			true
+			true,
 		);
 		try {
 			// An example of a json response from IWDP
@@ -66,7 +68,7 @@ export class IWDPHelper {
 				devices = endpointsList.filter((entry: { deviceId: string }) =>
 					attachArgs.target?.toLowerCase() === "device"
 						? entry.deviceId !== "SIMULATOR"
-						: entry.deviceId === "SIMULATOR"
+						: entry.deviceId === "SIMULATOR",
 				);
 			}
 
@@ -78,7 +80,7 @@ export class IWDPHelper {
 			};
 		} catch (e) {
 			throw ErrorHelper.getInternalError(
-				InternalErrorCode.IOSCouldNotFoundDeviceForDirectDebugging
+				InternalErrorCode.IOSCouldNotFoundDeviceForDirectDebugging,
 			);
 		}
 	}

@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import { ISpawnResult } from "./node/childProcess";
 import { ErrorHelper } from "./error/errorHelper";
-import { InternalErrorCode } from "./error/internalErrorCode";
 import { InternalError } from "./error/internalError";
+import { InternalErrorCode } from "./error/internalErrorCode";
+import { ISpawnResult } from "./node/childProcess";
 
 export interface PatternToFailure {
 	pattern: string | RegExp;
@@ -24,7 +24,7 @@ export class OutputVerifier {
 	constructor(
 		generatePatternsForSuccess: () => Promise<string[]>,
 		generatePatternToFailure: () => Promise<PatternToFailure[]>,
-		platformName: string
+		platformName: string,
 	) {
 		this.generatePatternsForSuccess = generatePatternsForSuccess;
 		this.generatePatternToFailure = generatePatternToFailure;
@@ -67,7 +67,7 @@ export class OutputVerifier {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.NotAllSuccessPatternsMatched,
 					this.platformName,
-					this.platformName
+					this.platformName,
 				);
 			} // else we found all the success patterns, so we succeed
 		}
@@ -75,7 +75,7 @@ export class OutputVerifier {
 
 	private store(
 		stream: NodeJS.ReadableStream,
-		append: (newContent: string) => void
+		append: (newContent: string) => void,
 	) {
 		stream.on("data", (data: Buffer) => {
 			append(data.toString());
@@ -84,7 +84,7 @@ export class OutputVerifier {
 
 	// We check the failure patterns one by one, to see if any of those appeared on the errors. If they did, we return the associated error
 	private findAnyFailurePattern(
-		patterns: PatternToFailure[]
+		patterns: PatternToFailure[],
 	): InternalError | null {
 		const errorsAndOutput = this.errors + this.output;
 		let matches: RegExpMatchArray | string[] | null | undefined;
@@ -105,7 +105,7 @@ export class OutputVerifier {
 				matches = matches.map((value) => value.trim());
 				return ErrorHelper.getInternalError(
 					errorCode,
-					matches.join("\n")
+					matches.join("\n"),
 				);
 			}
 			return ErrorHelper.getInternalError(errorCode);

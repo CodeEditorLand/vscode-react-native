@@ -2,14 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as url from "url";
+import * as qrcode from "qrcode-terminal";
 import * as vscode from "vscode";
 import * as nls from "vscode-nls";
-import * as qrcode from "qrcode-terminal";
 import { ErrorHelper } from "../../common/error/errorHelper";
 import { InternalErrorCode } from "../../common/error/internalErrorCode";
-import { ExpoHostType, IExponentRunOptions, PlatformType } from "../launchArgs";
-import { GeneralPlatform, MobilePlatformDeps } from "../generalPlatform";
 import { TelemetryHelper } from "../../common/telemetryHelper";
+import { GeneralPlatform, MobilePlatformDeps } from "../generalPlatform";
+import { ExpoHostType, IExponentRunOptions, PlatformType } from "../launchArgs";
 import { QRCodeContentProvider } from "../qrCodeContentProvider";
 import { ExponentHelper } from "./exponentHelper";
 
@@ -29,7 +29,7 @@ export class ExponentPlatform extends GeneralPlatform {
 
 	constructor(
 		runOptions: IExponentRunOptions,
-		platformDeps: MobilePlatformDeps = {}
+		platformDeps: MobilePlatformDeps = {},
 	) {
 		super(runOptions, platformDeps);
 		this.exponentHelper = this.packager.getExponentHelper();
@@ -47,7 +47,7 @@ export class ExponentPlatform extends GeneralPlatform {
 		extProps = TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 			this.runOptions,
 			this.runOptions.reactNativeVersions,
-			extProps
+			extProps,
 		);
 
 		await TelemetryHelper.generate(
@@ -74,7 +74,7 @@ export class ExponentPlatform extends GeneralPlatform {
 					this.runOptions.expoHostType !== "local"
 						? false
 						: // we need to execute 'adb reverse' command to bind ports used by Expo and RN of local machine to ports of a connected Android device or a running emulator
-							await XDL.startAdbReverse(this.projectPath);
+						  await XDL.startAdbReverse(this.projectPath);
 				let exponentUrl = "";
 				switch (this.runOptions.expoHostType) {
 					case "lan":
@@ -89,15 +89,15 @@ export class ExponentPlatform extends GeneralPlatform {
 							this.logger.info(
 								localize(
 									"ExpoStartAdbReverseSuccess",
-									"A device or an emulator was found, 'adb reverse' command successfully executed."
-								)
+									"A device or an emulator was found, 'adb reverse' command successfully executed.",
+								),
 							);
 						} else {
 							this.logger.warning(
 								localize(
 									"ExpoStartAdbReverseFailure",
-									"Adb reverse command failed. Couldn't find connected over usb device or running emulator. Also please make sure that there is only one currently connected device or running emulator."
-								)
+									"Adb reverse command failed. Couldn't find connected over usb device or running emulator. Also please make sure that there is only one currently connected device or running emulator.",
+								),
 							);
 						}
 
@@ -118,7 +118,7 @@ export class ExponentPlatform extends GeneralPlatform {
 
 				if (!exponentUrl) {
 					throw ErrorHelper.getInternalError(
-						InternalErrorCode.ExpectedExponentTunnelPath
+						InternalErrorCode.ExpectedExponentTunnelPath,
 					);
 				}
 
@@ -126,7 +126,7 @@ export class ExponentPlatform extends GeneralPlatform {
 				const outputMessage = localize(
 					"ExponentServerIsRunningOpenToSeeIt",
 					"Expo server is running. Open your Expo app at {0} to see it.",
-					this.exponentTunnelPath
+					this.exponentTunnelPath,
 				);
 				this.logger.info(outputMessage);
 
@@ -135,27 +135,27 @@ export class ExponentPlatform extends GeneralPlatform {
 						"Expo QR Code",
 						"Expo QR Code",
 						vscode.ViewColumn.Two,
-						{}
+						{},
 					);
 					exponentPage.webview.html =
 						this.qrCodeContentProvider.provideTextDocumentContent(
-							vscode.Uri.parse(exponentUrl)
+							vscode.Uri.parse(exponentUrl),
 						);
 					const outputMessage = localize(
 						"QRCodeOutputInstructions",
-						"Scan below QR code to open your app:"
+						"Scan below QR code to open your app:",
 					);
 					this.logger.info(outputMessage);
 					qrcode.generate(
 						exponentUrl,
 						{ small: true },
-						(qrcode: string) => this.logger.info(`\n${qrcode}`)
+						(qrcode: string) => this.logger.info(`\n${qrcode}`),
 					);
 				}
 
 				const copyButton = localize(
 					"CopyToClipboard",
-					"Copy to clipboard"
+					"Copy to clipboard",
 				);
 
 				void vscode.window
@@ -165,12 +165,12 @@ export class ExponentPlatform extends GeneralPlatform {
 							void vscode.env.clipboard.writeText(exponentUrl);
 						}
 					});
-			}
+			},
 		);
 	}
 
 	public async loginToExponentOrSkip(
-		expoHostType?: ExpoHostType
+		expoHostType?: ExpoHostType,
 	): Promise<any> {
 		if (expoHostType !== "tunnel") {
 			return;
@@ -192,15 +192,15 @@ export class ExponentPlatform extends GeneralPlatform {
 					message,
 					{ modal: true },
 					okButton,
-					cancelButton
+					cancelButton,
 				);
 				if (answer === cancelButton) {
 					throw ErrorHelper.getInternalError(
-						InternalErrorCode.UserCancelledExpoLogin
+						InternalErrorCode.UserCancelledExpoLogin,
 					);
 				}
 				return "";
-			}
+			},
 		);
 	}
 
@@ -212,8 +212,8 @@ export class ExponentPlatform extends GeneralPlatform {
 		this.logger.info(
 			localize(
 				"ApplicationIsRunningOnExponentShakeDeviceForRemoteDebugging",
-				"Application is running on Expo. Please shake device and select 'Debug JS Remotely' to enable debugging."
-			)
+				"Application is running on Expo. Please shake device and select 'Debug JS Remotely' to enable debugging.",
+			),
 		);
 	}
 

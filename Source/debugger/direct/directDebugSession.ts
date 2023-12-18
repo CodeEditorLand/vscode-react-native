@@ -1,31 +1,31 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as vscode from "vscode";
 import { logger } from "@vscode/debugadapter";
+import * as vscode from "vscode";
 import { DebugProtocol } from "vscode-debugprotocol";
 import * as nls from "vscode-nls";
-import { ProjectVersionHelper } from "../../common/projectVersionHelper";
-import { TelemetryHelper } from "../../common/telemetryHelper";
+import { BaseCDPMessageHandler } from "../../cdp-proxy/CDPMessageHandlers/baseCDPMessageHandler";
 import { HermesCDPMessageHandler } from "../../cdp-proxy/CDPMessageHandlers/hermesCDPMessageHandler";
+import { IOSDirectCDPMessageHandler } from "../../cdp-proxy/CDPMessageHandlers/iOSDirectCDPMessageHandler";
+import { DebuggerEndpointHelper } from "../../cdp-proxy/debuggerEndpointHelper";
+import { ErrorHelper } from "../../common/error/errorHelper";
+import { InternalErrorCode } from "../../common/error/internalErrorCode";
+import { ProjectVersionHelper } from "../../common/projectVersionHelper";
+import { ReactNativeProjectHelper } from "../../common/reactNativeProjectHelper";
+import { TelemetryHelper } from "../../common/telemetryHelper";
+import { ExponentHelper } from "../../extension/exponent/exponentHelper";
+import { PlatformType } from "../../extension/launchArgs";
+import { TipNotificationService } from "../../extension/services/tipsNotificationsService/tipsNotificationService";
+import { SettingsHelper } from "../../extension/settingsHelper";
 import {
 	DebugSessionBase,
 	DebugSessionStatus,
 	IAttachRequestArgs,
 	ILaunchRequestArgs,
 } from "../debugSessionBase";
-import { JsDebugConfigAdapter } from "../jsDebugConfigAdapter";
-import { DebuggerEndpointHelper } from "../../cdp-proxy/debuggerEndpointHelper";
-import { ErrorHelper } from "../../common/error/errorHelper";
-import { InternalErrorCode } from "../../common/error/internalErrorCode";
-import { IOSDirectCDPMessageHandler } from "../../cdp-proxy/CDPMessageHandlers/iOSDirectCDPMessageHandler";
-import { PlatformType } from "../../extension/launchArgs";
-import { BaseCDPMessageHandler } from "../../cdp-proxy/CDPMessageHandlers/baseCDPMessageHandler";
-import { TipNotificationService } from "../../extension/services/tipsNotificationsService/tipsNotificationService";
 import { RNSession } from "../debugSessionWrapper";
-import { SettingsHelper } from "../../extension/settingsHelper";
-import { ReactNativeProjectHelper } from "../../common/reactNativeProjectHelper";
-import { ExponentHelper } from "../../extension/exponent/exponentHelper";
+import { JsDebugConfigAdapter } from "../jsDebugConfigAdapter";
 import { IWDPHelper } from "./IWDPHelper";
 
 nls.config({
@@ -50,12 +50,12 @@ export class DirectDebugSession extends DebugSessionBase {
 
 		this.onDidTerminateDebugSessionHandler =
 			vscode.debug.onDidTerminateDebugSession(
-				this.handleTerminateDebugSession.bind(this)
+				this.handleTerminateDebugSession.bind(this),
 			);
 
 		this.onDidStartDebugSessionHandler =
 			vscode.debug.onDidStartDebugSession(
-				this.handleStartDebugSession.bind(this)
+				this.handleStartDebugSession.bind(this),
 			);
 	}
 
@@ -63,7 +63,7 @@ export class DirectDebugSession extends DebugSessionBase {
 		response: DebugProtocol.LaunchResponse,
 		launchArgs: ILaunchRequestArgs,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		let extProps = {
 			platform: {
@@ -77,14 +77,14 @@ export class DirectDebugSession extends DebugSessionBase {
 		};
 
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
-			"directDebuggingWithHermes"
+			"directDebuggingWithHermes",
 		);
 
 		try {
 			try {
 				if (launchArgs.platform != "exponent") {
 					await ReactNativeProjectHelper.verifyMetroConfigFile(
-						launchArgs.cwd
+						launchArgs.cwd,
 					);
 				}
 				await this.initializeSettings(launchArgs);
@@ -93,29 +93,29 @@ export class DirectDebugSession extends DebugSessionBase {
 					`Launching the application: ${JSON.stringify(
 						launchArgs,
 						null,
-						2
-					)}`
+						2,
+					)}`,
 				);
 
 				const versions =
 					await ProjectVersionHelper.getReactNativeVersions(
 						this.projectRootPath,
 						ProjectVersionHelper.generateAdditionalPackagesToCheckByPlatform(
-							launchArgs
-						)
+							launchArgs,
+						),
 					);
 				extProps =
 					TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 						launchArgs,
 						versions,
-						extProps
+						extProps,
 					);
 
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				await TelemetryHelper.generate(
 					"launch",
 					extProps,
-					(generator) => this.appLauncher.launch(launchArgs)
+					(generator) => this.appLauncher.launch(launchArgs),
 				);
 
 				if (!launchArgs.enableDebug) {
@@ -126,7 +126,7 @@ export class DirectDebugSession extends DebugSessionBase {
 			} catch (error) {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.ApplicationLaunchFailed,
-					error.message || error
+					error.message || error,
 				);
 			}
 			// if debugging is enabled start attach request
@@ -141,7 +141,7 @@ export class DirectDebugSession extends DebugSessionBase {
 		response: DebugProtocol.AttachResponse,
 		attachArgs: IAttachRequestArgs,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		let extProps = {
 			platform: {
@@ -163,12 +163,12 @@ export class DirectDebugSession extends DebugSessionBase {
 			if (attachArgs.request === "attach") {
 				const expoHelper = new ExponentHelper(
 					attachArgs.cwd,
-					attachArgs.cwd
+					attachArgs.cwd,
 				);
 				const isExpo = await expoHelper.isExpoManagedApp(true);
 				if (!isExpo) {
 					await ReactNativeProjectHelper.verifyMetroConfigFile(
-						attachArgs.cwd
+						attachArgs.cwd,
 					);
 				}
 			}
@@ -189,12 +189,12 @@ export class DirectDebugSession extends DebugSessionBase {
 				() => {
 					this.showError(
 						ErrorHelper.getInternalError(
-							InternalErrorCode.AnotherDebuggerConnectedToPackager
-						)
+							InternalErrorCode.AnotherDebuggerConnectedToPackager,
+						),
 					);
 					void this.terminate();
 				},
-				() => {}
+				() => {},
 			);
 
 			logger.log("Attaching to the application");
@@ -202,21 +202,21 @@ export class DirectDebugSession extends DebugSessionBase {
 				`Attaching to the application: ${JSON.stringify(
 					attachArgs,
 					null,
-					2
-				)}`
+					2,
+				)}`,
 			);
 
 			const versions = await ProjectVersionHelper.getReactNativeVersions(
 				this.projectRootPath,
 				ProjectVersionHelper.generateAdditionalPackagesToCheckByPlatform(
-					attachArgs
-				)
+					attachArgs,
+				),
 			);
 			extProps =
 				TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 					attachArgs,
 					versions,
-					extProps
+					extProps,
 				);
 
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -226,15 +226,15 @@ export class DirectDebugSession extends DebugSessionBase {
 				async (generator) => {
 					const port = attachArgs.useHermesEngine
 						? attachArgs.port ||
-							this.appLauncher.getPackagerPort(attachArgs.cwd)
+						  this.appLauncher.getPackagerPort(attachArgs.cwd)
 						: attachArgs.platform === PlatformType.iOS
-							? attachArgs.port ||
-								IWDPHelper.iOS_WEBKIT_DEBUG_PROXY_DEFAULT_PORT
-							: null;
+						  ? attachArgs.port ||
+							  IWDPHelper.iOS_WEBKIT_DEBUG_PROXY_DEFAULT_PORT
+						  : null;
 					if (port === null) {
 						throw ErrorHelper.getInternalError(
 							InternalErrorCode.CouldNotDirectDebugWithoutHermesEngine,
-							attachArgs.platform
+							attachArgs.platform,
 						);
 					}
 					attachArgs.port = port;
@@ -245,13 +245,13 @@ export class DirectDebugSession extends DebugSessionBase {
 						attachArgs.useHermesEngine
 							? new HermesCDPMessageHandler()
 							: attachArgs.platform === PlatformType.iOS
-								? new IOSDirectCDPMessageHandler()
-								: null;
+							  ? new IOSDirectCDPMessageHandler()
+							  : null;
 
 					if (!cdpMessageHandler) {
 						throw ErrorHelper.getInternalError(
 							InternalErrorCode.CouldNotDirectDebugWithoutHermesEngine,
-							attachArgs.platform
+							attachArgs.platform,
 						);
 					}
 					await this.appLauncher
@@ -259,7 +259,7 @@ export class DirectDebugSession extends DebugSessionBase {
 						.initializeServer(
 							cdpMessageHandler,
 							this.cdpProxyLogLevel,
-							this.cancellationTokenSource.token
+							this.cancellationTokenSource.token,
 						);
 
 					if (
@@ -269,11 +269,11 @@ export class DirectDebugSession extends DebugSessionBase {
 						await this.iOSWKDebugProxyHelper.startiOSWebkitDebugProxy(
 							attachArgs.port,
 							attachArgs.webkitRangeMin,
-							attachArgs.webkitRangeMax
+							attachArgs.webkitRangeMax,
 						);
 						const results =
 							await this.iOSWKDebugProxyHelper.getSimulatorProxyPort(
-								attachArgs
+								attachArgs,
 							);
 						attachArgs.port = results.targetPort;
 					}
@@ -281,7 +281,7 @@ export class DirectDebugSession extends DebugSessionBase {
 					if (attachArgs.request === "attach") {
 						await this.preparePackagerBeforeAttach(
 							attachArgs,
-							versions
+							versions,
 						);
 					}
 
@@ -303,7 +303,7 @@ export class DirectDebugSession extends DebugSessionBase {
 							});
 
 					const settingsPorts = SettingsHelper.getPackagerPort(
-						attachArgs.cwd
+						attachArgs.cwd,
 					);
 					const browserInspectUri =
 						await this.debuggerEndpointHelper.retryGetWSEndpoint(
@@ -311,22 +311,22 @@ export class DirectDebugSession extends DebugSessionBase {
 							90,
 							this.cancellationTokenSource.token,
 							attachArgs.useHermesEngine,
-							settingsPorts
+							settingsPorts,
 						);
 					this.appLauncher
 						.getRnCdpProxy()
 						.setBrowserInspectUri(browserInspectUri);
 					await this.establishDebugSession(attachArgs);
-				}
+				},
 			);
 			this.sendResponse(response);
 		} catch (error) {
 			this.terminateWithErrorResponse(
 				ErrorHelper.getInternalError(
 					InternalErrorCode.CouldNotAttachToDebugger,
-					error.message || error
+					error.message || error,
 				),
-				response
+				response,
 			);
 		}
 	}
@@ -334,7 +334,7 @@ export class DirectDebugSession extends DebugSessionBase {
 	protected async disconnectRequest(
 		response: DebugProtocol.DisconnectResponse,
 		args: DebugProtocol.DisconnectArguments,
-		request?: DebugProtocol.Request
+		request?: DebugProtocol.Request,
 	): Promise<void> {
 		this.debugSessionStatus = DebugSessionStatus.Stopping;
 
@@ -347,13 +347,13 @@ export class DirectDebugSession extends DebugSessionBase {
 	}
 
 	protected async establishDebugSession(
-		attachArgs: IAttachRequestArgs
+		attachArgs: IAttachRequestArgs,
 	): Promise<void> {
 		const attachConfiguration =
 			JsDebugConfigAdapter.createDebuggingConfigForRNHermes(
 				attachArgs,
 				this.appLauncher.getCdpProxyPort(),
-				this.rnSession.sessionId
+				this.rnSession.sessionId,
 			);
 
 		const childDebugSessionStarted = await vscode.debug.startDebugging(
@@ -362,20 +362,20 @@ export class DirectDebugSession extends DebugSessionBase {
 			{
 				parentSession: this.vsCodeDebugSession,
 				consoleMode: vscode.DebugConsoleMode.MergeWithParent,
-			}
+			},
 		);
 		if (!childDebugSessionStarted) {
 			throw new Error(
 				localize(
 					"CouldNotStartChildDebugSession",
-					"Couldn't start child debug session"
-				)
+					"Couldn't start child debug session",
+				),
 			);
 		}
 	}
 
 	private handleTerminateDebugSession(
-		debugSession: vscode.DebugSession
+		debugSession: vscode.DebugSession,
 	): void {
 		if (
 			debugSession.configuration.rnDebugSessionId ===

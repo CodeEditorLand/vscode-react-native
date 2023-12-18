@@ -11,11 +11,11 @@
  */
 
 import * as child_process from "child_process";
-import { exec as opensslWithCallback, Action } from "openssl-wrapper";
+import { Action, exec as opensslWithCallback } from "openssl-wrapper";
 
 export function openssl(
 	action: Action,
-	options: Record<string, any>
+	options: Record<string, any>,
 ): Promise<string> {
 	return new Promise((resolve, reject) => {
 		opensslWithCallback(action, options, (err, buffer) => {

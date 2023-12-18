@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import { BaseCDPMessageHandler } from "./baseCDPMessageHandler";
-import { ProcessedCDPMessage } from "./ICDPMessageHandler";
 import { CDP_API_NAMES } from "./CDPAPINames";
+import { ProcessedCDPMessage } from "./ICDPMessageHandler";
+import { BaseCDPMessageHandler } from "./baseCDPMessageHandler";
 
 interface ExecutionContext {
 	id: number;
@@ -98,7 +98,7 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 			this.sendCustomRequestToDebuggerTarget(
 				CDP_API_NAMES.EXECUTION_CONTEXT_CREATED,
 				{ context },
-				false
+				false,
 			);
 		} catch (err) {
 			throw Error("Could not create Execution context");
@@ -108,7 +108,7 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 	private sendCustomRequestToDebuggerTarget(
 		method: string,
 		params: any = {},
-		addMessageId: boolean = true
+		addMessageId = true,
 	): void {
 		const request: any = {
 			method,

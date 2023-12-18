@@ -10,23 +10,23 @@ import { PromiseUtil } from "../../../../common/node/promise";
 import { PackageVersion } from "../../../../common/projectVersionHelper";
 import { adbAndroid, adbExpo } from "./adb";
 import cocoaPods from "./cocoaPods";
+import devmode from "./devmode";
+import dotnet from "./dotnet";
 import emulator from "./emulator";
 import { androidHome } from "./env";
+import expoCli from "./expoCli";
 import gradle from "./gradle";
+import iosDeploy from "./iosDeploy";
 import java from "./java";
+import longPath from "./longPath";
+import macos from "./macos";
 import nodeJs from "./nodeJS";
 import npm from "./npm";
-import watchman from "./watchman";
-import iosDeploy from "./iosDeploy";
-import { xcodeBuild, xcodeBuildVersionRNmacOS } from "./xcodebuild";
-import expoCli from "./expoCli";
-import devmode from "./devmode";
 import visualStudio from "./visualStudio";
-import longPath from "./longPath";
+import watchman from "./watchman";
 import windows from "./windows";
-import dotnet from "./dotnet";
+import { xcodeBuild, xcodeBuildVersionRNmacOS } from "./xcodebuild";
 import xcodecli from "./xcodecli";
-import macos from "./macos";
 
 import { IValidation } from "./types";
 
@@ -58,7 +58,7 @@ export const getChecks = (versions: PackageVersion[] = []): IValidation[] => {
 	];
 
 	const rnVersionContainer = versions.find((it) =>
-		Object.keys(it).includes("reactNativeVersion")
+		Object.keys(it).includes("reactNativeVersion"),
 	);
 	if (
 		rnVersionContainer &&
@@ -69,7 +69,7 @@ export const getChecks = (versions: PackageVersion[] = []): IValidation[] => {
 		if (androidEnvCheck) {
 			androidEnvCheck.exec = androidEnvCheck.exec.bind(
 				null,
-				"ANDROID_SDK_ROOT"
+				"ANDROID_SDK_ROOT",
 			);
 		}
 	}
@@ -79,6 +79,6 @@ export const getChecks = (versions: PackageVersion[] = []): IValidation[] => {
 	});
 
 	return checks.filter((it) =>
-		it.platform ? it.platform.includes(process.platform) : true
+		it.platform ? it.platform.includes(process.platform) : true,
 	);
 };

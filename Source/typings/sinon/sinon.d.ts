@@ -3,9 +3,9 @@
 // Definitions by: William Sears <https://github.com/mrbigdog2u>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-declare module Sinon {
-	interface Event {}
-	interface Document {}
+declare namespace Sinon {
+	type Event = {};
+	type Document = {};
 	interface SinonSpyCallApi {
 		// Properties
 		thisValue: any;
@@ -201,15 +201,7 @@ declare module Sinon {
 			month: number,
 			day: number,
 			hour: number,
-			minute: number
-		): Date;
-		Date(
-			year: number,
-			month: number,
-			day: number,
-			hour: number,
 			minute: number,
-			second: number
 		): Date;
 		Date(
 			year: number,
@@ -218,7 +210,15 @@ declare module Sinon {
 			hour: number,
 			minute: number,
 			second: number,
-			ms: number
+		): Date;
+		Date(
+			year: number,
+			month: number,
+			day: number,
+			hour: number,
+			minute: number,
+			second: number,
+			ms: number,
 		): Date;
 		restore(): void;
 
@@ -287,8 +287,8 @@ declare module Sinon {
 				url: string,
 				async: boolean,
 				username: string,
-				password: string
-			) => boolean
+				password: string,
+			) => boolean,
 		): void;
 		setResponseHeaders(headers: any): void;
 		setResponseBody(body: string): void;
@@ -322,27 +322,27 @@ declare module Sinon {
 		respondWith(url: string, response: any[]): void;
 		respondWith(
 			url: string,
-			fn: (xhr: SinonFakeXMLHttpRequest) => void
+			fn: (xhr: SinonFakeXMLHttpRequest) => void,
 		): void;
 		respondWith(method: string, url: string, body: string): void;
 		respondWith(method: string, url: string, response: any[]): void;
 		respondWith(
 			method: string,
 			url: string,
-			fn: (xhr: SinonFakeXMLHttpRequest) => void
+			fn: (xhr: SinonFakeXMLHttpRequest) => void,
 		): void;
 		respondWith(url: RegExp, body: string): void;
 		respondWith(url: RegExp, response: any[]): void;
 		respondWith(
 			url: RegExp,
-			fn: (xhr: SinonFakeXMLHttpRequest) => void
+			fn: (xhr: SinonFakeXMLHttpRequest) => void,
 		): void;
 		respondWith(method: string, url: RegExp, body: string): void;
 		respondWith(method: string, url: RegExp, response: any[]): void;
 		respondWith(
 			method: string,
 			url: RegExp,
-			fn: (xhr: SinonFakeXMLHttpRequest) => void
+			fn: (xhr: SinonFakeXMLHttpRequest) => void,
 		): void;
 		respond(): void;
 		restore(): void;

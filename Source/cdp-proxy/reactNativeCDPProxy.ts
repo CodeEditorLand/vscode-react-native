@@ -2,19 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import { IncomingMessage } from "http";
+import { CancellationToken, EventEmitter } from "vscode";
 import {
 	Connection,
-	Server,
-	WebSocketTransport,
 	IProtocolCommand,
 	IProtocolError,
 	IProtocolSuccess,
+	Server,
+	WebSocketTransport,
 } from "vscode-cdp-proxy";
-import { CancellationToken, EventEmitter } from "vscode";
-import { OutputChannelLogger } from "../extension/log/OutputChannelLogger";
 import { LogLevel } from "../extension/log/LogHelper";
-import { DebuggerEndpointHelper } from "./debuggerEndpointHelper";
+import { OutputChannelLogger } from "../extension/log/OutputChannelLogger";
 import { BaseCDPMessageHandler } from "./CDPMessageHandlers/baseCDPMessageHandler";
+import { DebuggerEndpointHelper } from "./debuggerEndpointHelper";
 
 export class ReactNativeCDPProxy {
 	private readonly PROXY_LOG_TAGS = {
@@ -47,7 +47,7 @@ export class ReactNativeCDPProxy {
 	constructor(
 		hostAddress: string,
 		port: number,
-		logLevel: LogLevel = LogLevel.None
+		logLevel: LogLevel = LogLevel.None,
 	) {
 		this.port = port;
 		this.hostAddress = hostAddress;
@@ -55,7 +55,7 @@ export class ReactNativeCDPProxy {
 			"React Native Chrome Proxy",
 			process.env.REACT_NATIVE_TOOLS_LAZY_LOGS !== "false",
 			false,
-			true
+			true,
 		);
 		this.logLevel = logLevel;
 		this.browserInspectUri = "";
@@ -65,7 +65,7 @@ export class ReactNativeCDPProxy {
 	public async initializeServer(
 		CDPMessageHandler: BaseCDPMessageHandler,
 		logLevel: LogLevel,
-		cancellationToken?: CancellationToken
+		cancellationToken?: CancellationToken,
 	): Promise<void> {
 		this.logLevel = logLevel;
 		this.CDPMessageHandler = CDPMessageHandler;
@@ -116,34 +116,34 @@ export class ReactNativeCDPProxy {
 					await this.debuggerEndpointHelper.retryGetWSEndpoint(
 						`http://localhost:${this.applicationTargetPort}`,
 						90,
-						this.cancellationToken
+						this.cancellationToken,
 					);
 			} else {
 				this.browserInspectUri =
 					await this.debuggerEndpointHelper.getWSEndpoint(
-						`http://localhost:${this.applicationTargetPort}`
+						`http://localhost:${this.applicationTargetPort}`,
 					);
 			}
 		}
 
 		this.applicationTarget = new Connection(
-			await WebSocketTransport.create(this.browserInspectUri)
+			await WebSocketTransport.create(this.browserInspectUri),
 		);
 
 		this.applicationTarget.onError(
-			this.onApplicationTargetError.bind(this)
+			this.onApplicationTargetError.bind(this),
 		);
 		this.debuggerTarget.onError(this.onDebuggerTargetError.bind(this));
 
 		this.applicationTarget.onCommand(
-			this.handleApplicationTargetCommand.bind(this)
+			this.handleApplicationTargetCommand.bind(this),
 		);
 		this.debuggerTarget.onCommand(
-			this.handleDebuggerTargetCommand.bind(this)
+			this.handleDebuggerTargetCommand.bind(this),
 		);
 
 		this.applicationTarget.onReply(
-			this.handleApplicationTargetReply.bind(this)
+			this.handleApplicationTargetReply.bind(this),
 		);
 		this.debuggerTarget.onReply(this.handleDebuggerTargetReply.bind(this));
 
@@ -161,7 +161,7 @@ export class ReactNativeCDPProxy {
 		this.logger.logWithCustomTag(
 			this.PROXY_LOG_TAGS.DEBUGGER_COMMAND,
 			JSON.stringify(event, null, 2),
-			this.logLevel
+			this.logLevel,
 		);
 		const processedMessage =
 			this.CDPMessageHandler.processDebuggerCDPMessage(event);
@@ -177,7 +177,7 @@ export class ReactNativeCDPProxy {
 		this.logger.logWithCustomTag(
 			this.PROXY_LOG_TAGS.APPLICATION_COMMAND,
 			JSON.stringify(event, null, 2),
-			this.logLevel
+			this.logLevel,
 		);
 		const processedMessage =
 			this.CDPMessageHandler.processApplicationCDPMessage(event);
@@ -190,12 +190,12 @@ export class ReactNativeCDPProxy {
 	}
 
 	private handleDebuggerTargetReply(
-		event: IProtocolError | IProtocolSuccess
+		event: IProtocolError | IProtocolSuccess,
 	) {
 		this.logger.logWithCustomTag(
 			this.PROXY_LOG_TAGS.DEBUGGER_REPLY,
 			JSON.stringify(event, null, 2),
-			this.logLevel
+			this.logLevel,
 		);
 		const processedMessage =
 			this.CDPMessageHandler.processDebuggerCDPMessage(event);
@@ -208,12 +208,12 @@ export class ReactNativeCDPProxy {
 	}
 
 	private handleApplicationTargetReply(
-		event: IProtocolError | IProtocolSuccess
+		event: IProtocolError | IProtocolSuccess,
 	) {
 		this.logger.logWithCustomTag(
 			this.PROXY_LOG_TAGS.APPLICATION_REPLY,
 			JSON.stringify(event, null, 2),
-			this.logLevel
+			this.logLevel,
 		);
 		const processedMessage =
 			this.CDPMessageHandler.processApplicationCDPMessage(event);

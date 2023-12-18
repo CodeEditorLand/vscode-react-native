@@ -34,7 +34,7 @@ const main: IValidation = {
 	platform: ["win32"],
 	description: toLocale(
 		"LongPathSupportTestDescription",
-		"Required for building RNW apps"
+		"Required for building RNW apps",
 	),
 	category: ValidationCategoryE.Windows,
 	exec: test,

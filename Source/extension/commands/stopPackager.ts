@@ -11,7 +11,7 @@ export class StopPackager extends ReactNativeCommand<[AppLauncher]> {
 	codeName = "stopPackager";
 	label = "Stop Packager";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToStopPackager
+		InternalErrorCode.FailedToStopPackager,
 	);
 
 	requiresProject = false;

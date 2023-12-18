@@ -4,8 +4,8 @@
 /* eslint-disable */
 /* eslint-enable prettier/prettier*/
 
-import { IFormatter, FormattedBody } from "./requestBodyFormatter";
 import { Response } from "../networkMessageData";
+import { FormattedBody, IFormatter } from "./requestBodyFormatter";
 
 /**
  * @preserve
@@ -22,7 +22,7 @@ import { Response } from "../networkMessageData";
 export class ImageFormatter implements IFormatter {
 	public formatResponse(
 		response: Response,
-		contentType: string
+		contentType: string,
 	): FormattedBody | null {
 		if (contentType.startsWith("image/") && response.data) {
 			return response.data;

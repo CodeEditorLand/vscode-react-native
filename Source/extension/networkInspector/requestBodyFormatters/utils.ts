@@ -23,7 +23,7 @@ export function combineBase64Chunks(chunks: string[]): string {
 	const byteArray = chunks.map(
 		(b64Chunk) =>
 			Uint8Array.from(Base64.atob(b64Chunk), (c) => c.charCodeAt(0))
-				.buffer
+				.buffer,
 	);
 	const size = byteArray
 		.map((b) => b.byteLength)

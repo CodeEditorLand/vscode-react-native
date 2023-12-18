@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import { MultiStepInput, InputStep } from "../multiStepInput";
 import { ILaunchRequestArgs } from "../../../debugger/debugSessionBase";
 import {
-	DebugConfigurationState,
-	platformTypeDirectPickConfig,
 	DEBUG_TYPES,
+	DebugConfigurationState,
 	DebugScenarioType,
+	platformTypeDirectPickConfig,
 } from "../debugConfigTypesAndConstants";
+import { InputStep, MultiStepInput } from "../multiStepInput";
 import { BaseConfigProvider } from "./baseConfigProvider";
 
 export class AttachConfigProvider extends BaseConfigProvider {
@@ -22,7 +22,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 
 	public async buildConfiguration(
 		input: MultiStepInput<DebugConfigurationState>,
-		state: DebugConfigurationState
+		state: DebugConfigurationState,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		this.maxStepCount = 3;
 		state.config = {};
@@ -39,7 +39,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 			input,
 			config,
 			1,
-			this.maxStepCount
+			this.maxStepCount,
 		);
 
 		Object.assign(state.config, config);
@@ -53,7 +53,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 
 	private async configureDirectPlatform(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>
+		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		delete config.platform;
 		await this.configurationProviderHelper.selectPlatform(
@@ -61,14 +61,14 @@ export class AttachConfigProvider extends BaseConfigProvider {
 			config,
 			platformTypeDirectPickConfig,
 			2,
-			this.maxStepCount
+			this.maxStepCount,
 		);
 
-		if (!config.platform) {
+		if (config.platform) {
+			config.useHermesEngine = false;
+		} else {
 			delete config.platform;
 			delete config.useHermesEngine;
-		} else {
-			config.useHermesEngine = false;
 		}
 
 		return () => this.configureAddress(input, config);
@@ -76,27 +76,27 @@ export class AttachConfigProvider extends BaseConfigProvider {
 
 	private async configureAddress(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>
+		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		await this.configurationProviderHelper.configureAddress(
 			input,
 			config,
 			config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT ? 3 : 2,
 			this.maxStepCount,
-			this.defaultAddress
+			this.defaultAddress,
 		);
 		return () => this.configurePort(input, config);
 	}
 
 	private async configurePort(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>
+		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		await this.configurationProviderHelper.configurePort(
 			input,
 			config,
 			config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT ? 4 : 3,
-			this.maxStepCount
+			this.maxStepCount,
 		);
 	}
 }

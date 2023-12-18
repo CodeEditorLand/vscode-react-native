@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as path from "path";
-import * as vscode from "vscode";
 import { getLocation } from "jsonc-parser";
+import * as vscode from "vscode";
 import * as nls from "vscode-nls";
 
 nls.config({
@@ -27,7 +27,7 @@ export class LaunchJsonCompletionProvider
 		position: vscode.Position,
 		token: vscode.CancellationToken,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		context: vscode.CompletionContext
+		context: vscode.CompletionContext,
 	): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
 		if (!this.canProvideCompletions(document, position)) {
 			return [];
@@ -39,13 +39,13 @@ export class LaunchJsonCompletionProvider
 					command: "reactNative.selectAndInsertDebugConfiguration",
 					title: localize(
 						"SelectReactNativeDebugConfiguration",
-						"Select a React Native debug configuration"
+						"Select a React Native debug configuration",
 					),
 					arguments: [document, position, token],
 				},
 				documentation: localize(
 					"SelectReactNativeDebugConfiguration",
-					"Select a React Native debug configuration"
+					"Select a React Native debug configuration",
 				),
 				sortText: "AAAA",
 				preselect: true,
@@ -58,14 +58,14 @@ export class LaunchJsonCompletionProvider
 
 	private canProvideCompletions(
 		document: vscode.TextDocument,
-		position: vscode.Position
+		position: vscode.Position,
 	) {
 		if (path.basename(document.uri.fsPath) !== "launch.json") {
 			return false;
 		}
 		const location = getLocation(
 			document.getText(),
-			document.offsetAt(position)
+			document.offsetAt(position),
 		);
 		// Cursor must be inside the configurations array and not in any nested items.
 		// Hence path[0] = array, path[1] = array element index.

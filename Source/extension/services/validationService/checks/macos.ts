@@ -55,7 +55,7 @@ const main: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"macOSversionTestDescription",
-		"Required for testing and building RN macOS apps"
+		"Required for testing and building RN macOS apps",
 	),
 	category: ValidationCategoryE.macOS,
 	exec: test,

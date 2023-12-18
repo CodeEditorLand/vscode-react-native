@@ -5,17 +5,17 @@ import { ConsoleLogger } from "../extension/log/ConsoleLogger";
 import { ILogger } from "../extension/log/LogHelper";
 import { ErrorHelper } from "./error/errorHelper";
 import { InternalError } from "./error/internalError";
-import {
-	TelemetryHelper,
-	ICommandTelemetryProperties,
-} from "./telemetryHelper";
-import { TelemetryGenerator } from "./telemetryGenerators";
 import { Telemetry } from "./telemetry";
+import { TelemetryGenerator } from "./telemetryGenerators";
+import {
+	ICommandTelemetryProperties,
+	TelemetryHelper,
+} from "./telemetryHelper";
 
 export enum ProcessType {
-	Extension,
-	Debugee,
-	Debugger,
+	Extension = 0,
+	Debugee = 1,
+	Debugger = 2,
 }
 
 /* This class should we used for each entry point of the code, so we handle telemetry and error reporting properly */
@@ -24,7 +24,7 @@ export class EntryPointHandler {
 
 	constructor(
 		processType: ProcessType,
-		private logger: ILogger = new ConsoleLogger()
+		private logger: ILogger = new ConsoleLogger(),
 	) {
 		this.processType = processType;
 	}
@@ -34,15 +34,15 @@ export class EntryPointHandler {
 		taskName: string,
 		error: InternalError,
 		codeToRun: (telemetry: TelemetryGenerator) => Promise<void> | void,
-		errorsAreFatal: boolean = false,
-		extProps?: ICommandTelemetryProperties
+		errorsAreFatal = false,
+		extProps?: ICommandTelemetryProperties,
 	): Promise<void> {
 		return this.runFunctionWExtProps(
 			taskName,
 			extProps || {},
 			error,
 			codeToRun,
-			errorsAreFatal
+			errorsAreFatal,
 		);
 	}
 
@@ -51,12 +51,12 @@ export class EntryPointHandler {
 		extProps: ICommandTelemetryProperties,
 		error: InternalError,
 		codeToRun: (telemetry: TelemetryGenerator) => Promise<void> | void,
-		errorsAreFatal: boolean = false
+		errorsAreFatal = false,
 	): Promise<void> {
 		return this.handleErrors(
 			error,
 			TelemetryHelper.generate(taskName, extProps, codeToRun),
-			errorsAreFatal
+			errorsAreFatal,
 		);
 	}
 
@@ -67,7 +67,7 @@ export class EntryPointHandler {
 		error: InternalError,
 		reporter: Telemetry.ITelemetryReporter,
 		codeToRun: () => Promise<void> | void,
-		extProps?: ICommandTelemetryProperties
+		extProps?: ICommandTelemetryProperties,
 	): Promise<void> {
 		try {
 			Telemetry.init(appName, appVersion, reporter);
@@ -81,7 +81,7 @@ export class EntryPointHandler {
 	private handleErrors(
 		error: InternalError,
 		resultOfCode: Promise<void>,
-		errorsAreFatal: boolean
+		errorsAreFatal: boolean,
 	): Promise<void> {
 		resultOfCode.catch((reason) => {
 			const isDebugeeProcess = this.processType === ProcessType.Debugee;
@@ -89,7 +89,7 @@ export class EntryPointHandler {
 			this.logger.error(
 				error.message,
 				ErrorHelper.wrapError(error, reason),
-				shouldLogStack
+				shouldLogStack,
 			);
 			// For the debugee process we don't want to throw an exception because the debugger
 			// will appear to the user if he turned on the VS Code uncaught exceptions feature.

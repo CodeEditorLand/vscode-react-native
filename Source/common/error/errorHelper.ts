@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
+import { ERROR_STRINGS } from "./errorStrings";
 import {
 	InternalError,
-	NestedError,
 	InternalErrorLevel,
+	NestedError,
 } from "./internalError";
 import { InternalErrorCode } from "./internalErrorCode";
-import { ERROR_STRINGS } from "./errorStrings";
 
 export class ErrorHelper {
 	public static ERROR_STRINGS = ERROR_STRINGS;
@@ -30,7 +30,7 @@ export class ErrorHelper {
 
 	public static wrapError(
 		error: InternalError,
-		innerError: Error
+		innerError: Error,
 	): NestedError {
 		return NestedError.getWrappedError(error, innerError);
 	}
@@ -41,14 +41,14 @@ export class ErrorHelper {
 
 	public static getNestedWarning(
 		innerError: Error,
-		message: string
+		message: string,
 	): NestedError {
 		return new NestedError(
 			-1,
 			message,
 			innerError,
 			null /* extras */,
-			InternalErrorLevel.Warning
+			InternalErrorLevel.Warning,
 		);
 	}
 
@@ -58,7 +58,7 @@ export class ErrorHelper {
 	): string {
 		return ErrorHelper.formatErrorMessage(
 			ErrorHelper.ERROR_STRINGS[errorCode],
-			...optionalArgs
+			...optionalArgs,
 		);
 	}
 

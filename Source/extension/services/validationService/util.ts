@@ -3,8 +3,8 @@
 
 import * as cp from "child_process";
 import { promisify } from "util";
-import * as semver from "semver";
 import * as commandExists from "command-exists";
+import * as semver from "semver";
 
 export const executeCommand = promisify(cp.exec);
 export const normizeStr = (str: string): string => str.replace(/\r\n/g, "\n");
@@ -50,8 +50,8 @@ export const basicCheck = async (arg: {
 	result.versionCompare = semver.gtr(version, arg.versionRange)
 		? 1
 		: semver.ltr(version, arg.versionRange)
-			? -1
-			: 0;
+		  ? -1
+		  : 0;
 
 	return result;
 };
@@ -60,7 +60,7 @@ export const basicCheck = async (arg: {
 export const parseVersion = async (
 	command: string,
 	reg?: RegExp,
-	prop: "stdout" | "stderr" = "stdout"
+	prop: "stdout" | "stderr" = "stdout",
 ): Promise<semver.SemVer | null> => {
 	const data = await executeCommand(command).catch(() => {});
 	if (!data) {
@@ -72,14 +72,14 @@ export const parseVersion = async (
 
 // change typescript lib to es2019 ?
 export const fromEntries = <T = any, J extends PropertyKey = PropertyKey>(
-	entries: Iterable<readonly [J, T]>
+	entries: Iterable<readonly [J, T]>,
 ): Record<J, T> =>
 	[...entries].reduce(
 		(obj, [key, val]) => {
 			obj[key] = val;
 			return obj;
 		},
-		{} as Record<J, T>
+		{} as Record<J, T>,
 	);
 
 // export const flatten = (ary: any[]): unknown[] =>

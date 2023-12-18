@@ -1,19 +1,19 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as path from "path";
 import { EventEmitter } from "events";
-import * as vscode from "vscode";
-import * as WebSocket from "ws";
+import * as path from "path";
 import { logger } from "@vscode/debugadapter";
+import * as vscode from "vscode";
 import * as nls from "vscode-nls";
-import { ensurePackagerRunning } from "../common/packagerStatus";
+import * as WebSocket from "ws";
 import { ErrorHelper } from "../common/error/errorHelper";
-import { ExecutionsLimiter } from "../common/executionsLimiter";
-import { ReactNativeProjectHelper } from "../common/reactNativeProjectHelper";
 import { InternalErrorCode } from "../common/error/internalErrorCode";
+import { ExecutionsLimiter } from "../common/executionsLimiter";
 import { FileSystem } from "../common/node/fileSystem";
 import { PromiseUtil } from "../common/node/promise";
+import { ensurePackagerRunning } from "../common/packagerStatus";
+import { ReactNativeProjectHelper } from "../common/reactNativeProjectHelper";
 import { ForkedAppWorker } from "./forkedAppWorker";
 import { ScriptImporter } from "./scriptImporter";
 
@@ -39,7 +39,7 @@ function printDebuggingError(error: Error, reason: any) {
 	const nestedError = ErrorHelper.getNestedError(
 		error,
 		InternalErrorCode.DebuggingWontWorkReloadJSAndReconnect,
-		reason
+		reason,
 	);
 
 	logger.error(nestedError.message);
@@ -229,7 +229,7 @@ function fetch(url) {
 		sourcesStoragePath: string,
 		projectRootPath: string,
 		cancellationToken: vscode.CancellationToken,
-		{ webSocketConstructor = (url: string) => new WebSocket(url) } = {}
+		{ webSocketConstructor = (url: string) => new WebSocket(url) } = {},
 	) {
 		super();
 		this.packagerAddress = attachRequestArguments.address || "localhost";
@@ -243,7 +243,7 @@ function fetch(url) {
 		this.cancellationToken = cancellationToken;
 		if (!this.sourcesStoragePath)
 			throw ErrorHelper.getInternalError(
-				InternalErrorCode.SourcesStoragePathIsNullOrEmpty
+				InternalErrorCode.SourcesStoragePathIsNullOrEmpty,
 			);
 		this.webSocketConstructor = webSocketConstructor;
 		this.scriptImporter = new ScriptImporter(
@@ -251,20 +251,20 @@ function fetch(url) {
 			this.packagerPort,
 			sourcesStoragePath,
 			this.packagerRemoteRoot,
-			this.packagerLocalRoot
+			this.packagerLocalRoot,
 		);
 	}
 
-	public async start(retryAttempt: boolean = false): Promise<void> {
+	public async start(retryAttempt = false): Promise<void> {
 		const errPackagerNotRunning = ErrorHelper.getInternalError(
 			InternalErrorCode.CannotAttachToPackagerCheckPackagerRunningOnPort,
-			this.packagerPort
+			this.packagerPort,
 		);
 
 		await ensurePackagerRunning(
 			this.packagerAddress,
 			this.packagerPort,
-			errPackagerNotRunning
+			errPackagerNotRunning,
 		);
 		// Don't fetch debugger worker on socket disconnect
 		if (!retryAttempt) {
@@ -287,20 +287,20 @@ function fetch(url) {
 	public async downloadAndPatchDebuggerWorker(): Promise<void> {
 		const scriptToRunPath = path.resolve(
 			this.sourcesStoragePath,
-			ScriptImporter.DEBUGGER_WORKER_FILENAME
+			ScriptImporter.DEBUGGER_WORKER_FILENAME,
 		);
 
 		await this.scriptImporter.downloadDebuggerWorker(
 			this.sourcesStoragePath,
 			this.projectRootPath,
-			this.debuggerWorkerUrlPath
+			this.debuggerWorkerUrlPath,
 		);
 		const workerContent = await this.nodeFileSystem.readFile(
 			scriptToRunPath,
-			"utf8"
+			"utf8",
 		);
 		const isHaulProject = ReactNativeProjectHelper.isHaulProject(
-			this.projectRootPath
+			this.projectRootPath,
 		);
 		// Add our customizations to debugger worker to get it working smoothly
 		// in Node env and polyfill WebWorkers API over Node's IPC.
@@ -314,7 +314,7 @@ function fetch(url) {
 		].join("\n");
 		return this.nodeFileSystem.writeFile(
 			scriptToRunPath,
-			modifiedDebuggeeContent
+			modifiedDebuggeeContent,
 		);
 	}
 
@@ -344,19 +344,17 @@ function fetch(url) {
 				this.sendMessageToApp(message);
 			},
 			this.packagerRemoteRoot,
-			this.packagerLocalRoot
+			this.packagerLocalRoot,
 		);
 		logger.verbose("A new app worker lifetime was created.");
 		const startedEvent = await this.singleLifetimeWorker.start();
 		this.emit("connected", startedEvent);
 	}
 
-	private async createSocketToApp(
-		retryAttempt: boolean = false
-	): Promise<void> {
+	private async createSocketToApp(retryAttempt = false): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.socketToApp = this.webSocketConstructor(
-				this.debuggerProxyUrl()
+				this.debuggerProxyUrl(),
 			);
 			this.socketToApp.on("open", () => {
 				this.onSocketOpened();
@@ -378,17 +376,17 @@ function fetch(url) {
 						) {
 							reject(
 								ErrorHelper.getInternalError(
-									InternalErrorCode.AnotherDebuggerConnectedToPackager
-								)
+									InternalErrorCode.AnotherDebuggerConnectedToPackager,
+								),
 							);
 						}
 						logger.log(
 							localize(
 								"DisconnectedFromThePackagerToReactNative",
-								"Disconnected from the Proxy (Packager) to the React Native application. Retrying reconnection soon..."
-							)
+								"Disconnected from the Proxy (Packager) to the React Native application. Retrying reconnection soon...",
+							),
 						);
-					}
+					},
 				);
 				if (!this.cancellationToken.isCancellationRequested) {
 					setTimeout(() => {
@@ -397,15 +395,15 @@ function fetch(url) {
 				}
 			});
 			this.socketToApp.on("message", (message: any) =>
-				this.onMessage(message)
+				this.onMessage(message),
 			);
 			this.socketToApp.on("error", (error: Error) => {
 				if (retryAttempt) {
 					printDebuggingError(
 						ErrorHelper.getInternalError(
-							InternalErrorCode.ReconnectionToPackagerFailedCheckForErrorsOrRestartReactNative
+							InternalErrorCode.ReconnectionToPackagerFailedCheckForErrorsOrRestartReactNative,
 						),
-						error
+						error,
 					);
 				}
 
@@ -430,9 +428,9 @@ function fetch(url) {
 				logger.log(
 					localize(
 						"EstablishedConnectionWithPackagerToReactNativeApp",
-						"Established a connection with the Proxy (Packager) to the React Native application"
-					)
-				)
+						"Established a connection with the Proxy (Packager) to the React Native application",
+					),
+				),
 		);
 	}
 
@@ -463,16 +461,16 @@ function fetch(url) {
 			} else {
 				// Message doesn't have a method. Ignore it. This is an info message instead of warn because it's normal and expected
 				logger.verbose(
-					`The react-native app sent a message without specifying a method: ${message}`
+					`The react-native app sent a message without specifying a method: ${message}`,
 				);
 			}
 		} catch (exception) {
 			printDebuggingError(
 				ErrorHelper.getInternalError(
 					InternalErrorCode.FailedToProcessMessageFromReactNativeApp,
-					message
+					message,
 				),
-				exception
+				exception,
 			);
 		}
 	}
@@ -487,10 +485,10 @@ function fetch(url) {
 				printDebuggingError(
 					ErrorHelper.getInternalError(
 						InternalErrorCode.FailedToPrepareJSRuntimeEnvironment,
-						message
+						message,
 					),
-					error
-				)
+					error,
+				),
 		);
 	}
 
@@ -505,9 +503,9 @@ function fetch(url) {
 			printDebuggingError(
 				ErrorHelper.getInternalError(
 					InternalErrorCode.FailedToSendMessageToTheReactNativeApp,
-					messageToShow
+					messageToShow,
 				),
-				exception
+				exception,
 			);
 		}
 	}

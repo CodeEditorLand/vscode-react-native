@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as os from "os";
-import * as nls from "vscode-nls";
 import * as semver from "semver";
+import * as nls from "vscode-nls";
 import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
@@ -33,7 +33,7 @@ const main: IValidation = {
 	platform: ["win32"],
 	description: toLocale(
 		"RNWBuildTestDescription",
-		"Required for running RNW apps"
+		"Required for running RNW apps",
 	),
 	category: ValidationCategoryE.Windows,
 	exec: test,

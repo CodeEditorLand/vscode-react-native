@@ -21,7 +21,7 @@ export class RunExponent extends ReactNativeCommand {
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
-				nodeModulesRoot
+				nodeModulesRoot,
 			);
 		this.project.setReactNativeVersions(versions);
 
@@ -29,7 +29,7 @@ export class RunExponent extends ReactNativeCommand {
 			getRunOptions(this.project, PlatformType.Exponent),
 			{
 				packager: this.project.getPackager(),
-			}
+			},
 		);
 
 		await platform.beforeStartPackager();

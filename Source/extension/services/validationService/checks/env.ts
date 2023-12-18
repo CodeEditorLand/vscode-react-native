@@ -4,7 +4,7 @@
 import * as fs from "fs";
 import * as nls from "vscode-nls";
 import { fromEntries } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -18,7 +18,7 @@ const convertPathWithVars = (str: string) =>
 	str.replace(/%([^%]+)%/g, (_, n) => process.env[n] || _);
 
 async function test(
-	androidHomeVariableName: string = "ANDROID_HOME"
+	androidHomeVariableName = "ANDROID_HOME",
 ): Promise<ValidationResultT> {
 	const envVars: Record<string, string | undefined> = {};
 	envVars[androidHomeVariableName] = process.env[androidHomeVariableName];
@@ -27,11 +27,11 @@ async function test(
 		Object.entries(envVars).map(([key, val]) => [
 			key,
 			{ original: val, resolved: val && convertPathWithVars(val) },
-		])
+		]),
 	);
 
 	const notFoundVariable = Object.entries(resolvedEnv).find(
-		([, val]) => !val.original
+		([, val]) => !val.original,
 	)?.[0];
 
 	if (notFoundVariable) {
@@ -44,7 +44,7 @@ async function test(
 	}
 
 	const notFoundPath = Object.entries(resolvedEnv).find(
-		([, val]) => val.resolved && !fs.existsSync(val.resolved)
+		([, val]) => val.resolved && !fs.existsSync(val.resolved),
 	)?.[0];
 	if (notFoundPath) {
 		return {
@@ -54,7 +54,7 @@ async function test(
 	}
 
 	const valUsesEnv = Object.entries(resolvedEnv).find(
-		([key, val]) => val.original !== val.resolved
+		([key, val]) => val.original !== val.resolved,
 	)?.[0];
 
 	if (valUsesEnv) {
@@ -73,7 +73,7 @@ const androidHome: IValidation = {
 	label: "Android Env",
 	description: toLocale(
 		"AndroidHomeEnvCheckDescription",
-		"Required for launching React Native apps"
+		"Required for launching React Native apps",
 	),
 	category: ValidationCategoryE.Android,
 	exec: test,

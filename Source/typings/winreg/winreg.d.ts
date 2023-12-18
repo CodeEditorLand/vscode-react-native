@@ -150,7 +150,7 @@ interface Winreg {
 	 */
 	get(
 		name: string,
-		cb: (err: Error, result: Winreg.RegistryItem) => void
+		cb: (err: Error, result: Winreg.RegistryItem) => void,
 	): void;
 
 	/**
@@ -165,7 +165,7 @@ interface Winreg {
 		name: string,
 		type: string,
 		value: string,
-		cb: (err: Error) => void
+		cb: (err: Error) => void,
 	): void;
 
 	/**
@@ -206,7 +206,7 @@ declare namespace Winreg {
 		/**
 		 * Optional key, default is the root key.
 		 */
-		key?: String;
+		key?: string;
 	}
 
 	/**

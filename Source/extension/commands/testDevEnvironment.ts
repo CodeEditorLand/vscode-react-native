@@ -21,13 +21,13 @@ export class TestDevEnvironment extends Command {
 	requiresTrust = false;
 	requiresProject = false;
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToTestDevEnvironment
+		InternalErrorCode.FailedToTestDevEnvironment,
 	);
 
 	private async createRNProjectObserver(project: AppLauncher) {
 		const nodeModulesRoot = project.getOrUpdateNodeModulesRoot();
 		const projectRootPath = SettingsHelper.getReactNativeProjectRoot(
-			project.getWorkspaceFolderUri().fsPath
+			project.getWorkspaceFolderUri().fsPath,
 		);
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
@@ -35,7 +35,7 @@ export class TestDevEnvironment extends Command {
 				[
 					REACT_NATIVE_PACKAGES.REACT_NATIVE_WINDOWS,
 					REACT_NATIVE_PACKAGES.REACT_NATIVE_MACOS,
-				]
+				],
 			);
 		return new RNProjectObserver(projectRootPath, versions);
 	}
@@ -56,7 +56,7 @@ export class TestDevEnvironment extends Command {
 		const projectObserver =
 			project &&
 			(await this.createRNProjectObserver(project).catch(
-				() => undefined
+				() => undefined,
 			));
 
 		const shouldCheck = {
@@ -77,8 +77,8 @@ export class TestDevEnvironment extends Command {
 			await runChecks(
 				shouldCheck,
 				RNPackageVersionsToPackageVersion(
-					projectObserver.rnPackageVersions
-				)
+					projectObserver.rnPackageVersions,
+				),
 			);
 		} else {
 			await runChecks(shouldCheck);

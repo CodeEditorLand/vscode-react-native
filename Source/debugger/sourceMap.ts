@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as url from "url";
 import * as path from "path";
+import * as url from "url";
 import { RawSourceMap } from "source-map";
 import { SourceMapsCombinator } from "./sourceMapsCombinator";
 
@@ -34,7 +34,7 @@ export class SourceMapUtil {
 	 */
 	public getSourceMapURL(
 		scriptUrl: url.Url,
-		scriptBody: string
+		scriptBody: string,
 	): IStrictUrl | null {
 		let result: IStrictUrl | null = null;
 
@@ -68,7 +68,7 @@ export class SourceMapUtil {
 		scriptPath: string,
 		sourcesRootPath: string,
 		packagerRemoteRoot?: string,
-		packagerLocalRoot?: string
+		packagerLocalRoot?: string,
 	): string {
 		try {
 			let sourceMap = <ISourceMap>JSON.parse(sourceMapBody);
@@ -76,7 +76,7 @@ export class SourceMapUtil {
 			if (sourceMap.sections) {
 				// TODO: there is a need to handle value.map == null, make a fake map
 				sourceMap.sections = sourceMap.sections.filter(
-					(value) => value.map != null
+					(value) => value.map != null,
 				);
 
 				// eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -94,8 +94,8 @@ export class SourceMapUtil {
 								sourcePath,
 								sourcesRootPath,
 								packagerRemoteRoot,
-								packagerLocalRoot
-							)
+								packagerLocalRoot,
+						  ),
 				);
 			}
 
@@ -110,7 +110,7 @@ export class SourceMapUtil {
 
 	public appendSourceMapPaths(
 		scriptBody: string,
-		sourceMappingUrl: string
+		sourceMappingUrl: string,
 	): string {
 		scriptBody += `//# sourceMappingURL=${sourceMappingUrl}`;
 		return scriptBody;
@@ -121,7 +121,7 @@ export class SourceMapUtil {
 	 */
 	public updateScriptPaths(
 		scriptBody: string,
-		sourceMappingUrl: IStrictUrl
+		sourceMappingUrl: IStrictUrl,
 	): string {
 		const sourceMapMatch = this.searchSourceMapURL(scriptBody);
 		if (sourceMapMatch) {
@@ -129,8 +129,8 @@ export class SourceMapUtil {
 			return scriptBody.replace(
 				sourceMapMatch[0],
 				`//# sourceMappingURL=${path.basename(
-					sourceMappingUrl.pathname
-				)}`
+					sourceMappingUrl.pathname,
+				)}`,
 			);
 		}
 		return scriptBody;
@@ -179,7 +179,7 @@ export class SourceMapUtil {
 			?.filter((s) => !s.includes("\\n"));
 		if (matchesList && matchesList.length) {
 			return matchesList[matchesList.length - 1].match(
-				SourceMapUtil.SourceMapURLRegex
+				SourceMapUtil.SourceMapURLRegex,
 			);
 		}
 
@@ -195,14 +195,14 @@ export class SourceMapUtil {
 		sourcePath: string,
 		sourcesRootPath: string,
 		packagerRemoteRoot?: string,
-		packagerLocalRoot?: string
+		packagerLocalRoot?: string,
 	) {
 		if (packagerRemoteRoot && packagerLocalRoot) {
 			packagerRemoteRoot = this.makeUnixStylePath(packagerRemoteRoot);
 			packagerLocalRoot = this.makeUnixStylePath(packagerLocalRoot);
 			sourcePath = sourcePath.replace(
 				packagerRemoteRoot,
-				packagerLocalRoot
+				packagerLocalRoot,
 			);
 		}
 		const relativeSourcePath = path.relative(sourcesRootPath, sourcePath);

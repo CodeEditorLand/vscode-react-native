@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import { Node } from "../../common/node/node";
 import { ChildProcess } from "../../common/node/childProcess";
+import { Node } from "../../common/node/node";
 
 export class DefaultsHelper {
 	private readonly DEV_MENU_SETTINGS = "RCTDevMenu";
@@ -16,13 +16,13 @@ export class DefaultsHelper {
 	public async setPlistBooleanProperty(
 		plistFile: string,
 		property: string,
-		value: boolean
+		value: boolean,
 	): Promise<void> {
 		// Attempt to set the value, and if it fails due to the key not existing attempt to create the key
 		await this.invokeDefaultsCommand(
 			`write ${plistFile} ${
 				this.DEV_MENU_SETTINGS
-			} -dict-add ${property} -bool ${String(value)}`
+			} -dict-add ${property} -bool ${String(value)}`,
 		);
 	}
 

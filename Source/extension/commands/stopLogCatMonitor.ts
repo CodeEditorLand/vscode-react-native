@@ -16,7 +16,7 @@ export class StopLogCatMonitor extends Command {
 	requiresTrust = false;
 	requiresProject = false;
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.AndroidCouldNotStopLogCatMonitor
+		InternalErrorCode.AndroidCouldNotStopLogCatMonitor,
 	);
 
 	async baseFn(): Promise<void> {
@@ -45,13 +45,13 @@ function selectLogCatMonitor() {
 
 			assert(selected, "Selection canceled");
 			logger.debug(
-				`Command palette: selected LogCat monitor ${selected}`
+				`Command palette: selected LogCat monitor ${selected}`,
 			);
 			return LogCatMonitorManager.logCatMonitorsCache[selected];
 		});
 	}
 
 	throw ErrorHelper.getInternalError(
-		InternalErrorCode.AndroidCouldNotFindActiveLogCatMonitor
+		InternalErrorCode.AndroidCouldNotFindActiveLogCatMonitor,
 	);
 }

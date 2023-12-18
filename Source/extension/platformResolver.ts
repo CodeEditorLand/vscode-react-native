@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import { IRunOptions, PlatformType } from "./launchArgs";
-import { IOSPlatform } from "./ios/iOSPlatform";
 import { AndroidPlatform } from "./android/androidPlatform";
-import { WindowsPlatform } from "./windows/windowsPlatform";
-import { GeneralPlatform, MobilePlatformDeps } from "./generalPlatform";
 import { ExponentPlatform } from "./exponent/exponentPlatform";
+import { GeneralPlatform, MobilePlatformDeps } from "./generalPlatform";
+import { IOSPlatform } from "./ios/iOSPlatform";
+import { IRunOptions, PlatformType } from "./launchArgs";
 import { MacOSPlatform } from "./macos/macOSPlatform";
+import { WindowsPlatform } from "./windows/windowsPlatform";
 
 export class PlatformResolver {
 	/**
@@ -16,7 +16,7 @@ export class PlatformResolver {
 	public resolveMobilePlatform(
 		mobilePlatformString: string,
 		runOptions: IRunOptions,
-		platformDeps: MobilePlatformDeps
+		platformDeps: MobilePlatformDeps,
 	): GeneralPlatform {
 		switch (mobilePlatformString) {
 			// We lazyly load the strategies, because some components might be

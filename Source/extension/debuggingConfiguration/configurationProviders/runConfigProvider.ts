@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import { MultiStepInput, InputStep } from "../multiStepInput";
-import {
-	DebugConfigurationState,
-	platformTypeRunPickConfig,
-	DEBUG_TYPES,
-	DebugScenarioType,
-} from "../debugConfigTypesAndConstants";
-import { PlatformType } from "../../launchArgs";
 import { ILaunchRequestArgs } from "../../../debugger/debugSessionBase";
+import { PlatformType } from "../../launchArgs";
+import {
+	DEBUG_TYPES,
+	DebugConfigurationState,
+	DebugScenarioType,
+	platformTypeRunPickConfig,
+} from "../debugConfigTypesAndConstants";
+import { InputStep, MultiStepInput } from "../multiStepInput";
 import { BaseConfigProvider } from "./baseConfigProvider";
 
 export class RunConfigProvider extends BaseConfigProvider {
@@ -20,7 +20,7 @@ export class RunConfigProvider extends BaseConfigProvider {
 
 	public async buildConfiguration(
 		input: MultiStepInput<DebugConfigurationState>,
-		state: DebugConfigurationState
+		state: DebugConfigurationState,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		state.config = {};
 		const config: Partial<ILaunchRequestArgs> = {
@@ -38,7 +38,7 @@ export class RunConfigProvider extends BaseConfigProvider {
 			config,
 			platformTypeRunPickConfig,
 			1,
-			this.maxStepCount
+			this.maxStepCount,
 		);
 
 		Object.assign(state.config, config);
@@ -66,26 +66,26 @@ export class RunConfigProvider extends BaseConfigProvider {
 
 	private async configureApplicationType(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>
+		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		await this.configurationProviderHelper.selectApplicationType(
 			input,
 			config,
 			2,
-			this.maxStepCount
+			this.maxStepCount,
 		);
 	}
 
 	private async configureUseHermesEngine(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>
+		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		delete config.useHermesEngine;
 		await this.configurationProviderHelper.shouldUseHermesEngine(
 			input,
 			config,
 			3,
-			this.maxStepCount
+			this.maxStepCount,
 		);
 		if (config.useHermesEngine) {
 			delete config.useHermesEngine;

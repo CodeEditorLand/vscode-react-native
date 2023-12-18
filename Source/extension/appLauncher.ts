@@ -1,52 +1,52 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
+import * as child_process from "child_process";
 import * as fs from "fs";
 import * as path from "path";
-import * as child_process from "child_process";
-import * as vscode from "vscode";
-import * as nls from "vscode-nls";
 import * as execa from "execa";
+import * as vscode from "vscode";
 import * as BrowserHelper from "vscode-js-debug-browsers";
-import { Packager } from "../common/packager";
-import {
-	RNPackageVersions,
-	ProjectVersionHelper,
-} from "../common/projectVersionHelper";
+import * as nls from "vscode-nls";
+import { ReactNativeCDPProxy } from "../cdp-proxy/reactNativeCDPProxy";
 import { CommandExecutor } from "../common/commandExecutor";
-import { isNullOrUndefined } from "../common/utils";
-import { TelemetryHelper } from "../common/telemetryHelper";
 import { ErrorHelper } from "../common/error/errorHelper";
 import { InternalErrorCode } from "../common/error/internalErrorCode";
-import { TargetPlatformHelper } from "../common/targetPlatformHelper";
 import {
-	getNodeModulesInFolderHierarchy,
 	generateRandomPortNumber,
+	getNodeModulesInFolderHierarchy,
 } from "../common/extensionHelper";
-import { ReactNativeCDPProxy } from "../cdp-proxy/reactNativeCDPProxy";
-import { MultipleLifetimesAppWorker } from "../debugger/appWorker";
 import { HostPlatform } from "../common/hostPlatform";
-import { ProjectsStorage } from "./projectsStorage";
-import { PlatformResolver } from "./platformResolver";
+import { Packager } from "../common/packager";
+import {
+	ProjectVersionHelper,
+	RNPackageVersions,
+} from "../common/projectVersionHelper";
+import { TargetPlatformHelper } from "../common/targetPlatformHelper";
+import { TelemetryHelper } from "../common/telemetryHelper";
+import { isNullOrUndefined } from "../common/utils";
+import { MultipleLifetimesAppWorker } from "../debugger/appWorker";
+import {
+	BROWSER_TYPES,
+	DEBUG_TYPES,
+} from "./debuggingConfiguration/debugConfigTypesAndConstants";
+import { ExponentHelper } from "./exponent/exponentHelper";
+import { GeneralMobilePlatform } from "./generalMobilePlatform";
 import {
 	GeneralPlatform,
 	MobilePlatformDeps,
 	TargetType,
 } from "./generalPlatform";
-import { OutputChannelLogger } from "./log/OutputChannelLogger";
-import { PackagerStatusIndicator } from "./packagerStatusIndicator";
-import { SettingsHelper } from "./settingsHelper";
-import { ReactDirManager } from "./reactDirManager";
-import { ExponentHelper } from "./exponent/exponentHelper";
-import {
-	BROWSER_TYPES,
-	DEBUG_TYPES,
-} from "./debuggingConfiguration/debugConfigTypesAndConstants";
 import { IBaseArgs, PlatformType } from "./launchArgs";
 import { LaunchScenariosManager } from "./launchScenariosManager";
+import { OutputChannelLogger } from "./log/OutputChannelLogger";
+import { PackagerStatusIndicator } from "./packagerStatusIndicator";
+import { PlatformResolver } from "./platformResolver";
+import { ProjectsStorage } from "./projectsStorage";
+import { ReactDirManager } from "./reactDirManager";
 import { createAdditionalWorkspaceFolder, onFolderAdded } from "./rn-extension";
 import { RNProjectObserver } from "./rnProjectObserver";
-import { GeneralMobilePlatform } from "./generalMobilePlatform";
+import { SettingsHelper } from "./settingsHelper";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -75,13 +75,13 @@ export class AppLauncher {
 		new vscode.EventEmitter();
 
 	public static getAppLauncherByProjectRootPath(
-		projectRootPath: string
+		projectRootPath: string,
 	): AppLauncher {
 		const appLauncher =
 			ProjectsStorage.projectsCache[projectRootPath.toLowerCase()];
 		if (!appLauncher) {
 			throw new Error(
-				`Could not find AppLauncher by the project root path ${projectRootPath}`
+				`Could not find AppLauncher by the project root path ${projectRootPath}`,
 			);
 		}
 
@@ -89,7 +89,7 @@ export class AppLauncher {
 	}
 
 	public static async getOrCreateAppLauncherByProjectRootPath(
-		projectRootPath: string
+		projectRootPath: string,
 	): Promise<AppLauncher> {
 		let appLauncher =
 			ProjectsStorage.projectsCache[projectRootPath.toLowerCase()];
@@ -105,7 +105,7 @@ export class AppLauncher {
 			}
 			if (!appLauncher) {
 				throw new Error(
-					`Could not find AppLauncher by the project root path ${projectRootPath}`
+					`Could not find AppLauncher by the project root path ${projectRootPath}`,
 				);
 			}
 		}
@@ -114,7 +114,7 @@ export class AppLauncher {
 	}
 
 	public static getNodeModulesRootByProjectPath(
-		projectRootPath: string
+		projectRootPath: string,
 	): string {
 		const appLauncher: AppLauncher =
 			AppLauncher.getAppLauncherByProjectRootPath(projectRootPath);
@@ -125,31 +125,31 @@ export class AppLauncher {
 	constructor(
 		private reactDirManager: ReactDirManager,
 		private projectObserver: RNProjectObserver,
-		private workspaceFolder: vscode.WorkspaceFolder
+		private workspaceFolder: vscode.WorkspaceFolder,
 	) {
 		this.debugConfigurationRoot = workspaceFolder.uri.fsPath;
 
 		const projectRootPath = SettingsHelper.getReactNativeProjectRoot(
-			this.debugConfigurationRoot
+			this.debugConfigurationRoot,
 		);
 
 		this.launchScenariosManager = new LaunchScenariosManager(
-			this.debugConfigurationRoot
+			this.debugConfigurationRoot,
 		);
 		this.exponentHelper = new ExponentHelper(
 			this.debugConfigurationRoot,
-			projectRootPath
+			projectRootPath,
 		);
 		this.packager = new Packager(
 			this.debugConfigurationRoot,
 			projectRootPath,
 			SettingsHelper.getPackagerPort(workspaceFolder.uri.fsPath),
-			new PackagerStatusIndicator(this.debugConfigurationRoot)
+			new PackagerStatusIndicator(this.debugConfigurationRoot),
 		);
 		this.packager.setExponentHelper(this.exponentHelper);
 		this.rnCdpProxy = new ReactNativeCDPProxy(
 			this.cdpProxyHostAddress,
-			this.cdpProxyPort
+			this.cdpProxyPort,
 		);
 	}
 
@@ -157,7 +157,7 @@ export class AppLauncher {
 		if (this.debugConfigurationRoot !== debugConfigurationRoot) {
 			this.debugConfigurationRoot = debugConfigurationRoot;
 			this.launchScenariosManager = new LaunchScenariosManager(
-				this.debugConfigurationRoot
+				this.debugConfigurationRoot,
 			);
 		}
 	}
@@ -195,7 +195,7 @@ export class AppLauncher {
 	}
 
 	public setReactNativeVersions(
-		reactNativeVersions: RNPackageVersions
+		reactNativeVersions: RNPackageVersions,
 	): void {
 		this.reactNativeVersions = reactNativeVersions;
 	}
@@ -219,7 +219,7 @@ export class AppLauncher {
 
 			if (!nodeModulesRootPath) {
 				throw ErrorHelper.getInternalError(
-					InternalErrorCode.ReactNativePackageIsNotInstalled
+					InternalErrorCode.ReactNativePackageIsNotInstalled,
 				);
 			}
 
@@ -237,10 +237,10 @@ export class AppLauncher {
 
 	public async openFileAtLocation(
 		filename: string,
-		lineNumber: number
+		lineNumber: number,
 	): Promise<void> {
 		const document = await vscode.workspace.openTextDocument(
-			vscode.Uri.file(filename)
+			vscode.Uri.file(filename),
 		);
 		const editor = await vscode.window.showTextDocument(document);
 		const range = editor.document.lineAt(lineNumber - 1).range;
@@ -256,7 +256,7 @@ export class AppLauncher {
 		const workspaceFolder: vscode.WorkspaceFolder = <
 			vscode.WorkspaceFolder
 		>vscode.workspace.getWorkspaceFolder(
-			vscode.Uri.file(args.cwd || args.program)
+			vscode.Uri.file(args.cwd || args.program),
 		);
 		const baseRunOptions: IBaseArgs = {
 			platform: args.platform,
@@ -267,7 +267,7 @@ export class AppLauncher {
 			nodeModulesRoot: this.getOrUpdateNodeModulesRoot(),
 			isDirect: args.type === DEBUG_TYPES.REACT_NATIVE_DIRECT,
 			packagerPort: SettingsHelper.getPackagerPort(
-				args.cwd || args.program
+				args.cwd || args.program,
 			),
 		};
 		return baseRunOptions;
@@ -307,7 +307,7 @@ export class AppLauncher {
 		this.mobilePlatform = new PlatformResolver().resolveMobilePlatform(
 			launchArgs.platform,
 			mobilePlatformOptions,
-			platformDeps
+			platformDeps,
 		);
 
 		let extProps: any = {
@@ -329,15 +329,15 @@ export class AppLauncher {
 				await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 					mobilePlatformOptions.nodeModulesRoot,
 					ProjectVersionHelper.generateAdditionalPackagesToCheckByPlatform(
-						launchArgs
-					)
+						launchArgs,
+					),
 				);
 			mobilePlatformOptions.reactNativeVersions = versions;
 			extProps =
 				TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 					launchArgs,
 					versions,
-					extProps
+					extProps,
 				);
 
 			await TelemetryHelper.generate(
@@ -351,7 +351,7 @@ export class AppLauncher {
 							generator.step("resolveMobileTarget");
 							await this.resolveAndSaveMobileTarget(
 								launchArgs,
-								this.mobilePlatform
+								this.mobilePlatform,
 							);
 						}
 
@@ -359,7 +359,7 @@ export class AppLauncher {
 
 						generator.step("checkPlatformCompatibility");
 						TargetPlatformHelper.checkTargetPlatformSupport(
-							mobilePlatformOptions.platform
+							mobilePlatformOptions.platform,
 						);
 
 						generator.step("startPackager");
@@ -371,8 +371,8 @@ export class AppLauncher {
 						this.logger.info(
 							localize(
 								"PrewarmingBundleCache",
-								"Prewarming bundle cache. This may take a while ..."
-							)
+								"Prewarming bundle cache. This may take a while ...",
+							),
 						);
 						await this.mobilePlatform.prewarmBundleCache();
 
@@ -382,72 +382,72 @@ export class AppLauncher {
 						this.logger.info(
 							localize(
 								"BuildingAndRunningApplication",
-								"Building and running application."
-							)
+								"Building and running application.",
+							),
 						);
 						await this.mobilePlatform.runApp();
 
 						if (mobilePlatformOptions.isDirect) {
 							if (launchArgs.useHermesEngine) {
 								generator.step(
-									"mobilePlatform.enableHermesDebuggingMode"
+									"mobilePlatform.enableHermesDebuggingMode",
 								);
 								if (mobilePlatformOptions.enableDebug) {
 									this.logger.info(
 										localize(
 											"PrepareHermesDebugging",
-											"Prepare Hermes debugging (experimental)"
-										)
+											"Prepare Hermes debugging (experimental)",
+										),
 									);
 								} else {
 									this.logger.info(
 										localize(
 											"PrepareHermesLaunch",
-											"Prepare Hermes launch (experimental)"
-										)
+											"Prepare Hermes launch (experimental)",
+										),
 									);
 								}
 							} else if (
 								launchArgs.platform === PlatformType.iOS
 							) {
 								generator.step(
-									"mobilePlatform.enableIosDirectDebuggingMode"
+									"mobilePlatform.enableIosDirectDebuggingMode",
 								);
 								if (mobilePlatformOptions.enableDebug) {
 									this.logger.info(
 										localize(
 											"PrepareDirectIosDebugging",
-											"Prepare direct iOS debugging (experimental)"
-										)
+											"Prepare direct iOS debugging (experimental)",
+										),
 									);
 								} else {
 									this.logger.info(
 										localize(
 											"PrepareDirectIosLaunch",
-											"Prepare direct iOS launch (experimental)"
-										)
+											"Prepare direct iOS launch (experimental)",
+										),
 									);
 								}
 							}
 							generator.step(
-								"mobilePlatform.disableJSDebuggingMode"
+								"mobilePlatform.disableJSDebuggingMode",
 							);
 							this.logger.info(
 								localize(
 									"DisableJSDebugging",
-									"Disable JS Debugging"
-								)
+									"Disable JS Debugging",
+								),
 							);
 							await this.mobilePlatform.disableJSDebuggingMode();
 						} else {
 							generator.step(
-								"mobilePlatform.enableJSDebuggingMode"
+								"mobilePlatform.enableJSDebuggingMode",
 							);
 							this.logger.info(
 								localize(
 									"EnableJSDebugging",
-									"Enable JS Debugging"
-								)
+									"Enable JS Debugging",
+								),
 							);
 							await this.mobilePlatform.enableJSDebuggingMode();
 						}
@@ -465,7 +465,7 @@ export class AppLauncher {
 						this.logger.error(error);
 						throw error;
 					}
-				}
+				},
 			);
 		} catch (error) {
 			if (error && error.errorCode) {
@@ -476,8 +476,8 @@ export class AppLauncher {
 					TelemetryHelper.sendErrorEvent(
 						"ReactNativePackageIsNotInstalled",
 						ErrorHelper.getInternalError(
-							InternalErrorCode.ReactNativePackageIsNotInstalled
-						)
+							InternalErrorCode.ReactNativePackageIsNotInstalled,
+						),
 					);
 				} else if (
 					error.errorCode ===
@@ -486,8 +486,8 @@ export class AppLauncher {
 					TelemetryHelper.sendErrorEvent(
 						"ReactNativeWindowsPackageIsNotInstalled",
 						ErrorHelper.getInternalError(
-							InternalErrorCode.ReactNativeWindowsIsNotInstalled
-						)
+							InternalErrorCode.ReactNativeWindowsIsNotInstalled,
+						),
 					);
 				}
 			}
@@ -506,7 +506,7 @@ export class AppLauncher {
 		this.mobilePlatform = new PlatformResolver().resolveMobilePlatform(
 			launchArgs.platform,
 			platformOptions,
-			platformDeps
+			platformDeps,
 		);
 
 		let extProps: any = {
@@ -528,15 +528,15 @@ export class AppLauncher {
 				await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 					platformOptions.nodeModulesRoot,
 					ProjectVersionHelper.generateAdditionalPackagesToCheckByPlatform(
-						launchArgs
-					)
+						launchArgs,
+					),
 				);
 			platformOptions.reactNativeVersions = versions;
 			extProps =
 				TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 					launchArgs,
 					versions,
-					extProps
+					extProps,
 				);
 
 			await TelemetryHelper.generate(
@@ -548,7 +548,7 @@ export class AppLauncher {
 
 						generator.step("checkPlatformCompatibility");
 						TargetPlatformHelper.checkTargetPlatformSupport(
-							platformOptions.platform
+							platformOptions.platform,
 						);
 
 						generator.step("startPackager");
@@ -558,7 +558,7 @@ export class AppLauncher {
 						this.logger.error(error);
 						throw error;
 					}
-				}
+				},
 			);
 		} catch (error) {
 			if (error && error.errorCode) {
@@ -569,8 +569,8 @@ export class AppLauncher {
 					TelemetryHelper.sendErrorEvent(
 						"ReactNativePackageIsNotInstalled",
 						ErrorHelper.getInternalError(
-							InternalErrorCode.ReactNativePackageIsNotInstalled
-						)
+							InternalErrorCode.ReactNativePackageIsNotInstalled,
+						),
 					);
 				} else if (
 					error.errorCode ===
@@ -579,8 +579,8 @@ export class AppLauncher {
 					TelemetryHelper.sendErrorEvent(
 						"ReactNativeWindowsPackageIsNotInstalled",
 						ErrorHelper.getInternalError(
-							InternalErrorCode.ReactNativeWindowsIsNotInstalled
-						)
+							InternalErrorCode.ReactNativeWindowsIsNotInstalled,
+						),
 					);
 				}
 			}
@@ -600,7 +600,7 @@ export class AppLauncher {
 					browserFinder = new BrowserHelper.EdgeBrowserFinder(
 						process.env,
 						fs.promises,
-						execa
+						execa,
 					);
 					break;
 				case BROWSER_TYPES.Chrome:
@@ -608,7 +608,7 @@ export class AppLauncher {
 					browserFinder = new BrowserHelper.ChromeBrowserFinder(
 						process.env,
 						fs.promises,
-						execa
+						execa,
 					);
 			}
 			const browserPath = (await browserFinder.findAll())[0];
@@ -619,14 +619,14 @@ export class AppLauncher {
 					{
 						detached: true,
 						stdio: ["ignore"],
-					}
+					},
 				);
 				this.browserProc.unref();
 				this.browserProc.on("error", (err) => {
 					const errMsg = localize(
 						"BrowserError",
 						"Browser error: {0}",
-						err.message
+						err.message,
 					);
 					this.logger.error(errMsg);
 					this.browserStopEventEmitter.fire(err);
@@ -635,7 +635,7 @@ export class AppLauncher {
 					const exitMessage = localize(
 						"BrowserExit",
 						"Browser has been closed with exit code: {0}",
-						code
+						code,
 					);
 					this.logger.info(exitMessage);
 					this.browserStopEventEmitter.fire(undefined);
@@ -649,12 +649,12 @@ export class AppLauncher {
 		if (launchArgs.browserTarget == BROWSER_TYPES.Chrome) {
 			userDataDir = path.join(
 				HostPlatform.getSettingsHome(),
-				AppLauncher.CHROME_DATA_DIR
+				AppLauncher.CHROME_DATA_DIR,
 			);
 		} else if (launchArgs.browserTarget == BROWSER_TYPES.Edge) {
 			userDataDir = path.join(
 				HostPlatform.getSettingsHome(),
-				AppLauncher.EDGE_DATA_DIR
+				AppLauncher.EDGE_DATA_DIR,
 			);
 		} else {
 			userDataDir = "";
@@ -674,7 +674,7 @@ export class AppLauncher {
 
 	private async resolveAndSaveMobileTarget(
 		launchArgs: any,
-		mobilePlatform: GeneralMobilePlatform
+		mobilePlatform: GeneralMobilePlatform,
 	): Promise<void> {
 		if (
 			launchArgs.target &&
@@ -684,7 +684,7 @@ export class AppLauncher {
 				launchArgs.target.toLowerCase() === TargetType.Simulator ||
 				launchArgs.target.toLowerCase() === TargetType.Device;
 			const resultTarget = await mobilePlatform.resolveMobileTarget(
-				launchArgs.target
+				launchArgs.target,
 			);
 
 			// Save the result to config in case there are more than one possible target with this type (simulator/device)
@@ -693,7 +693,7 @@ export class AppLauncher {
 					await mobilePlatform.getTargetsCountByFilter(
 						(target) =>
 							target.isVirtualTarget ===
-							resultTarget.isVirtualTarget
+							resultTarget.isVirtualTarget,
 					);
 				if (targetsCount > 1) {
 					this.launchScenariosManager.updateLaunchScenario(
@@ -703,7 +703,7 @@ export class AppLauncher {
 								launchArgs.platform === PlatformType.Android
 									? resultTarget.name
 									: resultTarget.id,
-						}
+						},
 					);
 				}
 			}
@@ -714,11 +714,11 @@ export class AppLauncher {
 		const workspaceFolder: vscode.WorkspaceFolder = <
 			vscode.WorkspaceFolder
 		>vscode.workspace.getWorkspaceFolder(
-			vscode.Uri.file(args.cwd || args.program)
+			vscode.Uri.file(args.cwd || args.program),
 		);
 		const mobilePlatformOptions: any = Object.assign(
 			{ target: args.target, enableDebug: args.enableDebug },
-			this.prepareBaseRunOptions(args)
+			this.prepareBaseRunOptions(args),
 		);
 
 		if (args.platform === PlatformType.Exponent) {
@@ -730,22 +730,22 @@ export class AppLauncher {
 		CommandExecutor.ReactNativeCommand =
 			SettingsHelper.getReactNativeGlobalCommandName(workspaceFolder.uri);
 
-		if (!args.runArguments) {
+		if (args.runArguments) {
+			mobilePlatformOptions.runArguments = args.runArguments;
+		} else {
 			const runArgs = SettingsHelper.getRunArgs(
 				args.platform,
 				args.target || "simulator",
-				workspaceFolder.uri
+				workspaceFolder.uri,
 			);
 			mobilePlatformOptions.runArguments = runArgs;
-		} else {
-			mobilePlatformOptions.runArguments = args.runArguments;
 		}
 		return mobilePlatformOptions;
 	}
 
 	private getProjectRoot(args: any): string {
 		return SettingsHelper.getReactNativeProjectRoot(
-			args.cwd || args.program
+			args.cwd || args.program,
 		);
 	}
 

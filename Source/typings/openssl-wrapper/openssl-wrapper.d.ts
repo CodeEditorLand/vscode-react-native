@@ -28,6 +28,6 @@ declare module "openssl-wrapper" {
 	export function exec(
 		action: Action,
 		options: { [key: string]: string },
-		cb: (error: Error | undefined, buffer: Buffer | undefined) => any
+		cb: (error: Error | undefined, buffer: Buffer | undefined) => any,
 	): void;
 }

@@ -3,10 +3,10 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
+import { EntryPointHandler, ProcessType } from "../common/entryPointHandler";
 import { ErrorHelper } from "../common/error/errorHelper";
 import { InternalErrorCode } from "../common/error/internalErrorCode";
 import { FileSystem } from "../common/node/fileSystem";
-import { EntryPointHandler, ProcessType } from "../common/entryPointHandler";
 import { OutputChannelLogger } from "./log/OutputChannelLogger";
 
 /**
@@ -16,7 +16,7 @@ import { OutputChannelLogger } from "./log/OutputChannelLogger";
 export class ReactDirManager implements vscode.Disposable {
 	public vscodeDirPath: string;
 	public reactDirPath: string;
-	public isDisposed: boolean = false;
+	public isDisposed = false;
 
 	constructor(rootPath: string) {
 		this.vscodeDirPath = path.join(rootPath || "", ".vscode");
@@ -38,14 +38,14 @@ export class ReactDirManager implements vscode.Disposable {
 		this.isDisposed = true;
 		void new EntryPointHandler(
 			ProcessType.Extension,
-			OutputChannelLogger.getMainChannel()
+			OutputChannelLogger.getMainChannel(),
 		).runFunction(
 			"extension.deleteTemporaryFolder",
 			ErrorHelper.getInternalError(
 				InternalErrorCode.RNTempFolderDeletionFailed,
-				this.reactDirPath
+				this.reactDirPath,
 			),
-			() => new FileSystem().removePathRecursivelySync(this.reactDirPath)
+			() => new FileSystem().removePathRecursivelySync(this.reactDirPath),
 		);
 	}
 }

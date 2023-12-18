@@ -5,13 +5,13 @@ import * as fs from "fs";
 import * as nls from "vscode-nls";
 import { Packager } from "../common/packager";
 import { IRunOptions } from "./launchArgs";
-import {
-	PackagerStatusIndicator,
-	PackagerStatus,
-} from "./packagerStatusIndicator";
-import { SettingsHelper } from "./settingsHelper";
 import { OutputChannelLogger } from "./log/OutputChannelLogger";
+import {
+	PackagerStatus,
+	PackagerStatusIndicator,
+} from "./packagerStatusIndicator";
 import { RNProjectObserver } from "./rnProjectObserver";
+import { SettingsHelper } from "./settingsHelper";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -42,7 +42,7 @@ export class GeneralPlatform {
 
 	constructor(
 		protected runOptions: IRunOptions,
-		platformDeps: MobilePlatformDeps = {}
+		platformDeps: MobilePlatformDeps = {},
 	) {
 		this.platformName = this.runOptions.platform;
 		this.projectPath = this.runOptions.projectRoot;
@@ -52,7 +52,7 @@ export class GeneralPlatform {
 				this.runOptions.workspaceRoot,
 				this.projectPath,
 				SettingsHelper.getPackagerPort(this.runOptions.workspaceRoot),
-				new PackagerStatusIndicator(this.projectPath)
+				new PackagerStatusIndicator(this.projectPath),
 			);
 		this.projectObserver = platformDeps.projectObserver;
 		this.packager.setRunOptions(runOptions);
@@ -60,9 +60,9 @@ export class GeneralPlatform {
 			localize(
 				"ReactNativeRunPlatform",
 				"React Native: Run {0}",
-				this.platformName
+				this.platformName,
 			),
-			true
+			true,
 		);
 		this.logger.clear();
 		this.runArguments = this.getRunArguments();
@@ -76,8 +76,8 @@ export class GeneralPlatform {
 		this.logger.info(
 			localize(
 				"ConnectedToPackager",
-				"Connected to packager. You can now open your app in the simulator."
-			)
+				"Connected to packager. You can now open your app in the simulator.",
+			),
 		);
 	}
 
@@ -85,8 +85,8 @@ export class GeneralPlatform {
 		this.logger.info(
 			localize(
 				"DebuggerReadyEnableRemoteDebuggingInApp",
-				"Debugger ready. Enable remote debugging in app."
-			)
+				"Debugger ready. Enable remote debugging in app.",
+			),
 		);
 	}
 
@@ -94,8 +94,8 @@ export class GeneralPlatform {
 		this.logger.info(
 			localize(
 				"DebuggerReadyDisableRemoteDebuggingInApp",
-				"Debugger ready. Disable remote debugging in app."
-			)
+				"Debugger ready. Disable remote debugging in app.",
+			),
 		);
 	}
 
@@ -107,8 +107,8 @@ export class GeneralPlatform {
 		this.logger.info(
 			localize(
 				"StartingReactNativePackager",
-				"Starting React Native Packager."
-			)
+				"Starting React Native Packager.",
+			),
 		);
 		if (await this.packager.isRunning()) {
 			if (
@@ -120,8 +120,8 @@ export class GeneralPlatform {
 			this.logger.info(
 				localize(
 					"AttachingToRunningReactNativePackager",
-					"Attaching to running React Native packager"
-				)
+					"Attaching to running React Native packager",
+				),
 			);
 		}
 		await this.packager.start();
@@ -135,7 +135,7 @@ export class GeneralPlatform {
 	public static removeRunArgument(
 		runArguments: any[],
 		optName: string,
-		binary: boolean
+		binary: boolean,
 	): void {
 		const optIdx = runArguments.indexOf(optName);
 		if (optIdx > -1) {
@@ -150,7 +150,7 @@ export class GeneralPlatform {
 	public static setRunArgument(
 		runArguments: any[],
 		optName: string,
-		value: string | boolean
+		value: string | boolean,
 	): void {
 		const isBinary = typeof value === "boolean";
 		const optIdx = runArguments.indexOf(optName);
@@ -175,7 +175,7 @@ export class GeneralPlatform {
 	public static getOptFromRunArgs(
 		runArguments: any[],
 		optName: string,
-		binary: boolean = false
+		binary = false,
 	): any {
 		if (runArguments.length > 0) {
 			const optIdx = runArguments.indexOf(optName);
@@ -224,7 +224,7 @@ export class GeneralPlatform {
 	public static getEnvArgument(
 		processEnv: any,
 		env?: any,
-		envFile?: string
+		envFile?: string,
 	): any {
 		const modifyEnv = Object.assign({}, processEnv);
 

@@ -15,7 +15,7 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 abstract class RunAndroid extends ReactNativeCommand {
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToRunOnAndroid
+		InternalErrorCode.FailedToRunOnAndroid,
 	);
 
 	async onBeforeExecute(): Promise<void> {
@@ -24,7 +24,7 @@ abstract class RunAndroid extends ReactNativeCommand {
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
-				nodeModulesRoot
+				nodeModulesRoot,
 			);
 		this.project.setReactNativeVersions(versions);
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.Android);
@@ -56,7 +56,7 @@ async function runAndroid(target: TargetType, project: AppLauncher) {
 		getRunOptions(project, PlatformType.Android, target),
 		{
 			packager: project.getPackager(),
-		}
+		},
 	);
 
 	await platform.resolveMobileTarget(target);

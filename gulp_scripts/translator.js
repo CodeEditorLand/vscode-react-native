@@ -57,11 +57,11 @@ const translationsExport = gulp.series(
 				gulp.dest(
 					path.join(
 						"..",
-						`${translationProjectName}-localization-export`
-					)
-				)
+						`${translationProjectName}-localization-export`,
+					),
+				),
 			);
-	}
+	},
 );
 
 const translationImport = gulp.series((done) => {
@@ -73,14 +73,14 @@ const translationImport = gulp.series((done) => {
 	});
 	es.merge(
 		defaultLanguages.map((language) => {
-			let id = language.transifexId || language.id;
+			const id = language.transifexId || language.id;
 			log(
 				path.join(
 					options.location,
 					id,
 					"vscode-extensions",
-					`${fullExtensionName}.xlf`
-				)
+					`${fullExtensionName}.xlf`,
+				),
 			);
 			return gulp
 				.src(
@@ -88,16 +88,16 @@ const translationImport = gulp.series((done) => {
 						options.location,
 						id,
 						"vscode-extensions",
-						`${fullExtensionName}.xlf`
-					)
+						`${fullExtensionName}.xlf`,
+					),
 				)
 				.pipe(nls.prepareJsonFiles())
 				.pipe(gulp.dest(path.join("./i18n", language.folderName)));
-		})
+		}),
 	).pipe(
 		es.wait(() => {
 			done();
-		})
+		}),
 	);
 }, addi18n);
 

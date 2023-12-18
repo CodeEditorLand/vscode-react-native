@@ -5,8 +5,8 @@ import { ITarget } from "../../mobileTarget";
 import { ClientOS } from "../clientUtils";
 
 export enum DeviceStatus {
-	Prepared,
-	NotPrepared,
+	Prepared = 0,
+	NotPrepared = 1,
 }
 
 export class BaseClientDevice implements ITarget {
@@ -24,7 +24,7 @@ export class BaseClientDevice implements ITarget {
 		id: string,
 		isVirtualTarget: boolean,
 		os: ClientOS,
-		name?: string
+		name?: string,
 	) {
 		this._id = id;
 		this._name = name;

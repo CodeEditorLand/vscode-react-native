@@ -2,23 +2,23 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import { URL, URLSearchParams } from "url";
-import * as vscode from "vscode";
 import { Base64 } from "js-base64";
-import { RequestParams } from "../clientDevice";
-import {
-	Request,
-	Response,
-	Header,
-	ResponseFollowupChunk,
-	PartialResponse,
-} from "../networkMessageData";
+import * as vscode from "vscode";
 import {
 	EditorColorThemesHelper,
 	SystemColorTheme,
 } from "../../../common/editorColorThemesHelper";
 import { SettingsHelper } from "../../settingsHelper";
-import { combineBase64Chunks } from "../requestBodyFormatters/utils";
+import { RequestParams } from "../clientDevice";
+import {
+	Header,
+	PartialResponse,
+	Request,
+	Response,
+	ResponseFollowupChunk,
+} from "../networkMessageData";
 import { FormattedBody } from "../requestBodyFormatters/requestBodyFormatter";
+import { combineBase64Chunks } from "../requestBodyFormatters/utils";
 import { InspectorView } from "./inspectorView";
 
 interface ConsoleNetworkRequestDataView {
@@ -51,15 +51,15 @@ export class InspectorConsoleView extends InspectorView {
 		if (!this.isInitialized) {
 			this.isInitialized = true;
 			await vscode.commands.executeCommand(
-				this.openDeveloperToolsCommand
+				this.openDeveloperToolsCommand,
 			);
 			if (EditorColorThemesHelper.isAutoDetectColorSchemeEnabled()) {
 				this.setupConsoleLogsColor(
-					EditorColorThemesHelper.getCurrentSystemColorTheme()
+					EditorColorThemesHelper.getCurrentSystemColorTheme(),
 				);
 			} else {
 				this.setupConsoleLogsColor(
-					SettingsHelper.getNetworkInspectorConsoleLogsColorTheme()
+					SettingsHelper.getNetworkInspectorConsoleLogsColorTheme(),
 				);
 			}
 		}
@@ -76,7 +76,7 @@ export class InspectorConsoleView extends InspectorView {
 					break;
 				case "partialResponse":
 					this.handlePartialResponse(
-						data.params as Response | ResponseFollowupChunk
+						data.params as Response | ResponseFollowupChunk,
 					);
 					break;
 			}
@@ -101,14 +101,14 @@ export class InspectorConsoleView extends InspectorView {
 			this.printNetworkRequestData(
 				this.createNetworkRequestData(
 					this.requests.get(data.id) as Request,
-					data
-				)
+					data,
+				),
 			);
 		}
 	}
 
 	private handlePartialResponse(
-		data: Response | ResponseFollowupChunk
+		data: Response | ResponseFollowupChunk,
 	): void {
 		/* Some clients (such as low end Android devices) struggle to serialise large payloads in one go, so partial responses allow them
         to split payloads into chunks and serialise each individually.
@@ -131,7 +131,7 @@ export class InspectorConsoleView extends InspectorView {
 			const followupChunk: ResponseFollowupChunk =
 				data as ResponseFollowupChunk;
 			const partialResponseEntry = this.partialResponses.get(
-				followupChunk.id
+				followupChunk.id,
 			) ?? {
 				followupChunks: {},
 			};
@@ -144,7 +144,7 @@ export class InspectorConsoleView extends InspectorView {
 			// It's an initial chunk
 			const partialResponse: Response = data as Response;
 			const partialResponseEntry = this.partialResponses.get(
-				partialResponse.id
+				partialResponse.id,
 			) ?? {
 				followupChunks: {},
 			};
@@ -155,7 +155,7 @@ export class InspectorConsoleView extends InspectorView {
 			responseId = partialResponse.id;
 		}
 		const response = this.assembleChunksIfResponseIsComplete(
-			newPartialResponseEntry
+			newPartialResponseEntry,
 		);
 		if (response) {
 			this.handleResponse(response);
@@ -177,7 +177,7 @@ export class InspectorConsoleView extends InspectorView {
 	 * @format
 	 */
 	private assembleChunksIfResponseIsComplete(
-		partialResponseEntry: PartialResponse
+		partialResponseEntry: PartialResponse,
 	): Response | null {
 		const numChunks = partialResponseEntry.initialResponse?.totalChunks;
 		if (
@@ -200,10 +200,10 @@ export class InspectorConsoleView extends InspectorView {
 							// It's important to parseInt here or it sorts lexicographically
 							.sort(
 								(a, b) =>
-									parseInt(a[0], 10) - parseInt(b[0], 10)
+									parseInt(a[0], 10) - parseInt(b[0], 10),
 							)
 							.map(([_k, v]: [string, string]) => v),
-					]
+				  ]
 				: [];
 		const data = combineBase64Chunks(allChunks);
 
@@ -223,7 +223,7 @@ export class InspectorConsoleView extends InspectorView {
 
 	private createNetworkRequestData(
 		request: Request,
-		response: Response
+		response: Response,
 	): ConsoleNetworkRequestDataView {
 		const url = new URL(request.url);
 		const networkRequestConsoleView = {
@@ -236,13 +236,13 @@ export class InspectorConsoleView extends InspectorView {
 				Status: response.status,
 				Duration: this.getRequestDurationString(
 					request.timestamp,
-					response.timestamp
+					response.timestamp,
 				),
 				"Request Headers": this.prepareHeadersViewObject(
-					request.headers
+					request.headers,
 				),
 				"Response Headers": this.prepareHeadersViewObject(
-					response.headers
+					response.headers,
 				),
 				"Request Body": this.requestBodyDecoder.formatBody(request),
 				"Response Body": this.requestBodyDecoder.formatBody(response),
@@ -259,7 +259,7 @@ export class InspectorConsoleView extends InspectorView {
 	}
 
 	private retrieveURLSearchParams(
-		searchParams: URLSearchParams
+		searchParams: URLSearchParams,
 	): Record<string, string> {
 		const formattedSearchParams: Record<string, string> = {};
 		searchParams.forEach((value: string, key: string) => {
@@ -270,13 +270,13 @@ export class InspectorConsoleView extends InspectorView {
 
 	private getRequestDurationString(
 		requestTimestamp: number,
-		responseTimestamp: number
+		responseTimestamp: number,
 	): string {
 		return `${String(Math.abs(responseTimestamp - requestTimestamp))}ms`;
 	}
 
 	private prepareHeadersViewObject(
-		headers: Header[]
+		headers: Header[],
 	): Record<string, string> {
 		return headers.reduce((headersViewObject, header) => {
 			headersViewObject[header.key] = header.value;
@@ -285,7 +285,7 @@ export class InspectorConsoleView extends InspectorView {
 	}
 
 	private printNetworkRequestData(
-		networkRequestData: ConsoleNetworkRequestDataView
+		networkRequestData: ConsoleNetworkRequestDataView,
 	): void {
 		const responseBody =
 			networkRequestData.networkRequestData["Response Body"];
@@ -294,17 +294,18 @@ export class InspectorConsoleView extends InspectorView {
 			typeof responseBody === "string" &&
 			responseBody.length > this.maxResponseBodyLength
 		) {
-			networkRequestData.networkRequestData["Response Body"] =
-				`${responseBody.substring(
-					0,
-					this.maxResponseBodyLength
-				)}... (Response body exceeds output limit, the rest its part is omitted)`;
+			networkRequestData.networkRequestData[
+				"Response Body"
+			] = `${responseBody.substring(
+				0,
+				this.maxResponseBodyLength,
+			)}... (Response body exceeds output limit, the rest its part is omitted)`;
 		}
 
 		console.log(
 			networkRequestData.title,
 			`color: ${this.consoleLogsColor}`,
-			networkRequestData.networkRequestData
+			networkRequestData.networkRequestData,
 		);
 
 		this.logger.debug(
@@ -313,8 +314,8 @@ export class InspectorConsoleView extends InspectorView {
 			}\n${JSON.stringify(
 				networkRequestData.networkRequestData,
 				null,
-				2
-			)}`
+				2,
+			)}`,
 		);
 	}
 }

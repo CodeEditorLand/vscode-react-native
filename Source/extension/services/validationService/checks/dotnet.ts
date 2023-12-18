@@ -41,7 +41,7 @@ const main: IValidation = {
 	platform: ["win32"],
 	description: toLocale(
 		"DotNetTestDescription",
-		"Required for building RNW apps"
+		"Required for building RNW apps",
 	),
 	category: ValidationCategoryE.Windows,
 	exec: test,

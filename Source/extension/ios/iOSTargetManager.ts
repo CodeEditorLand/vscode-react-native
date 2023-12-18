@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
-import * as nls from "vscode-nls";
 import { QuickPickOptions, window } from "vscode";
+import * as nls from "vscode-nls";
 import { ChildProcess } from "../../common/node/childProcess";
 import { PromiseUtil } from "../../common/node/promise";
+import { TargetType } from "../generalPlatform";
+import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { IDebuggableMobileTarget, MobileTarget } from "../mobileTarget";
 import { MobileTargetManager } from "../mobileTargetManager";
-import { OutputChannelLogger } from "../log/OutputChannelLogger";
-import { TargetType } from "../generalPlatform";
 
 nls.config({
 	messageFormat: nls.MessageFormat.bundle,
@@ -31,7 +31,7 @@ export class IOSTarget extends MobileTarget implements IDebuggableIOSTarget {
 			obj.isVirtualTarget,
 			obj.id,
 			obj.name,
-			obj.system
+			obj.system,
 		);
 	}
 
@@ -40,7 +40,7 @@ export class IOSTarget extends MobileTarget implements IDebuggableIOSTarget {
 		isVirtualTarget: boolean,
 		id: string,
 		name: string,
-		system: string
+		system: string,
 	) {
 		super(isOnline, isVirtualTarget, id, name);
 		this._system = system;
@@ -72,7 +72,7 @@ export class IOSTargetManager extends MobileTargetManager {
 	private childProcess: ChildProcess = new ChildProcess();
 	private logger: OutputChannelLogger = OutputChannelLogger.getChannel(
 		OutputChannelLogger.MAIN_CHANNEL_NAME,
-		true
+		true,
 	);
 	protected targets?: IDebuggableIOSTarget[];
 
@@ -81,8 +81,8 @@ export class IOSTargetManager extends MobileTargetManager {
 		if (targetType === undefined || targetType === TargetType.Simulator) {
 			const simulators = JSON.parse(
 				await this.childProcess.execToString(
-					`${IOSTargetManager.SIMULATORS_LIST_COMMAND}`
-				)
+					`${IOSTargetManager.SIMULATORS_LIST_COMMAND}`,
+				),
 			);
 			Object.keys(simulators.devices).forEach((rawSystem) => {
 				const temp = rawSystem.split(".").slice(-1)[0].split("-"); // "com.apple.CoreSimulator.SimRuntime.iOS-11-4" -> ["iOS", "11", "4"]
@@ -105,7 +105,7 @@ export class IOSTargetManager extends MobileTargetManager {
 
 		if (targetType === undefined || targetType === TargetType.Device) {
 			const allDevicesOutput = await this.childProcess.execToString(
-				`${IOSTargetManager.ALL_DEVICES_LIST_COMMAND}`
+				`${IOSTargetManager.ALL_DEVICES_LIST_COMMAND}`,
 			);
 			// Output example:
 			// == Devices ==
@@ -150,7 +150,7 @@ export class IOSTargetManager extends MobileTargetManager {
 	}
 
 	public async selectAndPrepareTarget(
-		filter?: (el: IDebuggableIOSTarget) => boolean
+		filter?: (el: IDebuggableIOSTarget) => boolean,
 	): Promise<IOSTarget | undefined> {
 		const selectedTarget = await this.startSelection(filter);
 		if (selectedTarget) {
@@ -172,7 +172,7 @@ export class IOSTargetManager extends MobileTargetManager {
 				await this.getTargetList(
 					(target) =>
 						target.id === targetString ||
-						target.name === targetString
+						target.name === targetString,
 				)
 			)[0];
 			if (target) {
@@ -184,14 +184,14 @@ export class IOSTargetManager extends MobileTargetManager {
 				localize(
 					"CouldNotRecognizeTargetType",
 					"Could not recognize type of the target {0}",
-					targetString
-				)
+					targetString,
+				),
 			);
 		}
 	}
 
 	protected async startSelection(
-		filter?: (el: IDebuggableIOSTarget) => boolean
+		filter?: (el: IDebuggableIOSTarget) => boolean,
 	): Promise<IDebuggableIOSTarget | undefined> {
 		const system = await this.selectSystem(filter);
 		if (system) {
@@ -200,24 +200,24 @@ export class IOSTargetManager extends MobileTargetManager {
 					(filter ? filter(el) : true) &&
 					(system === IOSTargetManager.ANY_SYSTEM
 						? true
-						: el.system === system)
+						: el.system === system),
 			)) as IDebuggableIOSTarget | undefined;
 		}
 		return;
 	}
 
 	protected async selectSystem(
-		filter?: (el: IDebuggableIOSTarget) => boolean
+		filter?: (el: IDebuggableIOSTarget) => boolean,
 	): Promise<string | undefined> {
 		const targets = (await this.getTargetList(
-			filter
+			filter,
 		)) as IDebuggableIOSTarget[];
 		// If we select only from devices, we should not select system
 		if (!targets.find((target) => target.isVirtualTarget)) {
 			return IOSTargetManager.ANY_SYSTEM;
 		}
 		const names: Set<string> = new Set(
-			targets.map((target) => target.system)
+			targets.map((target) => target.system),
 		);
 		const systemsList = Array.from(names);
 		let result: string | undefined = systemsList[0];
@@ -227,7 +227,7 @@ export class IOSTargetManager extends MobileTargetManager {
 				canPickMany: false,
 				placeHolder: localize(
 					"SelectIOSSystemVersion",
-					"Select system version of iOS target"
+					"Select system version of iOS target",
 				),
 			};
 			result = await window.showQuickPick(systemsList, quickPickOptions);
@@ -236,7 +236,7 @@ export class IOSTargetManager extends MobileTargetManager {
 	}
 
 	protected async launchSimulator(
-		virtualTarget: IDebuggableIOSTarget
+		virtualTarget: IDebuggableIOSTarget,
 	): Promise<IOSTarget | undefined> {
 		return new Promise<IOSTarget | undefined>((resolve, reject) => {
 			let emulatorLaunchFailed = false;
@@ -250,7 +250,7 @@ export class IOSTargetManager extends MobileTargetManager {
 				{
 					detached: true,
 				},
-				true
+				true,
 			);
 			emulatorProcess.spawnedProcess.unref();
 			emulatorProcess.outcome.catch((e) => {
@@ -260,8 +260,8 @@ export class IOSTargetManager extends MobileTargetManager {
 						"ErrorWhileLaunchingSimulator",
 						"Error while launching simulator {0} : {1}",
 						`${virtualTarget.name}(${virtualTarget.id})`,
-						e
-					)
+						e,
+					),
 				);
 				reject(e);
 			});
@@ -272,7 +272,7 @@ export class IOSTargetManager extends MobileTargetManager {
 				await this.collectTargets(TargetType.Simulator);
 				const onlineTarget = (await this.getTargetList()).find(
 					(target) =>
-						target.id === virtualTarget.id && target.isOnline
+						target.id === virtualTarget.id && target.isOnline,
 				);
 				return onlineTarget ? true : null;
 			};
@@ -280,7 +280,7 @@ export class IOSTargetManager extends MobileTargetManager {
 			void PromiseUtil.waitUntil<boolean>(
 				condition,
 				1000,
-				IOSTargetManager.SIMULATOR_START_TIMEOUT * 1000
+				IOSTargetManager.SIMULATOR_START_TIMEOUT * 1000,
 			).then(
 				(isBooted) => {
 					if (isBooted) {
@@ -289,8 +289,8 @@ export class IOSTargetManager extends MobileTargetManager {
 							localize(
 								"SimulatorLaunched",
 								"Launched simulator {0}",
-								virtualTarget.name
-							)
+								virtualTarget.name,
+							),
 						);
 						resolve(IOSTarget.fromInterface(virtualTarget));
 					} else {
@@ -300,13 +300,13 @@ export class IOSTargetManager extends MobileTargetManager {
 									"SimulatorStartWarning",
 									"Could not start the simulator {0} within {1} seconds.",
 									virtualTarget.name,
-									IOSTargetManager.SIMULATOR_START_TIMEOUT
-								)}`
-							)
+									IOSTargetManager.SIMULATOR_START_TIMEOUT,
+								)}`,
+							),
 						);
 					}
 				},
-				() => {}
+				() => {},
 			);
 		});
 	}

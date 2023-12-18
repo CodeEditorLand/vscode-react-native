@@ -3,22 +3,22 @@
 
 import * as semver from "semver";
 import * as nls from "vscode-nls";
+import { CommandExecutor } from "../../common/commandExecutor";
+import { ErrorHelper } from "../../common/error/errorHelper";
+import { InternalErrorCode } from "../../common/error/internalErrorCode";
+import { Package } from "../../common/node/package";
+import { PromiseUtil } from "../../common/node/promise";
+import { OutputVerifier, PatternToFailure } from "../../common/outputVerifier";
+import { ProjectVersionHelper } from "../../common/projectVersionHelper";
+import { TelemetryHelper } from "../../common/telemetryHelper";
+import { notNullOrUndefined } from "../../common/utils";
+import { GeneralMobilePlatform } from "../generalMobilePlatform";
 import { MobilePlatformDeps, TargetType } from "../generalPlatform";
 import { IAndroidRunOptions, PlatformType } from "../launchArgs";
-import { Package } from "../../common/node/package";
-import { OutputVerifier, PatternToFailure } from "../../common/outputVerifier";
-import { TelemetryHelper } from "../../common/telemetryHelper";
-import { CommandExecutor } from "../../common/commandExecutor";
-import { InternalErrorCode } from "../../common/error/internalErrorCode";
-import { ErrorHelper } from "../../common/error/errorHelper";
-import { notNullOrUndefined } from "../../common/utils";
-import { PromiseUtil } from "../../common/node/promise";
-import { GeneralMobilePlatform } from "../generalMobilePlatform";
-import { ProjectVersionHelper } from "../../common/projectVersionHelper";
-import { LogCatMonitorManager } from "./logCatMonitorManager";
-import { AndroidTarget, AndroidTargetManager } from "./androidTargetManager";
 import { AdbHelper, AndroidAPILevel } from "./adb";
+import { AndroidTarget, AndroidTargetManager } from "./androidTargetManager";
 import { LogCatMonitor } from "./logCatMonitor";
+import { LogCatMonitorManager } from "./logCatMonitorManager";
 import { PackageNameResolver } from "./packageNameResolver";
 
 nls.config({
@@ -66,7 +66,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	private packageName: string;
 	private adbHelper: AdbHelper;
 	private logCatMonitor: LogCatMonitor | null = null;
-	private needsToLaunchApps: boolean = false;
+	private needsToLaunchApps = false;
 
 	protected targetManager: AndroidTargetManager;
 	protected target?: AndroidTarget;
@@ -74,13 +74,13 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	// We set remoteExtension = null so that if there is an instance of androidPlatform that wants to have it's custom remoteExtension it can. This is specifically useful for tests.
 	constructor(
 		protected runOptions: IAndroidRunOptions,
-		platformDeps: MobilePlatformDeps = {}
+		platformDeps: MobilePlatformDeps = {},
 	) {
 		super(runOptions, platformDeps);
 		this.adbHelper = new AdbHelper(
 			this.runOptions.projectRoot,
 			runOptions.nodeModulesRoot,
-			this.logger
+			this.logger,
 		);
 		this.targetManager = new AndroidTargetManager(this.adbHelper);
 	}
@@ -113,24 +113,24 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 							default:
 								return target.id === this.runOptions.target;
 						}
-					}
+					},
 				);
 				if (onlineTargetsBySpecifiedType.length) {
 					this.target = AndroidTarget.fromInterface(
-						onlineTargetsBySpecifiedType[0]
+						onlineTargetsBySpecifiedType[0],
 					);
 				} else if (onlineTargets.length) {
 					this.logger.warning(
 						localize(
 							"ThereIsNoOnlineTargetWithSpecifiedTargetType",
 							"There is no any online target with specified target type '{0}'. Continue with any online target.",
-							this.runOptions.target
-						)
+							this.runOptions.target,
+						),
 					);
 					this.target = AndroidTarget.fromInterface(onlineTargets[0]);
 				} else {
 					throw ErrorHelper.getInternalError(
-						InternalErrorCode.AndroidThereIsNoAnyOnlineDebuggableTarget
+						InternalErrorCode.AndroidThereIsNoAnyOnlineDebuggableTarget,
 					);
 				}
 			}
@@ -138,9 +138,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		return this.target;
 	}
 
-	public async runApp(
-		shouldLaunchInAllDevices: boolean = false
-	): Promise<void> {
+	public async runApp(shouldLaunchInAllDevices = false): Promise<void> {
 		let extProps: any = {
 			platform: {
 				value: PlatformType.Android,
@@ -159,7 +157,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		extProps = TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 			this.runOptions,
 			this.runOptions.reactNativeVersions,
-			extProps
+			extProps,
 		);
 
 		await TelemetryHelper.generate(
@@ -169,19 +167,19 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				const env = GeneralMobilePlatform.getEnvArgument(
 					process.env,
 					this.runOptions.env,
-					this.runOptions.envFile
+					this.runOptions.envFile,
 				);
 
 				if (
 					!semver.valid(
-						this.runOptions.reactNativeVersions.reactNativeVersion
+						this.runOptions.reactNativeVersions.reactNativeVersion,
 					) /* Custom RN implementations should support this flag*/ ||
 					semver.gte(
 						this.runOptions.reactNativeVersions.reactNativeVersion,
-						AndroidPlatform.NO_PACKAGER_VERSION
+						AndroidPlatform.NO_PACKAGER_VERSION,
 					) ||
 					ProjectVersionHelper.isCanaryVersion(
-						this.runOptions.reactNativeVersions.reactNativeVersion
+						this.runOptions.reactNativeVersions.reactNativeVersion,
 					)
 				) {
 					this.runArguments.push("--no-packager");
@@ -189,7 +187,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 
 				const mainActivity = GeneralMobilePlatform.getOptFromRunArgs(
 					this.runArguments,
-					"--main-activity"
+					"--main-activity",
 				);
 
 				if (mainActivity) {
@@ -199,28 +197,28 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				) {
 					this.runArguments.push(
 						"--main-activity",
-						this.runOptions.debugLaunchActivity
+						this.runOptions.debugLaunchActivity,
 					);
 					this.adbHelper.setLaunchActivity(
-						this.runOptions.debugLaunchActivity
+						this.runOptions.debugLaunchActivity,
 					);
 				}
 
 				const runAndroidSpawn = new CommandExecutor(
 					this.runOptions.nodeModulesRoot,
 					this.projectPath,
-					this.logger
+					this.logger,
 				).spawnReactCommand("run-android", this.runArguments, { env });
 				const output = new OutputVerifier(
 					() =>
 						Promise.resolve(
-							AndroidPlatform.RUN_ANDROID_SUCCESS_PATTERNS
+							AndroidPlatform.RUN_ANDROID_SUCCESS_PATTERNS,
 						),
 					() =>
 						Promise.resolve(
-							AndroidPlatform.RUN_ANDROID_FAILURE_PATTERNS
+							AndroidPlatform.RUN_ANDROID_FAILURE_PATTERNS,
 						),
-					PlatformType.Android
+					PlatformType.Android,
 				).process(runAndroidSpawn);
 
 				let devicesIdsForLaunch: string[] = [];
@@ -245,7 +243,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 					if (
 						error.message ===
 							ErrorHelper.getInternalError(
-								InternalErrorCode.AndroidMoreThanOneDeviceOrEmulator
+								InternalErrorCode.AndroidMoreThanOneDeviceOrEmulator,
 							).message &&
 						onlineTargetsIds.length >= 1 &&
 						targetId
@@ -261,9 +259,9 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				}
 
 				await PromiseUtil.forEach(devicesIdsForLaunch, (deviceId) =>
-					this.launchAppWithADBReverseAndLogCat(deviceId)
+					this.launchAppWithADBReverseAndLogCat(deviceId),
 				);
-			}
+			},
 		);
 	}
 
@@ -273,7 +271,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 			this.packageName,
 			true,
 			(await this.getTarget()).id,
-			this.getAppIdSuffixFromRunArgumentsIfExists()
+			this.getAppIdSuffixFromRunArgumentsIfExists(),
 		);
 	}
 
@@ -283,7 +281,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 			this.packageName,
 			false,
 			(await this.getTarget()).id,
-			this.getAppIdSuffixFromRunArgumentsIfExists()
+			this.getAppIdSuffixFromRunArgumentsIfExists(),
 		);
 	}
 
@@ -330,13 +328,13 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		) {
 			const deviceId = GeneralMobilePlatform.getOptFromRunArgs(
 				this.runOptions.runArguments,
-				"--deviceId"
+				"--deviceId",
 			);
 			if (deviceId) {
 				return new AndroidTarget(
 					true,
 					this.adbHelper.isVirtualTarget(deviceId),
-					deviceId
+					deviceId,
 				);
 			}
 		}
@@ -344,7 +342,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	}
 
 	private async getTargetIdForRunApp(
-		onlineTargetsIds: string[]
+		onlineTargetsIds: string[],
 	): Promise<string> {
 		let deviceId: string | undefined;
 		if (
@@ -353,7 +351,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		) {
 			deviceId = GeneralMobilePlatform.getOptFromRunArgs(
 				this.runOptions.runArguments,
-				"--deviceId"
+				"--deviceId",
 			);
 		}
 		return deviceId
@@ -362,8 +360,8 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				  this.runOptions.target !== TargetType.Simulator &&
 				  this.runOptions.target !== TargetType.Device &&
 				  onlineTargetsIds.find((id) => id === this.runOptions.target)
-				? this.runOptions.target
-				: (await this.getTarget()).id;
+			  ? this.runOptions.target
+			  : (await this.getTarget()).id;
 	}
 
 	private getAppIdSuffixFromRunArgumentsIfExists(): string | undefined {
@@ -375,24 +373,24 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	}
 
 	private async launchAppWithADBReverseAndLogCat(
-		deviceId: string
+		deviceId: string,
 	): Promise<void> {
 		await this.configureADBReverseWhenApplicable(deviceId);
 		if (this.needsToLaunchApps) {
 			await this.adbHelper.launchApp(
 				this.runOptions.projectRoot,
 				this.packageName,
-				deviceId
+				deviceId,
 			);
 		}
 		return this.startMonitoringLogCat(
 			deviceId,
-			this.runOptions.logCatArguments
+			this.runOptions.logCatArguments,
 		);
 	}
 
 	private async configureADBReverseWhenApplicable(
-		deviceId: string
+		deviceId: string,
 	): Promise<void> {
 		// For other emulators and devices we try to enable adb reverse
 		const apiVersion = await this.adbHelper.apiVersion(deviceId);
@@ -401,14 +399,14 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 			try {
 				void this.adbHelper.reverseAdb(
 					deviceId,
-					Number(this.runOptions.packagerPort)
+					Number(this.runOptions.packagerPort),
 				);
 			} catch (error) {
 				// "adb reverse" command could work incorrectly with remote devices, then skip the error and try to go on
 				if (
 					this.adbHelper.isRemoteTarget(deviceId) &&
 					error.message.includes(
-						AndroidPlatform.RUN_ANDROID_FAILURE_PATTERNS[3].pattern
+						AndroidPlatform.RUN_ANDROID_FAILURE_PATTERNS[3].pattern,
 					)
 				) {
 					this.logger.warning(error.message);
@@ -423,8 +421,8 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 					"Device {0} supports only API Level {1}. \n Level {2} is needed to support port forwarding via adb reverse. \n For debugging to work you'll need <Shake or press menu button> for the dev menu, \n go into <Dev Settings> and configure <Debug Server host & port for Device> to be \n an IP address of your computer that the Device can reach. More info at: \n https://facebook.github.io/react-native/docs/debugging.html#debugging-react-native-apps",
 					deviceId,
 					apiVersion,
-					AndroidAPILevel.LOLLIPOP
-				)
+					AndroidAPILevel.LOLLIPOP,
+				),
 			);
 		}
 	}
@@ -432,13 +430,13 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	private async getPackageName(): Promise<string> {
 		const appName = await new Package(this.runOptions.projectRoot).name();
 		return new PackageNameResolver(appName).resolvePackageName(
-			this.runOptions.projectRoot
+			this.runOptions.projectRoot,
 		);
 	}
 
 	private startMonitoringLogCat(
 		deviceId: string,
-		logCatArguments: string[]
+		logCatArguments: string[],
 	): void {
 		LogCatMonitorManager.delMonitor(deviceId); // Stop previous logcat monitor if it's running
 
@@ -446,7 +444,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		this.logCatMonitor = new LogCatMonitor(
 			deviceId,
 			this.adbHelper,
-			logCatArguments
+			logCatArguments,
 		);
 		LogCatMonitorManager.addMonitor(this.logCatMonitor);
 		this.logCatMonitor
@@ -456,8 +454,8 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				this.logger.warning(
 					localize(
 						"ErrorWhileMonitoringLogCat",
-						"Error while monitoring LogCat"
-					)
+						"Error while monitoring LogCat",
+					),
 				);
 			}); // The LogCatMonitor failing won't stop the debugging experience
 	}
