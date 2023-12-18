@@ -19,11 +19,11 @@ export type FormattedBody =
 export interface IFormatter {
 	formatRequest?: (
 		request: Request,
-		contentType: string,
+		contentType: string
 	) => FormattedBody | null;
 	formatResponse?: (
 		response: Response,
-		contentType: string,
+		contentType: string
 	) => FormattedBody | null;
 }
 
@@ -52,13 +52,13 @@ export class RequestBodyFormatter {
 					if (formatter.formatResponse) {
 						formattedRes = formatter.formatResponse(
 							<Response>container,
-							contentType,
+							contentType
 						);
 					}
 				} else if (formatter.formatRequest) {
 					formattedRes = formatter.formatRequest(
 						<Request>container,
-						contentType,
+						contentType
 					);
 				}
 
@@ -69,7 +69,7 @@ export class RequestBodyFormatter {
 				this.logger.debug(
 					`RequestBodyFormatter exception from ${
 						formatter.constructor.name
-					} ${String(err.message)}`,
+					} ${String(err.message)}`
 				);
 			}
 		}
@@ -91,7 +91,7 @@ export class RequestBodyFormatter {
  */
 export function decodeBody(
 	container: Request | Response,
-	logger?: OutputChannelLogger,
+	logger?: OutputChannelLogger
 ): string {
 	if (!container.data) {
 		return "";
@@ -127,7 +127,7 @@ export function decodeBody(
 		logger?.debug(
 			`Network inspector failed to decode request/response body (size: ${
 				container.data.length
-			}): ${String(err.toString())}`,
+			}): ${String(err.toString())}`
 		);
 		return "";
 	}

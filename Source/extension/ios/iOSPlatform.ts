@@ -66,7 +66,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 
 	constructor(
 		protected runOptions: IIOSRunOptions,
-		platformDeps: MobilePlatformDeps = {},
+		platformDeps: MobilePlatformDeps = {}
 	) {
 		super(runOptions, platformDeps);
 
@@ -78,31 +78,31 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			this.logger.warning(
 				localize(
 					"iosRelativeProjectPathOptionIsDeprecatedUseRunArgumentsInstead",
-					"'iosRelativeProjectPath' option is deprecated. Please use 'runArguments' instead.",
-				),
+					"'iosRelativeProjectPath' option is deprecated. Please use 'runArguments' instead."
+				)
 			);
 		}
 
 		const iosProjectFolderPath = IOSPlatform.getOptFromRunArgs(
 			this.runArguments,
 			"--project-path",
-			false,
+			false
 		);
 		this.iosProjectRoot = path.join(
 			this.projectPath,
 			iosProjectFolderPath ||
 				this.runOptions.iosRelativeProjectPath ||
-				IOSPlatform.DEFAULT_IOS_PROJECT_RELATIVE_PATH,
+				IOSPlatform.DEFAULT_IOS_PROJECT_RELATIVE_PATH
 		);
 		const schemeFromArgs = IOSPlatform.getOptFromRunArgs(
 			this.runArguments,
 			"--scheme",
-			false,
+			false
 		);
 		this.iosDebugModeManager = new IOSDebugModeManager(
 			this.iosProjectRoot,
 			this.projectPath,
-			schemeFromArgs ? schemeFromArgs : this.runOptions.scheme,
+			schemeFromArgs ? schemeFromArgs : this.runOptions.scheme
 		);
 	}
 
@@ -132,20 +132,20 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				});
 				if (targetsBySpecifiedType.length) {
 					this.target = IOSTarget.fromInterface(
-						targetsBySpecifiedType[0],
+						targetsBySpecifiedType[0]
 					);
 				} else if (targets.length) {
 					this.logger.warning(
 						localize(
 							"ThereIsNoTargetWithSpecifiedTargetType",
 							"There is no any target with specified target type '{0}'. Continue with any target.",
-							this.runOptions.target,
-						),
+							this.runOptions.target
+						)
 					);
 					this.target = IOSTarget.fromInterface(targets[0]);
 				} else {
 					throw ErrorHelper.getInternalError(
-						InternalErrorCode.IOSThereIsNoAnyDebuggableTarget,
+						InternalErrorCode.IOSThereIsNoAnyDebuggableTarget
 					);
 				}
 			}
@@ -186,7 +186,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		extProps = TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 			this.runOptions,
 			this.runOptions.reactNativeVersions,
-			extProps,
+			extProps
 		);
 
 		await TelemetryHelper.generate(
@@ -197,19 +197,19 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				const env = GeneralMobilePlatform.getEnvArgument(
 					process.env,
 					this.runOptions.env,
-					this.runOptions.envFile,
+					this.runOptions.envFile
 				);
 
 				if (
 					!semver.valid(
-						this.runOptions.reactNativeVersions.reactNativeVersion,
+						this.runOptions.reactNativeVersions.reactNativeVersion
 					) /* Custom RN implementations should support this flag*/ ||
 					semver.gte(
 						this.runOptions.reactNativeVersions.reactNativeVersion,
-						IOSPlatform.NO_PACKAGER_VERSION,
+						IOSPlatform.NO_PACKAGER_VERSION
 					) ||
 					ProjectVersionHelper.isCanaryVersion(
-						this.runOptions.reactNativeVersions.reactNativeVersion,
+						this.runOptions.reactNativeVersions.reactNativeVersion
 					)
 				) {
 					this.runArguments.push("--no-packager");
@@ -219,10 +219,10 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				if (
 					semver.gte(
 						this.runOptions.reactNativeVersions.reactNativeVersion,
-						IOSPlatform.NEW_RN_CLI_BEHAVIOUR_VERSION,
+						IOSPlatform.NEW_RN_CLI_BEHAVIOUR_VERSION
 					) ||
 					ProjectVersionHelper.isCanaryVersion(
-						this.runOptions.reactNativeVersions.reactNativeVersion,
+						this.runOptions.reactNativeVersions.reactNativeVersion
 					)
 				) {
 					this.runArguments.push("--verbose");
@@ -230,18 +230,18 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				const runIosSpawn = new CommandExecutor(
 					this.runOptions.nodeModulesRoot,
 					this.projectPath,
-					this.logger,
+					this.logger
 				).spawnReactCommand("run-ios", this.runArguments, { env });
 				await new OutputVerifier(
 					() =>
 						this.generateSuccessPatterns(
 							this.runOptions.reactNativeVersions
-								.reactNativeVersion,
+								.reactNativeVersion
 						),
 					() => Promise.resolve(IOSPlatform.RUN_IOS_FAILURE_PATTERNS),
-					PlatformType.iOS,
+					PlatformType.iOS
 				).process(runIosSpawn);
-			},
+			}
 		);
 	}
 
@@ -250,7 +250,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		if (!(await this.getTarget()).isVirtualTarget) {
 			// Note that currently we cannot automatically switch the device into debug mode.
 			this.logger.info(
-				"Application is running on a device, please shake device and select 'Debug JS Remotely' to enable debugging.",
+				"Application is running on a device, please shake device and select 'Debug JS Remotely' to enable debugging."
 			);
 			return;
 		}
@@ -261,7 +261,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		>([
 			this.iosDebugModeManager.getAppRemoteDebuggingSetting(
 				this.runOptions.configuration,
-				this.runOptions.productName,
+				this.runOptions.productName
 			),
 			this.getBundleId(),
 		]);
@@ -274,7 +274,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		// down before writing to the file.
 		const childProcess = new ChildProcess();
 		const output = await childProcess.execToString(
-			"xcrun simctl spawn booted launchctl list",
+			"xcrun simctl spawn booted launchctl list"
 		);
 		// Try to find an entry that looks like UIKitApplication:com.example.myApp[0x4f37]
 		const regex = new RegExp(`(\\S+${String(bundleId)}\\S+)`);
@@ -282,14 +282,14 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		// If we don't find a match, the app must not be running and so we do not need to close it
 		if (match) {
 			await childProcess.exec(
-				`xcrun simctl spawn booted launchctl stop ${match[1]}`,
+				`xcrun simctl spawn booted launchctl stop ${match[1]}`
 			);
 		}
 		// Write to the settings file while the app is not running to avoid races
 		await this.iosDebugModeManager.setAppRemoteDebuggingSetting(
 			/* enable=*/ true,
 			this.runOptions.configuration,
-			this.runOptions.productName,
+			this.runOptions.productName
 		);
 		// Relaunch the app
 		return await this.runApp();
@@ -302,7 +302,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		return this.iosDebugModeManager.setAppRemoteDebuggingSetting(
 			/* enable=*/ false,
 			this.runOptions.configuration,
-			this.runOptions.productName,
+			this.runOptions.productName
 		);
 	}
 
@@ -322,7 +322,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				const schemeFromArgs = IOSPlatform.getOptFromRunArgs(
 					runArguments,
 					"--scheme",
-					false,
+					false
 				);
 				if (!schemeFromArgs) {
 					runArguments.push("--scheme", this.runOptions.scheme);
@@ -330,22 +330,22 @@ export class IOSPlatform extends GeneralMobilePlatform {
 					this.logger.warning(
 						localize(
 							"iosSchemeParameterAlreadySetInRunArguments",
-							"'--scheme' is set as 'runArguments' configuration parameter value, 'scheme' configuration parameter value will be omitted",
-						),
+							"'--scheme' is set as 'runArguments' configuration parameter value, 'scheme' configuration parameter value will be omitted"
+						)
 					);
 				}
 			}
 		} else {
 			if (this.runOptions.target) {
 				runArguments.push(
-					...this.handleTargetArg(this.runOptions.target),
+					...this.handleTargetArg(this.runOptions.target)
 				);
 			}
 
 			if (this.runOptions.iosRelativeProjectPath) {
 				runArguments.push(
 					"--project-path",
-					this.runOptions.iosRelativeProjectPath,
+					this.runOptions.iosRelativeProjectPath
 				);
 			}
 
@@ -368,7 +368,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 
 			const udid = GeneralMobilePlatform.getOptFromRunArgs(
 				this.runOptions.runArguments,
-				"--udid",
+				"--udid"
 			);
 			if (udid) {
 				const target = targets.find((target) => target.id === udid);
@@ -379,19 +379,19 @@ export class IOSPlatform extends GeneralMobilePlatform {
 					localize(
 						"ThereIsNoIosTargetWithSuchUdid",
 						"There is no iOS target with such UDID: {0}",
-						udid,
-					),
+						udid
+					)
 				);
 			}
 
 			const device = GeneralMobilePlatform.getOptFromRunArgs(
 				this.runOptions.runArguments,
-				"--device",
+				"--device"
 			);
 			if (device) {
 				const target = targets.find(
 					(target) =>
-						!target.isVirtualTarget && target.name === device,
+						!target.isVirtualTarget && target.name === device
 				);
 				if (target) {
 					return IOSTarget.fromInterface(target);
@@ -400,19 +400,19 @@ export class IOSPlatform extends GeneralMobilePlatform {
 					localize(
 						"ThereIsNoIosDeviceWithSuchName",
 						"There is no iOS device with such name: {0}",
-						device,
-					),
+						device
+					)
 				);
 			}
 
 			const simulator = GeneralMobilePlatform.getOptFromRunArgs(
 				this.runOptions.runArguments,
-				"--simulator",
+				"--simulator"
 			);
 			if (simulator) {
 				const target = targets.find(
 					(target) =>
-						target.isVirtualTarget && target.name === simulator,
+						target.isVirtualTarget && target.name === simulator
 				);
 				if (target) {
 					return IOSTarget.fromInterface(target);
@@ -421,8 +421,8 @@ export class IOSPlatform extends GeneralMobilePlatform {
 					localize(
 						"ThereIsNoIosSimulatorWithSuchName",
 						"There is no iOS simulator with such name: {0}",
-						simulator,
-					),
+						simulator
+					)
 				);
 			}
 		}
@@ -456,7 +456,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			ProjectVersionHelper.isCanaryVersion(version)
 		) {
 			successPatterns.push(
-				`Launching "${bundleId}"\nsuccess Successfully launched the app `,
+				`Launching "${bundleId}"\nsuccess Successfully launched the app `
 			);
 		} else {
 			successPatterns.push(`Launching ${bundleId}\n${bundleId}: `);
@@ -468,7 +468,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		return (
 			IOSPlatform.getOptFromRunArgs(
 				this.runArguments,
-				this.configurationArgumentName,
+				this.configurationArgumentName
 			) || this.defaultConfiguration
 		);
 	}
@@ -479,7 +479,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			const schemeFromArgs = IOSPlatform.getOptFromRunArgs(
 				this.runArguments,
 				"--scheme",
-				false,
+				false
 			);
 			if (schemeFromArgs) {
 				scheme = schemeFromArgs;
@@ -492,7 +492,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			true,
 			this.runOptions.configuration,
 			this.runOptions.productName,
-			scheme,
+			scheme
 		);
 	}
 }

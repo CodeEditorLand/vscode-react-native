@@ -23,7 +23,7 @@ const outputChannel = OutputChannelLogger.getMainChannel();
 const evaluteChecks = async (checks: IValidation[]) => {
 	const execToEntries = (
 		categ: ValidationCategoryE,
-		toCheck: IValidation[],
+		toCheck: IValidation[]
 	) =>
 		Promise.all(
 			toCheck
@@ -34,7 +34,7 @@ const evaluteChecks = async (checks: IValidation[]) => {
 							it,
 							await it.exec().catch((err) => {
 								outputChannel.warning(
-									`Check ${it.label} failed with error`,
+									`Check ${it.label} failed with error`
 								);
 								outputChannel.warning(err);
 
@@ -43,17 +43,17 @@ const evaluteChecks = async (checks: IValidation[]) => {
 									comment: "Check execution failed",
 								} as ValidationResultT;
 							}),
-						] as const,
-				),
+						] as const
+				)
 		);
 
 	return fromEntries(
 		await Promise.all(
 			Object.values(ValidationCategoryE).map(
 				async (it) =>
-					[it, new Map(await execToEntries(it, checks))] as const,
-			),
-		),
+					[it, new Map(await execToEntries(it, checks))] as const
+			)
+		)
 	);
 };
 
@@ -65,7 +65,7 @@ const statusToSymbol = {
 
 export const runChecks = async (
 	options_?: Partial<Record<ValidationCategoryE, boolean>>,
-	versions?: PackageVersion[],
+	versions?: PackageVersion[]
 ): Promise<void> => {
 	const options = Object.assign(
 		{
@@ -73,20 +73,20 @@ export const runChecks = async (
 			[ValidationCategoryE.Android]: true,
 			[ValidationCategoryE.iOS]: true,
 		},
-		options_,
+		options_
 	);
 
 	outputChannel.setFocusOnLogChannel();
 	outputChannel.info(
-		toLocale("DevEnvVerificationStart", "Starting Environment check..."),
+		toLocale("DevEnvVerificationStart", "Starting Environment check...")
 	);
 	const checks = await evaluteChecks(
-		getChecks(versions).filter((it) => options?.[it.category] === true),
+		getChecks(versions).filter((it) => options?.[it.category] === true)
 	);
 
 	let outStr = `<<< ${toLocale(
 		"DevEnvVerificationHeader",
-		"Dev Environment verification result",
+		"Dev Environment verification result"
 	)} >>>\n`;
 
 	Object.entries(checks).forEach(async ([key, val]) => {
@@ -117,7 +117,7 @@ export const runChecks = async (
 	if (allPassed) {
 		outStr += `\n${toLocale(
 			"DevEnvVerificationFooter",
-			"All checks passed successfully!",
+			"All checks passed successfully!"
 		)}\n\n`;
 	}
 

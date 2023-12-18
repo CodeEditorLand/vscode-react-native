@@ -26,7 +26,7 @@ async function test(): Promise<ValidationResultT> {
 		getVersion: parseVersion.bind(
 			null,
 			"emulator -version",
-			/version (.*?)( |$)/gi,
+			/version (.*?)( |$)/gi
 		),
 	});
 
@@ -60,7 +60,7 @@ const main: IValidation = {
 	label,
 	description: toLocale(
 		"EmulatorCheckDescription",
-		"Required for working with Android emulators",
+		"Required for working with Android emulators"
 	),
 	category: ValidationCategoryE.Android,
 	exec: test,

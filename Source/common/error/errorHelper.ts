@@ -30,7 +30,7 @@ export class ErrorHelper {
 
 	public static wrapError(
 		error: InternalError,
-		innerError: Error,
+		innerError: Error
 	): NestedError {
 		return NestedError.getWrappedError(error, innerError);
 	}
@@ -41,14 +41,14 @@ export class ErrorHelper {
 
 	public static getNestedWarning(
 		innerError: Error,
-		message: string,
+		message: string
 	): NestedError {
 		return new NestedError(
 			-1,
 			message,
 			innerError,
 			null /* extras */,
-			InternalErrorLevel.Warning,
+			InternalErrorLevel.Warning
 		);
 	}
 
@@ -58,7 +58,7 @@ export class ErrorHelper {
 	): string {
 		return ErrorHelper.formatErrorMessage(
 			ErrorHelper.ERROR_STRINGS[errorCode],
-			...optionalArgs,
+			...optionalArgs
 		);
 	}
 

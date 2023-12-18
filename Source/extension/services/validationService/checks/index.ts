@@ -58,7 +58,7 @@ export const getChecks = (versions: PackageVersion[] = []): IValidation[] => {
 	];
 
 	const rnVersionContainer = versions.find((it) =>
-		Object.keys(it).includes("reactNativeVersion"),
+		Object.keys(it).includes("reactNativeVersion")
 	);
 	if (
 		rnVersionContainer &&
@@ -69,7 +69,7 @@ export const getChecks = (versions: PackageVersion[] = []): IValidation[] => {
 		if (androidEnvCheck) {
 			androidEnvCheck.exec = androidEnvCheck.exec.bind(
 				null,
-				"ANDROID_SDK_ROOT",
+				"ANDROID_SDK_ROOT"
 			);
 		}
 	}
@@ -79,6 +79,6 @@ export const getChecks = (versions: PackageVersion[] = []): IValidation[] => {
 	});
 
 	return checks.filter((it) =>
-		it.platform ? it.platform.includes(process.platform) : true,
+		it.platform ? it.platform.includes(process.platform) : true
 	);
 };

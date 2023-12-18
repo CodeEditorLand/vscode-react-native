@@ -120,7 +120,7 @@ export const expoHostTypePickConfig: DebugConfigurationQuickPickItem[] = [
 		label: "Tunnel",
 		description: localize(
 			"expoHostTypeTunnel",
-			"Allows to deploy and debug an application by means of Expo cloud services",
+			"Allows to deploy and debug an application by means of Expo cloud services"
 		),
 		type: "tunnel",
 	},
@@ -128,7 +128,7 @@ export const expoHostTypePickConfig: DebugConfigurationQuickPickItem[] = [
 		label: "LAN",
 		description: localize(
 			"expoHostTypeLAN",
-			"Allows to deploy and install an application via your LAN",
+			"Allows to deploy and install an application via your LAN"
 		),
 		type: "lan",
 	},
@@ -136,7 +136,7 @@ export const expoHostTypePickConfig: DebugConfigurationQuickPickItem[] = [
 		label: "Local",
 		description: localize(
 			"expoHostTypeLocal",
-			"Allows to debug an application on an emulator or an Android device without network connection",
+			"Allows to debug an application on an emulator or an Android device without network connection"
 		),
 		type: "local",
 	},

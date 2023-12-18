@@ -15,6 +15,6 @@ export abstract class BaseConfigProvider {
 
 	public abstract buildConfiguration(
 		input: MultiStepInput<DebugConfigurationState>,
-		state: DebugConfigurationState,
+		state: DebugConfigurationState
 	): Promise<InputStep<DebugConfigurationState> | void>;
 }

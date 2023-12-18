@@ -24,7 +24,7 @@ export abstract class ReactNativeCommand<
 	}
 
 	protected createHandler(
-		fn = this.baseFn.bind(this),
+		fn = this.baseFn.bind(this)
 	): (...args: ArgT) => Promise<void> {
 		return super.createHandler(async (...args: ArgT) => {
 			await this.executeInContext(fn.bind(this, ...args));
@@ -36,7 +36,7 @@ export abstract class ReactNativeCommand<
 
 		const logger = OutputChannelLogger.getMainChannel();
 		const projectRoot = SettingsHelper.getReactNativeProjectRoot(
-			this.project.getWorkspaceFolder().uri.fsPath,
+			this.project.getWorkspaceFolder().uri.fsPath
 		);
 		const isRNProject =
 			await ReactNativeProjectHelper.isReactNativeProject(projectRoot);
@@ -57,14 +57,14 @@ export abstract class ReactNativeCommand<
 
 				if (!isRNProject) {
 					void vscode.window.showErrorMessage(
-						`${projectRoot} workspace is not a React Native project.`,
+						`${projectRoot} workspace is not a React Native project.`
 					);
 					return;
 				}
 
 				logger.setFocusOnLogChannel();
 				await operation();
-			},
+			}
 		);
 	}
 }

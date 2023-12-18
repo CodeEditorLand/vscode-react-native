@@ -12,7 +12,7 @@ import {
 
 export type InputStep<T extends any> = (
 	input: MultiStepInput<T>,
-	state: T,
+	state: T
 ) => Promise<InputStep<T> | void>;
 
 export class InputFlowAction {
@@ -135,23 +135,23 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 							}
 						}),
 						input.onDidChangeSelection((selectedItems) =>
-							resolve(selectedItems[0]),
+							resolve(selectedItems[0])
 						),
 						input.onDidHide(() => {
 							(async () => {
 								reject(
 									shouldResume && (await shouldResume())
 										? InputFlowAction.resume
-										: InputFlowAction.cancel,
+										: InputFlowAction.cancel
 								);
 							})().catch(reject);
-						}),
+						})
 					);
 					if (acceptFilterBoxTextAsSelection) {
 						disposables.push(
 							input.onDidAccept(() => {
 								resolve(<any>input.value);
-							}),
+							})
 						);
 					}
 					if (this.current) {
@@ -159,7 +159,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 					}
 					this.current = input;
 					this.current.show();
-				},
+				}
 			);
 		} finally {
 			disposables.forEach((d) => d.dispose());
@@ -227,17 +227,17 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 								reject(
 									shouldResume && (await shouldResume())
 										? InputFlowAction.resume
-										: InputFlowAction.cancel,
+										: InputFlowAction.cancel
 								);
 							})().catch(reject);
-						}),
+						})
 					);
 					if (this.current) {
 						this.current.dispose();
 					}
 					this.current = input;
 					this.current.show();
-				},
+				}
 			);
 		} finally {
 			disposables.forEach((d) => d.dispose());

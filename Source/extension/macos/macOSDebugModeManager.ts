@@ -21,7 +21,7 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 		macosProjectRoot: string,
 		projectRoot: string,
 		scheme?: string,
-		{ nodeFileSystem = new FileSystem(), plistBuddy = undefined } = {},
+		{ nodeFileSystem = new FileSystem(), plistBuddy = undefined } = {}
 	) {
 		super(macosProjectRoot, projectRoot);
 		this.scheme = scheme;
@@ -33,36 +33,36 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 	public async setAppRemoteDebuggingSetting(
 		enable: boolean,
 		configuration?: string,
-		productName?: string,
+		productName?: string
 	): Promise<void> {
 		// Find the plistFile with the configuration setting
 		// There is a race here between us checking for the plist file, and the application starting up.
 		const plistFile = await this.findPListFileWithRetry(
 			configuration,
-			productName,
+			productName
 		);
 		// Set the "isDebuggingRemotely" flag to "true", so on the next startup the application will default into debug mode
 		// This is approximately equivalent to clicking the "Debug in Chrome" button
 		return await this.defaultsHelper.setPlistBooleanProperty(
 			plistFile,
 			MacOSDebugModeManager.REMOTE_DEBUGGING_FLAG_NAME,
-			enable,
+			enable
 		);
 	}
 
 	public async getAppRemoteDebuggingSetting(
 		configuration?: string,
-		productName?: string,
+		productName?: string
 	): Promise<boolean> {
 		const plistFile = await this.findPListFileWithRetry(
 			configuration,
-			productName,
+			productName
 		);
 		try {
 			// Attempt to read from the file, but if the property is not defined then return the empty string
 			const remoteDebugEnabled = await this.plistBuddy.readPlistProperty(
 				plistFile,
-				MacOSDebugModeManager.REMOTE_DEBUGGING_SETTING_NAME,
+				MacOSDebugModeManager.REMOTE_DEBUGGING_SETTING_NAME
 			);
 			return remoteDebugEnabled === "true";
 		} catch (e) {
@@ -72,13 +72,13 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 
 	protected async tryOneAttemptToFindPListFile(
 		configuration?: string,
-		productName?: string,
+		productName?: string
 	): Promise<string> {
 		try {
 			return await this.findPlistFile(configuration, productName);
 		} catch (reason) {
 			this.logger.debug(
-				`Failed one attempt to find plist file: ${String(reason)}`,
+				`Failed one attempt to find plist file: ${String(reason)}`
 			);
 			return "";
 		}
@@ -86,7 +86,7 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 
 	private async findPlistFile(
 		configuration?: string,
-		productName?: string,
+		productName?: string
 	): Promise<string> {
 		const bundleId = await this.plistBuddy.getBundleId(
 			this.platformProjectRoot,
@@ -95,13 +95,13 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 			false,
 			configuration,
 			productName,
-			this.scheme,
+			this.scheme
 		); // Find the name of the application
 		const plistFilePath = path.join(
 			homedir(),
 			"Library",
 			"Preferences",
-			`${bundleId}.plist`,
+			`${bundleId}.plist`
 		);
 		const exist = await this.nodeFileSystem.exists(plistFilePath);
 		if (!exist) {

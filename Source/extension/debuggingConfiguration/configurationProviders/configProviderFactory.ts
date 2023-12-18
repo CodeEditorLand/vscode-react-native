@@ -18,7 +18,7 @@ export class ConfigProviderFactory {
 				return new AttachConfigProvider();
 			default:
 				throw new Error(
-					`Couldn't find ${configurationType} config adapter type`,
+					`Couldn't find ${configurationType} config adapter type`
 				);
 		}
 	}

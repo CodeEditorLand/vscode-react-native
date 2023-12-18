@@ -38,14 +38,14 @@ export class ReactDirManager implements vscode.Disposable {
 		this.isDisposed = true;
 		void new EntryPointHandler(
 			ProcessType.Extension,
-			OutputChannelLogger.getMainChannel(),
+			OutputChannelLogger.getMainChannel()
 		).runFunction(
 			"extension.deleteTemporaryFolder",
 			ErrorHelper.getInternalError(
 				InternalErrorCode.RNTempFolderDeletionFailed,
-				this.reactDirPath,
+				this.reactDirPath
 			),
-			() => new FileSystem().removePathRecursivelySync(this.reactDirPath),
+			() => new FileSystem().removePathRecursivelySync(this.reactDirPath)
 		);
 	}
 }

@@ -24,7 +24,7 @@ export class PublishToExpHost extends ReactNativeCommand {
 	codeName = "publishToExpHost";
 	label = "Publish To Expo Host";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToPublishToExpHost,
+		InternalErrorCode.FailedToPublishToExpHost
 	);
 
 	async baseFn(): Promise<void> {
@@ -32,8 +32,8 @@ export class PublishToExpHost extends ReactNativeCommand {
 			logger.warning(
 				localize(
 					"ExponentPublishingWasUnsuccessfulMakeSureYoureLoggedInToExpo",
-					"Publishing was unsuccessful. Please make sure you are logged in Expo and your project is a valid Expo project",
-				),
+					"Publishing was unsuccessful. Please make sure you are logged in Expo and your project is a valid Expo project"
+				)
 			);
 		}
 	}
@@ -44,8 +44,8 @@ export class PublishToExpHost extends ReactNativeCommand {
 		logger.info(
 			localize(
 				"PublishingAppToExponentServer",
-				"Publishing app to Expo server. This might take a moment.",
-			),
+				"Publishing app to Expo server. This might take a moment."
+			)
 		);
 
 		const user = await loginToExponent(this.project);
@@ -54,7 +54,7 @@ export class PublishToExpHost extends ReactNativeCommand {
 
 		await RunExponent.prototype.baseFn.bind(this)();
 		const response = await XDL.publish(
-			this.project.getWorkspaceFolderUri().fsPath,
+			this.project.getWorkspaceFolderUri().fsPath
 		);
 
 		if (response.err || !response.url) {
@@ -64,7 +64,7 @@ export class PublishToExpHost extends ReactNativeCommand {
 		const publishedOutput = localize(
 			"ExpoAppSuccessfullyPublishedTo",
 			"Expo app successfully published to {0}",
-			response.url,
+			response.url
 		);
 
 		logger.info(publishedOutput);

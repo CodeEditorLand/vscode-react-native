@@ -22,7 +22,7 @@ import { Response } from "../networkMessageData";
 export class ImageFormatter implements IFormatter {
 	public formatResponse(
 		response: Response,
-		contentType: string,
+		contentType: string
 	): FormattedBody | null {
 		if (contentType.startsWith("image/") && response.data) {
 			return response.data;

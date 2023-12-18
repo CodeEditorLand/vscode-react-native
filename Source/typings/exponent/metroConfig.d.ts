@@ -21,7 +21,7 @@ declare module metroConfig {
 
 	var loadAsync: (
 		projectRoot: string,
-		{ reporter, target, ...metroOptions }?: ILoadOptions,
+		{ reporter, target, ...metroOptions }?: ILoadOptions
 	) => Promise<IMetroConfig>;
 }
 

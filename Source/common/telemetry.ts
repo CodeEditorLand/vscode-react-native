@@ -40,13 +40,13 @@ export module Telemetry {
 			let settingsHome = HostPlatform.getSettingsHome();
 			return path.join(
 				settingsHome,
-				TelemetryUtils.TELEMETRY_SETTINGS_FILENAME,
+				TelemetryUtils.TELEMETRY_SETTINGS_FILENAME
 			);
 		}
 
 		public static init(
 			appVersion: string,
-			reporterToUse: ITelemetryReporter,
+			reporterToUse: ITelemetryReporter
 		): void {
 			TelemetryUtils.loadSettings();
 			Telemetry.reporter = reporterToUse;
@@ -69,7 +69,7 @@ export module Telemetry {
 		private static loadSettings(): ITelemetrySettings {
 			try {
 				TelemetryUtils.telemetrySettings = JSON.parse(
-					<any>fs.readFileSync(TelemetryUtils.telemetrySettingsFile),
+					<any>fs.readFileSync(TelemetryUtils.telemetrySettingsFile)
 				);
 			} catch (e) {
 				// if file does not exist or fails to parse then assume no settings are saved and start over
@@ -90,7 +90,7 @@ export module Telemetry {
 
 			fs.writeFileSync(
 				TelemetryUtils.telemetrySettingsFile,
-				JSON.stringify(TelemetryUtils.telemetrySettings),
+				JSON.stringify(TelemetryUtils.telemetrySettings)
 			);
 		}
 	}
@@ -112,7 +112,7 @@ export module Telemetry {
 		public setPiiProperty(name: string, value: string): void {
 			let hmac: crypto.Hmac = crypto.createHmac(
 				"sha256",
-				Buffer.from(TelemetryEvent.PII_HASH_KEY, "utf8"),
+				Buffer.from(TelemetryEvent.PII_HASH_KEY, "utf8")
 			);
 			let hashedValue: string = hmac.update(value).digest("hex");
 
@@ -152,7 +152,7 @@ export module Telemetry {
 	export function init(
 		appNameValue: string,
 		appVersion: string,
-		reporterToUse: ITelemetryReporter,
+		reporterToUse: ITelemetryReporter
 	): void {
 		try {
 			Telemetry.appName = appNameValue;
@@ -164,7 +164,7 @@ export module Telemetry {
 
 	export function send(
 		event: TelemetryEvent,
-		ignoreOptIn: boolean = false,
+		ignoreOptIn: boolean = false
 	): void {
 		if (Telemetry.isOptedIn || ignoreOptIn) {
 			try {
@@ -177,7 +177,7 @@ export module Telemetry {
 					let measures: ITelemetryEventMeasures = {};
 
 					Object.keys(event.properties || {}).forEach(function (
-						key: string,
+						key: string
 					) {
 						switch (typeof event.properties[key]) {
 							case "string":
@@ -190,7 +190,7 @@ export module Telemetry {
 
 							default:
 								properties[key] = JSON.stringify(
-									event.properties[key],
+									event.properties[key]
 								);
 								break;
 						}
@@ -199,7 +199,7 @@ export module Telemetry {
 					Telemetry.reporter.sendTelemetryEvent(
 						event.name,
 						properties,
-						measures,
+						measures
 					);
 				}
 			} catch (err) {
@@ -231,7 +231,7 @@ export module Telemetry {
 		sendTelemetryEvent(
 			eventName: string,
 			properties?: ITelemetryEventProperties,
-			measures?: ITelemetryEventMeasures,
+			measures?: ITelemetryEventMeasures
 		): void;
 	}
 
@@ -241,7 +241,7 @@ export module Telemetry {
 		appInsightsKey: string,
 		eventName: string,
 		properties?: ITelemetryEventProperties,
-		measures?: ITelemetryEventMeasures,
+		measures?: ITelemetryEventMeasures
 	): void {
 		let extensionTelemetryReporter: ITelemetryReporter =
 			Telemetry.reporterDictionary[extensionId];
@@ -252,7 +252,7 @@ export module Telemetry {
 			Telemetry.reporterDictionary[extensionId] = new TelemetryReporter(
 				extensionId,
 				extensionVersion,
-				appInsightsKey,
+				appInsightsKey
 			);
 			extensionTelemetryReporter =
 				Telemetry.reporterDictionary[extensionId];
@@ -261,7 +261,7 @@ export module Telemetry {
 		extensionTelemetryReporter.sendTelemetryEvent(
 			eventName,
 			properties,
-			measures,
+			measures
 		);
 	}
 }

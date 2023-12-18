@@ -14,7 +14,7 @@ import { PROMPT_TITLES } from "../experimentsStrings";
 export default class RNTPreviewPrompt implements IExperiment {
 	public async run(
 		newExpConfig: ExperimentConfig,
-		curExpParameters?: ExperimentParameters,
+		curExpParameters?: ExperimentParameters
 	): Promise<ExperimentResult> {
 		if (
 			curExpParameters &&
@@ -31,7 +31,7 @@ export default class RNTPreviewPrompt implements IExperiment {
 		const updatedExperimentParameters =
 			this.showPrompIfThresholdIsNotExceeded(
 				newExpConfig,
-				curExpParameters,
+				curExpParameters
 			);
 
 		return {
@@ -42,7 +42,7 @@ export default class RNTPreviewPrompt implements IExperiment {
 
 	private showPrompIfThresholdIsNotExceeded(
 		newExpConfig: ExperimentConfig,
-		promptParameters?: ExperimentParameters,
+		promptParameters?: ExperimentParameters
 	) {
 		if (promptParameters) {
 			promptParameters.popCoveragePercent =
@@ -59,17 +59,17 @@ export default class RNTPreviewPrompt implements IExperiment {
 			void vscode.window
 				.showInformationMessage(
 					PROMPT_TITLES.RNT_PREVIEW_PROMPT,
-					buttonText,
+					buttonText
 				)
 				.then((selection) => {
 					if (selection === buttonText && promptParameters) {
 						void vscode.commands.executeCommand(
 							"workbench.extensions.search",
-							promptParameters.extensionId,
+							promptParameters.extensionId
 						);
 						void vscode.commands.executeCommand(
 							"extension.open",
-							promptParameters.extensionId,
+							promptParameters.extensionId
 						);
 					}
 				});

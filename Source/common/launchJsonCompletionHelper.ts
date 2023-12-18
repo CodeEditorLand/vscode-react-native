@@ -20,7 +20,7 @@ export class LaunchJsonCompletionHelper {
 	public static getTextForInsertion(
 		config: DebugConfiguration,
 		cursorPosition: PositionOfCursor,
-		commaPosition?: PositionOfComma,
+		commaPosition?: PositionOfComma
 	): string {
 		const json = JSON.stringify(config);
 		if (cursorPosition === "AfterItem") {
@@ -35,7 +35,7 @@ export class LaunchJsonCompletionHelper {
 
 	public static getCursorPositionInConfigurationsArray(
 		document: TextDocument,
-		position: Position,
+		position: Position
 	): PositionOfCursor | undefined {
 		if (this.isConfigurationArrayEmpty(document)) {
 			return "InsideEmptyArray";
@@ -58,12 +58,12 @@ export class LaunchJsonCompletionHelper {
 
 	public static isCommaImmediatelyBeforeCursor(
 		document: TextDocument,
-		position: Position,
+		position: Position
 	): boolean {
 		const line = document.lineAt(position.line);
 		// Get text from start of line until the cursor.
 		const currentLine = document.getText(
-			new Range(line.range.start, position),
+			new Range(line.range.start, position)
 		);
 		if (currentLine.trim().endsWith(",")) {
 			return true;

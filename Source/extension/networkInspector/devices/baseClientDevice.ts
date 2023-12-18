@@ -24,7 +24,7 @@ export class BaseClientDevice implements ITarget {
 		id: string,
 		isVirtualTarget: boolean,
 		os: ClientOS,
-		name?: string,
+		name?: string
 	) {
 		this._id = id;
 		this._name = name;

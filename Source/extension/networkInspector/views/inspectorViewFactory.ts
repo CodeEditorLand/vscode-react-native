@@ -13,7 +13,7 @@ export class InspectorViewFactory {
 	>();
 
 	public static getInspectorView(
-		inspectorViewType: InspectorViewType,
+		inspectorViewType: InspectorViewType
 	): InspectorView {
 		if (!InspectorViewFactory.cachedInspectorViews.has(inspectorViewType)) {
 			if (inspectorViewType === InspectorViewType.console) {
@@ -21,19 +21,19 @@ export class InspectorViewFactory {
 					InspectorViewType.console,
 					new InspectorConsoleView(
 						OutputChannelLogger.getChannel(
-							NETWORK_INSPECTOR_LOG_CHANNEL_NAME,
-						),
-					),
+							NETWORK_INSPECTOR_LOG_CHANNEL_NAME
+						)
+					)
 				);
 			} else {
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				throw new Error(
-					`Unsupported inspector view type: ${inspectorViewType}`,
+					`Unsupported inspector view type: ${inspectorViewType}`
 				);
 			}
 		}
 		return InspectorViewFactory.cachedInspectorViews.get(
-			inspectorViewType,
+			inspectorViewType
 		) as InspectorView;
 	}
 

@@ -34,7 +34,7 @@ type IPlatformRunOptions =
 export function getRunOptions(
 	project: AppLauncher,
 	platform: PlatformType,
-	target: TargetType = TargetType.Simulator,
+	target: TargetType = TargetType.Simulator
 ): IPlatformRunOptions {
 	const folderUri = project.getWorkspaceFolderUri();
 
@@ -58,14 +58,14 @@ export function getRunOptions(
 
 	CommandExecutor.ReactNativeCommand =
 		SettingsHelper.getReactNativeGlobalCommandName(
-			project.getWorkspaceFolderUri(),
+			project.getWorkspaceFolderUri()
 		);
 
 	return runOptions;
 }
 
 export async function loginToExponent(
-	project: AppLauncher,
+	project: AppLauncher
 ): Promise<xdl.IUser> {
 	try {
 		return await project.getExponentHelper().loginToExponent(
@@ -80,14 +80,14 @@ export async function loginToExponent(
 					vscode.window
 						.showInformationMessage(message)
 						.then(res, rej);
-				}).then((it) => it || ""),
+				}).then((it) => it || "")
 		);
 	} catch (err) {
 		OutputChannelLogger.getMainChannel().warning(
 			localize(
 				"ExpoErrorOccuredMakeSureYouAreLoggedIn",
-				"An error has occured. Please make sure you are logged in to Expo, your project is setup correctly for publishing and your packager is running as Expo.",
-			),
+				"An error has occured. Please make sure you are logged in to Expo, your project is setup correctly for publishing and your packager is running as Expo."
+			)
 		);
 		throw err;
 	}
@@ -100,7 +100,7 @@ export async function selectProject(): Promise<AppLauncher> {
 	if (projectKeys.length === 0) {
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.WorkspaceNotFound,
-			"Current workspace does not contain React Native projects.",
+			"Current workspace does not contain React Native projects."
 		);
 	}
 

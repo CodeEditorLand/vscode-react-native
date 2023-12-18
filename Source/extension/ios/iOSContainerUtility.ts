@@ -64,7 +64,7 @@ export async function isXcodeDetected(): Promise<boolean> {
 
 async function queryTargetsWithoutXcodeDependency(
 	idbCompanionPath: string,
-	isAvailableFunc: (idbPath: string) => Promise<boolean>,
+	isAvailableFunc: (idbPath: string) => Promise<boolean>
 ): Promise<Array<DeviceTarget>> {
 	if (await isAvailableFunc(idbCompanionPath)) {
 		return new ChildProcess()
@@ -72,13 +72,13 @@ async function queryTargetsWithoutXcodeDependency(
 			.then((stdout) => parseIdbTargets(stdout))
 			.catch((e: Error) => {
 				logger.warn(
-					`Failed to query idb_companion --list 1 --only device for physical targets: ${e}`,
+					`Failed to query idb_companion --list 1 --only device for physical targets: ${e}`
 				);
 				return [];
 			});
 	} else {
 		logger.warn(
-			`Unable to locate idb_companion in ${idbCompanionPath}. Try running sudo yum install -y fb-idb`,
+			`Unable to locate idb_companion in ${idbCompanionPath}. Try running sudo yum install -y fb-idb`
 		);
 		return [];
 	}
@@ -92,7 +92,7 @@ function parseIdbTargets(lines: string): Array<DeviceTarget> {
 		.filter(Boolean)
 		.map((line) => JSON.parse(line))
 		.filter(
-			({ state }: IdbTarget) => state.toLocaleLowerCase() === "booted",
+			({ state }: IdbTarget) => state.toLocaleLowerCase() === "booted"
 		)
 		.map<IdbTarget>(({ type, target_type, ...rest }: IdbTarget) => ({
 			type:
@@ -108,13 +108,13 @@ function parseIdbTargets(lines: string): Array<DeviceTarget> {
 }
 
 export async function idbListTargets(
-	idbPath: string,
+	idbPath: string
 ): Promise<Array<DeviceTarget>> {
 	return new ChildProcess()
 		.execToString(`${idbPath} list-targets --json`)
 		.then((stdout) =>
 			// See above.
-			parseIdbTargets(stdout),
+			parseIdbTargets(stdout)
 		)
 		.catch((e: Error) => {
 			logger.warn(`Failed to query idb for targets: ${e}`);
@@ -131,7 +131,7 @@ async function targets(): Promise<Array<DeviceTarget>> {
 		const idbCompanionPath = path.dirname(idbPath) + "/idb_companion";
 		return queryTargetsWithoutXcodeDependency(
 			idbCompanionPath,
-			isAvailable,
+			isAvailable
 		);
 	}
 
@@ -186,7 +186,7 @@ async function targets(): Promise<Array<DeviceTarget>> {
 				})
 				.catch((e) => {
 					logger.warn(
-						`Failed to query for devices using xctrace: ${e}`,
+						`Failed to query for devices using xctrace: ${e}`
 					);
 					return [];
 				});
@@ -197,20 +197,20 @@ async function push(
 	src: string,
 	bundleId: string,
 	dst: string,
-	logger?: OutputChannelLogger,
+	logger?: OutputChannelLogger
 ): Promise<void> {
 	const cp = new ChildProcess();
 	await checkIdbIsInstalled();
 	return wrapWithErrorMessage(
 		cp
 			.execToString(
-				`${idbPath} --log ${idbLogLevel} file push --udid ${udid} --bundle-id ${bundleId} '${src}' '${dst}'`,
+				`${idbPath} --log ${idbLogLevel} file push --udid ${udid} --bundle-id ${bundleId} '${src}' '${dst}'`
 			)
 			.then(() => {
 				return;
 			})
 			.catch((e) => handleMissingIdb(e)),
-		logger,
+		logger
 	);
 }
 
@@ -219,20 +219,20 @@ async function pull(
 	src: string,
 	bundleId: string,
 	dst: string,
-	logger?: OutputChannelLogger,
+	logger?: OutputChannelLogger
 ): Promise<void> {
 	const cp = new ChildProcess();
 	await checkIdbIsInstalled();
 	return wrapWithErrorMessage(
 		cp
 			.execToString(
-				`${idbPath} --log ${idbLogLevel} file pull --udid ${udid} --bundle-id ${bundleId} '${src}' '${dst}'`,
+				`${idbPath} --log ${idbLogLevel} file pull --udid ${udid} --bundle-id ${bundleId} '${src}' '${dst}'`
 			)
 			.then(() => {
 				return;
 			})
 			.catch((e) => handleMissingIdb(e)),
-		logger,
+		logger
 	);
 }
 
@@ -240,7 +240,7 @@ export async function checkIdbIsInstalled(): Promise<void> {
 	const isInstalled = await isIdbAvailable();
 	if (!isInstalled) {
 		throw new Error(
-			`idb is required to use iOS devices. Please install it with instructions from https://github.com/facebook/idb.`,
+			`idb is required to use iOS devices. Please install it with instructions from https://github.com/facebook/idb.`
 		);
 	}
 }
@@ -251,11 +251,11 @@ function handleMissingIdb(e: Error): void {
 	if (
 		e.message &&
 		e.message.includes(
-			"sudo: no tty present and no askpass program specified",
+			"sudo: no tty present and no askpass program specified"
 		)
 	) {
 		throw new Error(
-			`idb doesn't appear to be installed. Run "${idbPath} list-targets" to fix this.`,
+			`idb doesn't appear to be installed. Run "${idbPath} list-targets" to fix this.`
 		);
 	}
 	throw e;
@@ -263,13 +263,13 @@ function handleMissingIdb(e: Error): void {
 
 function wrapWithErrorMessage<T>(
 	p: Promise<T>,
-	logger?: OutputChannelLogger,
+	logger?: OutputChannelLogger
 ): Promise<T> {
 	return p.catch((e: Error) => {
 		logger?.error(e.message);
 		// Give the user instructions. Don't embed the error because it's unique per invocation so won't be deduped.
 		throw new Error(
-			"A problem with idb has ocurred. Please run `sudo rm -rf /tmp/idb*` and `sudo yum install -y fb-idb` to update it, if that doesn't fix it, post in https://github.com/microsoft/vscode-react-native.",
+			"A problem with idb has ocurred. Please run `sudo rm -rf /tmp/idb*` and `sudo yum install -y fb-idb` to update it, if that doesn't fix it, post in https://github.com/microsoft/vscode-react-native."
 		);
 	});
 }

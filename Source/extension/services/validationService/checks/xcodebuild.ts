@@ -26,7 +26,7 @@ async function test(requiredVersion?: string): Promise<ValidationResultT> {
 		getVersion: parseVersion.bind(
 			null,
 			`${command} -version`,
-			/\d+\.\d+\.\d+/gi,
+			/\d+\.\d+\.\d+/gi
 		),
 		versionRange: requiredVersion,
 	});
@@ -60,7 +60,7 @@ const xcodeBuild: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"XCodeBuildTestDescription",
-		"Required for building iOS apps",
+		"Required for building iOS apps"
 	),
 	category: ValidationCategoryE.iOS,
 	exec: test,
@@ -71,7 +71,7 @@ const xcodeBuildVersionRNmacOS: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"XCodeBuildVersionTestDescription",
-		"Required for building and testing RN macOS apps",
+		"Required for building and testing RN macOS apps"
 	),
 	category: ValidationCategoryE.macOS,
 	exec: test.bind(null, "11.3.1"),

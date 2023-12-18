@@ -51,7 +51,7 @@ export class ChildProcess {
 
 	public exec(
 		command: string,
-		options: IExecOptions = {},
+		options: IExecOptions = {}
 	): Promise<IExecResult> {
 		let outcome: Promise<string>;
 		let process: nodeChildProcess.ChildProcess;
@@ -67,13 +67,13 @@ export class ChildProcess {
 								ErrorHelper.getNestedError(
 									error,
 									InternalErrorCode.CommandFailed,
-									command,
-								),
+									command
+								)
 							);
 						} else {
 							resolve(stdout);
 						}
-					},
+					}
 				);
 			});
 			resolveRes({ process, outcome });
@@ -82,7 +82,7 @@ export class ChildProcess {
 
 	public async execToString(
 		command: string,
-		options: IExecOptions = {},
+		options: IExecOptions = {}
 	): Promise<string> {
 		const execResult = await this.exec(command, options);
 		const stdout = await execResult.outcome;
@@ -92,7 +92,7 @@ export class ChildProcess {
 	public execFileSync(
 		command: string,
 		args: string[] = [],
-		options: IExecOptions = {},
+		options: IExecOptions = {}
 	): Buffer | string {
 		return this.childProcess.execFileSync(command, args, options);
 	}
@@ -101,7 +101,7 @@ export class ChildProcess {
 		command: string,
 		args: string[] = [],
 		options: ISpawnOptions = {},
-		showStdOutputsOnError: boolean = false,
+		showStdOutputsOnError: boolean = false
 	): ISpawnResult {
 		const spawnedProcess = this.childProcess.spawn(command, args, options);
 		const outcome: Promise<void> = new Promise((resolve, reject) => {
@@ -131,12 +131,12 @@ export class ChildProcess {
 							details = details.concat(
 								`\n\tSTDOUT: ${
 									stdoutChunks[stdoutChunks.length - 1]
-								}`,
+								}`
 							);
 						}
 						if (stderrChunks.length > 0) {
 							details = details.concat(
-								`\n\tSTDERR: ${stderrChunks.join("\n\t")}`,
+								`\n\tSTDERR: ${stderrChunks.join("\n\t")}`
 							);
 						}
 						if (details === "") {
@@ -146,16 +146,16 @@ export class ChildProcess {
 							ErrorHelper.getInternalError(
 								InternalErrorCode.CommandFailedWithDetails,
 								commandWithArgs,
-								details,
-							),
+								details
+							)
 						);
 					} else {
 						reject(
 							ErrorHelper.getInternalError(
 								InternalErrorCode.CommandFailed,
 								commandWithArgs,
-								code,
-							),
+								code
+							)
 						);
 					}
 				}
@@ -191,13 +191,13 @@ export class ChildProcess {
 					(m) =>
 						m[3] &&
 						["/instruments", "/DTServiceHub"].some((name) =>
-							m[3].endsWith(name),
-						),
+							m[3].endsWith(name)
+						)
 				)
 				.forEach((m) => {
 					const pid = m[2];
 					console.debug(
-						`Killing orphaned Instruments process: ${pid}`,
+						`Killing orphaned Instruments process: ${pid}`
 					);
 					kill(parseInt(pid, 10), "SIGKILL");
 				});

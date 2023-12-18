@@ -46,7 +46,7 @@ const main: IValidation = {
 	label,
 	description: toLocale(
 		"NpmCheckDescription",
-		"Required for installing node packages",
+		"Required for installing node packages"
 	),
 	category: ValidationCategoryE.Common,
 	exec: test,

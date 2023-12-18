@@ -29,23 +29,23 @@ export class RunElementInspector extends Command {
 		InternalErrorCode.CommandFailed,
 		localize(
 			"ReactNativeRunElementInspector",
-			"React Native: Run Element Inspector",
-		),
+			"React Native: Run Element Inspector"
+		)
 	);
 
 	async baseFn(): Promise<void> {
 		const logger = OutputChannelLogger.getMainChannel();
 
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
-			"elementInspector",
+			"elementInspector"
 		);
 
 		if (elementInspector) {
 			logger.info(
 				localize(
 					"AnotherElementInspectorAlreadyRun",
-					"Another element inspector already run",
-				),
+					"Another element inspector already run"
+				)
 			);
 
 			return;
@@ -67,7 +67,7 @@ export class RunElementInspector extends Command {
 		if (!elementInspector.pid) {
 			elementInspector = undefined;
 			throw ErrorHelper.getInternalError(
-				InternalErrorCode.ReactDevtoolsIsNotInstalled,
+				InternalErrorCode.ReactDevtoolsIsNotInstalled
 			);
 		}
 
@@ -93,8 +93,8 @@ export class StopElementInspector extends Command {
 		InternalErrorCode.CommandFailed,
 		localize(
 			"ReactNativeStopElementInspector",
-			"React Native: Stop Element Inspector",
-		),
+			"React Native: Stop Element Inspector"
+		)
 	);
 
 	async baseFn(): Promise<void> {

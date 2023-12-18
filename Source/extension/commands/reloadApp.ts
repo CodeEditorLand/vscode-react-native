@@ -28,7 +28,7 @@ export class ReloadApp extends Command {
 	label = "ReloadApp";
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.CommandFailed,
-		localize("ReactNativeReloadApp", "React Native: Reload App"),
+		localize("ReactNativeReloadApp", "React Native: Reload App")
 	);
 
 	async baseFn(): Promise<void> {
@@ -38,7 +38,7 @@ export class ReloadApp extends Command {
 			getRunOptions(this.project, PlatformType.Android),
 			{
 				packager: this.project.getPackager(),
-			},
+			}
 		);
 
 		androidPlatform.reloadApp().catch(() => {});
@@ -48,11 +48,11 @@ export class ReloadApp extends Command {
 			const RNPackageVersions =
 				await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 					nodeModulesRoot,
-					[REACT_NATIVE_PACKAGES.REACT_NATIVE_WINDOWS],
+					[REACT_NATIVE_PACKAGES.REACT_NATIVE_WINDOWS]
 				);
 
 			const isRNWProject = !ProjectVersionHelper.isVersionError(
-				RNPackageVersions.reactNativeWindowsVersion,
+				RNPackageVersions.reactNativeWindowsVersion
 			);
 
 			if (isRNWProject) {
@@ -60,7 +60,7 @@ export class ReloadApp extends Command {
 					getRunOptions(this.project, PlatformType.Windows),
 					{
 						packager: this.project.getPackager(),
-					},
+					}
 				);
 				windowsPlatform.reloadApp(this.project).catch(() => {});
 			}
@@ -69,7 +69,7 @@ export class ReloadApp extends Command {
 				getRunOptions(this.project, PlatformType.iOS),
 				{
 					packager: this.project.getPackager(),
-				},
+				}
 			);
 
 			iosPlatform.reloadApp(this.project).catch(() => {});

@@ -26,7 +26,7 @@ export class GraphQLFormatter implements IFormatter {
 
 	public formatRequest(
 		request: Request,
-		contentType: string,
+		contentType: string
 	): FormattedBody | null {
 		if (request.url.indexOf("graphql") > 0) {
 			const decoded = decodeBody(request, this.logger);
@@ -47,7 +47,7 @@ export class GraphQLFormatter implements IFormatter {
 
 	public formatResponse(
 		response: Response,
-		contentType: string,
+		contentType: string
 	): FormattedBody | null {
 		if (
 			contentType.startsWith("application/json") ||

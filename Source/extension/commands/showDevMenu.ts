@@ -25,8 +25,8 @@ export class ShowDevMenu extends Command {
 		InternalErrorCode.CommandFailed,
 		localize(
 			"ReactNativeShowDevMenu",
-			"React Native: Show Developer Menu for app",
-		),
+			"React Native: Show Developer Menu for app"
+		)
 	);
 
 	async baseFn(): Promise<void> {
@@ -36,7 +36,7 @@ export class ShowDevMenu extends Command {
 			getRunOptions(this.project, PlatformType.Android),
 			{
 				packager: this.project.getPackager(),
-			},
+			}
 		) as AndroidPlatform;
 
 		androidPlatform.showDevMenu().catch(() => {});
@@ -46,7 +46,7 @@ export class ShowDevMenu extends Command {
 				getRunOptions(this.project, PlatformType.iOS),
 				{
 					packager: this.project.getPackager(),
-				},
+				}
 			);
 
 			iosPlatform.showDevMenu(this.project).catch(() => {});

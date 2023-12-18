@@ -22,7 +22,7 @@ abstract class RunIos extends ReactNativeCommand {
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
-				nodeModulesRoot,
+				nodeModulesRoot
 			);
 		this.project.setReactNativeVersions(versions);
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.iOS);
@@ -54,7 +54,7 @@ async function runIos(target: TargetType, project: AppLauncher) {
 		getRunOptions(project, PlatformType.iOS, target),
 		{
 			packager: project.getPackager(),
-		},
+		}
 	);
 
 	try {

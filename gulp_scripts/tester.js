@@ -66,7 +66,7 @@ const testCoverage = gulp.series(
 	gulp.series(getBuilder.buildDev),
 	async function () {
 		await test(true);
-	},
+	}
 );
 
 module.exports = {

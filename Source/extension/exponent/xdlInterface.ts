@@ -13,17 +13,17 @@ const METRO_CONFIG_PACKAGE = "@expo/metro-config";
 
 const xdlPackageConfig = new PackageConfig(
 	XDL_PACKAGE,
-	SettingsHelper.getExpoDependencyVersion(XDL_PACKAGE),
+	SettingsHelper.getExpoDependencyVersion(XDL_PACKAGE)
 );
 const metroConfigPackageConfig = new PackageConfig(
 	METRO_CONFIG_PACKAGE,
-	SettingsHelper.getExpoDependencyVersion(METRO_CONFIG_PACKAGE),
+	SettingsHelper.getExpoDependencyVersion(METRO_CONFIG_PACKAGE)
 );
 
 const ngrokPackageConfig = new PackageConfig(
 	xdlPackageConfig.getPackageName(),
 	xdlPackageConfig.getVersion(),
-	"build/start/resolveNgrok",
+	"build/start/resolveNgrok"
 );
 
 // There is the problem with '--no-save' flag for 'npm install' command for npm v6.
@@ -35,7 +35,7 @@ const EXPO_DEPS: PackageConfig[] = [xdlPackageConfig, metroConfigPackageConfig];
 export const getXDLPackage: () => Promise<typeof XDLPackage> =
 	PackageLoader.getInstance().generateGetPackageFunction<typeof XDLPackage>(
 		xdlPackageConfig,
-		...EXPO_DEPS,
+		...EXPO_DEPS
 	);
 export const getMetroConfigPackage: () => Promise<typeof MetroConfigPackage> =
 	PackageLoader.getInstance().generateGetPackageFunction<
@@ -44,7 +44,7 @@ export const getMetroConfigPackage: () => Promise<typeof MetroConfigPackage> =
 export const getNgrokResolver: () => Promise<XDLPackage.ResolveNgrok> =
 	PackageLoader.getInstance().generateGetPackageFunction<XDLPackage.ResolveNgrok>(
 		ngrokPackageConfig,
-		...EXPO_DEPS,
+		...EXPO_DEPS
 	);
 
 export type IUser = XDLPackage.IUser;
@@ -58,7 +58,7 @@ export async function configReactNativeVersionWarnings(): Promise<void> {
 
 export async function attachLoggerStream(
 	rootPath: string,
-	options?: XDLPackage.IBunyanStream | any,
+	options?: XDLPackage.IBunyanStream | any
 ): Promise<void> {
 	(await getXDLPackage()).ProjectUtils.attachLoggerStream(rootPath, options);
 }
@@ -72,7 +72,7 @@ export async function currentUser(): Promise<XDLPackage.IUser> {
 
 export async function login(
 	username: string,
-	password: string,
+	password: string
 ): Promise<XDLPackage.IUser> {
 	const xdl = await getXDLPackage();
 	return await (xdl.User
@@ -80,7 +80,7 @@ export async function login(
 		: xdl.UserManager.loginAsync("user-pass", {
 				username,
 				password,
-		  }));
+			}));
 }
 
 export async function getExpoSdkVersions(): Promise<XDLPackage.SDKVersions> {
@@ -93,19 +93,18 @@ export async function getReleasedExpoSdkVersions(): Promise<XDLPackage.SDKVersio
 
 export async function publish(
 	projectRoot: string,
-	options?: XDLPackage.IPublishOptions,
+	options?: XDLPackage.IPublishOptions
 ): Promise<XDLPackage.IPublishResponse> {
 	return (await getXDLPackage()).Project.publishAsync(projectRoot, options);
 }
 
 export async function setOptions(
 	projectRoot: string,
-	options: XDLPackage.IOptions,
+	options: XDLPackage.IOptions
 ): Promise<void> {
-	await (await getXDLPackage()).ProjectSettings.setPackagerInfoAsync(
-		projectRoot,
-		options,
-	);
+	await (
+		await getXDLPackage()
+	).ProjectSettings.setPackagerInfoAsync(projectRoot, options);
 }
 
 export async function startExponentServer(projectRoot: string): Promise<void> {
@@ -118,11 +117,11 @@ export async function startTunnels(projectRoot: string): Promise<void> {
 
 export async function getUrl(
 	projectRoot: string,
-	options?: XDLPackage.IUrlOptions,
+	options?: XDLPackage.IUrlOptions
 ): Promise<string> {
 	return (await getXDLPackage()).UrlUtils.constructManifestUrlAsync(
 		projectRoot,
-		options,
+		options
 	);
 }
 
@@ -139,7 +138,7 @@ export async function stopAdbReverse(projectRoot: string): Promise<void> {
 }
 
 export async function getMetroConfig(
-	projectRoot: string,
+	projectRoot: string
 ): Promise<MetroConfigPackage.IMetroConfig> {
 	return (await getMetroConfigPackage()).loadAsync(projectRoot);
 }

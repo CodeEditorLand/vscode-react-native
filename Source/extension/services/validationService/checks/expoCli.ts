@@ -33,7 +33,7 @@ const main: IValidation = {
 	label,
 	description: toLocale(
 		"ExpoCliTestDescription",
-		"Required for installing and managing Expo applications",
+		"Required for installing and managing Expo applications"
 	),
 	category: ValidationCategoryE.Expo,
 	exec: test,

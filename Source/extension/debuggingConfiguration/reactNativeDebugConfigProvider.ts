@@ -39,21 +39,21 @@ export class ReactNativeDebugConfigProvider
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID,
 			description: localize(
 				"DebugAndroidConfigDesc",
-				"Run and debug Android application",
+				"Run and debug Android application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.RUN_ANDROID,
 			description: localize(
 				"RunAndroidConfigDesc",
-				"Run Android application",
+				"Run Android application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_IOS,
 			description: localize(
 				"DebugiOSConfigDesc",
-				"Run and debug iOS application",
+				"Run and debug iOS application"
 			),
 		},
 		{
@@ -64,112 +64,112 @@ export class ReactNativeDebugConfigProvider
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS,
 			description: localize(
 				"DebugWindowsConfigDesc",
-				"Run and debug Windows application",
+				"Run and debug Windows application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS,
 			description: localize(
 				"DebugmacOSConfigDesc",
-				"Run and debug macOS application",
+				"Run and debug macOS application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.ATTACH_TO_PACKAGER,
 			description: localize(
 				"AttachToPackagerConfigDesc",
-				"Attach to already working application packager",
+				"Attach to already working application packager"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT,
 			description: localize(
 				"DebugExpoConfigDesc",
-				"Debug Expo application or React Native application in Expo",
+				"Debug Expo application or React Native application in Expo"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT_HERMES_EXPERIMENTAL,
 			description: localize(
 				"DebugHermesExpoConfigDesc",
-				"Debug Hermes Expo application or React Native application in Expo",
+				"Debug Hermes Expo application or React Native application in Expo"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT_WEB_EXPERIMENTAL,
 			description: localize(
 				"DebugExpoWebConfigDesc",
-				"Debug Hermes Expo application on web browser",
+				"Debug Hermes Expo application on web browser"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID_HERMES,
 			description: localize(
 				"DebugAndroidHermesConfigDesc",
-				"Run and debug Android Hermes application",
+				"Run and debug Android Hermes application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.RUN_ANDROID_HERMES,
 			description: localize(
 				"RunAndroidHermesConfigDesc",
-				"Run Android Hermes application",
+				"Run Android Hermes application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_IOS_HERMES,
 			description: localize(
 				"DebugIosHermesConfigDesc",
-				"Run and debug iOS Hermes application",
+				"Run and debug iOS Hermes application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.RUN_IOS_HERMES,
 			description: localize(
 				"RunIosHermesConfigDesc",
-				"Run iOS Hermes application",
+				"Run iOS Hermes application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS_HERMES_EXPERIMENTAL,
 			description: localize(
 				"DebugMacOSHermesConfigDesc",
-				"Run and debug macOS Hermes application",
+				"Run and debug macOS Hermes application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS_HERMES_EXPERIMENTAL,
 			description: localize(
 				"DebugWindowsHermesConfigDesc",
-				"Run and debug Windows Hermes application",
+				"Run and debug Windows Hermes application"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.ATTACH_TO_HERMES_APPLICATION,
 			description: localize(
 				"AttachToPackagerHermesConfigDesc",
-				"Attach to already working React Native Hermes application on Android directly",
+				"Attach to already working React Native Hermes application on Android directly"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_DIRECT_IOS_EXPERIMENTAL,
 			description: localize(
 				"DebugDirectiOSConfigDesc",
-				"Run and debug iOS application directly",
+				"Run and debug iOS application directly"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.RUN_DIRECT_IOS_EXPERIMENTAL,
 			description: localize(
 				"RunDirectiOSConfigDesc",
-				"Run iOS application with direct debugging support",
+				"Run iOS application with direct debugging support"
 			),
 		},
 		{
 			label: DEBUG_CONFIGURATION_NAMES.ATTACH_TO_DIRECT_IOS_EXPERIMENTAL,
 			description: localize(
 				"AttachToPackageriOSConfigDesc",
-				"Attach to already working React Native iOS application directly",
+				"Attach to already working React Native iOS application directly"
 			),
 		},
 	];
@@ -180,7 +180,7 @@ export class ReactNativeDebugConfigProvider
 				label: "Run application",
 				description: localize(
 					"RunApplicationScenario",
-					"Run React Native application without debugging",
+					"Run React Native application without debugging"
 				),
 				type: DebugScenarioType.RunApp,
 			},
@@ -188,7 +188,7 @@ export class ReactNativeDebugConfigProvider
 				label: "Debug application",
 				description: localize(
 					"DebugApplicationScenario",
-					"Debug React Native application",
+					"Debug React Native application"
 				),
 				type: DebugScenarioType.DebugApp,
 			},
@@ -196,7 +196,7 @@ export class ReactNativeDebugConfigProvider
 				label: "Attach to application",
 				description: localize(
 					"AttachApplicationScenario",
-					"Attach to running React Native application",
+					"Attach to running React Native application"
 				),
 				type: DebugScenarioType.AttachApp,
 			},
@@ -204,17 +204,17 @@ export class ReactNativeDebugConfigProvider
 
 	public async provideDebugConfigurations(
 		folder: vscode.WorkspaceFolder | undefined, // eslint-disable-line @typescript-eslint/no-unused-vars
-		token?: vscode.CancellationToken, // eslint-disable-line @typescript-eslint/no-unused-vars
+		token?: vscode.CancellationToken // eslint-disable-line @typescript-eslint/no-unused-vars
 	): Promise<vscode.DebugConfiguration[]> {
 		return new Promise<vscode.DebugConfiguration[]>((resolve) => {
 			const configPicker = this.prepareDebugConfigPicker();
 			const disposables: vscode.Disposable[] = [];
 			const pickHandler = () => {
 				const chosenConfigsEvent = TelemetryHelper.createTelemetryEvent(
-					"chosenDebugConfigurations",
+					"chosenDebugConfigurations"
 				);
 				const selected: string[] = configPicker.selectedItems.map(
-					(element) => element.label,
+					(element) => element.label
 				);
 				chosenConfigsEvent.properties.selectedItems = selected;
 				Telemetry.send(chosenConfigsEvent);
@@ -226,7 +226,7 @@ export class ReactNativeDebugConfigProvider
 			disposables.push(
 				configPicker.onDidAccept(pickHandler),
 				configPicker.onDidHide(pickHandler),
-				configPicker,
+				configPicker
 			);
 
 			configPicker.show();
@@ -235,7 +235,7 @@ export class ReactNativeDebugConfigProvider
 
 	public async provideDebugConfigurationSequentially(
 		folder: vscode.WorkspaceFolder | undefined,
-		token?: vscode.CancellationToken,
+		token?: vscode.CancellationToken
 	): Promise<vscode.DebugConfiguration | undefined> {
 		const config: Partial<ILaunchRequestArgs> = {};
 		const state = {
@@ -248,7 +248,7 @@ export class ReactNativeDebugConfigProvider
 		const multiStep = new MultiStepInput<DebugConfigurationState>();
 		await multiStep.run(
 			(input, s) => this.pickDebugConfiguration(input, s),
-			state,
+			state
 		);
 
 		if (Object.keys(state.config).length === 0) {
@@ -267,7 +267,7 @@ export class ReactNativeDebugConfigProvider
 							state.scenarioType,
 							state.config.type,
 							state.config.platform,
-							state.config.useHermesEngine !== false,
+							state.config.useHermesEngine !== false
 						);
 				} else {
 					state.config.name =
@@ -276,7 +276,7 @@ export class ReactNativeDebugConfigProvider
 							state.config.type,
 							state.config.platform,
 							state.config.useHermesEngine !== false,
-							true,
+							true
 						);
 				}
 			} else {
@@ -284,14 +284,14 @@ export class ReactNativeDebugConfigProvider
 					DebugScenarioNameGenerator.createScenarioName(
 						state.scenarioType,
 						state.config.type || DEBUG_TYPES.REACT_NATIVE,
-						state.config.platform,
+						state.config.platform
 					);
 			}
 		} else {
 			state.config.name = DebugScenarioNameGenerator.createScenarioName(
 				state.scenarioType,
 				state.config.type || DEBUG_TYPES.REACT_NATIVE,
-				state.config.platform,
+				state.config.platform
 			);
 		}
 
@@ -300,7 +300,7 @@ export class ReactNativeDebugConfigProvider
 
 	private async pickDebugConfiguration(
 		input: IMultiStepInput<DebugConfigurationState>,
-		state: DebugConfigurationState,
+		state: DebugConfigurationState
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		state.config = {};
 		const pick = await input.showQuickPick<
@@ -309,7 +309,7 @@ export class ReactNativeDebugConfigProvider
 		>({
 			title: localize(
 				"DebugConfigQuickPickSequentialLabel",
-				"Select a debug configuration",
+				"Select a debug configuration"
 			),
 			placeholder: "Debug Configuration",
 			activeItem: this.sequentialPickConfig[0],
@@ -322,10 +322,10 @@ export class ReactNativeDebugConfigProvider
 	}
 
 	private gatherDebugScenarios(
-		selectedItems: string[],
+		selectedItems: string[]
 	): vscode.DebugConfiguration[] {
 		const launchConfig: vscode.DebugConfiguration[] = selectedItems.map(
-			(element) => debugConfigurations[element],
+			(element) => debugConfigurations[element]
 		);
 		return launchConfig;
 	}
@@ -336,7 +336,7 @@ export class ReactNativeDebugConfigProvider
 		debugConfigPicker.ignoreFocusOut = true;
 		debugConfigPicker.title = localize(
 			"DebugConfigQuickPickLabel",
-			"Pick debug configurations",
+			"Pick debug configurations"
 		);
 		debugConfigPicker.items = this.initialPickConfig;
 		// QuickPickItem property `picked` doesn't work, so this line will check first item in the list

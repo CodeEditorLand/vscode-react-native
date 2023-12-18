@@ -36,7 +36,7 @@ export class DebuggerEndpointHelper {
 		attemptNumber: number,
 		cancellationToken: CancellationToken,
 		isHermes: boolean = false,
-		settingsPort?: number,
+		settingsPort?: number
 	): Promise<string> {
 		while (true) {
 			try {
@@ -59,13 +59,13 @@ export class DebuggerEndpointHelper {
 					const internalError = ErrorHelper.getInternalError(
 						InternalErrorCode.CouldNotConnectToDebugTarget,
 						browserURL,
-						err.message,
+						err.message
 					);
 
 					if (cancellationToken.isCancellationRequested) {
 						throw ErrorHelper.getNestedError(
 							internalError,
-							InternalErrorCode.CancellationTokenTriggered,
+							InternalErrorCode.CancellationTokenTriggered
 						);
 					}
 
@@ -83,7 +83,7 @@ export class DebuggerEndpointHelper {
 	 */
 	public async getWSEndpoint(
 		browserURL: string,
-		isHermes: boolean = false,
+		isHermes: boolean = false
 	): Promise<string> {
 		const jsonVersion = await this.fetchJson<{
 			webSocketDebuggerUrl?: string;
@@ -95,24 +95,24 @@ export class DebuggerEndpointHelper {
 		// Chrome its top-level debugg on /json/version, while Node does not.
 		// Request both and return whichever one got us a string.
 		const jsonList = await this.fetchJson<DebuggableEndpointData[]>(
-			URL.resolve(browserURL, "/json/list"),
+			URL.resolve(browserURL, "/json/list")
 		);
 		if (jsonList.length) {
 			return isHermes
 				? this.tryToGetHermesImprovedChromeReloadsWebSocketDebuggerUrl(
-						jsonList,
-				  )
+						jsonList
+					)
 				: jsonList[0].webSocketDebuggerUrl;
 		}
 		// Try to get websocket endpoint from default metro bundler
 		const defaultJsonList = await this.fetchJson<DebuggableEndpointData[]>(
-			"http://localhost:8081/json/list",
+			"http://localhost:8081/json/list"
 		);
 		if (defaultJsonList.length) {
 			return isHermes
 				? this.tryToGetHermesImprovedChromeReloadsWebSocketDebuggerUrl(
-						defaultJsonList,
-				  )
+						defaultJsonList
+					)
 				: defaultJsonList[0].webSocketDebuggerUrl;
 		}
 
@@ -120,12 +120,12 @@ export class DebuggerEndpointHelper {
 	}
 
 	private tryToGetHermesImprovedChromeReloadsWebSocketDebuggerUrl(
-		jsonList: DebuggableEndpointData[],
+		jsonList: DebuggableEndpointData[]
 	): string {
 		const target = jsonList.find(
 			(target) =>
 				target.title ===
-				"React Native Experimental (Improved Chrome Reloads)",
+				"React Native Experimental (Improved Chrome Reloads)"
 		);
 		return target
 			? target.webSocketDebuggerUrl

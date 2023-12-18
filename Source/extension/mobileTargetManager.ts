@@ -18,11 +18,11 @@ export abstract class MobileTargetManager {
 	public abstract collectTargets(targetType?: TargetType): Promise<void>;
 
 	public abstract selectAndPrepareTarget(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<MobileTarget | undefined>;
 
 	public async getTargetList(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<IMobileTarget[]> {
 		if (!this.targets) {
 			await this.collectTargets();
@@ -33,7 +33,7 @@ export abstract class MobileTargetManager {
 	}
 
 	public async getTargetsCountWithFilter(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<number> {
 		return (await this.getTargetList(filter)).length;
 	}
@@ -49,21 +49,21 @@ export abstract class MobileTargetManager {
 			localize(
 				"CouldNotRecognizeTargetType",
 				"Could not recognize type of the target {0}",
-				target,
-			),
+				target
+			)
 		);
 	}
 
 	protected abstract launchSimulator(
-		emulatorTarget: IMobileTarget,
+		emulatorTarget: IMobileTarget
 	): Promise<MobileTarget | undefined>;
 
 	protected abstract startSelection(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<IMobileTarget | undefined>;
 
 	protected async selectTarget(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<IMobileTarget | undefined> {
 		const targetList = await this.getTargetList(filter);
 		let result: string | undefined =
@@ -74,20 +74,20 @@ export abstract class MobileTargetManager {
 				canPickMany: false,
 				placeHolder: localize(
 					"SelectTargetDevice",
-					"Select target device for launch application",
+					"Select target device for launch application"
 				),
 			};
 			result = await window.showQuickPick(
 				targetList.map<string>(
-					(target) => (target?.name || target?.id) as string,
+					(target) => (target?.name || target?.id) as string
 				),
-				quickPickOptions,
+				quickPickOptions
 			);
 		}
 		return result
 			? targetList.find(
-					(target) => target.name === result || target.id === result,
-			  )
+					(target) => target.name === result || target.id === result
+				)
 			: undefined;
 	}
 }

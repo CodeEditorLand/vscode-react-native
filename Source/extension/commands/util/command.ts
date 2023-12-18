@@ -17,7 +17,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 	private static instances = new Map<Command, unknown>();
 
 	static formInstance<T extends { prototype: unknown }>(
-		this: T,
+		this: T
 	): T["prototype"] {
 		// 'any' because TypeScript is wrong
 		// workaround from https://github.com/microsoft/TypeScript/issues/5863
@@ -40,7 +40,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 				PlatformType.macOS,
 				PlatformType.Windows,
 			].find((it) =>
-				this.codeName.toLowerCase().includes(it.toLowerCase()),
+				this.codeName.toLowerCase().includes(it.toLowerCase())
 			) || ""
 		);
 	}
@@ -58,12 +58,12 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 	protected constructor() {}
 
 	protected createHandler(
-		fn = this.baseFn.bind(this),
+		fn = this.baseFn.bind(this)
 	): (...args: ArgT) => Promise<void> {
 		return async (...args: ArgT): Promise<void> => {
 			assert(
 				this.entryPointHandler,
-				"this.entryPointHandler is not defined",
+				"this.entryPointHandler is not defined"
 			);
 
 			const resultFn = async (generator: TelemetryGenerator) => {
@@ -82,7 +82,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 			};
 
 			OutputChannelLogger.getMainChannel().debug(
-				`Run command: ${this.codeName}`,
+				`Run command: ${this.codeName}`
 			);
 
 			await this.entryPointHandler.runFunctionWExtProps(
@@ -94,7 +94,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 					},
 				},
 				this.error,
-				resultFn.bind(this),
+				resultFn.bind(this)
 			);
 		};
 	}
@@ -109,7 +109,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.WorkspaceIsNotTrusted,
 				this.project?.getPackager().getProjectPath() || undefined,
-				this.label,
+				this.label
 			);
 		}
 
@@ -132,7 +132,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 					throw ErrorHelper.getNestedError(
 						error,
 						InternalErrorCode.CommandCanceled,
-						this.label,
+						this.label
 					);
 				default:
 					throw error;
@@ -157,7 +157,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 			isCalled = true;
 			return vscode.commands.registerCommand(
 				`reactNative.${this.codeName}`,
-				this.createHandler(),
+				this.createHandler()
 			);
 		};
 	})();

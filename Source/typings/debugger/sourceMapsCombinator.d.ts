@@ -5,6 +5,6 @@ declare module "source-map-resolve" {
 		code: string | null,
 		codeUrl: string,
 		read: Function,
-		options?: any,
+		options?: any
 	): any;
 }

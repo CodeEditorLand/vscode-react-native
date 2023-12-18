@@ -12,7 +12,7 @@ const JSON5 = require("json5");
 
 export function removeModuleFromRequireCacheByName(moduleName: string): void {
 	const moduleKey = Object.keys(customRequire.cache).find((key) =>
-		key.includes(moduleName),
+		key.includes(moduleName)
 	);
 	if (moduleKey) {
 		delete customRequire.cache[moduleKey];
@@ -22,7 +22,7 @@ export function removeModuleFromRequireCacheByName(moduleName: string): void {
 export function getNodeModulesGlobalPath(): Promise<string> {
 	const childProcess = new ChildProcess();
 	return childProcess.execToString(
-		`${HostPlatform.getNpmCliCommand("npm")} root -g`,
+		`${HostPlatform.getNpmCliCommand("npm")} root -g`
 	);
 }
 
@@ -72,8 +72,8 @@ function padZeroes(minDesiredLength: number, numberToPad: string): string {
 	return numberToPad.length >= minDesiredLength
 		? numberToPad
 		: String("0".repeat(minDesiredLength) + numberToPad).slice(
-				-minDesiredLength,
-		  );
+				-minDesiredLength
+			);
 }
 
 export function stripJsonTrailingComma(str: string): any {
@@ -106,9 +106,9 @@ export function getTimestamp(): string {
 	const month = date.getMonth() + 1;
 	const time = `${date.getDate()}${String(date.getHours()).padStart(
 		2,
-		"0",
+		"0"
 	)}${String(date.getMinutes()).padStart(2, "0")}${String(
-		date.getSeconds(),
+		date.getSeconds()
 	).padStart(2, "0")}`;
 
 	return `${year}${month}${time}`;

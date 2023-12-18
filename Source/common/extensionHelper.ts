@@ -9,7 +9,7 @@ import { Package } from "./node/package";
 export function getExtensionVersion(): string | null {
 	const packageJsonPath = findFileInFolderHierarchy(
 		__dirname,
-		"package.json",
+		"package.json"
 	);
 	return packageJsonPath
 		? JSON.parse(fs.readFileSync(packageJsonPath, "utf-8")).version
@@ -19,7 +19,7 @@ export function getExtensionVersion(): string | null {
 export function getExtensionName(): string | null {
 	const packageJsonPath = findFileInFolderHierarchy(
 		__dirname,
-		"package.json",
+		"package.json"
 	);
 	return packageJsonPath
 		? JSON.parse(fs.readFileSync(packageJsonPath, "utf-8")).name
@@ -28,7 +28,7 @@ export function getExtensionName(): string | null {
 
 export function findFileInFolderHierarchy(
 	dir: string,
-	filename: string,
+	filename: string
 ): string | null {
 	let parentPath: string;
 	let projectRoot: string = dir;
@@ -52,18 +52,18 @@ export function generateRandomPortNumber(): number {
 }
 
 export function getNodeModulesInFolderHierarchy(
-	projectRoot: string,
+	projectRoot: string
 ): string | null {
 	const NODE_MODULES_FOLDER = "node_modules";
 	const REACT_NATIVE_MODULE = "react-native";
 	const pathToReactNativeModule: string = path.join(
 		NODE_MODULES_FOLDER,
-		REACT_NATIVE_MODULE,
+		REACT_NATIVE_MODULE
 	);
 
 	const nodeModulesPath: string | null = findFileInFolderHierarchy(
 		projectRoot,
-		pathToReactNativeModule,
+		pathToReactNativeModule
 	);
 	return nodeModulesPath ? path.resolve(nodeModulesPath, "..", "..") : null;
 }
@@ -77,17 +77,17 @@ export function isWorkspaceTrusted(): boolean {
 }
 
 export async function getVersionFromExtensionNodeModules(
-	packageName: string,
+	packageName: string
 ): Promise<string | null> {
 	const packageJsonPath = findFileInFolderHierarchy(
 		__dirname,
-		"package.json",
+		"package.json"
 	);
 	if (packageJsonPath) {
 		const rootDirecory = path.resolve(packageJsonPath, "..");
 		try {
 			return await new Package(
-				rootDirecory,
+				rootDirecory
 			).getPackageVersionFromNodeModules(packageName);
 		} catch {
 			return null;

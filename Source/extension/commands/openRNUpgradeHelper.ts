@@ -21,7 +21,7 @@ export class OpenRNUpgradeHelper extends Command {
 	codeName = "openRNUpgradeHelper";
 	label = "Open react native upgrade helper in web page";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToOpenRNUpgradeHelper,
+		InternalErrorCode.FailedToOpenRNUpgradeHelper
 	);
 
 	async baseFn(): Promise<void> {
@@ -38,14 +38,14 @@ export class OpenRNUpgradeHelper extends Command {
 			["React Native", "React Native Windows", "React Native MacOS"],
 			{
 				placeHolder: "Select type for your react native project",
-			},
+			}
 		);
 
 		logger.info(
 			localize(
 				"OpenInWebBrowser",
-				"Open react native upgrade helper in web browser.",
-			),
+				"Open react native upgrade helper in web browser."
+			)
 		);
 
 		switch (item) {

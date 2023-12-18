@@ -33,8 +33,8 @@ export class AndroidDeviceTracker extends AbstractDeviceTracker {
 			[...DeviceStorage.devices.keys()].filter(
 				(key) =>
 					DeviceStorage.devices.get(key) instanceof
-					AndroidClientDevice,
-			),
+					AndroidClientDevice
+			)
 		);
 
 		for (const onlineDevice of onlineDevices) {
@@ -44,7 +44,7 @@ export class AndroidDeviceTracker extends AbstractDeviceTracker {
 				const androidDevice = new AndroidClientDevice(
 					onlineDevice.id,
 					onlineDevice.isVirtualTarget,
-					ClientOS.Android,
+					ClientOS.Android
 				);
 				await this.initAndroidDevice(androidDevice);
 				DeviceStorage.devices.set(androidDevice.id, androidDevice);
@@ -59,11 +59,11 @@ export class AndroidDeviceTracker extends AbstractDeviceTracker {
 	private async initAndroidDevice(androidDevice: AndroidClientDevice) {
 		await this.adbHelper.reverseAdb(
 			androidDevice.id,
-			NetworkInspectorServer.InsecureServerPort,
+			NetworkInspectorServer.InsecureServerPort
 		);
 		await this.adbHelper.reverseAdb(
 			androidDevice.id,
-			NetworkInspectorServer.SecureServerPort,
+			NetworkInspectorServer.SecureServerPort
 		);
 		androidDevice.deviceStatus = DeviceStatus.Prepared;
 	}

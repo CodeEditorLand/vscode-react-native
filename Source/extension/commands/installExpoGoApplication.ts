@@ -28,7 +28,7 @@ export class InstallExpoGoApplication extends Command {
 	codeName = "installExpoGoApplication";
 	label = "Download and install Expo Go on simulator or device";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToInstallExpoGo,
+		InternalErrorCode.FailedToInstallExpoGo
 	);
 
 	async baseFn(): Promise<void> {
@@ -40,14 +40,14 @@ export class InstallExpoGoApplication extends Command {
 			["Manual", "Auto"],
 			{
 				placeHolder: "How to install application",
-			},
+			}
 		);
 		const expoHelper = this.project.getExponentHelper();
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",
-				"Checking Expo project environment.",
-			),
+				"Checking Expo project environment."
+			)
 		);
 		const isExpo = await expoHelper.isExpoManagedApp(true);
 
@@ -61,13 +61,13 @@ export class InstallExpoGoApplication extends Command {
 
 			if (item == "Android") {
 				void vscode.window.showInformationMessage(
-					"Downloading Expo Go for Android.",
+					"Downloading Expo Go for Android."
 				);
 				logger.logStream(
 					localize(
 						"DownloadAndroidExpoGo",
-						"\nDownloading Expo Go for Android. \n",
-					),
+						"\nDownloading Expo Go for Android. \n"
+					)
 				);
 
 				const targetUrl = expoUrlInfo.androidClientUrl;
@@ -84,8 +84,8 @@ export class InstallExpoGoApplication extends Command {
 						throw new Error(
 							localize(
 								"FailedToDownloadExpoGo",
-								"Failed to download Expo Go.",
-							),
+								"Failed to download Expo Go."
+							)
 						);
 					}
 				}
@@ -97,16 +97,16 @@ export class InstallExpoGoApplication extends Command {
 						throw new Error(
 							localize(
 								"FailedToInstallExpoGo",
-								"Failed to install Expo Go.",
-							),
+								"Failed to install Expo Go."
+							)
 						);
 					}
 				} else {
 					logger.logStream(
 						localize(
 							"ManualInstall",
-							"Please manually install Expo Go from project root path. \n",
-						),
+							"Please manually install Expo Go from project root path. \n"
+						)
 					);
 				}
 			} else if (item == "iOS") {
@@ -114,18 +114,18 @@ export class InstallExpoGoApplication extends Command {
 					logger.warning(
 						localize(
 							"NotDarwinPlatform",
-							"Current OS may not support iOS installer. The Expo Go may not be installed.\n",
-						),
+							"Current OS may not support iOS installer. The Expo Go may not be installed.\n"
+						)
 					);
 				}
 				void vscode.window.showInformationMessage(
-					"Downloading Expo Go for iOS.",
+					"Downloading Expo Go for iOS."
 				);
 				logger.logStream(
 					localize(
 						"DownloadiOSExpoGo",
-						"\nDownloading Expo Go for iOS. \n",
-					),
+						"\nDownloading Expo Go for iOS. \n"
+					)
 				);
 
 				const targetUrl = expoUrlInfo.iosClientUrl;
@@ -141,14 +141,14 @@ export class InstallExpoGoApplication extends Command {
 							targetUrl,
 							`${this.project
 								.getPackager()
-								.getProjectPath()}/expogo_${iOSClientVersion}.tar.gz`,
+								.getProjectPath()}/expogo_${iOSClientVersion}.tar.gz`
 						);
 					} catch {
 						throw new Error(
 							localize(
 								"FailedToDownloadExpoGo",
-								"Failed to download Expo Go.",
-							),
+								"Failed to download Expo Go."
+							)
 						);
 					}
 				}
@@ -160,16 +160,16 @@ export class InstallExpoGoApplication extends Command {
 						throw new Error(
 							localize(
 								"FailedToInstallExpoGo",
-								"Failed to install Expo Go.",
-							),
+								"Failed to install Expo Go."
+							)
 						);
 					}
 				} else {
 					logger.logStream(
 						localize(
 							"CannotAutoInstall",
-							"Cannot auto install Expo Go, selected manual install or target machine is not MacOS. \n",
-						),
+							"Cannot auto install Expo Go, selected manual install or target machine is not MacOS. \n"
+						)
 					);
 				}
 			} else {
@@ -179,8 +179,8 @@ export class InstallExpoGoApplication extends Command {
 			throw new Error(
 				localize(
 					"NotExpoProject",
-					"Current project is not Expo managed.",
-				),
+					"Current project is not Expo managed."
+				)
 			);
 		}
 	}

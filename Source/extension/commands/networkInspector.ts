@@ -35,7 +35,7 @@ export class StartNetworkInspector extends Command {
 	label = "Run Network Inspector";
 	requiresTrust = false;
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.CouldNotStartNetworkInspector,
+		InternalErrorCode.CouldNotStartNetworkInspector
 	);
 
 	async baseFn(): Promise<void> {
@@ -47,15 +47,15 @@ export class StartNetworkInspector extends Command {
 			logger.info(
 				localize(
 					"AnotherNetworkInspectorAlreadyRun",
-					"Another Network inspector is already running",
-				),
+					"Another Network inspector is already running"
+				)
 			);
 			return;
 		}
 
 		const adbHelper = new AdbHelper(
 			this.project.getPackager().getProjectPath(),
-			this.project.getOrUpdateNodeModulesRoot(),
+			this.project.getOrUpdateNodeModulesRoot()
 		);
 		const networkInspector = new NetworkInspectorServer();
 		const androidDeviceTracker = new AndroidDeviceTracker(adbHelper);
@@ -78,7 +78,7 @@ export class StartNetworkInspector extends Command {
 			void vscode.commands.executeCommand(
 				"setContext",
 				CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,
-				true,
+				true
 			);
 		} catch (err) {
 			await stopNetworkInspector();
@@ -92,7 +92,7 @@ export class StopNetworkInspector extends Command {
 	label = "Stop Network Inspector";
 	requiresTrust = false;
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.CouldNotStopNetworkInspector,
+		InternalErrorCode.CouldNotStopNetworkInspector
 	);
 
 	async baseFn(): Promise<void> {
@@ -109,6 +109,6 @@ async function stopNetworkInspector() {
 	void vscode.commands.executeCommand(
 		"setContext",
 		CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,
-		false,
+		false
 	);
 }

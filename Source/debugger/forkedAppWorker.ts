@@ -17,7 +17,7 @@ function printDebuggingError(error: Error, reason: any) {
 	const nestedError = ErrorHelper.getNestedError(
 		error,
 		InternalErrorCode.DebuggingWontWorkReloadJSAndReconnect,
-		reason,
+		reason
 	);
 
 	logger.error(nestedError.message);
@@ -46,21 +46,21 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 		private projectRootPath: string,
 		private postReplyToApp: (message: any) => void,
 		private packagerRemoteRoot?: string,
-		private packagerLocalRoot?: string,
+		private packagerLocalRoot?: string
 	) {
 		this.scriptImporter = new ScriptImporter(
 			this.packagerAddress,
 			this.packagerPort,
 			this.sourcesStoragePath,
 			this.packagerRemoteRoot,
-			this.packagerLocalRoot,
+			this.packagerLocalRoot
 		);
 	}
 
 	public stop(): void {
 		if (this.debuggeeProcess) {
 			logger.verbose(
-				`About to kill debuggee with pid ${this.debuggeeProcess.pid}`,
+				`About to kill debuggee with pid ${this.debuggeeProcess.pid}`
 			);
 			this.debuggeeProcess.kill();
 			this.debuggeeProcess = null;
@@ -70,7 +70,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 	public async start(): Promise<number> {
 		const scriptToRunPath = path.resolve(
 			this.sourcesStoragePath,
-			ScriptImporter.DEBUGGER_WORKER_FILENAME,
+			ScriptImporter.DEBUGGER_WORKER_FILENAME
 		);
 		const port = generateRandomPortNumber();
 
@@ -106,9 +106,9 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 			.on("error", (error: Error) => {
 				printDebuggingError(
 					ErrorHelper.getInternalError(
-						InternalErrorCode.ReactNativeWorkerProcessThrownAnError,
+						InternalErrorCode.ReactNativeWorkerProcessThrownAnError
 					),
-					error,
+					error
 				);
 			});
 
@@ -117,13 +117,13 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 
 		if (this.logDirectory) {
 			this.logWriteStream = fs.createWriteStream(
-				path.join(this.logDirectory, "nodeProcessLog.txt"),
+				path.join(this.logDirectory, "nodeProcessLog.txt")
 			);
 			this.logWriteStream.on("error", (err) => {
 				logger.error(
 					`Error creating log file at path: ${String(
-						this.logDirectory,
-					)}. Error: ${String(err.toString())}\n`,
+						this.logDirectory
+					)}. Error: ${String(err.toString())}\n`
 				);
 			});
 			this.debuggeeProcess.stdout.pipe(this.logWriteStream);
@@ -136,7 +136,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 		// Resolve with port debugger server is listening on
 		// This will be sent to subscribers of MLAppWorker in "connected" event
 		logger.verbose(
-			`Spawned debuggee process with pid ${this.debuggeeProcess.pid} listening to ${port}`,
+			`Spawned debuggee process with pid ${this.debuggeeProcess.pid} listening to ${port}`
 		);
 
 		return port;
@@ -177,13 +177,13 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 				};
 				logger.verbose(
 					`Packager requested runtime to load script from ${String(
-						rnMessage.url,
-					)}`,
+						rnMessage.url
+					)}`
 				);
 				const downloadedScript =
 					await this.scriptImporter.downloadAppScript(
 						<string>rnMessage.url,
-						this.projectRootPath,
+						this.projectRootPath
 					);
 				this.bundleLoaded = Promise.resolve();
 				return Object.assign({}, rnMessage, {
@@ -191,7 +191,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 				});
 			}
 			throw ErrorHelper.getInternalError(
-				InternalErrorCode.RNMessageWithMethodExecuteApplicationScriptDoesntHaveURLProperty,
+				InternalErrorCode.RNMessageWithMethodExecuteApplicationScriptDoesntHaveURLProperty
 			);
 		})();
 		promise.then(
@@ -204,10 +204,10 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 				printDebuggingError(
 					ErrorHelper.getInternalError(
 						InternalErrorCode.CouldntImportScriptAt,
-						rnMessage.url,
+						rnMessage.url
 					),
-					reason,
-				),
+					reason
+				)
 		);
 		return promise;
 	}

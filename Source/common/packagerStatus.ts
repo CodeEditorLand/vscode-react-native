@@ -6,7 +6,7 @@ import { Request } from "./node/request";
 export async function ensurePackagerRunning(
 	packagerAddress: string,
 	packagerPort: number,
-	error: any,
+	error: any
 ): Promise<void> {
 	const statusURL = `http://${packagerAddress}:${packagerPort}/status`;
 	try {

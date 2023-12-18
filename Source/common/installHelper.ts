@@ -9,22 +9,22 @@ import { ChildProcess } from "./node/childProcess";
 
 export async function installAndroidApplication(
 	project: AppLauncher,
-	appPath: string,
+	appPath: string
 ) {
 	const logger = OutputChannelLogger.getMainChannel();
 	const adbHelper = new AdbHelper(
 		project.getPackager().getProjectPath(),
-		project.getOrUpdateNodeModulesRoot(),
+		project.getOrUpdateNodeModulesRoot()
 	);
 
 	const targets = await adbHelper.getOnlineTargets();
 	if (targets.length == 0) {
 		throw new Error(
-			"No online target found, please check your emulator status.",
+			"No online target found, please check your emulator status."
 		);
 	} else if (targets.length > 1) {
 		logger.logStream(
-			`Found ${targets.length} online emulators, installing application on ${targets[0].id}. \n`,
+			`Found ${targets.length} online emulators, installing application on ${targets[0].id}. \n`
 		);
 		try {
 			await adbHelper.installApplicationToEmulator(appPath);
@@ -44,7 +44,7 @@ export async function installAndroidApplication(
 
 export async function installiOSApplication(
 	project: AppLauncher,
-	appPath: string,
+	appPath: string
 ) {
 	const logger = OutputChannelLogger.getMainChannel();
 	const childProcess: ChildProcess = new ChildProcess();
@@ -54,14 +54,14 @@ export async function installiOSApplication(
 	try {
 		// Create dir to iOS app
 		await childProcess.execToString(
-			`mkdir ${project.getPackager().getProjectPath()}/expoApp.app`,
+			`mkdir ${project.getPackager().getProjectPath()}/expoApp.app`
 		);
 
 		// Unpack .tar.gz file
 		await childProcess.execToString(
 			`tar -xf ${appPath} -C ${project
 				.getPackager()
-				.getProjectPath()}/expoApp.app`,
+				.getProjectPath()}/expoApp.app`
 		);
 	} catch (e) {
 		throw e;
@@ -69,18 +69,18 @@ export async function installiOSApplication(
 
 	if (targets.length == 1) {
 		throw new Error(
-			"No booted iOS simulator found, please check your simulator status.",
+			"No booted iOS simulator found, please check your simulator status."
 		);
 	} else if (targets.length > 2) {
 		logger.logStream(
 			`Found ${
 				targets.length - 1
-			} booted simulators, installing application on ${targets[0]}. \n`,
+			} booted simulators, installing application on ${targets[0]}. \n`
 		);
 		try {
 			await SimctrlHelper.installApplicationToSimulator(
 				targets[0],
-				`${project.getPackager().getProjectPath()}/expoApp.app`,
+				`${project.getPackager().getProjectPath()}/expoApp.app`
 			);
 		} catch {
 			throw new Error(`Failed to install application: ${appPath}.`);
@@ -90,7 +90,7 @@ export async function installiOSApplication(
 		try {
 			await SimctrlHelper.installApplicationToSimulator(
 				targets[0],
-				`${project.getPackager().getProjectPath()}/expoApp.app`,
+				`${project.getPackager().getProjectPath()}/expoApp.app`
 			);
 		} catch {
 			throw new Error(`Failed to install application: ${appPath}.`);

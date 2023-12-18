@@ -27,7 +27,7 @@ export class LogCatMonitorManager {
 		Object.keys(LogCatMonitorManager.logCatMonitorsCache).forEach(
 			(monitor) => {
 				LogCatMonitorManager.delMonitor(monitor);
-			},
+			}
 		);
 	}
 }

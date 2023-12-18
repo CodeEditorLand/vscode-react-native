@@ -25,7 +25,7 @@ const localize = nls.loadMessageBundle();
 	if (process.argv.length < 3) {
 		throw localize(
 			"WrongNumberOfParametersProvidedReferToTheUsageOfThisScript",
-			"Wrong number of parameters provided. Please refer to the usage of this script for proper use.",
+			"Wrong number of parameters provided. Please refer to the usage of this script for proper use."
 		);
 	}
 
@@ -64,14 +64,14 @@ const localize = nls.loadMessageBundle();
 			throw ErrorHelper.getNestedError(
 				reason,
 				InternalErrorCode.CommandFailed,
-				"Unable to communicate with VSCode. Please make sure it is open in the appropriate workspace.",
+				"Unable to communicate with VSCode. Please make sure it is open in the appropriate workspace."
 			);
 		});
 }
 
 async function getReactNativeWorkspaceForFile(
 	file: string,
-	workspace: string,
+	workspace: string
 ): Promise<string> {
 	if (workspace) {
 		return workspace;
@@ -82,7 +82,7 @@ async function getReactNativeWorkspaceForFile(
 		throw ErrorHelper.getNestedError(
 			reason,
 			InternalErrorCode.WorkspaceNotFound,
-			`Error while looking at workspace for file: ${file}.`,
+			`Error while looking at workspace for file: ${file}.`
 		);
 	}
 }
@@ -96,7 +96,7 @@ async function getPathForRNParentWorkspace(dir: string): Promise<string> {
 	if (dir === "" || dir === "." || dir === "/" || dir === path.dirname(dir)) {
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.WorkspaceNotFound,
-			"React Native project workspace not found.",
+			"React Native project workspace not found."
 		);
 	}
 	return getPathForRNParentWorkspace(path.dirname(dir));

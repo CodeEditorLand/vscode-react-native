@@ -13,14 +13,14 @@ export class LaunchIOSSimulator extends Command {
 	requiresProject = false;
 
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToStartIOSSimulator,
+		InternalErrorCode.FailedToStartIOSSimulator
 	);
 
 	async baseFn(): Promise<void> {
 		const targetManager = new IOSTargetManager();
 		await targetManager.collectTargets(TargetType.Simulator);
 		await targetManager.selectAndPrepareTarget(
-			(target) => target.isVirtualTarget,
+			(target) => target.isVirtualTarget
 		);
 	}
 }

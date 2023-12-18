@@ -9,7 +9,7 @@ module.exports = function (target, opts, cb) {
 		if (opts.app) {
 			console.log(
 				"Debugger for React Native is configured. Skipping launch of " +
-					opts.app,
+					opts.app
 			);
 		}
 		return;

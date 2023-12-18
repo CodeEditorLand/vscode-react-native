@@ -12,6 +12,6 @@ const localize = nls.loadMessageBundle();
 export const PROMPT_TITLES = {
 	RNT_PREVIEW_PROMPT: localize(
 		"RNTPreviewPrompt",
-		"Want to help us improve the React Native Tools Extension? Install the Preview version and give us feedback!",
+		"Want to help us improve the React Native Tools Extension? Install the Preview version and give us feedback!"
 	),
 };

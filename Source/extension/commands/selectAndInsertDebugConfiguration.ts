@@ -19,11 +19,11 @@ export class SelectAndInsertDebugConfiguration extends Command {
 	async baseFn(
 		document: vscode.TextDocument,
 		position: vscode.Position,
-		token: vscode.CancellationToken,
+		token: vscode.CancellationToken
 	): Promise<void> {
 		assert(
 			debugConfigProvider && document && position && token,
-			ErrorHelper.getInternalError(InternalErrorCode.CommandFailed),
+			ErrorHelper.getInternalError(InternalErrorCode.CommandFailed)
 		);
 
 		if (
@@ -37,7 +37,7 @@ export class SelectAndInsertDebugConfiguration extends Command {
 		const config =
 			await debugConfigProvider.provideDebugConfigurationSequentially(
 				folder,
-				token,
+				token
 			);
 
 		if (token.isCancellationRequested || !config) {
@@ -48,7 +48,7 @@ export class SelectAndInsertDebugConfiguration extends Command {
 		const cursorPosition =
 			LaunchJsonCompletionHelper.getCursorPositionInConfigurationsArray(
 				document,
-				position,
+				position
 			);
 
 		if (!cursorPosition) {
@@ -58,7 +58,7 @@ export class SelectAndInsertDebugConfiguration extends Command {
 		const commaPosition =
 			LaunchJsonCompletionHelper.isCommaImmediatelyBeforeCursor(
 				document,
-				position,
+				position
 			)
 				? "BeforeCursor"
 				: undefined;
@@ -66,7 +66,7 @@ export class SelectAndInsertDebugConfiguration extends Command {
 		const formattedJson = LaunchJsonCompletionHelper.getTextForInsertion(
 			config,
 			cursorPosition,
-			commaPosition,
+			commaPosition
 		);
 
 		const workspaceEdit = new vscode.WorkspaceEdit();
@@ -77,7 +77,7 @@ export class SelectAndInsertDebugConfiguration extends Command {
 
 		vscode.commands.executeCommand("editor.action.formatDocument").then(
 			() => {},
-			() => {},
+			() => {}
 		);
 	}
 }

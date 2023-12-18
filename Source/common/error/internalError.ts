@@ -17,7 +17,7 @@ export class InternalError extends Error {
 	constructor(
 		errorCode: number,
 		message: string,
-		errorLevel: InternalErrorLevel = InternalErrorLevel.Error,
+		errorLevel: InternalErrorLevel = InternalErrorLevel.Error
 	) {
 		super(message);
 		this.errorCode = errorCode;
@@ -38,7 +38,7 @@ export class NestedError extends InternalError {
 		message: string,
 		innerError: any = null,
 		extras?: any,
-		errorLevel: InternalErrorLevel = InternalErrorLevel.Error,
+		errorLevel: InternalErrorLevel = InternalErrorLevel.Error
 	) {
 		super(errorCode, message, errorLevel);
 		this.innerError = innerError;
@@ -56,12 +56,12 @@ export class NestedError extends InternalError {
 
 	public static getWrappedError(
 		error: InternalError,
-		innerError: any,
+		innerError: any
 	): NestedError {
 		return new NestedError(
 			innerError.errorCode || error.errorCode,
 			error.message,
-			innerError,
+			innerError
 		);
 	}
 }

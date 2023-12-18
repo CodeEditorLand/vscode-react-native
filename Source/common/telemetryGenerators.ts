@@ -26,7 +26,7 @@ export abstract class TelemetryGeneratorBase {
 
 	constructor(
 		componentName: string,
-		extendedProps: ICommandTelemetryProperties = {},
+		extendedProps: ICommandTelemetryProperties = {}
 	) {
 		this.componentName = componentName;
 		this.extendedTelemetryProperties = extendedProps;
@@ -34,13 +34,13 @@ export abstract class TelemetryGeneratorBase {
 	}
 
 	protected abstract sendTelemetryEvent(
-		telemetryEvent: Telemetry.TelemetryEvent,
+		telemetryEvent: Telemetry.TelemetryEvent
 	): void;
 
 	public add(
 		baseName: string,
 		value: any,
-		isPii: boolean,
+		isPii: boolean
 	): TelemetryGeneratorBase {
 		return this.addWithPiiEvaluator(baseName, value, () => isPii);
 	}
@@ -48,7 +48,7 @@ export abstract class TelemetryGeneratorBase {
 	public addWithPiiEvaluator(
 		baseName: string,
 		value: any,
-		piiEvaluator: { (value: string, name: string): boolean },
+		piiEvaluator: { (value: string, name: string): boolean }
 	): TelemetryGeneratorBase {
 		// We have 3 cases:
 		//     * Object is an array, we add each element as baseNameNNN
@@ -71,7 +71,7 @@ export abstract class TelemetryGeneratorBase {
 			this.addString(
 				`telemetryGenerationError.${baseName}`,
 				String(error),
-				() => false,
+				() => false
 			);
 		}
 
@@ -90,7 +90,7 @@ export abstract class TelemetryGeneratorBase {
 
 	public async time<T>(
 		name: string,
-		codeToMeasure: { (): Promise<T> | T },
+		codeToMeasure: { (): Promise<T> | T }
 	): Promise<T> {
 		const startTime: [number, number] = process.hrtime();
 
@@ -133,8 +133,8 @@ export abstract class TelemetryGeneratorBase {
 			telemetryEvent,
 			Object.assign(
 				this.telemetryProperties,
-				this.extendedTelemetryProperties,
-			),
+				this.extendedTelemetryProperties
+			)
 		);
 		this.sendTelemetryEvent(telemetryEvent);
 	}
@@ -142,47 +142,47 @@ export abstract class TelemetryGeneratorBase {
 	private addArray(
 		baseName: string,
 		array: any[],
-		piiEvaluator: { (value: string, name: string): boolean },
+		piiEvaluator: { (value: string, name: string): boolean }
 	): void {
 		// Object is an array, we add each element as baseNameNNN
 		array.forEach((element: any, i) =>
 			this.addWithPiiEvaluator(
 				baseName + String(i + 1),
 				element,
-				piiEvaluator,
-			),
+				piiEvaluator
+			)
 		);
 	}
 
 	private addHash(
 		baseName: string,
 		hash: IDictionary<any>,
-		piiEvaluator: { (value: string, name: string): boolean },
+		piiEvaluator: { (value: string, name: string): boolean }
 	): void {
 		// Object is a hash, we add each element as baseName.KEY
 		Object.keys(hash).forEach((key: string) =>
 			this.addWithPiiEvaluator(
 				`${baseName}.${key}`,
 				hash[key],
-				piiEvaluator,
-			),
+				piiEvaluator
+			)
 		);
 	}
 
 	private addString(
 		name: string,
 		value: string,
-		piiEvaluator: { (value: string, name: string): boolean },
+		piiEvaluator: { (value: string, name: string): boolean }
 	): void {
 		this.telemetryProperties[name] = TelemetryHelper.telemetryProperty(
 			value,
-			piiEvaluator(value, name),
+			piiEvaluator(value, name)
 		);
 	}
 
 	private combine(...components: string[]): string {
 		const nonNullComponents: string[] = components.filter(
-			(component: string) => !!component,
+			(component: string) => !!component
 		);
 		return nonNullComponents.join(".");
 	}
@@ -194,7 +194,7 @@ export abstract class TelemetryGeneratorBase {
 			this.add(
 				this.combine(name, "time"),
 				String(endTime[0] * 1000 + endTime[1] / 1000000),
-				/* isPii*/ false,
+				/* isPii*/ false
 			);
 		}
 	}
@@ -202,7 +202,7 @@ export abstract class TelemetryGeneratorBase {
 
 export class TelemetryGenerator extends TelemetryGeneratorBase {
 	protected sendTelemetryEvent(
-		telemetryEvent: Telemetry.TelemetryEvent,
+		telemetryEvent: Telemetry.TelemetryEvent
 	): void {
 		Telemetry.send(telemetryEvent);
 	}

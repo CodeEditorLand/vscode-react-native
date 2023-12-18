@@ -43,7 +43,7 @@ export class WindowsPlatform extends GeneralPlatform {
 
 	constructor(
 		protected runOptions: IWindowsRunOptions,
-		platformDeps: MobilePlatformDeps = {},
+		platformDeps: MobilePlatformDeps = {}
 	) {
 		super(runOptions, platformDeps);
 	}
@@ -68,7 +68,7 @@ export class WindowsPlatform extends GeneralPlatform {
 		extProps = TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 			this.runOptions,
 			this.runOptions.reactNativeVersions,
-			extProps,
+			extProps
 		);
 
 		await TelemetryHelper.generate(
@@ -78,18 +78,18 @@ export class WindowsPlatform extends GeneralPlatform {
 				const env = GeneralPlatform.getEnvArgument(
 					process.env,
 					this.runOptions.env,
-					this.runOptions.envFile,
+					this.runOptions.envFile
 				);
 
 				if (
 					semver.gte(
 						this.runOptions.reactNativeVersions
 							.reactNativeWindowsVersion,
-						WindowsPlatform.RNW_CLI_EXISTS_VERSION,
+						WindowsPlatform.RNW_CLI_EXISTS_VERSION
 					) ||
 					ProjectVersionHelper.isCanaryVersion(
 						this.runOptions.reactNativeVersions
-							.reactNativeWindowsVersion,
+							.reactNativeWindowsVersion
 					)
 				) {
 					this.runArguments.push("--logging");
@@ -102,14 +102,14 @@ export class WindowsPlatform extends GeneralPlatform {
 
 				if (
 					!semver.valid(
-						this.runOptions.reactNativeVersions.reactNativeVersion,
+						this.runOptions.reactNativeVersions.reactNativeVersion
 					) /* Custom RN implementations should support this flag*/ ||
 					semver.gte(
 						this.runOptions.reactNativeVersions.reactNativeVersion,
-						WindowsPlatform.NO_PACKAGER_VERSION,
+						WindowsPlatform.NO_PACKAGER_VERSION
 					) ||
 					ProjectVersionHelper.isCanaryVersion(
-						this.runOptions.reactNativeVersions.reactNativeVersion,
+						this.runOptions.reactNativeVersions.reactNativeVersion
 					)
 				) {
 					this.runArguments.push("--no-packager");
@@ -118,18 +118,18 @@ export class WindowsPlatform extends GeneralPlatform {
 				const runWindowsSpawn = new CommandExecutor(
 					this.runOptions.nodeModulesRoot,
 					this.projectPath,
-					this.logger,
+					this.logger
 				).spawnReactCommand(
 					`run-${this.platformName}`,
 					this.runArguments,
-					{ env },
+					{ env }
 				);
 				await new OutputVerifier(
 					() => Promise.resolve(WindowsPlatform.SUCCESS_PATTERNS),
 					() => Promise.resolve(WindowsPlatform.FAILURE_PATTERNS),
-					this.platformName,
+					this.platformName
 				).process(runWindowsSpawn);
-			},
+			}
 		);
 	}
 

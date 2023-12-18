@@ -19,11 +19,11 @@ export class SettingsHelper {
 		const uri = vscode.Uri.file(projectRoot);
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native.packager",
-			uri,
+			uri
 		);
 		if (workspaceConfiguration.has("port")) {
 			return ConfigurationReader.readInt(
-				workspaceConfiguration.get("port"),
+				workspaceConfiguration.get("port")
 			);
 		}
 		return Packager.DEFAULT_PORT;
@@ -37,11 +37,11 @@ export class SettingsHelper {
 		// In future we should support it as well.
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native-tools",
-			null,
+			null
 		);
 		if (workspaceConfiguration.has("logLevel")) {
 			const logLevelString: string = ConfigurationReader.readString(
-				workspaceConfiguration.get("logLevel"),
+				workspaceConfiguration.get("logLevel")
 			);
 			return <LogLevel>parseInt(LogLevel[<any>logLevelString], 10);
 		}
@@ -55,11 +55,11 @@ export class SettingsHelper {
 		const uri = vscode.Uri.file(fsPath);
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native-tools",
-			uri,
+			uri
 		);
 		if (workspaceConfiguration.has("projectRoot")) {
 			const projectRoot: string = ConfigurationReader.readString(
-				workspaceConfiguration.get("projectRoot"),
+				workspaceConfiguration.get("projectRoot")
 			);
 			return path.isAbsolute(projectRoot)
 				? projectRoot
@@ -72,15 +72,15 @@ export class SettingsHelper {
 	 * Get the React Native Global Command Name, e.g. 'react-native' or a custom one
 	 */
 	public static getReactNativeGlobalCommandName(
-		uri: vscode.Uri,
+		uri: vscode.Uri
 	): string | null {
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native-tools",
-			uri,
+			uri
 		);
 		if (workspaceConfiguration.has("reactNativeGlobalCommandName")) {
 			return ConfigurationReader.readString(
-				workspaceConfiguration.get("reactNativeGlobalCommandName"),
+				workspaceConfiguration.get("reactNativeGlobalCommandName")
 			);
 		}
 
@@ -93,14 +93,14 @@ export class SettingsHelper {
 	public static getRunArgs(
 		platform: string,
 		target: "device" | "simulator",
-		uri: vscode.Uri,
+		uri: vscode.Uri
 	): string[] {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
 		const configKey = `${platform}.runArguments.${target}`;
 		if (workspaceConfiguration.has(configKey)) {
 			return ConfigurationReader.readArray(
-				workspaceConfiguration.get(configKey),
+				workspaceConfiguration.get(configKey)
 			);
 		}
 
@@ -110,14 +110,14 @@ export class SettingsHelper {
 	public static getEnvArgs(
 		platform: string,
 		target: "device" | "simulator",
-		uri: vscode.Uri,
+		uri: vscode.Uri
 	): any {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
 		const configKey = `${platform}.env.${target}`;
 		if (workspaceConfiguration.has(configKey)) {
 			return ConfigurationReader.readObject(
-				workspaceConfiguration.get(configKey),
+				workspaceConfiguration.get(configKey)
 			);
 		}
 
@@ -127,14 +127,14 @@ export class SettingsHelper {
 	public static getEnvFile(
 		platform: string,
 		target: "device" | "simulator",
-		uri: vscode.Uri,
+		uri: vscode.Uri
 	): string {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
 		const configKey = `${platform}.envFile.${target}`;
 		if (workspaceConfiguration.has(configKey)) {
 			return ConfigurationReader.readString(
-				workspaceConfiguration.get(configKey),
+				workspaceConfiguration.get(configKey)
 			);
 		}
 
@@ -144,12 +144,12 @@ export class SettingsHelper {
 	public static getNetworkInspectorConsoleLogsColorTheme(): SystemColorTheme {
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native-tools.networkInspector",
-			null,
+			null
 		);
 		if (workspaceConfiguration.has("consoleLogsColorTheme")) {
 			const consoleLogsColorTheme: string =
 				ConfigurationReader.readString(
-					workspaceConfiguration.get("consoleLogsColorTheme"),
+					workspaceConfiguration.get("consoleLogsColorTheme")
 				);
 			return SystemColorTheme[consoleLogsColorTheme];
 		}
@@ -164,11 +164,11 @@ export class SettingsHelper {
 		const uri = vscode.Uri.file(projectRoot);
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native.packager",
-			uri,
+			uri
 		);
 		if (workspaceConfiguration.has("status-indicator")) {
 			const version = ConfigurationReader.readString(
-				workspaceConfiguration.get("status-indicator"),
+				workspaceConfiguration.get("status-indicator")
 			);
 			if (
 				version === PackagerStatusIndicator.FULL_VERSION ||
@@ -181,26 +181,26 @@ export class SettingsHelper {
 	}
 
 	public static getLogCatFilteringArgs(
-		uri: vscode.Uri,
+		uri: vscode.Uri
 	): string[] | undefined {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
 		if (workspaceConfiguration.has("android.logCatArguments")) {
 			return ConfigurationReader.readArray(
-				workspaceConfiguration.get("android.logCatArguments"),
+				workspaceConfiguration.get("android.logCatArguments")
 			);
 		}
 		return undefined;
 	}
 
 	public static getExpoDependencyVersion(
-		packageName: string,
+		packageName: string
 	): string | undefined {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native.expo.dependencies");
 		if (workspaceConfiguration.has(packageName)) {
 			const packageVersion = ConfigurationReader.readString(
-				workspaceConfiguration.get(packageName),
+				workspaceConfiguration.get(packageName)
 			);
 			return packageVersion;
 		}
@@ -210,11 +210,11 @@ export class SettingsHelper {
 	public static getShowTips(): boolean {
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native-tools",
-			null,
+			null
 		);
 		if (workspaceConfiguration.has("showUserTips")) {
 			return ConfigurationReader.readBoolean(
-				workspaceConfiguration.get("showUserTips"),
+				workspaceConfiguration.get("showUserTips")
 			);
 		}
 		return false;
@@ -223,7 +223,7 @@ export class SettingsHelper {
 	public static async setShowTips(showTips: boolean): Promise<void> {
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native-tools",
-			null,
+			null
 		);
 		if (workspaceConfiguration.has("showUserTips")) {
 			await workspaceConfiguration.update("showUserTips", showTips, true);
@@ -231,7 +231,7 @@ export class SettingsHelper {
 	}
 
 	public static async getWorkspaceFileExcludeFolder(
-		settingsPath: string | undefined,
+		settingsPath: string | undefined
 	): Promise<any> {
 		// Handle non-workspace project and untitled workspace
 		if (!settingsPath || !fs.existsSync(settingsPath)) {
@@ -239,7 +239,7 @@ export class SettingsHelper {
 		}
 		// Get workspace settings
 		const workspaceSettingsContent = JSON.parse(
-			stripJsonComments(fs.readFileSync(settingsPath, "utf-8")),
+			stripJsonComments(fs.readFileSync(settingsPath, "utf-8"))
 		);
 		if (workspaceSettingsContent) {
 			if (workspaceSettingsContent.settings) {

@@ -25,14 +25,14 @@ export class JSONFormatter implements IFormatter {
 
 	public formatRequest(
 		request: Request,
-		contentType: string,
+		contentType: string
 	): FormattedBody | null {
 		return this.format(decodeBody(request, this.logger), contentType);
 	}
 
 	public formatResponse(
 		response: Response,
-		contentType: string,
+		contentType: string
 	): FormattedBody | null {
 		return this.format(decodeBody(response, this.logger), contentType);
 	}

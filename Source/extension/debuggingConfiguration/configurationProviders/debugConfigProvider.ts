@@ -20,7 +20,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 
 	public async buildConfiguration(
 		input: MultiStepInput<DebugConfigurationState>,
-		state: DebugConfigurationState,
+		state: DebugConfigurationState
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		state.config = {};
 		const config: Partial<ILaunchRequestArgs> = {
@@ -37,7 +37,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 			config,
 			platformTypeDebugPickConfig,
 			1,
-			this.maxStepCount,
+			this.maxStepCount
 		);
 
 		Object.assign(state.config, config);
@@ -78,38 +78,38 @@ export class DebugConfigProvider extends BaseConfigProvider {
 
 	private async configureApplicationType(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>,
+		config: Partial<ILaunchRequestArgs>
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		await this.configurationProviderHelper.selectApplicationType(
 			input,
 			config,
 			2,
-			this.maxStepCount,
+			this.maxStepCount
 		);
 	}
 
 	private async configureExpoHostType(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>,
+		config: Partial<ILaunchRequestArgs>
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		await this.configurationProviderHelper.selectExpoHostType(
 			input,
 			config,
 			2,
-			this.maxStepCount,
+			this.maxStepCount
 		);
 	}
 
 	private async configureUseHermesEngine(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>,
+		config: Partial<ILaunchRequestArgs>
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		delete config.useHermesEngine;
 		await this.configurationProviderHelper.shouldUseHermesEngine(
 			input,
 			config,
 			3,
-			this.maxStepCount,
+			this.maxStepCount
 		);
 		if (config.useHermesEngine) {
 			delete config.useHermesEngine;
@@ -118,13 +118,13 @@ export class DebugConfigProvider extends BaseConfigProvider {
 
 	private async configureBrowserTarget(
 		input: MultiStepInput<DebugConfigurationState>,
-		config: Partial<ILaunchRequestArgs>,
+		config: Partial<ILaunchRequestArgs>
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		await this.configurationProviderHelper.selectBrowserTarget(
 			input,
 			config,
 			4,
-			this.maxStepCount,
+			this.maxStepCount
 		);
 	}
 }

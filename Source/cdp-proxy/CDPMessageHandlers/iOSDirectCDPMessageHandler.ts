@@ -98,7 +98,7 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 			this.sendCustomRequestToDebuggerTarget(
 				CDP_API_NAMES.EXECUTION_CONTEXT_CREATED,
 				{ context },
-				false,
+				false
 			);
 		} catch (err) {
 			throw Error("Could not create Execution context");
@@ -108,7 +108,7 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 	private sendCustomRequestToDebuggerTarget(
 		method: string,
 		params: any = {},
-		addMessageId: boolean = true,
+		addMessageId: boolean = true
 	): void {
 		const request: any = {
 			method,

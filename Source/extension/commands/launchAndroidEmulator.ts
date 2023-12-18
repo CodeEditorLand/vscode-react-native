@@ -14,7 +14,7 @@ export class LaunchAndroidEmulator extends Command {
 	codeName = "launchAndroidSimulator";
 	label = "Launch Android Emulator";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToStartAndroidEmulator,
+		InternalErrorCode.FailedToStartAndroidEmulator
 	);
 
 	async baseFn(): Promise<void> {
@@ -26,7 +26,7 @@ export class LaunchAndroidEmulator extends Command {
 		const androidEmulatorManager = new AndroidTargetManager(adbHelper);
 		await androidEmulatorManager.collectTargets(TargetType.Simulator);
 		await androidEmulatorManager.selectAndPrepareTarget(
-			(target) => target.isVirtualTarget,
+			(target) => target.isVirtualTarget
 		);
 	}
 }

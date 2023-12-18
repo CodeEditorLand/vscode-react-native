@@ -16,7 +16,7 @@ const runPrettier = async (fix) => {
 		],
 		{
 			stdio: "inherit",
-		},
+		}
 	);
 
 	await new Promise((resolve, reject) => {

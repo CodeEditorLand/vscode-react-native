@@ -28,7 +28,7 @@ export class AndroidTarget extends MobileTarget {
 			obj.isOnline,
 			obj.isVirtualTarget,
 			obj.id,
-			obj.name,
+			obj.name
 		);
 	}
 
@@ -36,7 +36,7 @@ export class AndroidTarget extends MobileTarget {
 		isOnline: boolean,
 		isVirtualTarget: boolean,
 		id: string,
-		name?: string,
+		name?: string
 	) {
 		super(isOnline, isVirtualTarget, id, name ? name : id);
 	}
@@ -56,7 +56,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 		this.adbHelper = adbHelper;
 		this.logger = OutputChannelLogger.getChannel(
 			OutputChannelLogger.MAIN_CHANNEL_NAME,
-			true,
+			true
 		);
 		this.childProcess = new ChildProcess();
 	}
@@ -83,13 +83,13 @@ export class AndroidTargetManager extends MobileTargetManager {
 			throw ErrorHelper.getNestedError(
 				error,
 				InternalErrorCode.CouldNotRecognizeTargetType,
-				target,
+				target
 			);
 		}
 	}
 
 	public async selectAndPrepareTarget(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<AndroidTarget | undefined> {
 		const selectedTarget = await this.startSelection(filter);
 		if (selectedTarget) {
@@ -98,7 +98,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			}
 			if (selectedTarget.id) {
 				return AndroidTarget.fromInterface(
-					<IDebuggableMobileTarget>selectedTarget,
+					<IDebuggableMobileTarget>selectedTarget
 				);
 			}
 		}
@@ -120,7 +120,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 						name,
 						isOnline: false,
 						isVirtualTarget: true,
-					})),
+					}))
 				);
 			}
 		} catch (error) {
@@ -133,8 +133,8 @@ export class AndroidTargetManager extends MobileTargetManager {
 				localize(
 					"CouldNotUseEmulators",
 					"An error occurred while trying to get installed emulators: {0}\nContinue using only online targets",
-					error instanceof Error ? error.message : error.toString(),
-				),
+					error instanceof Error ? error.message : error.toString()
+				)
 			);
 		}
 
@@ -143,7 +143,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			if (device.isVirtualTarget && collectSimulators) {
 				const avdName = await this.adbHelper.getAvdNameById(device.id);
 				const emulatorTarget = targetList.find(
-					(target) => target.name === avdName,
+					(target) => target.name === avdName
 				);
 				if (emulatorTarget) {
 					emulatorTarget.isOnline = true;
@@ -162,13 +162,13 @@ export class AndroidTargetManager extends MobileTargetManager {
 	}
 
 	protected async startSelection(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<IMobileTarget | undefined> {
 		return this.selectTarget(filter);
 	}
 
 	protected async launchSimulator(
-		emulatorTarget: IMobileTarget,
+		emulatorTarget: IMobileTarget
 	): Promise<AndroidTarget> {
 		return new Promise<AndroidTarget>((resolve, reject) => {
 			let emulatorLaunchFailed = false;
@@ -181,7 +181,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 				{
 					detached: true,
 				},
-				true,
+				true
 			);
 			emulatorProcess.outcome.catch((error) => {
 				emulatorLaunchFailed = true;
@@ -193,16 +193,16 @@ export class AndroidTargetManager extends MobileTargetManager {
 					this.logger.warning(
 						localize(
 							"RDPEmulatorWarning",
-							"Android emulator was launched from the Windows RDP session, this might lead to failures.",
-						),
+							"Android emulator was launched from the Windows RDP session, this might lead to failures."
+						)
 					);
 				}
 				reject(
 					new Error(
 						`Virtual device launch finished with an exception: ${String(
-							error,
-						)}`,
-					),
+							error
+						)}`
+					)
 				);
 			});
 			emulatorProcess.spawnedProcess.unref();
@@ -210,13 +210,13 @@ export class AndroidTargetManager extends MobileTargetManager {
 			const condition = async () => {
 				if (emulatorLaunchFailed)
 					throw new Error(
-						"Android emulator launch failed unexpectedly",
+						"Android emulator launch failed unexpectedly"
 					);
 				const connectedDevices =
 					await this.adbHelper.getOnlineTargets();
 				for (const target of connectedDevices) {
 					const onlineAvdName = await this.adbHelper.getAvdNameById(
-						target.id,
+						target.id
 					);
 					if (onlineAvdName === emulatorTarget.name) {
 						return target.id;
@@ -228,7 +228,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			void PromiseUtil.waitUntil<string>(
 				condition,
 				1000,
-				AndroidTargetManager.EMULATOR_START_TIMEOUT * 1000,
+				AndroidTargetManager.EMULATOR_START_TIMEOUT * 1000
 			).then(
 				(emulatorId) => {
 					if (emulatorId) {
@@ -238,13 +238,13 @@ export class AndroidTargetManager extends MobileTargetManager {
 							localize(
 								"EmulatorLaunched",
 								"Launched Android emulator {0}",
-								emulatorTarget.name,
-							),
+								emulatorTarget.name
+							)
 						);
 						resolve(
 							AndroidTarget.fromInterface(
-								<IDebuggableMobileTarget>emulatorTarget,
-							),
+								<IDebuggableMobileTarget>emulatorTarget
+							)
 						);
 					} else {
 						reject(
@@ -253,13 +253,13 @@ export class AndroidTargetManager extends MobileTargetManager {
 									"EmulatorStartWarning",
 									"Could not start the emulator {0} within {1} seconds.",
 									emulatorTarget.name,
-									AndroidTargetManager.EMULATOR_START_TIMEOUT,
-								)}`,
-							),
+									AndroidTargetManager.EMULATOR_START_TIMEOUT
+								)}`
+							)
 						);
 					}
 				},
-				() => {},
+				() => {}
 			);
 		});
 	}

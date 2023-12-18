@@ -19,7 +19,7 @@ export class ReactNativeProjectHelper {
 	 * Otherwise, displays an error message banner
 	 */
 	public static async isReactNativeProject(
-		projectRoot: string,
+		projectRoot: string
 	): Promise<boolean> {
 		if (
 			!projectRoot ||
@@ -31,10 +31,10 @@ export class ReactNativeProjectHelper {
 		const versions = await ProjectVersionHelper.getReactNativeVersions(
 			projectRoot,
 			undefined,
-			projectRoot,
+			projectRoot
 		);
 		return !ProjectVersionHelper.isVersionError(
-			versions.reactNativeVersion,
+			versions.reactNativeVersion
 		);
 	}
 
@@ -45,7 +45,7 @@ export class ReactNativeProjectHelper {
 		}
 
 		const packageJson = JSON.parse(
-			fs.readFileSync(packageJsonPath, "utf-8"),
+			fs.readFileSync(packageJsonPath, "utf-8")
 		);
 		const haulVersion =
 			packageJson.devDependencies &&
@@ -59,7 +59,7 @@ export class ReactNativeProjectHelper {
 			projectRoot,
 			"android",
 			"app",
-			"build.gradle",
+			"build.gradle"
 		);
 		if (!projectRoot || !fs.existsSync(buildGradlePath)) {
 			return false;
@@ -67,7 +67,7 @@ export class ReactNativeProjectHelper {
 
 		const buildGradleContent = fs.readFileSync(buildGradlePath, "utf-8");
 		const hermesEnabled = /enableHermes\s*:\s*true/.test(
-			buildGradleContent,
+			buildGradleContent
 		);
 		return hermesEnabled;
 	}
@@ -80,7 +80,7 @@ export class ReactNativeProjectHelper {
 
 		const podfileContent = fs.readFileSync(podfilePath, "utf-8");
 		const matches = podfileContent.match(
-			/#?\s*:hermes_enabled\s*=>\s*true/,
+			/#?\s*:hermes_enabled\s*=>\s*true/
 		);
 		return !!(matches && !matches[0].startsWith("#"));
 	}
@@ -93,7 +93,7 @@ export class ReactNativeProjectHelper {
 
 		const podfileContent = fs.readFileSync(podfilePath, "utf-8");
 		let matches = podfileContent.match(
-			/#?\s*:hermes_enabled\s*=>\s*(true|false)/,
+			/#?\s*:hermes_enabled\s*=>\s*(true|false)/
 		);
 
 		if (matches && matches.length > 1) {
@@ -108,7 +108,7 @@ export class ReactNativeProjectHelper {
 		const experimentalFeaturesPath = path.join(
 			projectRoot,
 			"windows",
-			"ExperimentalFeatures.props",
+			"ExperimentalFeatures.props"
 		);
 		if (!projectRoot || !fs.existsSync(experimentalFeaturesPath)) {
 			return false;
@@ -116,10 +116,10 @@ export class ReactNativeProjectHelper {
 
 		const experimentalFeaturesContent = fs.readFileSync(
 			experimentalFeaturesPath,
-			"utf-8",
+			"utf-8"
 		);
 		const hermesEnabled = /<UseHermes>\s*true\s*<\/UseHermes>/.test(
-			experimentalFeaturesContent,
+			experimentalFeaturesContent
 		);
 		return hermesEnabled;
 	}
@@ -140,7 +140,7 @@ export class ReactNativeProjectHelper {
 	public static async verifyMetroConfigFile(projectRoot: string) {
 		const logger = OutputChannelLogger.getChannel(
 			OutputChannelLogger.MAIN_CHANNEL_NAME,
-			true,
+			true
 		);
 
 		let version;
@@ -151,7 +151,7 @@ export class ReactNativeProjectHelper {
 			version = await ProjectVersionHelper.getReactNativeVersions(
 				projectRoot,
 				undefined,
-				projectRoot,
+				projectRoot
 			);
 		}
 
@@ -163,7 +163,7 @@ export class ReactNativeProjectHelper {
 			!isNewMetroConfig
 		) {
 			logger.warning(
-				'The version of "metro.config.js" in current project will be deprecated from rn 0.73, please update your "metro.config.js" file according to template: https://github.com/facebook/react-native/blob/main/packages/react-native/template/metro.config.js',
+				'The version of "metro.config.js" in current project will be deprecated from rn 0.73, please update your "metro.config.js" file according to template: https://github.com/facebook/react-native/blob/main/packages/react-native/template/metro.config.js'
 			);
 		} else if (
 			parseInt(version.reactNativeVersion.substring(2, 4)) > 72 &&

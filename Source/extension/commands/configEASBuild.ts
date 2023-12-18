@@ -22,7 +22,7 @@ export class ConfigEASBuild extends ReactNativeCommand {
 	codeName = "createExpoEASBuildConfigFile";
 	label = "Config Expo app with EAS build";
 	error = ErrorHelper.getInternalError(
-		InternalErrorCode.FailedToConfigEASBuild,
+		InternalErrorCode.FailedToConfigEASBuild
 	);
 
 	async baseFn(): Promise<void> {
@@ -32,8 +32,8 @@ export class ConfigEASBuild extends ReactNativeCommand {
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",
-				"Checking Expo project environment.",
-			),
+				"Checking Expo project environment."
+			)
 		);
 		const isExpo = await expoHelper.isExpoManagedApp(true);
 
@@ -44,35 +44,35 @@ export class ConfigEASBuild extends ReactNativeCommand {
 				logger.info(
 					localize(
 						"FoundEASJsonFile",
-						"There is an eas.json file already existing in your app root.",
-					),
+						"There is an eas.json file already existing in your app root."
+					)
 				);
 			} else {
 				logger.info(
 					localize(
 						"ConfigEASBuildInProgress",
-						"Creating EAS build config file.",
-					),
+						"Creating EAS build config file."
+					)
 				);
 
 				try {
 					await new CommandExecutor(
 						this.nodeModulesRoot,
-						projectRootPath,
+						projectRootPath
 					).execute("eas build:configure --platform all");
 
 					logger.info(
 						localize(
 							"ConfigEASBuildSuccessfully",
-							"Create EAS build config file successfully.",
-						),
+							"Create EAS build config file successfully."
+						)
 					);
 				} catch {
 					logger.error(
 						localize(
 							"NoExistingEASProject",
-							"Unable to find existing EAS project. Please run 'eas init' firstly to bind your app to EAS project.",
-						),
+							"Unable to find existing EAS project. Please run 'eas init' firstly to bind your app to EAS project."
+						)
 					);
 				}
 			}
@@ -80,8 +80,8 @@ export class ConfigEASBuild extends ReactNativeCommand {
 			throw new Error(
 				localize(
 					"NotExpoApplication",
-					"The current app is not an Expo application.",
-				),
+					"The current app is not an Expo application."
+				)
 			);
 		}
 	}

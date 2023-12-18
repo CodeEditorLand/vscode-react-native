@@ -37,7 +37,7 @@ class WindowsHostPlatform implements IHostPlatform {
 
 	public async setEnvironmentVariable(
 		name: string,
-		value: string,
+		value: string
 	): Promise<any> {
 		const res = await new ChildProcess().exec(`setx ${name} ${value}`);
 		return res.outcome;
@@ -79,7 +79,7 @@ abstract class UnixHostPlatform implements IHostPlatform {
 
 	public abstract setEnvironmentVariable(
 		name: string,
-		value: string,
+		value: string
 	): Promise<any>;
 
 	public getSettingsHome(): string {
@@ -95,7 +95,7 @@ abstract class UnixHostPlatform implements IHostPlatform {
 	public abstract getUserID(): string;
 
 	public abstract isCompatibleWithTarget(
-		targetPlatformId: TargetPlatformId,
+		targetPlatformId: TargetPlatformId
 	): boolean;
 }
 
@@ -105,10 +105,10 @@ abstract class UnixHostPlatform implements IHostPlatform {
 class OSXHostPlatform extends UnixHostPlatform {
 	public async setEnvironmentVariable(
 		name: string,
-		value: string,
+		value: string
 	): Promise<any> {
 		const res = await new ChildProcess().exec(
-			`launchctl setenv ${name} ${value}`,
+			`launchctl setenv ${name} ${value}`
 		);
 		return res.outcome;
 	}
@@ -141,7 +141,7 @@ class OSXHostPlatform extends UnixHostPlatform {
 class LinuxHostPlatform extends UnixHostPlatform {
 	public async setEnvironmentVariable(
 		name: string,
-		value: string,
+		value: string
 	): Promise<any> {
 		const res = await new ChildProcess().exec(`export ${name}=${value}`);
 		return res.outcome;
@@ -214,7 +214,7 @@ export class HostPlatform {
 
 	public static setEnvironmentVariable(
 		name: string,
-		value: string,
+		value: string
 	): Promise<void> {
 		return HostPlatform.platform.setEnvironmentVariable(name, value);
 	}
@@ -225,7 +225,7 @@ export class HostPlatform {
 	}
 
 	public static isCompatibleWithTarget(
-		targetPlatformId: TargetPlatformId,
+		targetPlatformId: TargetPlatformId
 	): boolean {
 		return HostPlatform.platform.isCompatibleWithTarget(targetPlatformId);
 	}

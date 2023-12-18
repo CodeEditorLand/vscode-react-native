@@ -49,12 +49,12 @@ interface ShouldAssertion {
 	within(
 		start: number,
 		finish: number,
-		description?: string,
+		description?: string
 	): ShouldAssertion;
 	approximately(
 		value: number,
 		delta: number,
-		description?: string,
+		description?: string
 	): ShouldAssertion;
 	type(expected: any, description?: string): ShouldAssertion;
 	instanceof(constructor: Function, description?: string): ShouldAssertion;
@@ -86,7 +86,7 @@ interface ShouldAssertion {
 	propertyByPath(...properties: string[]): ShouldAssertion;
 	propertyWithDescriptor(
 		name: string,
-		descriptor: PropertyDescriptor,
+		descriptor: PropertyDescriptor
 	): ShouldAssertion;
 	oneOf(...values: any[]): ShouldAssertion;
 	ownProperty(name: string, description?: string): ShouldAssertion;

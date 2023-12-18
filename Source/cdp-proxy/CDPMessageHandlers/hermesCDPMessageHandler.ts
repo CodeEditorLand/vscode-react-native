@@ -85,7 +85,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 			(callFrame) =>
 				callFrame.functionName !== this.HERMES_NATIVE_FUNCTION_NAME &&
 				callFrame.location.scriptId !==
-					this.HERMES_NATIVE_FUNCTION_SCRIPT_ID,
+					this.HERMES_NATIVE_FUNCTION_SCRIPT_ID
 		);
 		event.params.callFrames = callFrames;
 

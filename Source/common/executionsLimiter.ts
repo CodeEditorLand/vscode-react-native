@@ -8,7 +8,7 @@ export class ExecutionsLimiter {
 	public execute(
 		id: string,
 		limitInSeconds: number,
-		lambda: () => void,
+		lambda: () => void
 	): void {
 		const now = new Date().getTime();
 

@@ -11,7 +11,7 @@ export class ConfigurationReader {
 		}
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedStringValue,
-			value,
+			value
 		);
 	}
 
@@ -23,7 +23,7 @@ export class ConfigurationReader {
 		}
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedBooleanValue,
-			value,
+			value
 		);
 	}
 
@@ -33,7 +33,7 @@ export class ConfigurationReader {
 		}
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedArrayValue,
-			value,
+			value
 		);
 	}
 
@@ -43,7 +43,7 @@ export class ConfigurationReader {
 		}
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedObjectValue,
-			value,
+			value
 		);
 	}
 
@@ -56,7 +56,7 @@ export class ConfigurationReader {
 		}
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedIntegerValue,
-			value,
+			value
 		);
 	}
 
@@ -65,14 +65,14 @@ export class ConfigurationReader {
       the value that was provided */
 	public static readIntWithDefaultSync(
 		value: any,
-		defaultValue: number,
+		defaultValue: number
 	): number {
 		return value ? this.readInt(value) : defaultValue;
 	}
 
 	public static async readIntWithDefaultAsync(
 		value: any,
-		defaultValuePromise: Promise<number>,
+		defaultValuePromise: Promise<number>
 	): Promise<number> {
 		const defaultValue = await defaultValuePromise;
 		return this.readIntWithDefaultSync(value, defaultValue);

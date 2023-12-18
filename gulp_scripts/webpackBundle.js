@@ -102,7 +102,7 @@ async function runWebpack({
 					analyzerMode: "static",
 					reportFilename: path.resolve(
 						distSrcDir,
-						path.basename(entry) + ".html",
+						path.basename(entry) + ".html"
 					),
 				}),
 			];
@@ -120,7 +120,7 @@ async function runWebpack({
 			} else {
 				resolve();
 			}
-		}),
+		})
 	);
 }
 

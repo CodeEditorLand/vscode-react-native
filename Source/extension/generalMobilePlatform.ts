@@ -21,13 +21,13 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 	protected target?: MobileTarget;
 
 	public async getTargetsCountByFilter(
-		filter?: (el: IMobileTarget) => boolean,
+		filter?: (el: IMobileTarget) => boolean
 	): Promise<number> {
 		return this.targetManager.getTargetsCountWithFilter(filter);
 	}
 
 	public async resolveMobileTarget(
-		targetString: string,
+		targetString: string
 	): Promise<MobileTarget | undefined> {
 		let collectTargetsCalled = false;
 
@@ -48,7 +48,7 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 
 		if (!collectTargetsCalled) {
 			await this.targetManager.collectTargets(
-				isVirtualTarget ? TargetType.Simulator : TargetType.Device,
+				isVirtualTarget ? TargetType.Simulator : TargetType.Device
 			);
 		}
 
@@ -66,13 +66,13 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 					const conditionForNotAnyTarget = isAnyTarget
 						? true
 						: target.name === targetString ||
-						  target.id === targetString;
+							target.id === targetString;
 					const conditionForVirtualTarget =
 						isVirtualTarget === target.isVirtualTarget;
 					return (
 						conditionForVirtualTarget && conditionForNotAnyTarget
 					);
-				},
+				}
 			);
 
 			if (!this.target) {
@@ -80,14 +80,14 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 					localize(
 						"CouldNotFindAnyDebuggableTarget",
 						"Could not find any debuggable target by specified target: {0}",
-						targetString,
-					),
+						targetString
+					)
 				);
 				this.logger.warning(
 					localize(
 						"ContinueWithRnCliWorkflow",
-						"Continue using standard RN CLI workflow.",
-					),
+						"Continue using standard RN CLI workflow."
+					)
 				);
 				cleanupTargetModifications();
 			} else {
@@ -112,16 +112,16 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 				TelemetryHelper.sendErrorEvent(
 					"TargetSelectionError",
 					ErrorHelper.getInternalError(
-						InternalErrorCode.TargetSelectionError,
-					),
+						InternalErrorCode.TargetSelectionError
+					)
 				);
 
 				this.logger.warning(error);
 				this.logger.warning(
 					localize(
 						"ContinueWithRnCliWorkflow",
-						"Continue using standard RN CLI workflow.",
-					),
+						"Continue using standard RN CLI workflow."
+					)
 				);
 
 				cleanupTargetModifications();

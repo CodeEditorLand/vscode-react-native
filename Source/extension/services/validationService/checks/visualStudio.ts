@@ -36,7 +36,7 @@ async function test(): Promise<ValidationResultT> {
 		if (versions.some(valid)) {
 			for (const comp of components) {
 				const pathToComponent = await executeCommand(
-					`${vswherePath}  -requires ${comp}  -property productPath`,
+					`${vswherePath}  -requires ${comp}  -property productPath`
 				);
 				if (!pathToComponent.stdout) {
 					return {
@@ -67,7 +67,7 @@ const main: IValidation = {
 	platform: ["win32"],
 	description: toLocale(
 		"VisualStudioCheckDescription",
-		"Required for building RNW apps",
+		"Required for building RNW apps"
 	),
 	category: ValidationCategoryE.Windows,
 	exec: test,

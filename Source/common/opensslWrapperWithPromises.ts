@@ -15,7 +15,7 @@ import { exec as opensslWithCallback, Action } from "openssl-wrapper";
 
 export function openssl(
 	action: Action,
-	options: Record<string, any>,
+	options: Record<string, any>
 ): Promise<string> {
 	return new Promise((resolve, reject) => {
 		opensslWithCallback(action, options, (err, buffer) => {

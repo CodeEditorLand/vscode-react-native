@@ -41,7 +41,7 @@ export class PlistBuddy {
 		simulator: boolean = true,
 		configuration: string = "Debug",
 		productName?: string,
-		scheme?: string,
+		scheme?: string
 	): Promise<string> {
 		const iOSBuildLocationData =
 			await this.getExecutableAndConfigurationFolder(
@@ -51,18 +51,18 @@ export class PlistBuddy {
 				simulator,
 				configuration,
 				productName,
-				scheme,
+				scheme
 			);
 		const infoPlistPath = path.join(
 			iOSBuildLocationData.configurationFolder,
 			iOSBuildLocationData.executable,
 			platform === PlatformType.iOS
 				? "Info.plist"
-				: path.join("Contents", "Info.plist"),
+				: path.join("Contents", "Info.plist")
 		);
 		return await this.invokePlistBuddy(
 			"Print:CFBundleIdentifier",
-			infoPlistPath,
+			infoPlistPath
 		);
 	}
 	public async getExecutableAndConfigurationFolder(
@@ -72,7 +72,7 @@ export class PlistBuddy {
 		simulator: boolean = true,
 		configuration: string = "Debug",
 		productName?: string,
-		scheme?: string,
+		scheme?: string
 	): Promise<IOSBuildLocationData> {
 		const rnVersions =
 			await ProjectVersionHelper.getReactNativeVersions(projectRoot);
@@ -80,7 +80,7 @@ export class PlistBuddy {
 		if (
 			semver.gte(
 				rnVersions.reactNativeVersion,
-				PlistBuddy.SCHEME_IN_PRODUCTS_FOLDER_PATH_VERSION,
+				PlistBuddy.SCHEME_IN_PRODUCTS_FOLDER_PATH_VERSION
 			) ||
 			ProjectVersionHelper.isCanaryVersion(rnVersions.reactNativeVersion)
 		) {
@@ -89,7 +89,7 @@ export class PlistBuddy {
 				scheme = this.getInferredScheme(
 					platformProjectRoot,
 					projectRoot,
-					rnVersions.reactNativeVersion,
+					rnVersions.reactNativeVersion
 				);
 				if (platform === PlatformType.macOS) {
 					scheme = `${scheme}-macOS`;
@@ -100,14 +100,14 @@ export class PlistBuddy {
 				"build",
 				scheme,
 				"Build",
-				"Products",
+				"Products"
 			);
 		} else {
 			productsFolder = path.join(
 				platformProjectRoot,
 				"build",
 				"Build",
-				"Products",
+				"Products"
 			);
 		}
 		const sdkType =
@@ -116,7 +116,7 @@ export class PlistBuddy {
 				: undefined;
 		let configurationFolder = path.join(
 			productsFolder,
-			`${configuration}${sdkType ? `-${sdkType}` : ""}`,
+			`${configuration}${sdkType ? `-${sdkType}` : ""}`
 		);
 		let executable = "";
 		if (productName) {
@@ -129,7 +129,7 @@ export class PlistBuddy {
 					configuration,
 					scheme,
 					configurationFolder,
-					sdkType,
+					sdkType
 				);
 				configurationFolder = configurationData.configurationFolder;
 			}
@@ -143,14 +143,14 @@ export class PlistBuddy {
 					configuration,
 					scheme,
 					configurationFolder,
-					sdkType,
+					sdkType
 				);
 				configurationFolder = configurationData_1.configurationFolder;
 				executableList.push(configurationData_1.fullProductName);
 			} else if (executableList.length > 1) {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.IOSFoundMoreThanOneExecutablesCleanupBuildFolder,
-					configurationFolder,
+					configurationFolder
 				);
 			}
 			executable = `${executableList[0]}`;
@@ -163,7 +163,7 @@ export class PlistBuddy {
 	public async setPlistProperty(
 		plistFile: string,
 		property: string,
-		value: string,
+		value: string
 	): Promise<void> {
 		// Attempt to set the value, and if it fails due to the key not existing attempt to create the key
 		try {
@@ -171,31 +171,31 @@ export class PlistBuddy {
 		} catch (e) {
 			await this.invokePlistBuddy(
 				`Add ${property} string ${value}`,
-				plistFile,
+				plistFile
 			);
 		}
 	}
 	public async setPlistBooleanProperty(
 		plistFile: string,
 		property: string,
-		value: boolean,
+		value: boolean
 	): Promise<void> {
 		// Attempt to set the value, and if it fails due to the key not existing attempt to create the key
 		try {
 			await this.invokePlistBuddy(
 				`Set ${property} ${String(value)}`,
-				plistFile,
+				plistFile
 			);
 		} catch (e) {
 			await this.invokePlistBuddy(
 				`Add ${property} bool ${String(value)}`,
-				plistFile,
+				plistFile
 			);
 		}
 	}
 	public async deletePlistProperty(
 		plistFile: string,
-		property: string,
+		property: string
 	): Promise<void> {
 		try {
 			await this.invokePlistBuddy(`Delete ${property}`, plistFile);
@@ -207,7 +207,7 @@ export class PlistBuddy {
 	}
 	public readPlistProperty(
 		plistFile: string,
-		property: string,
+		property: string
 	): Promise<string> {
 		return this.invokePlistBuddy(`Print ${property}`, plistFile);
 	}
@@ -216,7 +216,7 @@ export class PlistBuddy {
 		projectWorkspaceConfigName: string,
 		configuration: string,
 		scheme: string,
-		sdkType?: string,
+		sdkType?: string
 	): ConfigurationData {
 		const xcodebuildParams = [
 			"-workspace",
@@ -230,7 +230,7 @@ export class PlistBuddy {
 		xcodebuildParams.push(
 			"-configuration",
 			configuration,
-			"-showBuildSettings",
+			"-showBuildSettings"
 		);
 		const buildSettings = this.nodeChildProcess.execFileSync(
 			"xcodebuild",
@@ -238,15 +238,15 @@ export class PlistBuddy {
 			{
 				encoding: "utf8",
 				cwd: platformProjectRoot,
-			},
+			}
 		);
 		const targetBuildDir = this.fetchParameterFromBuildSettings(
 			<string>buildSettings,
-			this.TARGET_BUILD_DIR_SEARCH_KEY,
+			this.TARGET_BUILD_DIR_SEARCH_KEY
 		);
 		const fullProductName = this.fetchParameterFromBuildSettings(
 			<string>buildSettings,
-			this.FULL_PRODUCT_NAME_SEARCH_KEY,
+			this.FULL_PRODUCT_NAME_SEARCH_KEY
 		);
 		if (!targetBuildDir) {
 			throw new Error("Failed to get the target build directory.");
@@ -262,12 +262,12 @@ export class PlistBuddy {
 	public getInferredScheme(
 		platformProjectRoot: string,
 		projectRoot: string,
-		rnVersion: string,
+		rnVersion: string
 	): string {
 		const projectWorkspaceConfigName = this.getProjectWorkspaceConfigName(
 			platformProjectRoot,
 			projectRoot,
-			rnVersion,
+			rnVersion
 		);
 		return getFileNameWithoutExtension(projectWorkspaceConfigName);
 	}
@@ -282,7 +282,7 @@ export class PlistBuddy {
 	public getProjectWorkspaceConfigName(
 		platformProjectRoot: string,
 		projectRoot: string,
-		rnVersion: string,
+		rnVersion: string
 	): string {
 		// Portion of code was taken from https://github.com/react-native-community/cli/blob/master/packages/platform-ios/src/commands/runIOS/index.js
 		// and modified a little bit
@@ -303,7 +303,7 @@ export class PlistBuddy {
 		const findXcodeProjectLocation = `node_modules/@react-native-community/${iOSCliFolderName}/build/${
 			semver.gte(
 				rnVersion,
-				PlistBuddy.RN69_FUND_XCODE_PROJECT_LOCATION_VERSION,
+				PlistBuddy.RN69_FUND_XCODE_PROJECT_LOCATION_VERSION
 			)
 				? "config/findXcodeProject"
 				: "commands/runIOS/findXcodeProject"
@@ -311,15 +311,15 @@ export class PlistBuddy {
 		const findXcodeProject = customRequire(
 			path.join(
 				AppLauncher.getNodeModulesRootByProjectPath(projectRoot),
-				findXcodeProjectLocation,
-			),
+				findXcodeProjectLocation
+			)
 		).default;
 		const xcodeProject = findXcodeProject(
-			fs.readdirSync(platformProjectRoot),
+			fs.readdirSync(platformProjectRoot)
 		);
 		if (!xcodeProject) {
 			throw new Error(
-				`Could not find Xcode project files in "${platformProjectRoot}" folder`,
+				`Could not find Xcode project files in "${platformProjectRoot}" folder`
 			);
 		}
 		return xcodeProject.name;
@@ -331,25 +331,25 @@ export class PlistBuddy {
 		configuration: string,
 		scheme: string | undefined,
 		oldConfigurationFolder: string,
-		sdkType?: string,
+		sdkType?: string
 	): ConfigurationData {
 		if (!scheme) {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.IOSCouldNotFoundExecutableInFolder,
-				oldConfigurationFolder,
+				oldConfigurationFolder
 			);
 		}
 		const projectWorkspaceConfigName = this.getProjectWorkspaceConfigName(
 			platformProjectRoot,
 			projectRoot,
-			reactNativeVersion,
+			reactNativeVersion
 		);
 		return this.getBuildPathAndProductName(
 			platformProjectRoot,
 			projectWorkspaceConfigName,
 			configuration,
 			scheme,
-			sdkType,
+			sdkType
 		);
 	}
 	/**
@@ -359,11 +359,11 @@ export class PlistBuddy {
 	 */
 	public fetchParameterFromBuildSettings(
 		buildSettings: string,
-		parameterName: string,
+		parameterName: string
 	): string | null {
 		const targetBuildMatch = new RegExp(
 			`${parameterName} = (.+)$`,
-			"m",
+			"m"
 		).exec(buildSettings);
 		return targetBuildMatch && targetBuildMatch[1]
 			? targetBuildMatch[1].trim()
@@ -376,10 +376,10 @@ export class PlistBuddy {
 	}
 	private async invokePlistBuddy(
 		command: string,
-		plistFile: string,
+		plistFile: string
 	): Promise<string> {
 		const res = await this.nodeChildProcess.exec(
-			`${PlistBuddy.plistBuddyExecutable} -c '${command}' '${plistFile}'`,
+			`${PlistBuddy.plistBuddyExecutable} -c '${command}' '${plistFile}'`
 		);
 		const outcome = await res.outcome;
 		return outcome.toString().trim();

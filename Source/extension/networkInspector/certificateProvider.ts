@@ -95,7 +95,7 @@ export class CertificateProvider {
 		this.adbHelper = adbHelper;
 		this.certificateSetup = this.ensureServerCertExists();
 		this.logger = OutputChannelLogger.getChannel(
-			NETWORK_INSPECTOR_LOG_CHANNEL_NAME,
+			NETWORK_INSPECTOR_LOG_CHANNEL_NAME
 		);
 	}
 
@@ -115,12 +115,12 @@ export class CertificateProvider {
 		unsanitizedCsr: string,
 		os: ClientOS,
 		appDirectory: string,
-		medium: CertificateExchangeMedium,
+		medium: CertificateExchangeMedium
 	): Promise<{ deviceId: string }> {
 		const csr = this.santitizeString(unsanitizedCsr);
 		if (csr === "") {
 			return Promise.reject(
-				new Error(`Received empty CSR from ${os} device`),
+				new Error(`Received empty CSR from ${os} device`)
 			);
 		}
 		this.ensureOpenSSLIsAvailable();
@@ -136,8 +136,8 @@ export class CertificateProvider {
 					csr,
 					os,
 					medium,
-					certFolder,
-				),
+					certFolder
+				)
 			)
 			.then(() => this.generateClientCertificate(csr))
 			.then((clientCert) =>
@@ -148,8 +148,8 @@ export class CertificateProvider {
 					csr,
 					os,
 					medium,
-					certFolder,
-				),
+					certFolder
+				)
 			)
 			.then(() => {
 				return this.extractAppNameFromCSR(csr);
@@ -160,7 +160,7 @@ export class CertificateProvider {
 						os,
 						appName,
 						appDirectory,
-						csr,
+						csr
 					);
 				} else {
 					return uuid();
@@ -184,7 +184,7 @@ export class CertificateProvider {
 					RFC2253: false,
 				}).then((subject) => {
 					return [path, subject];
-				}),
+				})
 			)
 			.then(([path, subject]) => {
 				return new Promise<string>(function (resolve, reject) {
@@ -207,7 +207,7 @@ export class CertificateProvider {
 			.then((appName) => {
 				if (!appName.match(allowedAppNameRegex)) {
 					throw new Error(
-						`Disallowed app name in CSR: ${appName}. Only alphanumeric characters and '.' allowed.`,
+						`Disallowed app name in CSR: ${appName}. Only alphanumeric characters and '.' allowed.`
 					);
 				}
 				return appName;
@@ -218,7 +218,7 @@ export class CertificateProvider {
 		os: ClientOS,
 		appName: string,
 		appDirectory: string,
-		csr: string,
+		csr: string
 	): Promise<string> {
 		if (os === ClientOS.Android) {
 			return this.getTargetAndroidDeviceId(appName, appDirectory, csr);
@@ -233,7 +233,7 @@ export class CertificateProvider {
 	private ensureOpenSSLIsAvailable(): void {
 		if (!opensslInstalled()) {
 			throw new Error(
-				"It looks like you don't have OpenSSL installed globally. Please install it and add it to Path to continue.",
+				"It looks like you don't have OpenSSL installed globally. Please install it and add it to Path to continue."
 			);
 		}
 	}
@@ -278,7 +278,7 @@ export class CertificateProvider {
 		csr: string,
 		os: ClientOS,
 		medium: CertificateExchangeMedium,
-		certFolder: string,
+		certFolder: string
 	): Promise<void> {
 		const appNamePromise = this.extractAppNameFromCSR(csr);
 
@@ -287,14 +287,14 @@ export class CertificateProvider {
 				.writeFileToFolder(certFolder, filename, contents)
 				.catch((e) => {
 					throw new Error(
-						`Failed to write ${filename} to temporary folder. Error: ${e}`,
+						`Failed to write ${filename} to temporary folder. Error: ${e}`
 					);
 				});
 		}
 
 		if (os === ClientOS.Android) {
 			const deviceIdPromise = appNamePromise.then((app) =>
-				this.getTargetAndroidDeviceId(app, destination, csr),
+				this.getTargetAndroidDeviceId(app, destination, csr)
 			);
 			return Promise.all([deviceIdPromise, appNamePromise]).then(
 				([deviceId, appName]) => {
@@ -308,8 +308,8 @@ export class CertificateProvider {
 									appName,
 									destination + filename,
 									path.join(certFolder, filename),
-									this.logger,
-								),
+									this.logger
+								)
 							);
 					}
 					return androidUtil.push(
@@ -318,9 +318,9 @@ export class CertificateProvider {
 						appName,
 						destination + filename,
 						contents,
-						this.logger,
+						this.logger
 					);
-				},
+				}
 			);
 		}
 		if (
@@ -340,7 +340,7 @@ export class CertificateProvider {
 								return this.getTargetiOSDeviceId(
 									appName,
 									destination,
-									csr,
+									csr
 								);
 							})
 							.then((udid) => {
@@ -350,14 +350,14 @@ export class CertificateProvider {
 										appName,
 										relativePathInsideApp,
 										filename,
-										contents,
-									),
+										contents
+									)
 								);
 							});
 					}
 					throw new Error(
 						`Invalid appDirectory recieved from ${os} device: ${destination}: ` +
-							err.toString(),
+							err.toString()
 					);
 				});
 		}
@@ -369,7 +369,7 @@ export class CertificateProvider {
 		bundleId: string,
 		destination: string,
 		filename: string,
-		contents: string,
+		contents: string
 	): Promise<void> {
 		return tmp.dir({ unsafeCleanup: true }).then((dir) => {
 			const filePath = path.resolve(dir.path, filename);
@@ -381,8 +381,8 @@ export class CertificateProvider {
 						filePath,
 						bundleId,
 						destination,
-						this.logger,
-					),
+						this.logger
+					)
 				);
 		});
 	}
@@ -390,7 +390,7 @@ export class CertificateProvider {
 	private getTargetAndroidDeviceId(
 		appName: string,
 		deviceCsrFilePath: string,
-		csr: string,
+		csr: string
 	): Promise<string> {
 		return this.adbHelper.getOnlineTargets().then((devices) => {
 			if (devices.length === 0) {
@@ -401,14 +401,14 @@ export class CertificateProvider {
 					deviceCsrFilePath,
 					device.id,
 					appName,
-					csr,
+					csr
 				)
 					.then((result) => {
 						return { id: device.id, ...result, error: null };
 					})
 					.catch((e) => {
 						this.logger.error(
-							`Unable to check for matching CSR in ${device.id}:${appName}`,
+							`Unable to check for matching CSR in ${device.id}:${appName}`
 						);
 						return {
 							id: device.id,
@@ -416,7 +416,7 @@ export class CertificateProvider {
 							foundCsr: null,
 							error: e,
 						};
-					}),
+					})
 			);
 			return Promise.all(deviceMatchList).then((devices) => {
 				const matchingIds = devices
@@ -430,7 +430,7 @@ export class CertificateProvider {
 					const foundCsrs = devices
 						.filter((d) => d.foundCsr !== null)
 						.map((d) =>
-							d.foundCsr ? encodeURI(d.foundCsr) : "null",
+							d.foundCsr ? encodeURI(d.foundCsr) : "null"
 						);
 					this.logger.error(`Looking for CSR (url encoded):
 
@@ -440,12 +440,12 @@ export class CertificateProvider {
 
             ${foundCsrs.join("\n\n")}`);
 					throw new Error(
-						`No matching device found for app: ${appName}`,
+						`No matching device found for app: ${appName}`
 					);
 				}
 				if (matchingIds.length > 1) {
 					this.logger.error(
-						`More than one matching device found for CSR:\n${csr}`,
+						`More than one matching device found for CSR:\n${csr}`
 					);
 				}
 				return matchingIds[0];
@@ -456,7 +456,7 @@ export class CertificateProvider {
 	private getTargetiOSDeviceId(
 		appName: string,
 		deviceCsrFilePath: string,
-		csr: string,
+		csr: string
 	): Promise<string> {
 		const matches = /\/Devices\/([^/]+)\//.exec(deviceCsrFilePath);
 		if (matches && matches.length == 2) {
@@ -472,10 +472,10 @@ export class CertificateProvider {
 					deviceCsrFilePath,
 					target.id,
 					appName,
-					csr,
+					csr
 				).then((isMatch) => {
 					return { id: target.id, isMatch };
-				}),
+				})
 			);
 			return Promise.all(deviceMatchList).then((devices) => {
 				const matchingIds = devices
@@ -483,7 +483,7 @@ export class CertificateProvider {
 					.map((m) => m.id);
 				if (matchingIds.length == 0) {
 					throw new Error(
-						`No matching device found for app: ${appName}`,
+						`No matching device found for app: ${appName}`
 					);
 				}
 				return matchingIds[0];
@@ -495,7 +495,7 @@ export class CertificateProvider {
 		directory: string,
 		deviceId: string,
 		processName: string,
-		csr: string,
+		csr: string
 	): Promise<{ isMatch: boolean; foundCsr: string }> {
 		return androidUtil
 			.pull(
@@ -503,7 +503,7 @@ export class CertificateProvider {
 				deviceId,
 				processName,
 				directory + csrFileName,
-				this.logger,
+				this.logger
 			)
 			.then((deviceCsr) => {
 				// Santitize both of the string before comparation
@@ -521,10 +521,10 @@ export class CertificateProvider {
 		directory: string,
 		deviceId: string,
 		bundleId: string,
-		csr: string,
+		csr: string
 	): Promise<boolean> {
 		const originalFile = this.getRelativePathInAppContainer(
-			path.resolve(directory, csrFileName),
+			path.resolve(directory, csrFileName)
 		);
 		return tmp
 			.dir({ unsafeCleanup: true })
@@ -535,7 +535,7 @@ export class CertificateProvider {
 						originalFile,
 						bundleId,
 						path.join(dir.path, csrFileName),
-						this.logger,
+						this.logger
 					)
 					.then(() => dir);
 			})
@@ -556,12 +556,12 @@ export class CertificateProvider {
 						return fs.promises
 							.readFile(copiedFile)
 							.then((data) =>
-								this.santitizeString(data.toString()),
+								this.santitizeString(data.toString())
 							);
 					});
 			})
 			.then(
-				(csrFromDevice) => csrFromDevice === this.santitizeString(csr),
+				(csrFromDevice) => csrFromDevice === this.santitizeString(csr)
 			);
 	}
 
@@ -574,7 +574,7 @@ export class CertificateProvider {
 			return this.generateCertificateAuthority();
 		}
 		return this.checkCertIsValid(caCert).catch(() =>
-			this.generateCertificateAuthority(),
+			this.generateCertificateAuthority()
 		);
 	}
 
@@ -597,8 +597,8 @@ export class CertificateProvider {
 					localize(
 						"NICertificateExpireSoon",
 						"Certificate will expire soon: {0}",
-						filename,
-					),
+						filename
+					)
 				);
 				throw e;
 			})
@@ -607,7 +607,7 @@ export class CertificateProvider {
 					enddate: true,
 					in: filename,
 					noout: true,
-				}),
+				})
 			)
 			.then((endDateOutput) => {
 				const dateString = endDateOutput.trim().split("=")[1].trim();
@@ -615,10 +615,10 @@ export class CertificateProvider {
 				if (isNaN(expiryDate)) {
 					this.logger.error(
 						"Unable to parse certificate expiry date: " +
-							endDateOutput,
+							endDateOutput
 					);
 					throw new Error(
-						"Cannot parse certificate expiry date. Assuming it has expired.",
+						"Cannot parse certificate expiry date. Assuming it has expired."
 					);
 				}
 				if (
@@ -626,7 +626,7 @@ export class CertificateProvider {
 					Date.now() + minCertExpiryWindowSeconds * 1000
 				) {
 					throw new Error(
-						"Certificate has expired or will expire soon.",
+						"Certificate has expired or will expire soon."
 					);
 				}
 			});
@@ -643,7 +643,7 @@ export class CertificateProvider {
 				// This should never happen, but if it does, we need to notice so we can
 				// generate a valid one, or no clients will trust our server.
 				throw new Error(
-					"Current server cert was not issued by current CA",
+					"Current server cert was not issued by current CA"
 				);
 			}
 		});
@@ -661,7 +661,7 @@ export class CertificateProvider {
 					subj: caSubject,
 					key: caKey,
 					out: caCert,
-				}),
+				})
 			)
 			.then(() => undefined);
 	}
@@ -692,7 +692,7 @@ export class CertificateProvider {
 					key: serverKey,
 					out: serverCsr,
 					subj: serverSubject,
-				}),
+				})
 			)
 			.then(() =>
 				openssl("x509", {
@@ -703,7 +703,7 @@ export class CertificateProvider {
 					CAcreateserial: true,
 					CAserial: serverSrl,
 					out: serverCert,
-				}),
+				})
 			)
 			.then(() => undefined);
 	}
@@ -712,7 +712,7 @@ export class CertificateProvider {
 		return tmp
 			.file()
 			.then((path) =>
-				fs.promises.writeFile(path.path, content).then(() => path.path),
+				fs.promises.writeFile(path.path, content).then(() => path.path)
 			);
 	}
 }
@@ -728,6 +728,6 @@ function getFilePath(fileName: string): string {
 		".config",
 		"vscode-react-native",
 		"certs",
-		fileName,
+		fileName
 	);
 }

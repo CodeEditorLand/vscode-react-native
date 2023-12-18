@@ -32,14 +32,14 @@ export function buildClientId(
 		device: string;
 		device_id: string;
 	},
-	logger: OutputChannelLogger,
+	logger: OutputChannelLogger
 ): string {
 	for (const key of ["app", "os", "device", "device_id"] as Array<
 		keyof ClientIdConstituents
 	>) {
 		if (!clientInfo[key]) {
 			logger.error(
-				`Attempted to build clientId with invalid ${key}: "${clientInfo[key]}`,
+				`Attempted to build clientId with invalid ${key}: "${clientInfo[key]}`
 			);
 		}
 	}

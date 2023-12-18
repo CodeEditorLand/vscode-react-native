@@ -61,7 +61,7 @@ const localize = nls.loadMessageBundle();
 const outputChannelLogger = OutputChannelLogger.getMainChannel();
 const entryPointHandler = new EntryPointHandler(
 	ProcessType.Extension,
-	outputChannelLogger,
+	outputChannelLogger
 );
 // #todo> are we sure we need null here and this is the correct place for this?
 export let debugConfigProvider: ReactNativeDebugConfigProvider | null;
@@ -80,7 +80,7 @@ let EXTENSION_CONTEXT: vscode.ExtensionContext;
 let COUNT_WORKSPACE_FOLDERS = 9000;
 
 export async function activate(
-	context: vscode.ExtensionContext,
+	context: vscode.ExtensionContext
 ): Promise<void> {
 	const extensionName = getExtensionName();
 	const appVersion = getExtensionVersion();
@@ -88,8 +88,8 @@ export async function activate(
 		throw new Error(
 			localize(
 				"ExtensionVersionNotFound",
-				"Extension version is not found",
-			),
+				"Extension version is not found"
+			)
 		);
 	}
 
@@ -112,7 +112,7 @@ export async function activate(
 		void TipNotificationService.getInstance().showTipNotification();
 
 		SurveyService.getInstance().setExtensionFirstTimeInstalled(
-			extensionFirstTimeInstalled,
+			extensionFirstTimeInstalled
 		);
 		void SurveyService.getInstance().promptSurvey();
 	}
@@ -125,7 +125,7 @@ export async function activate(
 	const reporter = new ExtensionTelemetryReporter(
 		APP_NAME,
 		appVersion,
-		Telemetry.APPINSIGHTS_INSTRUMENTATIONKEY,
+		Telemetry.APPINSIGHTS_INSTRUMENTATIONKEY
 	);
 	const configProvider = (debugConfigProvider =
 		new ReactNativeDebugConfigProvider());
@@ -149,58 +149,58 @@ export async function activate(
 		APP_NAME,
 		appVersion,
 		ErrorHelper.getInternalError(
-			InternalErrorCode.ExtensionActivationFailed,
+			InternalErrorCode.ExtensionActivationFailed
 		),
 		reporter,
 		async () => {
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.workspace.onDidChangeWorkspaceFolders((event) =>
-					onChangeWorkspaceFolders(event),
-				),
+					onChangeWorkspaceFolders(event)
+				)
 			);
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.workspace.onDidChangeConfiguration(() =>
-					onChangeConfiguration(),
-				),
+					onChangeConfiguration()
+				)
 			);
 			EXTENSION_CONTEXT.subscriptions.push(
-				TipNotificationService.getInstance(),
+				TipNotificationService.getInstance()
 			);
 			EXTENSION_CONTEXT.subscriptions.push(SurveyService.getInstance());
 
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.debug.registerDebugConfigurationProvider(
 					DEBUG_TYPES.REACT_NATIVE,
-					configProvider,
-				),
+					configProvider
+				)
 			);
 
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.debug.registerDebugConfigurationProvider(
 					DEBUG_TYPES.REACT_NATIVE,
 					dymConfigProvider,
-					vscode.DebugConfigurationProviderTriggerKind.Dynamic,
-				),
+					vscode.DebugConfigurationProviderTriggerKind.Dynamic
+				)
 			);
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.debug.registerDebugConfigurationProvider(
 					DEBUG_TYPES.REACT_NATIVE_DIRECT,
 					dymConfigProvider,
-					vscode.DebugConfigurationProviderTriggerKind.Dynamic,
-				),
+					vscode.DebugConfigurationProviderTriggerKind.Dynamic
+				)
 			);
 
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.languages.registerCompletionItemProvider(
 					{ language: JsonLanguages.json },
-					completionItemProviderInst,
-				),
+					completionItemProviderInst
+				)
 			);
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.languages.registerCompletionItemProvider(
 					{ language: JsonLanguages.jsonWithComments },
-					completionItemProviderInst,
-				),
+					completionItemProviderInst
+				)
 			);
 
 			const sessionManager = new ReactNativeSessionManager();
@@ -208,14 +208,14 @@ export async function activate(
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.debug.registerDebugAdapterDescriptorFactory(
 					DEBUG_TYPES.REACT_NATIVE,
-					sessionManager,
-				),
+					sessionManager
+				)
 			);
 			EXTENSION_CONTEXT.subscriptions.push(
 				vscode.debug.registerDebugAdapterDescriptorFactory(
 					DEBUG_TYPES.REACT_NATIVE_DIRECT,
-					sessionManager,
-				),
+					sessionManager
+				)
 			);
 
 			EXTENSION_CONTEXT.subscriptions.push(sessionManager);
@@ -224,8 +224,8 @@ export async function activate(
 				DebugSessionBase.onDidTerminateRootDebugSession(
 					(terminateEvent) => {
 						sessionManager.terminate(terminateEvent);
-					},
-				),
+					}
+				)
 			);
 
 			const activateExtensionEvent =
@@ -234,27 +234,27 @@ export async function activate(
 			const promises: Promise<void>[] = [];
 			if (workspaceFolders) {
 				outputChannelLogger.debug(
-					`Projects found: ${workspaceFolders.length}`,
+					`Projects found: ${workspaceFolders.length}`
 				);
 				workspaceFolders.forEach((folder: vscode.WorkspaceFolder) => {
 					promises.push(onFolderAdded(folder));
 				});
 			} else {
 				outputChannelLogger.warning(
-					"Could not find workspace while activating",
+					"Could not find workspace while activating"
 				);
 				TelemetryHelper.sendErrorEvent(
 					"ActivateCouldNotFindWorkspace",
 					ErrorHelper.getInternalError(
-						InternalErrorCode.CouldNotFindWorkspace,
-					),
+						InternalErrorCode.CouldNotFindWorkspace
+					)
 				);
 			}
 
 			await Promise.all(promises);
 			await registerVscodeCommands();
 		},
-		extProps,
+		extProps
 	);
 }
 
@@ -264,21 +264,21 @@ export function deactivate(): Promise<void> {
 		void entryPointHandler.runFunction(
 			"extension.deactivate",
 			ErrorHelper.getInternalError(
-				InternalErrorCode.FailedToStopPackagerOnExit,
+				InternalErrorCode.FailedToStopPackagerOnExit
 			),
 			async () => {
 				debugConfigProvider = null;
 
 				await Promise.all(
 					Object.values(ProjectsStorage.projectsCache).map((it) =>
-						StopPackager.formInstance().executeLocally(it),
-					),
+						StopPackager.formInstance().executeLocally(it)
+					)
 				);
 				await StopElementInspector.formInstance().executeLocally();
 				LogCatMonitorManager.cleanUp();
 				resolve();
 			},
-			true,
+			true
 		);
 	});
 }
@@ -303,7 +303,7 @@ function onChangeConfiguration() {
 }
 
 export function createAdditionalWorkspaceFolder(
-	folderPath: string,
+	folderPath: string
 ): vscode.WorkspaceFolder | null {
 	if (fs.existsSync(folderPath)) {
 		const folderUri = vscode.Uri.file(folderPath);
@@ -323,7 +323,7 @@ export function getCountOfWorkspaceFolders(): number {
 }
 
 export async function onFolderAdded(
-	folder: vscode.WorkspaceFolder,
+	folder: vscode.WorkspaceFolder
 ): Promise<void> {
 	const workspacePath = vscode.workspace.workspaceFile?.fsPath;
 	const excludeFolders =
@@ -347,22 +347,22 @@ export async function onFolderAdded(
 		await ProjectVersionHelper.tryToGetRNSemverValidVersionsFromProjectPackage(
 			projectRootPath,
 			ProjectVersionHelper.generateAllAdditionalPackages(),
-			projectRootPath,
+			projectRootPath
 		);
 	outputChannelLogger.debug(
-		`React Native version: ${versions.reactNativeVersion}`,
+		`React Native version: ${versions.reactNativeVersion}`
 	);
 	const promises = [];
 	if (ProjectVersionHelper.isVersionError(versions.reactNativeVersion)) {
 		outputChannelLogger.debug(
-			`react-native package version is not found in ${projectRootPath}. Reason: ${versions.reactNativeVersion}`,
+			`react-native package version is not found in ${projectRootPath}. Reason: ${versions.reactNativeVersion}`
 		);
 		TelemetryHelper.sendErrorEvent(
 			"AddProjectReactNativeVersionIsEmpty",
 			ErrorHelper.getInternalError(
-				InternalErrorCode.CouldNotFindProjectVersion,
+				InternalErrorCode.CouldNotFindProjectVersion
 			),
-			versions.reactNativeVersion,
+			versions.reactNativeVersion
 		);
 	} else if (isSupportedVersion(versions.reactNativeVersion)) {
 		activateCommands();
@@ -371,13 +371,13 @@ export async function onFolderAdded(
 			entryPointHandler.runFunction(
 				"debugger.setupLauncherStub",
 				ErrorHelper.getInternalError(
-					InternalErrorCode.DebuggerStubLauncherFailed,
+					InternalErrorCode.DebuggerStubLauncherFailed
 				),
 				async () => {
 					const reactDirManager = new ReactDirManager(rootPath);
 					const projectObserver = new RNProjectObserver(
 						projectRootPath,
-						versions,
+						versions
 					);
 					await setupAndDispose(reactDirManager);
 					ProjectsStorage.addFolder(
@@ -385,16 +385,16 @@ export async function onFolderAdded(
 						new AppLauncher(
 							reactDirManager,
 							projectObserver,
-							folder,
-						),
+							folder
+						)
 					);
 					COUNT_WORKSPACE_FOLDERS++;
-				},
-			),
+				}
+			)
 		);
 	} else {
 		outputChannelLogger.debug(
-			`react-native@${versions.reactNativeVersion} isn't supported`,
+			`react-native@${versions.reactNativeVersion} isn't supported`
 		);
 	}
 	await Promise.all(promises);
@@ -404,7 +404,7 @@ function activateCommands(): void {
 	void vscode.commands.executeCommand(
 		"setContext",
 		CONTEXT_VARIABLES_NAMES.IS_RN_PROJECT,
-		true,
+		true
 	);
 }
 
@@ -425,7 +425,7 @@ function onFolderRemoved(folder: vscode.WorkspaceFolder): void {
 				if (element.isDisposed) {
 					EXTENSION_CONTEXT.subscriptions.splice(index, 1); // Array.prototype.filter doesn't work, "context.subscriptions" is read only
 				}
-			},
+			}
 		);
 	} catch (err) {
 		// Ignore
@@ -433,7 +433,7 @@ function onFolderRemoved(folder: vscode.WorkspaceFolder): void {
 }
 
 async function setupAndDispose<T extends ISetupableDisposable>(
-	setuptableDisposable: T,
+	setuptableDisposable: T
 ): Promise<T> {
 	await setuptableDisposable.setup();
 	EXTENSION_CONTEXT.subscriptions.push(setuptableDisposable);
@@ -451,7 +451,7 @@ function isSupportedVersion(version: string): boolean {
 		});
 		const shortMessage = localize(
 			"ReactNativeToolsRequiresMoreRecentVersionThan019",
-			"React Native Tools need React Native version 0.19.0 or later to be installed in <PROJECT_ROOT>/node_modules/",
+			"React Native Tools need React Native version 0.19.0 or later to be installed in <PROJECT_ROOT>/node_modules/"
 		);
 		const longMessage = `${shortMessage}: ${version}`;
 		void vscode.window.showWarningMessage(shortMessage);
@@ -467,8 +467,8 @@ function showTwoVersionFoundNotification(): boolean {
 		void vscode.window.showInformationMessage(
 			localize(
 				"RNTTwoVersionsFound",
-				"React Native Tools: Both Stable and Preview extensions are installed. Stable will be used. Disable or remove it to work with Preview version.",
-			),
+				"React Native Tools: Both Stable and Preview extensions are installed. Stable will be used. Disable or remove it to work with Preview version."
+			)
 		);
 		return true;
 	}
@@ -498,14 +498,14 @@ function showChangelogNotificationOnUpdate(currentVersion: string) {
 				localize(
 					"RNTHaveBeenUpdatedToVersion",
 					"React Native Tools have been updated to {0}",
-					currentVersion,
+					currentVersion
 				),
-				localize("MoreDetails", "More details"),
+				localize("MoreDetails", "More details")
 			)
 			.then(() => {
 				void vscode.commands.executeCommand(
 					"markdown.showPreview",
-					vscode.Uri.file(changelogFile),
+					vscode.Uri.file(changelogFile)
 				);
 			});
 	}
@@ -515,7 +515,7 @@ async function registerVscodeCommands() {
 	const commands = await import("./commands");
 	Object.values(commands).forEach((it) => {
 		EXTENSION_CONTEXT.subscriptions.push(
-			it.formInstance().register(entryPointHandler),
+			it.formInstance().register(entryPointHandler)
 		);
 	});
 }

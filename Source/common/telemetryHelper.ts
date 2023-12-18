@@ -24,32 +24,32 @@ export interface IExternalTelemetryProvider {
 	sendTelemetry: (
 		event: string,
 		props: Telemetry.ITelemetryProperties,
-		error?: Error,
+		error?: Error
 	) => void;
 }
 
 export class TelemetryHelper {
 	public static sendSimpleEvent(
 		eventName: string,
-		properties?: Telemetry.ITelemetryProperties,
+		properties?: Telemetry.ITelemetryProperties
 	): void {
 		const event = TelemetryHelper.createTelemetryEvent(
 			eventName,
-			properties,
+			properties
 		);
 		Telemetry.send(event);
 	}
 
 	public static createTelemetryEvent(
 		eventName: string,
-		properties?: Telemetry.ITelemetryProperties,
+		properties?: Telemetry.ITelemetryProperties
 	): Telemetry.TelemetryEvent {
 		return new Telemetry.TelemetryEvent(eventName, properties);
 	}
 
 	public static telemetryProperty(
 		propertyValue: any,
-		pii?: boolean,
+		pii?: boolean
 	): ITelemetryPropertyInfo {
 		return { value: String(propertyValue), isPii: pii || false };
 	}
@@ -57,7 +57,7 @@ export class TelemetryHelper {
 	public static addPropertyToTelemetryProperties(
 		propValue: any,
 		propName: string,
-		properties: ICommandTelemetryProperties = {},
+		properties: ICommandTelemetryProperties = {}
 	): any {
 		properties[propName] = {
 			value: propValue,
@@ -73,44 +73,44 @@ export class TelemetryHelper {
 	public static addPlatformPropertiesToTelemetryProperties(
 		args: IRunOptions,
 		versions: RNPackageVersions,
-		properties: ICommandTelemetryProperties,
+		properties: ICommandTelemetryProperties
 	): any {
 		properties = TelemetryHelper.addPropertyToTelemetryProperties(
 			versions.reactNativeVersion,
 			"reactNativeVersion",
-			properties,
+			properties
 		);
 		if (args.platform === PlatformType.Windows) {
 			if (
 				ProjectVersionHelper.isVersionError(
-					versions.reactNativeWindowsVersion,
+					versions.reactNativeWindowsVersion
 				)
 			) {
 				throw ErrorHelper.getInternalError(
-					InternalErrorCode.ReactNativeWindowsIsNotInstalled,
+					InternalErrorCode.ReactNativeWindowsIsNotInstalled
 				);
 			}
 			properties = TelemetryHelper.addPropertyToTelemetryProperties(
 				versions.reactNativeWindowsVersion,
 				"reactNativeWindowsVersion",
-				properties,
+				properties
 			);
 		}
 
 		if (args.platform === PlatformType.macOS) {
 			if (
 				ProjectVersionHelper.isVersionError(
-					versions.reactNativeMacOSVersion,
+					versions.reactNativeMacOSVersion
 				)
 			) {
 				throw ErrorHelper.getInternalError(
-					InternalErrorCode.ReactNativemacOSIsNotInstalled,
+					InternalErrorCode.ReactNativemacOSIsNotInstalled
 				);
 			}
 			properties = TelemetryHelper.addPropertyToTelemetryProperties(
 				versions.reactNativeMacOSVersion,
 				"reactNativeMacOSVersion",
-				properties,
+				properties
 			);
 		}
 
@@ -118,7 +118,7 @@ export class TelemetryHelper {
 			properties = TelemetryHelper.addPropertyToTelemetryProperties(
 				args.expoHostType,
 				"expoHostType",
-				properties,
+				properties
 			);
 		}
 
@@ -127,7 +127,7 @@ export class TelemetryHelper {
 
 	public static addTelemetryEventProperties(
 		event: Telemetry.TelemetryEvent,
-		properties: ICommandTelemetryProperties,
+		properties: ICommandTelemetryProperties
 	): void {
 		if (!properties) {
 			return;
@@ -138,7 +138,7 @@ export class TelemetryHelper {
 				event,
 				propertyName,
 				properties[propertyName].value,
-				properties[propertyName].isPii,
+				properties[propertyName].isPii
 			);
 		});
 	}
@@ -146,21 +146,21 @@ export class TelemetryHelper {
 	public static sendErrorEvent(
 		eventName: string,
 		error: Error,
-		errorDescription?: string,
+		errorDescription?: string
 	): void {
 		const event = TelemetryHelper.createTelemetryEvent(eventName);
 		TelemetryHelper.addTelemetryEventErrorProperty(
 			event,
 			error,
 			errorDescription,
-			"",
+			""
 		);
 		Telemetry.send(event);
 	}
 
 	public static sendDirect(
 		eventName: string,
-		properties?: Telemetry.ITelemetryProperties,
+		properties?: Telemetry.ITelemetryProperties
 	): void {
 		const event = TelemetryHelper.createTelemetryEvent(eventName, {
 			isDirect: true,
@@ -174,14 +174,14 @@ export class TelemetryHelper {
 	public static sendCommandSuccessTelemetry(
 		commandName: string,
 		commandProperties: ICommandTelemetryProperties,
-		args: string[] = [],
+		args: string[] = []
 	): void {
 		const successEvent: Telemetry.TelemetryEvent =
 			TelemetryHelper.createBasicCommandTelemetry(commandName, args);
 
 		TelemetryHelper.addTelemetryEventProperties(
 			successEvent,
-			commandProperties,
+			commandProperties
 		);
 
 		Telemetry.send(successEvent);
@@ -191,21 +191,21 @@ export class TelemetryHelper {
 		event: Telemetry.TelemetryEvent,
 		propertyName: string,
 		propertyValue: any,
-		isPii: boolean,
+		isPii: boolean
 	): void {
 		if (Array.isArray(propertyValue)) {
 			TelemetryHelper.addMultiValuedTelemetryEventProperty(
 				event,
 				propertyName,
 				propertyValue,
-				isPii,
+				isPii
 			);
 		} else {
 			TelemetryHelper.setTelemetryEventProperty(
 				event,
 				propertyName,
 				propertyValue,
-				isPii,
+				isPii
 			);
 		}
 	}
@@ -214,7 +214,7 @@ export class TelemetryHelper {
 		event: Telemetry.TelemetryEvent,
 		error: Error,
 		errorDescription?: string,
-		errorPropPrefix: string = "",
+		errorPropPrefix: string = ""
 	): void {
 		const errorWithErrorCode: IHasErrorCode = <IHasErrorCode>(
 			(<Record<string, any>>error)
@@ -224,14 +224,14 @@ export class TelemetryHelper {
 				event,
 				`${errorPropPrefix}error.code`,
 				errorWithErrorCode.errorCode,
-				false,
+				false
 			);
 			if (errorDescription) {
 				this.addTelemetryEventProperty(
 					event,
 					`${errorPropPrefix}error.message`,
 					errorDescription,
-					false,
+					false
 				);
 			}
 		} else {
@@ -239,7 +239,7 @@ export class TelemetryHelper {
 				event,
 				`${errorPropPrefix}error.code`,
 				InternalErrorCode.UnknownError,
-				false,
+				false
 			);
 		}
 	}
@@ -248,7 +248,7 @@ export class TelemetryHelper {
 		telemetryProperties: ICommandTelemetryProperties,
 		knownOptions: any,
 		commandOptions: { [flag: string]: any },
-		nonPiiOptions: string[] = [],
+		nonPiiOptions: string[] = []
 	): ICommandTelemetryProperties {
 		// We parse only the known options, to avoid potential private information that may appear on the command line
 		let unknownOptionIndex = 1;
@@ -261,7 +261,7 @@ export class TelemetryHelper {
 					telemetryProperties[`options.${key}`] =
 						this.telemetryProperty(
 							value,
-							!nonPiiOptions.includes(key),
+							!nonPiiOptions.includes(key)
 						);
 				}
 			} else {
@@ -282,11 +282,11 @@ export class TelemetryHelper {
 		extendedParamsToSend: ICommandTelemetryProperties = {},
 		codeGeneratingTelemetry: {
 			(telemetry: TelemetryGenerator): Promise<T> | T;
-		},
+		}
 	): Promise<T> {
 		const generator: TelemetryGenerator = new TelemetryGenerator(
 			name,
-			extendedParamsToSend,
+			extendedParamsToSend
 		);
 		return generator
 			.time("", () => codeGeneratingTelemetry(generator))
@@ -295,7 +295,7 @@ export class TelemetryHelper {
 
 	private static createBasicCommandTelemetry(
 		commandName: string,
-		args: string[] = [],
+		args: string[] = []
 	): Telemetry.TelemetryEvent {
 		const commandEvent: Telemetry.TelemetryEvent =
 			new Telemetry.TelemetryEvent(commandName || "command");
@@ -309,7 +309,7 @@ export class TelemetryHelper {
 				commandEvent,
 				"argument",
 				args,
-				true,
+				true
 			);
 		}
 
@@ -320,7 +320,7 @@ export class TelemetryHelper {
 		event: Telemetry.TelemetryEvent,
 		propertyName: string,
 		propertyValue: string,
-		isPii: boolean,
+		isPii: boolean
 	): void {
 		if (isPii) {
 			event.setPiiProperty(propertyName, String(propertyValue));
@@ -333,14 +333,14 @@ export class TelemetryHelper {
 		event: Telemetry.TelemetryEvent,
 		propertyName: string,
 		propertyValue: any,
-		isPii: boolean,
+		isPii: boolean
 	): void {
 		for (let i = 0; i < propertyValue.length; i++) {
 			TelemetryHelper.setTelemetryEventProperty(
 				event,
 				propertyName + String(i),
 				propertyValue[i],
-				isPii,
+				isPii
 			);
 		}
 	}

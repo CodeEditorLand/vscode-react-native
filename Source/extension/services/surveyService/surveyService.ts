@@ -62,7 +62,7 @@ export class SurveyService implements vscode.Disposable {
 	private constructor() {
 		this.downloadConfigRequest = retryDownloadConfig<RemoteSurveyConfig>(
 			this.endpointURL,
-			this.cancellationTokenSource,
+			this.cancellationTokenSource
 		);
 	}
 
@@ -100,7 +100,7 @@ export class SurveyService implements vscode.Disposable {
 	}
 
 	public setExtensionFirstTimeInstalled(
-		extensionFirstTimeInstalled: boolean,
+		extensionFirstTimeInstalled: boolean
 	): void {
 		this.extensionFirstTimeInstalled = extensionFirstTimeInstalled;
 	}
@@ -120,9 +120,9 @@ export class SurveyService implements vscode.Disposable {
 			ExtensionConfigManager.config.has(this.SURVEY_CONFIG_NAME)
 				? this.prepareRawConfig(
 						ExtensionConfigManager.config.get(
-							this.SURVEY_CONFIG_NAME,
-						),
-				  )
+							this.SURVEY_CONFIG_NAME
+						)
+					)
 				: {
 						shortPeriodToRemind: 30,
 						longPeriodToRemind: 90,
@@ -133,7 +133,7 @@ export class SurveyService implements vscode.Disposable {
 							: 3,
 						surveyName: "none",
 						surveyUrl: "",
-				  };
+					};
 
 		const surveyConfig =
 			await this.mergeRemoteConfigToLocal(surveyConfigLocal);
@@ -146,7 +146,7 @@ export class SurveyService implements vscode.Disposable {
 	private saveSurveyConfig(surveyConfig: SurveyConfig): void {
 		ExtensionConfigManager.config.set(
 			this.SURVEY_CONFIG_NAME,
-			surveyConfig,
+			surveyConfig
 		);
 	}
 
@@ -154,7 +154,7 @@ export class SurveyService implements vscode.Disposable {
 		return (
 			getRandomIntInclusive(
 				this.MIN_WAIT_TIME_TO_SHOW_SURVEY_IN_MINUTES,
-				this.MAX_WAIT_TIME_TO_SHOW_SURVEY_IN_MINUTES,
+				this.MAX_WAIT_TIME_TO_SHOW_SURVEY_IN_MINUTES
 			) *
 			60 *
 			1000
@@ -164,15 +164,15 @@ export class SurveyService implements vscode.Disposable {
 	private async showSurveyNotification(): Promise<void> {
 		const giveFeedbackButtonText = localize(
 			"giveFeedback",
-			"Give Feedback",
+			"Give Feedback"
 		);
 		const remindLaterButtonText = localize(
 			"remindLater",
-			"Remind Me later",
+			"Remind Me later"
 		);
 		const notificationText = localize(
 			"surveyNotificationText",
-			"Got a moment to help the React Native Tools team? Please tell us about your experience with the extension so far.",
+			"Got a moment to help the React Native Tools team? Please tell us about your experience with the extension so far."
 		);
 
 		this.sendPromptSurveyTelemetry(this.surveyConfig.surveyName);
@@ -180,13 +180,13 @@ export class SurveyService implements vscode.Disposable {
 		const selection = await vscode.window.showInformationMessage(
 			notificationText,
 			giveFeedbackButtonText,
-			remindLaterButtonText,
+			remindLaterButtonText
 		);
 
 		if (!selection || selection === remindLaterButtonText) {
 			this.sendSurveyNotificationReactionTelemetry(
 				this.surveyConfig.surveyName,
-				SurveyNotificationReaction.CANCEL,
+				SurveyNotificationReaction.CANCEL
 			);
 		}
 		if (
@@ -194,11 +194,11 @@ export class SurveyService implements vscode.Disposable {
 			this.surveyConfig.surveyUrl
 		) {
 			void vscode.env.openExternal(
-				vscode.Uri.parse(this.surveyConfig.surveyUrl),
+				vscode.Uri.parse(this.surveyConfig.surveyUrl)
 			);
 			this.sendSurveyNotificationReactionTelemetry(
 				this.surveyConfig.surveyName,
-				SurveyNotificationReaction.ACCEPT,
+				SurveyNotificationReaction.ACCEPT
 			);
 		}
 	}
@@ -207,11 +207,11 @@ export class SurveyService implements vscode.Disposable {
 		if (!this._surveyConfig) {
 			if (!ExtensionConfigManager.config.has(this.SURVEY_CONFIG_NAME)) {
 				throw new Error(
-					"Could not find Survey config in the config store.",
+					"Could not find Survey config in the config store."
 				);
 			} else {
 				this._surveyConfig = this.prepareRawConfig(
-					ExtensionConfigManager.config.get(this.SURVEY_CONFIG_NAME),
+					ExtensionConfigManager.config.get(this.SURVEY_CONFIG_NAME)
 				);
 			}
 		}
@@ -225,14 +225,14 @@ export class SurveyService implements vscode.Disposable {
 	private prepareRawConfig(rawSurveyConfig: SurveyConfig): SurveyConfig {
 		if (rawSurveyConfig.lastExtensionUsageDate) {
 			rawSurveyConfig.lastExtensionUsageDate = new Date(
-				rawSurveyConfig.lastExtensionUsageDate,
+				rawSurveyConfig.lastExtensionUsageDate
 			);
 		}
 		return rawSurveyConfig;
 	}
 
 	private async mergeRemoteConfigToLocal(
-		surveyConfig: SurveyConfig,
+		surveyConfig: SurveyConfig
 	): Promise<SurveyConfig> {
 		const remoteConfig = await this.downloadConfigRequest;
 		surveyConfig.shortPeriodToRemind = remoteConfig.shortPeriodToRemind;
@@ -249,7 +249,7 @@ export class SurveyService implements vscode.Disposable {
 			"promptUserSurvey",
 			{
 				surveyName,
-			},
+			}
 		);
 
 		Telemetry.send(promptUserSurveyEvent);
@@ -257,7 +257,7 @@ export class SurveyService implements vscode.Disposable {
 
 	private sendSurveyNotificationReactionTelemetry(
 		surveyName: string,
-		surveyNotificationReaction: SurveyNotificationReaction,
+		surveyNotificationReaction: SurveyNotificationReaction
 	): void {
 		const surveyNotificationReactionEvent =
 			TelemetryHelper.createTelemetryEvent("surveyNotificationReaction", {

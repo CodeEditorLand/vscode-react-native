@@ -47,7 +47,7 @@ const localize = nls.loadMessageBundle();
  */
 
 function transformCertificateExchangeMediumToType(
-	medium: number | undefined,
+	medium: number | undefined
 ): CertificateExchangeMedium {
 	if (medium == 1) {
 		return "FS_ACCESS";
@@ -74,20 +74,20 @@ export class NetworkInspectorServer {
 	constructor() {
 		this.connections = new Map<string, ClientDevice>();
 		this.logger = OutputChannelLogger.getChannel(
-			NETWORK_INSPECTOR_LOG_CHANNEL_NAME,
+			NETWORK_INSPECTOR_LOG_CHANNEL_NAME
 		);
 	}
 
 	public async start(adbHelper: AdbHelper): Promise<void> {
 		this.logger.info(
-			localize("StartNetworkinspector", "Starting Network inspector"),
+			localize("StartNetworkinspector", "Starting Network inspector")
 		);
 		TipNotificationService.getInstance().setKnownDateForFeatureById(
-			"networkInspector",
+			"networkInspector"
 		);
 		TipNotificationService.getInstance().showTipNotification(
 			false,
-			"networkInspectorLogsColorTheme",
+			"networkInspectorLogsColorTheme"
 		);
 		this.initialisePromise = new Promise(async (resolve, reject) => {
 			this.certificateProvider = new CertificateProvider(adbHelper);
@@ -97,10 +97,10 @@ export class NetworkInspectorServer {
 					await this.certificateProvider.loadSecureServerConfig();
 				this.secureServer = await this.startServer(
 					NetworkInspectorServer.SecureServerPort,
-					options,
+					options
 				);
 				this.insecureServer = await this.startServer(
-					NetworkInspectorServer.InsecureServerPort,
+					NetworkInspectorServer.InsecureServerPort
 				);
 			} catch (err) {
 				return reject(err);
@@ -109,8 +109,8 @@ export class NetworkInspectorServer {
 			this.logger.info(
 				localize(
 					"NetworkInspectorWorking",
-					"Network inspector is working",
-				),
+					"Network inspector is working"
+				)
 			);
 			resolve();
 		});
@@ -134,14 +134,14 @@ export class NetworkInspectorServer {
 		this.logger.info(
 			localize(
 				"NetworkInspectorStopped",
-				"Network inspector has been stopped",
-			),
+				"Network inspector has been stopped"
+			)
 		);
 	}
 
 	private async startServer(
 		port: number,
-		sslConfig?: SecureServerConfig,
+		sslConfig?: SecureServerConfig
 	): Promise<RSocketServer<any, any>> {
 		return new Promise((resolve, reject) => {
 			let rsServer: RSocketServer<any, any> | undefined; // eslint-disable-line prefer-const
@@ -149,7 +149,7 @@ export class NetworkInspectorServer {
 				const transportServer = sslConfig
 					? tls.createServer(sslConfig, (socket) => {
 							onConnect(socket);
-					  })
+						})
 					: net.createServer(onConnect);
 				transportServer
 					.on("error", (err) => {
@@ -157,8 +157,8 @@ export class NetworkInspectorServer {
 							localize(
 								"ErrorOpeningNetworkInspectorServerOnPort",
 								"Error while opening Network inspector server on port {0}",
-								port,
-							),
+								port
+							)
 						);
 						reject(err);
 					})
@@ -166,7 +166,7 @@ export class NetworkInspectorServer {
 						this.logger.debug(
 							`${
 								sslConfig ? "Secure" : "Certificate"
-							} server started on port ${port}`,
+							} server started on port ${port}`
 						);
 						resolve(rsServer!);
 					});
@@ -187,7 +187,7 @@ export class NetworkInspectorServer {
 
 	private trustedRequestHandler = (
 		socket: ReactiveSocket<string, any>,
-		payload: Payload<string, any>,
+		payload: Payload<string, any>
 	): Partial<Responder<string, any>> => {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const server = this;
@@ -220,7 +220,7 @@ export class NetworkInspectorServer {
 				sdk_version,
 				medium: transformedMedium,
 			},
-			{ csr, csr_path },
+			{ csr, csr_path }
 		).then((client) => {
 			return (resolvedClient = client);
 		});
@@ -234,8 +234,8 @@ export class NetworkInspectorServer {
 							localize(
 								"NIDeviceDisconnected",
 								"Device disconnected {0} from the Network inspector",
-								client.id,
-							),
+								client.id
+							)
 						);
 						server.removeConnection(client.id);
 					});
@@ -247,7 +247,7 @@ export class NetworkInspectorServer {
 			onError(error) {
 				server.logger.error(
 					"Network inspector server connection status error ",
-					error,
+					error
 				);
 			},
 		});
@@ -267,7 +267,7 @@ export class NetworkInspectorServer {
 
 	private untrustedRequestHandler = (
 		_socket: ReactiveSocket<string, any>,
-		payload: Payload<string, any>,
+		payload: Payload<string, any>
 	): Partial<Responder<string, any>> => {
 		if (!payload.data) {
 			return {};
@@ -276,7 +276,7 @@ export class NetworkInspectorServer {
 
 		return {
 			requestResponse: (
-				payload: Payload<string, any>,
+				payload: Payload<string, any>
 			): Single<Payload<string, any>> => {
 				if (typeof payload.data !== "string") {
 					return new Single(() => {});
@@ -287,7 +287,7 @@ export class NetworkInspectorServer {
 					rawData = JSON.parse(payload.data);
 				} catch (err) {
 					this.logger.error(
-						`Network inspector: invalid JSON: ${payload.data}`,
+						`Network inspector: invalid JSON: ${payload.data}`
 					);
 					return new Single(() => {});
 				}
@@ -310,9 +310,7 @@ export class NetworkInspectorServer {
 								csr,
 								clientData.os,
 								destination,
-								transformCertificateExchangeMediumToType(
-									medium,
-								),
+								transformCertificateExchangeMediumToType(medium)
 							)
 							.then((result) => {
 								subscriber.onComplete({
@@ -351,7 +349,7 @@ export class NetworkInspectorServer {
 					json = JSON.parse(payload.data);
 				} catch (err) {
 					this.logger.error(
-						`Network inspector: invalid JSON: ${payload.data}`,
+						`Network inspector: invalid JSON: ${payload.data}`
 					);
 					return;
 				}
@@ -364,7 +362,7 @@ export class NetworkInspectorServer {
 							csr,
 							clientData.os,
 							destination,
-							transformCertificateExchangeMediumToType(medium),
+							transformCertificateExchangeMediumToType(medium)
 						)
 						.catch((e) => {
 							this.logger.error(e.toString());
@@ -377,7 +375,7 @@ export class NetworkInspectorServer {
 	private async addConnection(
 		conn: ReactiveSocket<any, any>,
 		query: ClientQuery & { medium: CertificateExchangeMedium },
-		csrQuery: ClientCsrQuery,
+		csrQuery: ClientCsrQuery
 	): Promise<ClientDevice> {
 		// try to get id by comparing giving `csr` to file from `csr_path`
 		// otherwise, use given device_id
@@ -392,7 +390,7 @@ export class NetworkInspectorServer {
 								query.os,
 								appName,
 								csr_path,
-								csr,
+								csr
 							);
 						})
 				: Promise.resolve(query.device_id)
@@ -407,10 +405,10 @@ export class NetworkInspectorServer {
 					device: query.device,
 					device_id: csrId,
 				},
-				this.logger,
+				this.logger
 			);
 			this.logger.info(
-				localize("NIDeviceConnected", "Device connected: {0}", id),
+				localize("NIDeviceConnected", "Device connected: {0}", id)
 			);
 
 			const client = new ClientDevice(
@@ -418,7 +416,7 @@ export class NetworkInspectorServer {
 				query,
 				conn,
 				InspectorViewType.console,
-				this.logger,
+				this.logger
 			);
 
 			client.init().then(() => {

@@ -36,7 +36,7 @@ const main: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"IosDeployTestDescription",
-		"Required for installing your app on a physical device with the CLI",
+		"Required for installing your app on a physical device with the CLI"
 	),
 	category: ValidationCategoryE.iOS,
 	exec: test,

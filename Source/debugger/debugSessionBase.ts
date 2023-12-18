@@ -130,7 +130,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 	protected initializeRequest(
 		response: DebugProtocol.InitializeResponse,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		args: DebugProtocol.InitializeRequestArguments,
+		args: DebugProtocol.InitializeRequestArguments
 	): void {
 		response.body = response.body || {};
 
@@ -144,7 +144,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 
 	protected abstract establishDebugSession(
 		attachArgs: IAttachRequestArgs,
-		resolve?: (value?: void | PromiseLike<void> | undefined) => void,
+		resolve?: (value?: void | PromiseLike<void> | undefined) => void
 	): void;
 
 	protected async initializeSettings(args: any): Promise<void> {
@@ -153,18 +153,18 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			if (chromeDebugCoreLogs) {
 				chromeDebugCoreLogs = path.join(
 					chromeDebugCoreLogs,
-					"DebugSessionLogs.txt",
+					"DebugSessionLogs.txt"
 				);
 			}
 			let logLevel: string = args.trace;
 			if (logLevel) {
 				logLevel = logLevel.replace(
 					logLevel[0],
-					logLevel[0].toUpperCase(),
+					logLevel[0].toUpperCase()
 				);
 				logger.setup(
 					Logger.LogLevel[logLevel],
-					chromeDebugCoreLogs || false,
+					chromeDebugCoreLogs || false
 				);
 				this.cdpProxyLogLevel =
 					LogLevel[logLevel] === LogLevel.Verbose
@@ -193,21 +193,21 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			}
 
 			const projectRootPath = SettingsHelper.getReactNativeProjectRoot(
-				args.cwd,
+				args.cwd
 			);
 			const isReactProject =
 				await ReactNativeProjectHelper.isReactNativeProject(
-					projectRootPath,
+					projectRootPath
 				);
 			if (!isReactProject) {
 				throw ErrorHelper.getInternalError(
-					InternalErrorCode.NotInReactNativeFolderError,
+					InternalErrorCode.NotInReactNativeFolderError
 				);
 			}
 
 			const appLauncher =
 				await AppLauncher.getOrCreateAppLauncherByProjectRootPath(
-					projectRootPath,
+					projectRootPath
 				);
 			this.appLauncher = appLauncher;
 			this.projectRootPath = projectRootPath;
@@ -215,7 +215,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			this.appLauncher.getOrUpdateNodeModulesRoot(true);
 			if (this.vsCodeDebugSession.workspaceFolder) {
 				this.appLauncher.updateDebugConfigurationRoot(
-					this.vsCodeDebugSession.workspaceFolder.uri.fsPath,
+					this.vsCodeDebugSession.workspaceFolder.uri.fsPath
 				);
 			}
 			const settingsPort =
@@ -230,7 +230,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 		response: DebugProtocol.DisconnectResponse,
 		args: DebugProtocol.DisconnectArguments,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		request?: DebugProtocol.Request,
+		request?: DebugProtocol.Request
 	): Promise<void> {
 		if (this.appLauncher) {
 			await this.appLauncher.getRnCdpProxy().stopServer();
@@ -251,8 +251,8 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 					localize(
 						"CouldNotStopMonitoringLogcat",
 						"Couldn't stop monitoring logcat: {0}",
-						err.message || err,
-					),
+						err.message || err
+					)
 				);
 			}
 		}
@@ -272,7 +272,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 
 	protected terminateWithErrorResponse(
 		error: Error,
-		response: DebugProtocol.Response,
+		response: DebugProtocol.Response
 	): void {
 		// We can't print error messages after the debugging session is stopped. This could break the extension work.
 		if (
@@ -289,18 +289,18 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			{ format: error.message, id: 1 },
 			undefined,
 			undefined,
-			ErrorDestination.User,
+			ErrorDestination.User
 		);
 	}
 
 	protected async preparePackagerBeforeAttach(
 		args: IAttachRequestArgs,
-		reactNativeVersions: RNPackageVersions,
+		reactNativeVersions: RNPackageVersions
 	): Promise<void> {
 		if (!(await this.appLauncher.getPackager().isRunning())) {
 			const runOptions: ILaunchArgs = Object.assign(
 				{ reactNativeVersions },
-				this.appLauncher.prepareBaseRunOptions(args),
+				this.appLauncher.prepareBaseRunOptions(args)
 			);
 			this.appLauncher.getPackager().setRunOptions(runOptions);
 			await this.appLauncher.getPackager().start();
@@ -343,7 +343,7 @@ export function getProjectRoot(args: any): string {
 		return path.resolve(vsCodeRoot, projectRootPath);
 	} catch (e) {
 		logger.verbose(
-			`${settingsPath} file doesn't exist or its content is incorrect. This file will be ignored.`,
+			`${settingsPath} file doesn't exist or its content is incorrect. This file will be ignored.`
 		);
 		return args.cwd
 			? path.resolve(args.cwd)

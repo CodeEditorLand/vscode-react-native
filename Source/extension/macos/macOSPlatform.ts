@@ -38,31 +38,31 @@ export class MacOSPlatform extends GeneralPlatform {
 
 	constructor(
 		protected runOptions: ImacOSRunOptions,
-		platformDeps: MobilePlatformDeps = {},
+		platformDeps: MobilePlatformDeps = {}
 	) {
 		super(runOptions, platformDeps);
 
 		const macosProjectFolderPath = MacOSPlatform.getOptFromRunArgs(
 			this.runArguments,
 			"--project-path",
-			false,
+			false
 		);
 		this.macosProjectRoot = path.join(
 			this.projectPath,
 			macosProjectFolderPath ||
-				MacOSPlatform.DEFAULT_MACOS_PROJECT_RELATIVE_PATH,
+				MacOSPlatform.DEFAULT_MACOS_PROJECT_RELATIVE_PATH
 		);
 		this.plistBuddy = new PlistBuddy();
 
 		const schemeFromArgs = MacOSPlatform.getOptFromRunArgs(
 			this.runArguments,
 			"--scheme",
-			false,
+			false
 		);
 		this.macOSDebugModeManager = new MacOSDebugModeManager(
 			this.macosProjectRoot,
 			this.projectPath,
-			schemeFromArgs ? schemeFromArgs : this.runOptions.scheme,
+			schemeFromArgs ? schemeFromArgs : this.runOptions.scheme
 		);
 	}
 
@@ -86,7 +86,7 @@ export class MacOSPlatform extends GeneralPlatform {
 		extProps = TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 			this.runOptions,
 			this.runOptions.reactNativeVersions,
-			extProps,
+			extProps
 		);
 
 		await TelemetryHelper.generate(
@@ -96,19 +96,19 @@ export class MacOSPlatform extends GeneralPlatform {
 				const env = GeneralPlatform.getEnvArgument(
 					process.env,
 					this.runOptions.env,
-					this.runOptions.envFile,
+					this.runOptions.envFile
 				);
 
 				if (
 					!semver.valid(
-						this.runOptions.reactNativeVersions.reactNativeVersion,
+						this.runOptions.reactNativeVersions.reactNativeVersion
 					) /* Custom RN implementations should support this flag*/ ||
 					semver.gte(
 						this.runOptions.reactNativeVersions.reactNativeVersion,
-						MacOSPlatform.NO_PACKAGER_VERSION,
+						MacOSPlatform.NO_PACKAGER_VERSION
 					) ||
 					ProjectVersionHelper.isCanaryVersion(
-						this.runOptions.reactNativeVersions.reactNativeVersion,
+						this.runOptions.reactNativeVersions.reactNativeVersion
 					)
 				) {
 					this.runArguments.push("--no-packager");
@@ -117,18 +117,18 @@ export class MacOSPlatform extends GeneralPlatform {
 				const runmacOSSpawn = new CommandExecutor(
 					this.runOptions.nodeModulesRoot,
 					this.projectPath,
-					this.logger,
+					this.logger
 				).spawnReactCommand(
 					`run-${this.platformName}`,
 					this.runArguments,
-					{ env },
+					{ env }
 				);
 				await new OutputVerifier(
 					() => Promise.resolve(MacOSPlatform.SUCCESS_PATTERNS),
 					() => Promise.resolve(MacOSPlatform.FAILURE_PATTERNS),
-					this.platformName,
+					this.platformName
 				).process(runmacOSSpawn);
-			},
+			}
 		);
 	}
 
@@ -164,10 +164,10 @@ export class MacOSPlatform extends GeneralPlatform {
 			[
 				this.macOSDebugModeManager.getAppRemoteDebuggingSetting(
 					this.runOptions.configuration,
-					this.runOptions.productName,
+					this.runOptions.productName
 				),
 				this.getApplicationName(),
-			],
+			]
 		);
 		if (debugModeEnabled) {
 			return;
@@ -182,7 +182,7 @@ export class MacOSPlatform extends GeneralPlatform {
 		await this.macOSDebugModeManager.setAppRemoteDebuggingSetting(
 			/* enable=*/ true,
 			this.runOptions.configuration,
-			this.runOptions.productName,
+			this.runOptions.productName
 		);
 		// Relaunch the app
 		await this.runApp();
@@ -192,7 +192,7 @@ export class MacOSPlatform extends GeneralPlatform {
 		return this.macOSDebugModeManager.setAppRemoteDebuggingSetting(
 			/* enable=*/ false,
 			this.runOptions.configuration,
-			this.runOptions.productName,
+			this.runOptions.productName
 		);
 	}
 
@@ -205,7 +205,7 @@ export class MacOSPlatform extends GeneralPlatform {
 				false,
 				this.runOptions.configuration,
 				this.runOptions.productName,
-				this.getSchemeFromDebuggingParameters(),
+				this.getSchemeFromDebuggingParameters()
 			);
 		return iOSBuildLocationData.executable;
 	}
@@ -216,7 +216,7 @@ export class MacOSPlatform extends GeneralPlatform {
 			const schemeFromArgs = MacOSPlatform.getOptFromRunArgs(
 				this.runArguments,
 				"--scheme",
-				false,
+				false
 			);
 			if (schemeFromArgs) {
 				scheme = schemeFromArgs;
@@ -233,7 +233,7 @@ export class MacOSPlatform extends GeneralPlatform {
 		// 41004 ??         0:21.34 /Users/user/Library/Developer/Xcode/DerivedData/rn_for_mac_proj-ghuavabiztosiqfqkrityjoxqfmv/Build/Products/Debug/rn_for_mac_proj.app/Contents/MacOS/rn_for_mac_proj
 		// 75514 ttys007    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn rn_for_mac_proj
 		const searchResults = await childProcess.execToString(
-			`ps -ax | grep ${appName}`,
+			`ps -ax | grep ${appName}`
 		);
 		if (searchResults) {
 			const processIdRgx = /(^\d*)\s\?\?/g;

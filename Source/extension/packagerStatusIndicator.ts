@@ -37,28 +37,28 @@ export class PackagerStatusIndicator implements Disposable {
 
 	private static PACKAGER_NAME: string = localize(
 		"ReactNativePackager",
-		"React Native Packager",
+		"React Native Packager"
 	);
 
 	private static STOP_TOOLTIP: string = localize(
 		"StopPackager",
-		"Stop Packager",
+		"Stop Packager"
 	);
 	private static START_TOOLTIP: string = localize(
 		"StartPackager",
-		"Start Packager",
+		"Start Packager"
 	);
 	private static RESTART_TOOLTIP: string = localize(
 		"RestartPackager",
-		"Restart Packager",
+		"Restart Packager"
 	);
 	private static STARTING_TOOLTIP: string = localize(
 		"StartingPackager",
-		"Starting Packager",
+		"Starting Packager"
 	);
 	private static STOPPING_TOOLTIP: string = localize(
 		"StoppingPackager",
-		"Stopping Packager",
+		"Stopping Packager"
 	);
 
 	private static START_ICON = "$(play)";
@@ -81,7 +81,7 @@ export class PackagerStatusIndicator implements Disposable {
 			this.restartPackagerItem = (window as any).createStatusBarItem(
 				"restartPackagerItem",
 				StatusBarAlignment.Left,
-				10,
+				10
 			);
 			(this.restartPackagerItem as any).name =
 				PackagerStatusIndicator.RESTART_TOOLTIP;
@@ -89,18 +89,18 @@ export class PackagerStatusIndicator implements Disposable {
 			this.togglePackagerItem = (window as any).createStatusBarItem(
 				"togglePackagerItem",
 				StatusBarAlignment.Left,
-				10,
+				10
 			);
 			(this.togglePackagerItem as any).name =
 				PackagerStatusIndicator.PACKAGER_NAME;
 		} else {
 			this.restartPackagerItem = window.createStatusBarItem(
 				StatusBarAlignment.Left,
-				10,
+				10
 			);
 			this.togglePackagerItem = window.createStatusBarItem(
 				StatusBarAlignment.Left,
-				10,
+				10
 			);
 		}
 		this.restartPackagerItem.text = PackagerStatusIndicator.RESTART_ICON;
@@ -112,7 +112,7 @@ export class PackagerStatusIndicator implements Disposable {
 		this.setupPackagerStatusIndicatorItems(
 			PackagerStatusIndicator.START_ICON,
 			PackagerStatusIndicator.START_COMMAND,
-			PackagerStatusIndicator.START_TOOLTIP,
+			PackagerStatusIndicator.START_TOOLTIP
 		);
 	}
 
@@ -122,7 +122,7 @@ export class PackagerStatusIndicator implements Disposable {
 			if (this.projectRoot) {
 				this.displayVersion =
 					SettingsHelper.getPackagerStatusIndicatorPattern(
-						this.projectRoot,
+						this.projectRoot
 					);
 			}
 		} catch (e) {
@@ -139,7 +139,7 @@ export class PackagerStatusIndicator implements Disposable {
 	private setupPackagerStatusIndicatorItems(
 		icon: string,
 		command?: string,
-		tooltip: string = "",
+		tooltip: string = ""
 	): void {
 		this.updateDisplayVersion();
 		this.togglePackagerItem.command = command;
@@ -164,28 +164,28 @@ export class PackagerStatusIndicator implements Disposable {
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.START_ICON,
 					PackagerStatusIndicator.START_COMMAND,
-					PackagerStatusIndicator.START_TOOLTIP,
+					PackagerStatusIndicator.START_TOOLTIP
 				);
 				break;
 			case PackagerStatus.PACKAGER_STOPPING:
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.ACTIVITY_ICON,
 					undefined,
-					PackagerStatusIndicator.STOPPING_TOOLTIP,
+					PackagerStatusIndicator.STOPPING_TOOLTIP
 				);
 				break;
 			case PackagerStatus.PACKAGER_STARTED:
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.STOP_ICON,
 					PackagerStatusIndicator.STOP_COMMAND,
-					PackagerStatusIndicator.STOP_TOOLTIP,
+					PackagerStatusIndicator.STOP_TOOLTIP
 				);
 				break;
 			case PackagerStatus.PACKAGER_STARTING:
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.ACTIVITY_ICON,
 					undefined,
-					PackagerStatusIndicator.STARTING_TOOLTIP,
+					PackagerStatusIndicator.STARTING_TOOLTIP
 				);
 				break;
 			default:

@@ -24,7 +24,7 @@ function prepareLicenses() {
 		"package-lock.json",
 	];
 	const backupFolder = path.resolve(
-		path.join(os.tmpdir(), "vscode-react-native"),
+		path.join(os.tmpdir(), "vscode-react-native")
 	);
 	if (!fs.existsSync(backupFolder)) {
 		fs.mkdirSync(backupFolder);
@@ -37,7 +37,7 @@ function prepareLicenses() {
 			backupFiles.forEach((fileName) => {
 				fs.writeFileSync(
 					path.join(backupFolder, fileName),
-					fs.readFileSync(fileName),
+					fs.readFileSync(fileName)
 				);
 			});
 
@@ -45,11 +45,11 @@ function prepareLicenses() {
 			log("Preparing license files for release...");
 			fs.writeFileSync(
 				"LICENSE.txt",
-				fs.readFileSync("release/LICENSE.txt"),
+				fs.readFileSync("release/LICENSE.txt")
 			);
 			fs.writeFileSync(
 				"ThirdPartyNotices.txt",
-				fs.readFileSync("release/ThirdPartyNotices.txt"),
+				fs.readFileSync("release/ThirdPartyNotices.txt")
 			);
 		})
 		.then(() => {
@@ -75,7 +75,7 @@ function prepareLicenses() {
 						}
 						resolve();
 					},
-					{ cwd: appRoot },
+					{ cwd: appRoot }
 				);
 			});
 		})
@@ -85,7 +85,7 @@ function prepareLicenses() {
 			backupFiles.forEach((fileName) => {
 				fs.writeFileSync(
 					path.join(appRoot, fileName),
-					fs.readFileSync(path.join(backupFolder, fileName)),
+					fs.readFileSync(path.join(backupFolder, fileName))
 				);
 			});
 		});
@@ -105,7 +105,7 @@ function writeJson(file, jsonObj) {
 
 const getVersionNumber = () => {
 	const date = new Date(
-		new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
+		new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })
 	);
 
 	return [

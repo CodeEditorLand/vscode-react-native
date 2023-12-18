@@ -23,11 +23,11 @@ export class ReactNativeDebugDynamicConfigProvider
 {
 	public async provideDebugConfigurations(
 		folder: vscode.WorkspaceFolder | undefined,
-		token?: vscode.CancellationToken, // eslint-disable-line @typescript-eslint/no-unused-vars
+		token?: vscode.CancellationToken // eslint-disable-line @typescript-eslint/no-unused-vars
 	): Promise<vscode.DebugConfiguration[]> {
 		const debugConfigurationsToShow = Object.assign(
 			{},
-			debugConfigurations,
+			debugConfigurations
 		);
 
 		if (folder) {
@@ -38,7 +38,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				await ProjectVersionHelper.tryToGetRNSemverValidVersionsFromProjectPackage(
 					projectRootPath,
 					ProjectVersionHelper.generateAllAdditionalPackages(),
-					projectRootPath,
+					projectRootPath
 				);
 
 			let macOSHermesEnabled = false;
@@ -50,7 +50,7 @@ export class ReactNativeDebugDynamicConfigProvider
 
 			if (
 				ProjectVersionHelper.isVersionError(
-					versions.reactNativeWindowsVersion,
+					versions.reactNativeWindowsVersion
 				)
 			) {
 				delete debugConfigurationsToShow[
@@ -72,7 +72,7 @@ export class ReactNativeDebugDynamicConfigProvider
 
 			if (
 				ProjectVersionHelper.isVersionError(
-					versions.reactNativeMacOSVersion,
+					versions.reactNativeMacOSVersion
 				)
 			) {
 				delete debugConfigurationsToShow[
@@ -123,7 +123,7 @@ export class ReactNativeDebugDynamicConfigProvider
 		}
 
 		const debugConfigurationsToShowList = Object.values(
-			debugConfigurationsToShow,
+			debugConfigurationsToShow
 		);
 		debugConfigurationsToShowList.forEach((config) => {
 			config.isDynamic = true;
@@ -135,14 +135,14 @@ export class ReactNativeDebugDynamicConfigProvider
 	public async resolveDebugConfiguration(
 		folder: vscode.WorkspaceFolder | undefined,
 		config: vscode.DebugConfiguration,
-		token?: vscode.CancellationToken,
+		token?: vscode.CancellationToken
 	): Promise<vscode.ProviderResult<vscode.DebugConfiguration>> {
 		if (config.isDynamic) {
 			const chosenConfigsEvent = TelemetryHelper.createTelemetryEvent(
 				"chosenDynamicDebugConfiguration",
 				{
 					selectedConfiguration: config.name,
-				},
+				}
 			);
 			Telemetry.send(chosenConfigsEvent);
 			if (config.request === "attach") {
@@ -159,7 +159,7 @@ export class ReactNativeDebugDynamicConfigProvider
 	private async configureExpoScenario(
 		folder: vscode.WorkspaceFolder | undefined,
 		config: vscode.DebugConfiguration,
-		token?: vscode.CancellationToken,
+		token?: vscode.CancellationToken
 	): Promise<vscode.DebugConfiguration> {
 		const state = {
 			config,
@@ -174,7 +174,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				input,
 				s.config,
 				1,
-				1,
+				1
 			);
 		}, state);
 
@@ -184,7 +184,7 @@ export class ReactNativeDebugDynamicConfigProvider
 	private async configureAttachScenario(
 		folder: vscode.WorkspaceFolder | undefined,
 		config: vscode.DebugConfiguration,
-		token?: vscode.CancellationToken,
+		token?: vscode.CancellationToken
 	): Promise<vscode.DebugConfiguration> {
 		const state = {
 			config,
@@ -197,33 +197,33 @@ export class ReactNativeDebugDynamicConfigProvider
 
 		const configurePort = async (
 			input: MultiStepInput<DebugConfigurationState>,
-			config: Partial<ILaunchRequestArgs>,
+			config: Partial<ILaunchRequestArgs>
 		): Promise<InputStep<DebugConfigurationState> | void> => {
 			await configurationProviderHelper.configurePort(
 				input,
 				config,
 				2,
-				2,
+				2
 			);
 		};
 
 		const configureAddress = async (
 			input: MultiStepInput<DebugConfigurationState>,
-			config: Partial<ILaunchRequestArgs>,
+			config: Partial<ILaunchRequestArgs>
 		): Promise<InputStep<DebugConfigurationState> | void> => {
 			await configurationProviderHelper.configureAddress(
 				input,
 				config,
 				1,
 				2,
-				"localhost",
+				"localhost"
 			);
 			return () => configurePort(input, config);
 		};
 
 		await picker.run(
 			(input, s) => configureAddress(input, s.config),
-			state,
+			state
 		);
 
 		return config;

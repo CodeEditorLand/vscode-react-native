@@ -16,7 +16,7 @@ export class PlatformResolver {
 	public resolveMobilePlatform(
 		mobilePlatformString: string,
 		runOptions: IRunOptions,
-		platformDeps: MobilePlatformDeps,
+		platformDeps: MobilePlatformDeps
 	): GeneralPlatform {
 		switch (mobilePlatformString) {
 			// We lazyly load the strategies, because some components might be

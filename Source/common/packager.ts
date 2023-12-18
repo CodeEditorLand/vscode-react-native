@@ -51,7 +51,7 @@ export class Packager {
 	private packagerStatusIndicator: PackagerStatusIndicator;
 	private logger: OutputChannelLogger = OutputChannelLogger.getChannel(
 		OutputChannelLogger.MAIN_CHANNEL_NAME,
-		true,
+		true
 	);
 
 	// old name for RN < 0.60.0, new for versions >= 0.60.0
@@ -77,7 +77,7 @@ export class Packager {
 		private workspacePath: string,
 		private projectPath: string,
 		private packagerPort?: number,
-		packagerStatusIndicator?: PackagerStatusIndicator,
+		packagerStatusIndicator?: PackagerStatusIndicator
 	) {
 		this.packagerStatus = PackagerStatus.PACKAGER_STOPPED;
 		this.packagerStatusIndicator =
@@ -96,7 +96,7 @@ export class Packager {
 		if (!this.expoHelper) {
 			this.expoHelper = new ExponentHelper(
 				this.workspacePath,
-				this.projectPath,
+				this.projectPath
 			);
 		}
 		return this.expoHelper;
@@ -140,7 +140,7 @@ export class Packager {
 	public async getPackagerArgs(
 		projectRoot: string,
 		rnVersion: string,
-		resetCache: boolean = false,
+		resetCache: boolean = false
 	): Promise<string[]> {
 		let args: string[] = ["--port", this.getPort().toString()];
 
@@ -156,15 +156,15 @@ export class Packager {
 					"--root",
 					path.relative(
 						this.projectPath,
-						path.resolve(this.workspacePath, ".vscode"),
-					),
+						path.resolve(this.workspacePath, ".vscode")
+					)
 				);
 			}
 
 			try {
 				const packagerOptions =
 					await this.getExponentHelper().getExpPackagerOptions(
-						projectRoot,
+						projectRoot
 					);
 				Object.keys(packagerOptions).forEach((key) => {
 					args = args.concat([`--${key}`, packagerOptions[key]]);
@@ -173,8 +173,8 @@ export class Packager {
 				this.logger.warning(
 					localize(
 						"CouldNotReadPackagerOptions",
-						"Couldn't read packager's options from exp.json, continue...",
-					),
+						"Couldn't read packager's options from exp.json, continue..."
+					)
 				);
 			}
 		}
@@ -183,7 +183,7 @@ export class Packager {
 
 	public async start(resetCache: boolean = false): Promise<void> {
 		this.packagerStatusIndicator.updatePackagerStatus(
-			PackagerStatus.PACKAGER_STARTING,
+			PackagerStatus.PACKAGER_STARTING
 		);
 		let executedStartPackagerCmd = false;
 		let rnVersion: string;
@@ -194,9 +194,9 @@ export class Packager {
 					ErrorHelper.getWarning(
 						localize(
 							"PackagerIsRunningBeforeStarting",
-							"Packager is already running. If you want to debug please use the 'Attach to packager' option.",
-						),
-					),
+							"Packager is already running. If you want to debug please use the 'Attach to packager' option."
+						)
+					)
 				);
 				return;
 			}
@@ -204,7 +204,7 @@ export class Packager {
 			executedStartPackagerCmd = true;
 
 			const versions = await ProjectVersionHelper.getReactNativeVersions(
-				this.projectPath,
+				this.projectPath
 			);
 			rnVersion = versions.reactNativeVersion;
 			await this.monkeyPatchOpnForRNPackager(rnVersion);
@@ -212,7 +212,7 @@ export class Packager {
 			const args = await this.getPackagerArgs(
 				this.projectPath,
 				rnVersion,
-				resetCache,
+				resetCache
 			);
 			//  There is a bug with launching VSCode editor for file from stack frame in 0.38, 0.39, 0.40 versions:
 			//  https://github.com/facebook/react-native/commit/f49093f39710173620fead6230d62cc670570210
@@ -230,7 +230,7 @@ export class Packager {
 				env = GeneralPlatform.getEnvArgument(
 					env,
 					this.runOptions.env,
-					this.runOptions.envFile,
+					this.runOptions.envFile
 				);
 			} else {
 				const rootEnv = path.join(this.getProjectPath(), ".env");
@@ -261,19 +261,19 @@ export class Packager {
 				packagerSpawnResult = new CommandExecutor(
 					nodeModulesRoot,
 					this.projectPath,
-					this.logger,
+					this.logger
 				).spawnReactPackager(args, spawnOptions);
 			} else if (this.runOptions?.platform == "exponent") {
 				packagerSpawnResult = new CommandExecutor(
 					nodeModulesRoot,
 					this.projectPath,
-					this.logger,
+					this.logger
 				).spawnExpoPackager(args, spawnOptions);
 			} else {
 				packagerSpawnResult = new CommandExecutor(
 					nodeModulesRoot,
 					this.projectPath,
-					this.logger,
+					this.logger
 				).spawnExpoPackager(["--web"]);
 			}
 
@@ -289,23 +289,23 @@ export class Packager {
 			void vscode.commands.executeCommand(
 				"setContext",
 				CONTEXT_VARIABLES_NAMES.IS_RN_PACKAGER_RUNNING,
-				true,
+				true
 			);
 		} else {
 			this.logger.info(
 				localize(
 					"PackagerIsAlreadyRunning",
-					"Packager is already running.",
-				),
+					"Packager is already running."
+				)
 			);
 			if (!this.packagerProcess) {
 				this.logger.warning(
 					ErrorHelper.getWarning(
 						localize(
 							"PackagerRunningOutsideVSCode",
-							"React Native Packager running outside of VS Code. If you want to debug please use the 'Attach to packager' option.",
-						),
-					),
+							"React Native Packager running outside of VS Code. If you want to debug please use the 'Attach to packager' option."
+						)
+					)
 				);
 				this.setPackagerStopStateUI();
 				return;
@@ -313,13 +313,13 @@ export class Packager {
 		}
 
 		this.packagerStatusIndicator.updatePackagerStatus(
-			PackagerStatus.PACKAGER_STARTED,
+			PackagerStatus.PACKAGER_STARTED
 		);
 	}
 
 	public async stop(silent: boolean = false): Promise<boolean> {
 		this.packagerStatusIndicator.updatePackagerStatus(
-			PackagerStatus.PACKAGER_STOPPING,
+			PackagerStatus.PACKAGER_STOPPING
 		);
 		let successfullyStopped = false;
 
@@ -330,9 +330,9 @@ export class Packager {
 						ErrorHelper.getWarning(
 							localize(
 								"PackagerIsStillRunning",
-								"Packager is still running. If the packager was started outside VS Code, please quit the packager process using the task manager.",
-							),
-						),
+								"Packager is still running. If the packager was started outside VS Code, please quit the packager process using the task manager."
+							)
+						)
 					);
 				}
 			} else {
@@ -345,9 +345,9 @@ export class Packager {
 					ErrorHelper.getWarning(
 						localize(
 							"PackagerIsNotRunning",
-							"Packager is not running",
-						),
-					),
+							"Packager is not running"
+						)
+					)
 				);
 			}
 			successfullyStopped = true;
@@ -356,7 +356,7 @@ export class Packager {
 		void vscode.commands.executeCommand(
 			"setContext",
 			CONTEXT_VARIABLES_NAMES.IS_RN_PACKAGER_RUNNING,
-			false,
+			false
 		);
 		return successfullyStopped;
 	}
@@ -366,7 +366,7 @@ export class Packager {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.PackagerRunningInDifferentPort,
 				port,
-				this.getPort(),
+				this.getPort()
 			);
 		}
 
@@ -385,7 +385,7 @@ export class Packager {
 			const defaultIndex = path.resolve(this.projectPath, "index.js");
 			const oldIndex = path.resolve(
 				this.projectPath,
-				`index.${platform}.js`,
+				`index.${platform}.js`
 			); // react-native < 0.49.0
 
 			try {
@@ -404,22 +404,22 @@ export class Packager {
 						localize(
 							"EntryPointDoesntExist",
 							"Entry point doesn't exist neither at index.js nor index.{0}.js. Skip prewarming...",
-							platform,
-						),
+							platform
+						)
 					);
 					return;
 				}
 
 				const bundleURL = `http://${this.getHost()}/${bundleName}?platform=${platform}`;
 				this.logger.info(
-					localize("AboutToGetURL", "About to get: {0}", bundleURL),
+					localize("AboutToGetURL", "About to get: {0}", bundleURL)
 				);
 				await Request.request(bundleURL, true);
 				this.logger.warning(
 					localize(
 						"BundleCacheWasPrewarmed",
-						"The Bundle Cache was prewarmed.",
-					),
+						"The Bundle Cache was prewarmed."
+					)
 				);
 			} catch {
 				// The attempt to prefetch the bundle failed. This may be because the bundle has
@@ -440,7 +440,7 @@ export class Packager {
 
 	public async forMessage(
 		message: string,
-		arg: Omit<MetroEventData, "data">,
+		arg: Omit<MetroEventData, "data">
 	): Promise<void> {
 		await this.awaitStart();
 
@@ -475,7 +475,7 @@ export class Packager {
 					resolve();
 					this.packagerSocket.removeListener(
 						"message",
-						resolveHandler,
+						resolveHandler
 					);
 					this.packagerSocket.removeListener("error", reject);
 					this.packagerSocket.removeListener("close", reject);
@@ -498,8 +498,8 @@ export class Packager {
 				delay,
 				localize(
 					"CouldNotStartPackager",
-					"Could not start the packager.",
-				),
+					"Could not start the packager."
+				)
 			);
 		} catch (error) {
 			this.setPackagerStopStateUI();
@@ -512,7 +512,7 @@ export class Packager {
 			const OPN_PACKAGE_NAME =
 				semver.gte(
 					ReactNativeVersion,
-					Packager.RN_VERSION_WITH_OPEN_PKG,
+					Packager.RN_VERSION_WITH_OPEN_PKG
 				) || ProjectVersionHelper.isCanaryVersion(ReactNativeVersion)
 					? Packager.OPN_PACKAGE_NAME.new
 					: Packager.OPN_PACKAGE_NAME.old;
@@ -523,21 +523,21 @@ export class Packager {
 			const openModulePath = path.resolve(
 				nodeModulesRoot,
 				Packager.NODE_MODULES_FODLER_NAME,
-				OPN_PACKAGE_NAME,
+				OPN_PACKAGE_NAME
 			);
 			this.logger.info(
 				localize(
 					"VerifyOpenModuleMainFileAndEntry",
 					"Need to check main file and entry point of open module, will setup and write new content if they're not existing. Path: {0}",
-					openModulePath,
-				),
+					openModulePath
+				)
 			);
 
 			const flatDependencyPackagePath = path.resolve(
 				nodeModulesRoot,
 				Packager.NODE_MODULES_FODLER_NAME,
 				OPN_PACKAGE_NAME,
-				Packager.OPN_PACKAGE_MAIN_FILENAME,
+				Packager.OPN_PACKAGE_MAIN_FILENAME
 			);
 
 			const nestedDependencyPackagePath = path.resolve(
@@ -546,7 +546,7 @@ export class Packager {
 				Packager.REACT_NATIVE_PACKAGE_NAME,
 				Packager.NODE_MODULES_FODLER_NAME,
 				OPN_PACKAGE_NAME,
-				Packager.OPN_PACKAGE_MAIN_FILENAME,
+				Packager.OPN_PACKAGE_MAIN_FILENAME
 			);
 
 			const fsHelper = new FileSystem();
@@ -559,33 +559,33 @@ export class Packager {
 			];
 			const paths = await Promise.all(
 				possiblePaths.map(async (fsPath) =>
-					(await fsHelper.exists(fsPath)) ? fsPath : "",
-				),
+					(await fsHelper.exists(fsPath)) ? fsPath : ""
+				)
 			);
 			const packagePath = paths.find((fsPath) => !!fsPath);
 			if (packagePath) {
 				return packagePath;
 			}
 			throw ErrorHelper.getInternalError(
-				InternalErrorCode.OpnPackagerLocationNotFound,
+				InternalErrorCode.OpnPackagerLocationNotFound
 			);
 		} catch (err) {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.OpnPackagerNotFound,
-				err,
+				err
 			);
 		}
 	}
 
 	private async monkeyPatchOpnForRNPackager(
-		ReactNativeVersion: string,
+		ReactNativeVersion: string
 	): Promise<void> {
 		// Finds the 'opn' or 'open' package
 		const opnIndexFilePath = await this.findOpnPackage(ReactNativeVersion);
 		const destnFilePath = opnIndexFilePath;
 		// Read the package's "package.json"
 		const opnPackage = new Package(
-			path.resolve(path.dirname(destnFilePath)),
+			path.resolve(path.dirname(destnFilePath))
 		);
 
 		const packageJson = await opnPackage.parsePackageInformation();
@@ -596,49 +596,49 @@ export class Packager {
 				: Packager.JS_INJECTOR_FILENAME.old;
 		const JS_INJECTOR_FILEPATH = path.resolve(
 			Packager.JS_INJECTOR_DIRPATH,
-			JS_INJECTOR_FILENAME,
+			JS_INJECTOR_FILENAME
 		);
 		if (packageJson.main !== JS_INJECTOR_FILENAME) {
 			this.logger.info(
 				localize(
 					"NoOpenMainFile",
-					"Cannot find main file in open module, executing setup...",
-				),
+					"Cannot find main file in open module, executing setup..."
+				)
 			);
 
 			// Copy over the patched 'opn' main file
 			this.logger.info(
 				localize(
 					"CopyOpenMainFile",
-					"Copy open-main.js to open module...",
-				),
+					"Copy open-main.js to open module..."
+				)
 			);
 			await new FileSystem().copyFile(
 				JS_INJECTOR_FILEPATH,
-				path.resolve(path.dirname(destnFilePath), JS_INJECTOR_FILENAME),
+				path.resolve(path.dirname(destnFilePath), JS_INJECTOR_FILENAME)
 			);
 
 			// Write/over-write the "main" attribute with the new file
 			this.logger.info(
 				localize(
 					"AddOpenMainEntry",
-					"Add open-main.js entry to package.json 'main' field...",
-				),
+					"Add open-main.js entry to package.json 'main' field..."
+				)
 			);
 			return opnPackage.setMainFile(JS_INJECTOR_FILENAME);
 		}
 		this.logger.info(
 			localize(
 				"OpenMainEntryIsExisting",
-				"Find open-main.js and entry in open module, skip setup...",
-			),
+				"Find open-main.js and entry in open module, skip setup..."
+			)
 		);
 	}
 
 	private setPackagerStopStateUI() {
 		this.packagerStatus = PackagerStatus.PACKAGER_STOPPED;
 		this.packagerStatusIndicator.updatePackagerStatus(
-			PackagerStatus.PACKAGER_STOPPED,
+			PackagerStatus.PACKAGER_STOPPED
 		);
 	}
 
@@ -651,13 +651,13 @@ export class Packager {
 		await new CommandExecutor(
 			nodeModulesRoot,
 			this.projectPath,
-			this.logger,
+			this.logger
 		).killReactPackager(this.packagerProcess);
 		this.packagerProcess = undefined;
 		if (
 			await new ExponentHelper(
 				this.workspacePath,
-				this.projectPath,
+				this.projectPath
 			).isExpoManagedApp(false)
 		) {
 			this.logger.debug("Stopping Exponent");
@@ -678,7 +678,7 @@ export class Packager {
 			"..",
 			"..",
 			"scripts",
-			"atom",
+			"atom"
 		)}`;
 
 		//  shell-quote package incorrectly parses windows paths

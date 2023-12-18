@@ -19,7 +19,7 @@ export class ReactNativeSessionManager
 	public createDebugAdapterDescriptor(
 		session: vscode.DebugSession,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		executable: vscode.DebugAdapterExecutable | undefined,
+		executable: vscode.DebugAdapterExecutable | undefined
 	): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
 		const rnSession = new RNSession(session);
 
@@ -50,14 +50,14 @@ export class ReactNativeSessionManager
 
 		// make VS Code connect to debug server
 		return new vscode.DebugAdapterServer(
-			(<Net.AddressInfo>debugServer.address()).port,
+			(<Net.AddressInfo>debugServer.address()).port
 		);
 	}
 
 	public terminate(terminateEvent: TerminateEventArgs): void {
 		this.destroyServer(
 			terminateEvent.debugSession.id,
-			this.servers.get(terminateEvent.debugSession.id),
+			this.servers.get(terminateEvent.debugSession.id)
 		);
 
 		const connection = this.connections.get(terminateEvent.debugSession.id);

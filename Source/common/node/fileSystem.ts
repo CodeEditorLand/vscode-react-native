@@ -28,7 +28,7 @@ export class FileSystem {
 
 	public async ensureFileWithContents(
 		file: string,
-		contents: string,
+		contents: string
 	): Promise<void> {
 		try {
 			const stat = await this.stat(file);
@@ -101,7 +101,7 @@ export class FileSystem {
 
 	public readFile(
 		filename: string,
-		encoding: string = "utf8",
+		encoding: string = "utf8"
 	): Promise<string | Buffer> {
 		return this.fs.promises.readFile(filename, { encoding });
 	}
@@ -113,7 +113,7 @@ export class FileSystem {
 	public static writeFileToFolder(
 		folder: string,
 		basename: string,
-		data: any,
+		data: any
 	): Promise<void> {
 		if (!nodeFs.existsSync(folder)) {
 			mkdirp.sync(folder);
@@ -163,10 +163,8 @@ export class FileSystem {
 				const childPaths = await this.readDir(p);
 				await Promise.all(
 					childPaths.map((childPath) =>
-						this.removePathRecursivelyAsync(
-							path.join(p, childPath),
-						),
-					),
+						this.removePathRecursivelyAsync(path.join(p, childPath))
+					)
 				);
 				await this.rmdir(p);
 			} else {
@@ -182,7 +180,7 @@ export class FileSystem {
 			if (stats.isDirectory()) {
 				const contents = this.fs.readdirSync(p);
 				contents.forEach((childPath) =>
-					this.removePathRecursivelySync(path.join(p, childPath)),
+					this.removePathRecursivelySync(path.join(p, childPath))
 				);
 				this.fs.rmdirSync(p);
 			} else {

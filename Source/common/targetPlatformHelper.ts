@@ -40,7 +40,7 @@ export class TargetPlatformHelper {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.PlatformNotSupported,
 					platformName,
-					os.platform(),
+					os.platform()
 				);
 		}
 	}
@@ -55,7 +55,7 @@ export class TargetPlatformHelper {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.PlatformNotSupported,
 				platformName,
-				os.platform(),
+				os.platform()
 			);
 		}
 	}

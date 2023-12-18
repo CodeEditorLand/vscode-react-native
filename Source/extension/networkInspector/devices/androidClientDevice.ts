@@ -9,7 +9,7 @@ export class AndroidClientDevice extends BaseClientDevice {
 		id: string,
 		isVirtualTarget: boolean,
 		os: ClientOS,
-		name?: string,
+		name?: string
 	) {
 		super(id, isVirtualTarget, os, name);
 	}

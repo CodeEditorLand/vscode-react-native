@@ -10,6 +10,6 @@ import {
 export interface IExperiment {
 	run: (
 		newExpConfig: ExperimentConfig,
-		curExpParameters?: ExperimentParameters,
+		curExpParameters?: ExperimentParameters
 	) => Promise<ExperimentResult>;
 }

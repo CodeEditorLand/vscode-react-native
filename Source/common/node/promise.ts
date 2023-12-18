@@ -9,7 +9,7 @@ import { CancellationTokenSource, Disposable } from "vscode";
 export class PromiseUtil {
 	public static async forEach<T>(
 		sources: T[],
-		promiseGenerator: (source: T) => Promise<void>,
+		promiseGenerator: (source: T) => Promise<void>
 	): Promise<void> {
 		await Promise.all(sources.map((source) => promiseGenerator(source)));
 	}
@@ -30,7 +30,7 @@ export class PromiseUtil {
 		maxRetries: number,
 		delay: number,
 		failure: string,
-		cancellationTokenSource?: CancellationTokenSource,
+		cancellationTokenSource?: CancellationTokenSource
 	): Promise<T> {
 		return this.retryAsyncIteration(
 			operation,
@@ -39,13 +39,13 @@ export class PromiseUtil {
 			0,
 			delay,
 			failure,
-			cancellationTokenSource,
+			cancellationTokenSource
 		);
 	}
 
 	public static async reduce<T>(
 		sources: T[] | Promise<T[]>,
-		generateAsyncOperation: (value: T) => Promise<void>,
+		generateAsyncOperation: (value: T) => Promise<void>
 	): Promise<void> {
 		const arraySources: T[] =
 			sources instanceof Promise ? await sources : sources;
@@ -55,7 +55,7 @@ export class PromiseUtil {
 				await previousReduction;
 				return generateAsyncOperation(newSource);
 			},
-			Promise.resolve(),
+			Promise.resolve()
 		);
 	}
 
@@ -68,7 +68,7 @@ export class PromiseUtil {
 	public static waitUntil<T>(
 		condition: () => Promise<T | null> | T | null,
 		interval: number = 1000,
-		timeout?: number,
+		timeout?: number
 	): Promise<T | null> {
 		return new Promise(async (resolve, reject) => {
 			let rejectTimeout: NodeJS.Timeout | undefined;
@@ -120,7 +120,7 @@ export class PromiseUtil {
 
 	public static promiseCacheDecorator<T>(
 		func: (...args: any[]) => Promise<T>,
-		context: Record<string, any> | null = null,
+		context: Record<string, any> | null = null
 	): (...args: any[]) => Promise<T> {
 		let promise: Promise<T> | undefined;
 		return (...args: any[]): Promise<T> => {
@@ -138,7 +138,7 @@ export class PromiseUtil {
 		iteration: number,
 		delay: number,
 		failure: string,
-		cancellationTokenSource?: CancellationTokenSource,
+		cancellationTokenSource?: CancellationTokenSource
 	): Promise<T> {
 		const result = await operation();
 		const conditionResult = await condition(result);
@@ -161,7 +161,7 @@ export class PromiseUtil {
 				iteration + 1,
 				delay,
 				failure,
-				cancellationTokenSource,
+				cancellationTokenSource
 			);
 		}
 
@@ -186,7 +186,7 @@ export class Delayer<T> implements Disposable {
 
 	public runWihtDelay(
 		task: { (): T | Promise<T> },
-		delay: number,
+		delay: number
 	): Promise<T> {
 		this.task = task;
 		this.cancelTimeout();

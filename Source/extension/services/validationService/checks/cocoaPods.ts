@@ -36,7 +36,7 @@ const main: IValidation = {
 	platform: ["darwin"],
 	description: toLocale(
 		"CocoaPodsTestDescription",
-		"Required for managing library dependencies of XCode projects",
+		"Required for managing library dependencies of XCode projects"
 	),
 	category: ValidationCategoryE.iOS,
 	exec: test,

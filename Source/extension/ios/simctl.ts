@@ -11,7 +11,7 @@ export class SimctrlHelper {
 			"xcrun simctl list | awk -F'[()]' '/(Booted)/ { print $2 }'";
 
 		const targetResult = await childProcess.execToString(
-			getBootedSimulatorCommand,
+			getBootedSimulatorCommand
 		);
 		const targetList = targetResult.split("\n");
 		return targetList;
@@ -19,7 +19,7 @@ export class SimctrlHelper {
 
 	public static async installApplicationToSimulator(
 		targetId: string,
-		appPath: string,
+		appPath: string
 	): Promise<void> {
 		const installCommand = `xcrun simctl install ${targetId} ${appPath}`;
 		await childProcess.execToString(installCommand);

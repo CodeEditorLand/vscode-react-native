@@ -34,7 +34,7 @@ export class SimulatorPlist {
 			nodeFileSystem = new FileSystem(),
 			plistBuddy = undefined,
 			nodeChildProcess = new ChildProcess(),
-		} = {},
+		} = {}
 	) {
 		this.iosProjectRoot = iosProjectRoot;
 		this.projectRoot = projectRoot;
@@ -46,7 +46,7 @@ export class SimulatorPlist {
 
 	public async findPlistFile(
 		configuration?: string,
-		productName?: string,
+		productName?: string
 	): Promise<string> {
 		const [bundleId, pathBuffer] = await Promise.all([
 			this.plistBuddy.getBundleId(
@@ -56,7 +56,7 @@ export class SimulatorPlist {
 				true,
 				configuration,
 				productName,
-				this.scheme,
+				this.scheme
 			), // Find the name of the application
 			this.nodeChildProcess
 				.exec("xcrun simctl getenv booted HOME")
@@ -66,19 +66,19 @@ export class SimulatorPlist {
 			pathBuffer.toString().trim(),
 			"Containers",
 			"Data",
-			"Application",
+			"Application"
 		);
 		const pathAfter = path.join(
 			"Library",
 			"Preferences",
-			`${bundleId}.plist`,
+			`${bundleId}.plist`
 		);
 		// Look through $SIMULATOR_HOME/Containers/Data/Application/*/Library/Preferences to find $BUNDLEID.plist
 		const apps = await this.nodeFileSystem.readDir(pathBefore);
 		this.logger.info(
 			`About to search for plist in base folder: ${pathBefore} pathAfter: ${pathAfter} in each of the apps: ${String(
-				apps,
-			)}`,
+				apps
+			)}`
 		);
 		const plistCandidates = apps
 			.map((app: string) => path.join(pathBefore, app, pathAfter))
@@ -91,9 +91,9 @@ export class SimulatorPlist {
 				ErrorHelper.getWarning(
 					localize(
 						"MultiplePlistCandidatesFoundAppMayNotBeDebuggedInDebugMode",
-						"Multiple plist candidates found. Application may not be in debug mode.",
-					),
-				),
+						"Multiple plist candidates found. Application may not be in debug mode."
+					)
+				)
 			);
 		}
 		return plistCandidates[0];

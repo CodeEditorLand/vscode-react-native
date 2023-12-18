@@ -83,17 +83,17 @@ declare module xdl {
 		stopAsync(projectRoot: string): Promise<void>;
 		getUrlAsync(
 			projectRoot: string,
-			options?: IUrlOptions,
+			options?: IUrlOptions
 		): Promise<string>;
 		publishAsync(
 			projectRoot: string,
-			options?: IPublishOptions,
+			options?: IPublishOptions
 		): Promise<IPublishResponse>;
 		startExpoServerAsync(projectRoot: string): Promise<void>;
 		stopExpoServerAsync(projectRoot: string): Promise<void>;
 		startReactNativeServerAsync(
 			projectRoot: string,
-			options?: IReactNativeServerOptions,
+			options?: IReactNativeServerOptions
 		): Promise<void>;
 		stopReactNativeServerAsync(projectRoot: string): Promise<void>;
 		startTunnelsAsync(projectRoot: string): Promise<void>;
@@ -103,7 +103,7 @@ declare module xdl {
 	var ProjectSettings: {
 		setPackagerInfoAsync(
 			projectRoot: string,
-			json: Partial<IOptions>,
+			json: Partial<IOptions>
 		): Promise<IOptions>;
 	};
 
@@ -111,7 +111,7 @@ declare module xdl {
 		constructManifestUrlAsync(
 			projectRoot: string,
 			opts?: any,
-			requestHostname?: string,
+			requestHostname?: string
 		): Promise<string>;
 	};
 
@@ -170,7 +170,7 @@ declare module xdl {
 			{
 				shouldPrompt = true,
 				autoInstall = false,
-			}: { shouldPrompt?: boolean; autoInstall?: boolean } = {},
+			}: { shouldPrompt?: boolean; autoInstall?: boolean } = {}
 		): Promise<any>;
 	}
 }
