@@ -73,7 +73,7 @@ jobs:
                           --unsafe-perm=true
                         ]
 
-            - uses: actions/setup-node@v4.0.0
+            - uses: actions/setup-node@v4.0.1
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
@@ -82,7 +82,7 @@ jobs:
             - run: pnpm install
               working-directory: ./SampleApplication
 
-            - uses: actions/setup-node@v4.0.0
+            - uses: actions/setup-node@v4.0.1
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
