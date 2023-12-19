@@ -32,7 +32,7 @@ export class PromiseUtil {
 		failure: string,
 		cancellationTokenSource?: CancellationTokenSource,
 	): Promise<T> {
-		return this.retryAsyncIteration(
+		return PromiseUtil.retryAsyncIteration(
 			operation,
 			condition,
 			maxRetries,
@@ -148,13 +148,10 @@ export class PromiseUtil {
 
 		if (
 			iteration < maxRetries &&
-			!(
-				cancellationTokenSource &&
-				cancellationTokenSource.token.isCancellationRequested
-			)
+			!cancellationTokenSource?.token.isCancellationRequested
 		) {
 			await PromiseUtil.delay(delay);
-			return this.retryAsyncIteration(
+			return PromiseUtil.retryAsyncIteration(
 				operation,
 				condition,
 				maxRetries,

@@ -82,7 +82,7 @@ export class DirectDebugSession extends DebugSessionBase {
 
 		try {
 			try {
-				if (launchArgs.platform != "exponent") {
+				if (launchArgs.platform !== "exponent") {
 					await ReactNativeProjectHelper.verifyMetroConfigFile(
 						launchArgs.cwd,
 					);

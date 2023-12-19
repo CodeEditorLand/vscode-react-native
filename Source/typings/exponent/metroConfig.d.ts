@@ -19,7 +19,7 @@ declare namespace metroConfig {
 		resolver: IResolver;
 	}
 
-	var loadAsync: (
+	let loadAsync: (
 		projectRoot: string,
 		{ reporter, target, ...metroOptions }?: ILoadOptions,
 	) => Promise<IMetroConfig>;

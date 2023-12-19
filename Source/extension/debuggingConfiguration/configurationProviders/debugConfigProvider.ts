@@ -104,7 +104,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 		input: MultiStepInput<DebugConfigurationState>,
 		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
-		delete config.useHermesEngine;
+		config.useHermesEngine = undefined;
 		await this.configurationProviderHelper.shouldUseHermesEngine(
 			input,
 			config,
@@ -112,7 +112,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 			this.maxStepCount,
 		);
 		if (config.useHermesEngine) {
-			delete config.useHermesEngine;
+			config.useHermesEngine = undefined;
 		}
 	}
 

@@ -186,7 +186,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			emulatorProcess.outcome.catch((error) => {
 				emulatorLaunchFailed = true;
 				if (
-					process.platform == "win32" &&
+					process.platform === "win32" &&
 					process.env.SESSIONNAME &&
 					process.env.SESSIONNAME.toLowerCase().includes("rdp-tcp")
 				) {
@@ -208,10 +208,11 @@ export class AndroidTargetManager extends MobileTargetManager {
 			emulatorProcess.spawnedProcess.unref();
 
 			const condition = async () => {
-				if (emulatorLaunchFailed)
+				if (emulatorLaunchFailed) {
 					throw new Error(
 						"Android emulator launch failed unexpectedly",
 					);
+				}
 				const connectedDevices =
 					await this.adbHelper.getOnlineTargets();
 				for (const target of connectedDevices) {

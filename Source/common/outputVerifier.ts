@@ -91,7 +91,7 @@ export class OutputVerifier {
 		const patternThatAppeared = patterns.find((pattern) => {
 			if (pattern.pattern instanceof RegExp) {
 				matches = errorsAndOutput.match(pattern.pattern);
-				return matches && matches.length;
+				return matches?.length;
 			}
 			return errorsAndOutput.includes(pattern.pattern as string);
 		});
@@ -101,7 +101,7 @@ export class OutputVerifier {
 			: null;
 
 		if (errorCode) {
-			if (matches && matches.length) {
+			if (matches?.length) {
 				matches = matches.map((value) => value.trim());
 				return ErrorHelper.getInternalError(
 					errorCode,

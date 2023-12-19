@@ -201,7 +201,7 @@ export class ConfigurationProviderHelper {
 		totalSteps: number,
 		defaultAddress: string,
 	): Promise<Partial<ILaunchRequestArgs>> {
-		delete config.address;
+		config.address = undefined;
 		const address = await input.showInputBox({
 			title: localize("AddressInputTitle", "The address of the host"),
 			step,
@@ -235,7 +235,7 @@ export class ConfigurationProviderHelper {
 		step: number,
 		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
-		delete config.port;
+		config.port = undefined;
 		const defaultPort = String(
 			config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT &&
 			config.platform === PlatformType.iOS &&

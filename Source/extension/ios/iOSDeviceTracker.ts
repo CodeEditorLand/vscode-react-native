@@ -13,7 +13,7 @@ import { IDebuggableIOSTarget, IOSTargetManager } from "./iOSTargetManager";
 export class IOSDeviceTracker extends AbstractDeviceTracker {
 	private readonly portForwardingClientPath: string;
 	private iOSTargetManager: IOSTargetManager;
-	private portForwarders: Array<ChildProcess>;
+	private portForwarders: ChildProcess[];
 
 	constructor() {
 		super();
@@ -49,7 +49,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 	}
 
 	private processDevices(
-		activeDevices: Array<DeviceTarget>,
+		activeDevices: DeviceTarget[],
 		isVirtualTarget: boolean,
 	): void {
 		const currentDevicesIds = new Set(
@@ -175,7 +175,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 	 *
 	 * @format
 	 */
-	private getActiveDevices(): Promise<Array<DeviceTarget>> {
+	private getActiveDevices(): Promise<DeviceTarget[]> {
 		return iosUtil.targets().catch((e) => {
 			this.logger.error(e.message);
 			return [];

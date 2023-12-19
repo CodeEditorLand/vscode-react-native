@@ -329,9 +329,9 @@ export async function onFolderAdded(
 	const excludeFolders =
 		await SettingsHelper.getWorkspaceFileExcludeFolder(workspacePath);
 	let isExclude = false;
-	if (excludeFolders.length != 0) {
+	if (excludeFolders.length !== 0) {
 		for (let i = 0; i < excludeFolders.length; i++) {
-			if (folder.name == excludeFolders[i]) {
+			if (folder.name === excludeFolders[i]) {
 				isExclude = true;
 				break;
 			}

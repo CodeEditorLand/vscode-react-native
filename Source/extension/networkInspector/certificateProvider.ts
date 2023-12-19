@@ -224,7 +224,7 @@ export class CertificateProvider {
 			return this.getTargetAndroidDeviceId(appName, appDirectory, csr);
 		} else if (os === ClientOS.iOS) {
 			return this.getTargetiOSDeviceId(appName, appDirectory, csr);
-		} else if (os == ClientOS.MacOS) {
+		} else if (os === ClientOS.MacOS) {
 			return Promise.resolve("");
 		}
 		return Promise.resolve("unknown");
@@ -268,7 +268,7 @@ export class CertificateProvider {
 		if (matches && matches.length === 2) {
 			return matches[1];
 		}
-		throw new Error("Path didn't match expected pattern: " + absolutePath);
+		throw new Error(`Path didn't match expected pattern: ${absolutePath}`);
 	}
 
 	private async deployOrStageFileForMobileApp(
@@ -422,7 +422,7 @@ export class CertificateProvider {
 				const matchingIds = devices
 					.filter((m) => m.isMatch)
 					.map((m) => m.id);
-				if (matchingIds.length == 0) {
+				if (matchingIds.length === 0) {
 					const erroredDevice = devices.find((d) => d.error);
 					if (erroredDevice) {
 						throw erroredDevice.error;
@@ -459,7 +459,7 @@ export class CertificateProvider {
 		csr: string,
 	): Promise<string> {
 		const matches = /\/Devices\/([^/]+)\//.exec(deviceCsrFilePath);
-		if (matches && matches.length == 2) {
+		if (matches && matches.length === 2) {
 			// It's a simulator, the deviceId is in the filepath.
 			return Promise.resolve(matches[1]);
 		}
@@ -481,7 +481,7 @@ export class CertificateProvider {
 				const matchingIds = devices
 					.filter((m) => m.isMatch)
 					.map((m) => m.id);
-				if (matchingIds.length == 0) {
+				if (matchingIds.length === 0) {
 					throw new Error(
 						`No matching device found for app: ${appName}`,
 					);
@@ -612,10 +612,9 @@ export class CertificateProvider {
 			.then((endDateOutput) => {
 				const dateString = endDateOutput.trim().split("=")[1].trim();
 				const expiryDate = Date.parse(dateString);
-				if (isNaN(expiryDate)) {
+				if (Number.isNaN(expiryDate)) {
 					this.logger.error(
-						"Unable to parse certificate expiry date: " +
-							endDateOutput,
+						`Unable to parse certificate expiry date: ${endDateOutput}`,
 					);
 					throw new Error(
 						"Cannot parse certificate expiry date. Assuming it has expired.",

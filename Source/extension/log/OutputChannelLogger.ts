@@ -32,7 +32,10 @@ export class OutputChannelLogger implements ILogger {
 	}
 
 	public static getMainChannel(): OutputChannelLogger {
-		return this.getChannel(this.MAIN_CHANNEL_NAME, true);
+		return OutputChannelLogger.getChannel(
+			OutputChannelLogger.MAIN_CHANNEL_NAME,
+			true,
+		);
 	}
 
 	public static getChannel(

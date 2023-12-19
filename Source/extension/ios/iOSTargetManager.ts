@@ -62,7 +62,7 @@ export class IOSTarget extends MobileTarget implements IDebuggableIOSTarget {
 export class IOSTargetManager extends MobileTargetManager {
 	private static readonly XCRUN_COMMAND = "xcrun";
 	private static readonly SIMCTL_COMMAND = "simctl";
-	private static readonly BOOT_COMMAND = `boot`;
+	private static readonly BOOT_COMMAND = "boot";
 	private static readonly SIMULATORS_LIST_COMMAND = `${IOSTargetManager.XCRUN_COMMAND} ${IOSTargetManager.SIMCTL_COMMAND} list devices available --json`;
 	private static readonly ALL_DEVICES_LIST_COMMAND = `${IOSTargetManager.XCRUN_COMMAND} xctrace list devices`;
 	private static readonly BOOTED_STATE = "Booted";
@@ -267,8 +267,9 @@ export class IOSTargetManager extends MobileTargetManager {
 			});
 
 			const condition = async () => {
-				if (emulatorLaunchFailed)
+				if (emulatorLaunchFailed) {
 					throw new Error("iOS simulator launch failed unexpectedly");
+				}
 				await this.collectTargets(TargetType.Simulator);
 				const onlineTarget = (await this.getTargetList()).find(
 					(target) =>

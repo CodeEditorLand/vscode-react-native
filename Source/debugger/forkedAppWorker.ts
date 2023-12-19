@@ -96,7 +96,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 				// We need to wait for it before doing any IPC because process.send doesn't seems to care
 				// about whether the message has been received or not and the first messages are often get
 				// discarded by spawned process
-				if (message && message.workerLoaded) {
+				if (message?.workerLoaded) {
 					this.workerLoaded = Promise.resolve();
 					return;
 				}

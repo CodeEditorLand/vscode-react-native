@@ -56,7 +56,7 @@ export type Request = {
 	timestamp: number;
 	method: string;
 	url: string;
-	headers: Array<Header>;
+	headers: Header[];
 	data?: string | null;
 };
 
@@ -65,7 +65,7 @@ export type Response = {
 	timestamp: number;
 	status: number;
 	reason: string;
-	headers: Array<Header>;
+	headers: Header[];
 	data?: string | null;
 	isMock: boolean;
 	insights?: Insights | null;

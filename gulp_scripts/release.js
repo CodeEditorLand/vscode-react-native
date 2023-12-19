@@ -33,7 +33,7 @@ function prepareLicenses() {
 	return Promise.resolve()
 		.then(() => {
 			/* back up LICENSE.txt, ThirdPartyNotices.txt, README.md */
-			log("Backing up license files to " + backupFolder + "...");
+			log(`Backing up license files to ${backupFolder}...`);
 			backupFiles.forEach((fileName) => {
 				fs.writeFileSync(
 					path.join(backupFolder, fileName),

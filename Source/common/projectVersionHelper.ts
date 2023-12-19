@@ -91,7 +91,7 @@ export class ProjectVersionHelper {
 			);
 		if (
 			Object.values(versions).findIndex((packageVersion) =>
-				packageVersion.includes(this.SEMVER_INVALID),
+				packageVersion.includes(ProjectVersionHelper.SEMVER_INVALID),
 			) !== -1
 		) {
 			if (!nodeModulesRoot) {
@@ -259,14 +259,19 @@ export class ProjectVersionHelper {
 		useSemverCoerce = true,
 	): string {
 		try {
-			return new URL(version) && `${this.SEMVER_INVALID}: URL`;
+			return (
+				new URL(version) &&
+				`${ProjectVersionHelper.SEMVER_INVALID}: URL`
+			);
 		} catch {
 			// As some of 'react-native-windows' versions contain postfixes we cannot use 'coerce' function to parse them
 			// as some critical parts of the version string will be dropped. To save this information we use 'clean' function
 			const versionObj = useSemverCoerce
 				? semver.coerce(version)
 				: semver.clean(version.replace(/[<>^~]/g, ""), { loose: true });
-			return (versionObj && versionObj.toString()) || this.SEMVER_INVALID;
+			return (
+				versionObj?.toString() || ProjectVersionHelper.SEMVER_INVALID
+			);
 		}
 	}
 

@@ -5,7 +5,7 @@ const nls = require("vscode-nls-dev");
 const es = require("event-stream");
 const minimist = require("minimist");
 
-const getBuilder = require(appRoot + "/gulp_scripts/builder");
+const getBuilder = require(`${appRoot}/gulp_scripts/builder`);
 
 /**
  * Whether we're running a nightly build.
@@ -65,7 +65,7 @@ const translationsExport = gulp.series(
 );
 
 const translationImport = gulp.series((done) => {
-	var options = minimist(process.argv.slice(2), {
+	const options = minimist(process.argv.slice(2), {
 		string: "location",
 		default: {
 			location: "../vscode-translations-import",

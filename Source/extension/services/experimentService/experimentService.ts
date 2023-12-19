@@ -35,7 +35,7 @@ export class ExperimentService implements vscode.Disposable {
 	private static instance: ExperimentService;
 
 	private readonly endpointURL: string;
-	private downloadedExperimentsConfig: Array<ExperimentConfig> | null;
+	private downloadedExperimentsConfig: ExperimentConfig[] | null;
 	private experimentsInstances: Map<string, IExperiment>;
 	private downloadConfigRequest: Promise<ExperimentConfig[]>;
 	private cancellationTokenSource: vscode.CancellationTokenSource;
@@ -55,7 +55,7 @@ export class ExperimentService implements vscode.Disposable {
 				await this.initializeExperimentsInstances();
 		}
 
-		const experimentResults: Array<ExperimentResult> = await Promise.all(
+		const experimentResults: ExperimentResult[] = await Promise.all(
 			this.downloadedExperimentsConfig.map((expConfig) =>
 				this.executeExperiment(expConfig),
 			),

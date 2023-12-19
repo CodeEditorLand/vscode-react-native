@@ -43,9 +43,7 @@ async function test(): Promise<ValidationResultT> {
 	if (result.versionCompare === -1) {
 		return {
 			status: "failure",
-			comment:
-				"Detected version is older than 12.0.0 " +
-				`Minimal required version is 12.0.0. Please update your ${label} installation`,
+			comment: `Detected version is older than 12.0.0 Minimal required version is 12.0.0. Please update your ${label} installation`,
 		};
 	}
 

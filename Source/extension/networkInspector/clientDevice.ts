@@ -229,26 +229,28 @@ export class ClientDevice {
 			}
 
 			if (!fromPlugin || this.isAcceptingMessagesFromPlugin(plugin)) {
-				this._connection!.requestResponse({
-					data: JSON.stringify(data),
-				}).subscribe({
-					onComplete: (payload) => {
-						if (
-							!fromPlugin ||
-							this.isAcceptingMessagesFromPlugin(plugin)
-						) {
-							const response: {
-								success?: Record<string, any>;
-								error?: ErrorType;
-							} = JSON.parse(payload.data);
+				this._connection
+					?.requestResponse({
+						data: JSON.stringify(data),
+					})
+					.subscribe({
+						onComplete: (payload) => {
+							if (
+								!fromPlugin ||
+								this.isAcceptingMessagesFromPlugin(plugin)
+							) {
+								const response: {
+									success?: Record<string, any>;
+									error?: ErrorType;
+								} = JSON.parse(payload.data);
 
-							this.onResponse(response, resolve, reject);
-						}
-					},
-					onError: (e) => {
-						reject(e);
-					},
-				});
+								this.onResponse(response, resolve, reject);
+							}
+						},
+						onError: (e) => {
+							reject(e);
+						},
+					});
 			} else {
 				reject(
 					new Error(
@@ -268,7 +270,7 @@ export class ClientDevice {
 		reject: (error: ErrorType) => any,
 	): void {
 		if (data.success) {
-			resolve && resolve(data.success);
+			resolve?.(data.success);
 		} else if (data.error) {
 			reject(data.error);
 			const { error } = data;

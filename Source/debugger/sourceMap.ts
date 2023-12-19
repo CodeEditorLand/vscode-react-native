@@ -99,7 +99,7 @@ export class SourceMapUtil {
 				);
 			}
 
-			delete sourceMap.sourcesContent;
+			sourceMap.sourcesContent = undefined;
 			sourceMap.sourceRoot = "";
 			sourceMap.file = scriptPath;
 			return JSON.stringify(sourceMap);
@@ -177,7 +177,7 @@ export class SourceMapUtil {
 		const matchesList = str
 			.match(SourceMapUtil.SourceMapURLGlobalRegex)
 			?.filter((s) => !s.includes("\\n"));
-		if (matchesList && matchesList.length) {
+		if (matchesList?.length) {
 			return matchesList[matchesList.length - 1].match(
 				SourceMapUtil.SourceMapURLRegex,
 			);

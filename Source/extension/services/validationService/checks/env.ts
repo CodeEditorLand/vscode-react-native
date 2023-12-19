@@ -37,9 +37,7 @@ async function test(
 	if (notFoundVariable) {
 		return {
 			status: "failure",
-			comment:
-				`"${notFoundVariable}" not found in path. ` +
-				`Ensure all variables are set up accroding to this guide - https://reactnative.dev/docs/environment-setup`,
+			comment: `"${notFoundVariable}" not found in path. Ensure all variables are set up accroding to this guide - https://reactnative.dev/docs/environment-setup`,
 		};
 	}
 

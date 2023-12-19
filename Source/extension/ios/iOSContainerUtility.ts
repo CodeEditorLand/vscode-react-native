@@ -65,7 +65,7 @@ export async function isXcodeDetected(): Promise<boolean> {
 async function queryTargetsWithoutXcodeDependency(
 	idbCompanionPath: string,
 	isAvailableFunc: (idbPath: string) => Promise<boolean>,
-): Promise<Array<DeviceTarget>> {
+): Promise<DeviceTarget[]> {
 	if (await isAvailableFunc(idbCompanionPath)) {
 		return new ChildProcess()
 			.execToString(`${idbCompanionPath} --list 1 --only device`)
@@ -84,7 +84,7 @@ async function queryTargetsWithoutXcodeDependency(
 	}
 }
 
-function parseIdbTargets(lines: string): Array<DeviceTarget> {
+function parseIdbTargets(lines: string): DeviceTarget[] {
 	return lines
 		.trim()
 		.split("\n")
@@ -107,9 +107,7 @@ function parseIdbTargets(lines: string): Array<DeviceTarget> {
 		}));
 }
 
-export async function idbListTargets(
-	idbPath: string,
-): Promise<Array<DeviceTarget>> {
+export async function idbListTargets(idbPath: string): Promise<DeviceTarget[]> {
 	return new ChildProcess()
 		.execToString(`${idbPath} list-targets --json`)
 		.then((stdout) =>
@@ -122,13 +120,13 @@ export async function idbListTargets(
 		});
 }
 
-async function targets(): Promise<Array<DeviceTarget>> {
+async function targets(): Promise<DeviceTarget[]> {
 	if (process.platform !== "darwin") {
 		return [];
 	}
 	const isXcodeInstalled = await isXcodeDetected();
 	if (!isXcodeInstalled) {
-		const idbCompanionPath = path.dirname(idbPath) + "/idb_companion";
+		const idbCompanionPath = `${path.dirname(idbPath)}/idb_companion`;
 		return queryTargetsWithoutXcodeDependency(
 			idbCompanionPath,
 			isAvailable,
@@ -240,7 +238,7 @@ export async function checkIdbIsInstalled(): Promise<void> {
 	const isInstalled = await isIdbAvailable();
 	if (!isInstalled) {
 		throw new Error(
-			`idb is required to use iOS devices. Please install it with instructions from https://github.com/facebook/idb.`,
+			"idb is required to use iOS devices. Please install it with instructions from https://github.com/facebook/idb.",
 		);
 	}
 }
@@ -249,8 +247,7 @@ export async function checkIdbIsInstalled(): Promise<void> {
 // If we detect this, Tell the user how to fix it.
 function handleMissingIdb(e: Error): void {
 	if (
-		e.message &&
-		e.message.includes(
+		e.message?.includes(
 			"sudo: no tty present and no askpass program specified",
 		)
 	) {

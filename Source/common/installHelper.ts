@@ -18,7 +18,7 @@ export async function installAndroidApplication(
 	);
 
 	const targets = await adbHelper.getOnlineTargets();
-	if (targets.length == 0) {
+	if (targets.length === 0) {
 		throw new Error(
 			"No online target found, please check your emulator status.",
 		);
@@ -38,7 +38,7 @@ export async function installAndroidApplication(
 		} catch {
 			throw new Error(`Failed to install application: ${appPath}.`);
 		}
-		logger.logStream(`Install Android application is completed. \n`);
+		logger.logStream("Install Android application is completed. \n");
 	}
 }
 
@@ -67,7 +67,7 @@ export async function installiOSApplication(
 		throw e;
 	}
 
-	if (targets.length == 1) {
+	if (targets.length === 1) {
 		throw new Error(
 			"No booted iOS simulator found, please check your simulator status.",
 		);
@@ -95,6 +95,6 @@ export async function installiOSApplication(
 		} catch {
 			throw new Error(`Failed to install application: ${appPath}.`);
 		}
-		logger.logStream(`Install iOS application is completed. \n`);
+		logger.logStream("Install iOS application is completed. \n");
 	}
 }

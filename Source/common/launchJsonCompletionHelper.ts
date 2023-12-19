@@ -37,7 +37,7 @@ export class LaunchJsonCompletionHelper {
 		document: TextDocument,
 		position: Position,
 	): PositionOfCursor | undefined {
-		if (this.isConfigurationArrayEmpty(document)) {
+		if (LaunchJsonCompletionHelper.isConfigurationArrayEmpty(document)) {
 			return "InsideEmptyArray";
 		}
 		const scanner = createScanner(document.getText(), true);
@@ -97,8 +97,7 @@ export class LaunchJsonCompletionHelper {
 			configurations: [];
 		};
 		return (
-			!configuration ||
-			!Array.isArray(configuration.configurations) ||
+			!(configuration && Array.isArray(configuration.configurations)) ||
 			configuration.configurations.length === 0
 		);
 	}

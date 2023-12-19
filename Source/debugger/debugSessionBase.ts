@@ -162,16 +162,13 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 					logLevel[0],
 					logLevel[0].toUpperCase(),
 				);
-				logger.setup(
-					Logger.LogLevel[logLevel],
-					chromeDebugCoreLogs || false,
-				);
+				logger.setup(Logger.LogLevel[logLevel], chromeDebugCoreLogs);
 				this.cdpProxyLogLevel =
 					LogLevel[logLevel] === LogLevel.Verbose
 						? LogLevel.Custom
 						: LogLevel.None;
 			} else {
-				logger.setup(Logger.LogLevel.Log, chromeDebugCoreLogs || false);
+				logger.setup(Logger.LogLevel.Log, chromeDebugCoreLogs);
 				this.cdpProxyLogLevel =
 					LogHelper.LOG_LEVEL === LogLevel.Trace
 						? LogLevel.Custom
@@ -220,7 +217,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			}
 			const settingsPort =
 				this.appLauncher.getPackagerPort(projectRootPath);
-			if (this.appLauncher.getPackager().getPort() != settingsPort) {
+			if (this.appLauncher.getPackager().getPort() !== settingsPort) {
 				this.appLauncher.getPackager().resetToSettingsPort();
 			}
 		}

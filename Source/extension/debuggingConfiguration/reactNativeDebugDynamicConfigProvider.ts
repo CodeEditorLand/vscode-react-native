@@ -111,10 +111,12 @@ export class ReactNativeDebugDynamicConfigProvider
 			}
 
 			if (
-				!androidHermesEnabled &&
-				!iOSHermesEnabled &&
-				!macOSHermesEnabled &&
-				!windowsHermesEnabled
+				!(
+					androidHermesEnabled ||
+					iOSHermesEnabled ||
+					macOSHermesEnabled ||
+					windowsHermesEnabled
+				)
 			) {
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.ATTACH_TO_HERMES_APPLICATION

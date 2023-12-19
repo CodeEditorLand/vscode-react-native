@@ -26,12 +26,16 @@ export class SourceMapsCombinator {
 			rawBundleSourcemap.sources.reduce(
 				(result: { [key: string]: SourceMapConsumer }, file) => {
 					// Skip files inside node_modules
-					if (file.includes("node_modules")) return result;
+					if (file.includes("node_modules")) {
+						return result;
+					}
 
 					try {
 						const consumer: SourceMapConsumer | null =
 							this.getSourceMapConsumerFrom(file);
-						if (consumer) result[file] = consumer;
+						if (consumer) {
+							result[file] = consumer;
+						}
 					} finally {
 						return result;
 					}

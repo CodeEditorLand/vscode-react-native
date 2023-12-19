@@ -244,7 +244,7 @@ export class MacOSPlatform extends GeneralPlatform {
 
 			if (processData) {
 				const match = processIdRgx.exec(processData.trim());
-				if (match && match[1]) {
+				if (match?.[1]) {
 					await childProcess.execToString(`kill ${match[1]}`);
 				}
 			}

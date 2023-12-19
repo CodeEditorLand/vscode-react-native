@@ -84,9 +84,9 @@ export class RevertOpenModule extends ReactNativeCommand {
 			const packageJson = JSON.parse(
 				fs.readFileSync(packageFilePath, "utf-8"),
 			);
-			if (packageJson.main == "open-main.js") {
+			if (packageJson.main === "open-main.js") {
 				try {
-					delete packageJson.main;
+					packageJson.main = undefined;
 					await fs.writeFileSync(
 						packageFilePath,
 						JSON.stringify(<Record<string, any>>packageJson),

@@ -322,10 +322,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	}
 
 	public async getTargetFromRunArgs(): Promise<AndroidTarget | undefined> {
-		if (
-			this.runOptions.runArguments &&
-			this.runOptions.runArguments.length
-		) {
+		if (this.runOptions.runArguments?.length) {
 			const deviceId = GeneralMobilePlatform.getOptFromRunArgs(
 				this.runOptions.runArguments,
 				"--deviceId",
@@ -345,10 +342,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		onlineTargetsIds: string[],
 	): Promise<string> {
 		let deviceId: string | undefined;
-		if (
-			this.runOptions.runArguments &&
-			this.runOptions.runArguments.length
-		) {
+		if (this.runOptions.runArguments?.length) {
 			deviceId = GeneralMobilePlatform.getOptFromRunArgs(
 				this.runOptions.runArguments,
 				"--deviceId",

@@ -2,7 +2,7 @@ const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const path = require("path");
 const srcPath = "src";
-const distDir = appRoot + "/dist";
+const distDir = `${appRoot}/dist`;
 const distSrcDir = `${distDir}/src`;
 
 /** Run webpack to bundle the extension output files */
@@ -102,7 +102,7 @@ async function runWebpack({
 					analyzerMode: "static",
 					reportFilename: path.resolve(
 						distSrcDir,
-						path.basename(entry) + ".html",
+						`${path.basename(entry)}.html`,
 					),
 				}),
 			];

@@ -13,13 +13,13 @@ declare namespace xdl {
 		username: string;
 	}
 
-	var User: {
+	let User: {
 		loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
 		logoutAsync(): Promise<void>;
 		getCurrentUserAsync(): Promise<IUser>;
 	};
 
-	var UserManager: {
+	let UserManager: {
 		loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
 		logoutAsync(): Promise<void>;
 		getCurrentUserAsync(): Promise<IUser>;
@@ -78,7 +78,7 @@ declare namespace xdl {
 		[version: string]: SDKVersion;
 	}
 
-	var Project: {
+	let Project: {
 		startAsync(projectRoot: string, options?: IStartOptions): Promise<void>;
 		stopAsync(projectRoot: string): Promise<void>;
 		getUrlAsync(
@@ -100,14 +100,14 @@ declare namespace xdl {
 		stopTunnelsAsync(projectRoot: string): Promise<void>;
 	};
 
-	var ProjectSettings: {
+	let ProjectSettings: {
 		setPackagerInfoAsync(
 			projectRoot: string,
 			json: Partial<IOptions>,
 		): Promise<IOptions>;
 	};
 
-	var UrlUtils: {
+	let UrlUtils: {
 		constructManifestUrlAsync(
 			projectRoot: string,
 			opts?: any,
@@ -115,12 +115,12 @@ declare namespace xdl {
 		): Promise<string>;
 	};
 
-	var Versions: {
+	let Versions: {
 		sdkVersionsAsync(): Promise<SDKVersions>;
 		releasedSdkVersionsAsync(): Promise<SDKVersions>;
 	};
 
-	var Android: {
+	let Android: {
 		startAdbReverseAsync(projectRoot: string): Promise<boolean>;
 		stopAdbReverseAsync(projectRoot: string): Promise<void>;
 	};
@@ -148,7 +148,7 @@ declare namespace xdl {
 		validation: IValidationConfig;
 	}
 
-	var Config: IConfig;
+	let Config: IConfig;
 
 	interface IBunyanStream {
 		type?: string;
@@ -160,7 +160,7 @@ declare namespace xdl {
 		count?: number;
 	}
 
-	var ProjectUtils: {
+	let ProjectUtils: {
 		attachLoggerStream(rootPath: string, options?: IBunyanStream): void;
 	};
 

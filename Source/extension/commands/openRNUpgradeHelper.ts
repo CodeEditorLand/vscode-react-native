@@ -49,15 +49,18 @@ export class OpenRNUpgradeHelper extends Command {
 		);
 
 		switch (item) {
-			case "React Native":
+			case "React Native": {
 				await vscode.env.openExternal(vscode.Uri.parse(RNUrl));
 				break;
-			case "React Native Windows":
+			}
+			case "React Native Windows": {
 				await vscode.env.openExternal(vscode.Uri.parse(RNWUrl));
 				break;
-			case "React Native MacOS":
+			}
+			case "React Native MacOS": {
 				await vscode.env.openExternal(vscode.Uri.parse(RNMUrl));
 				break;
+			}
 			default:
 		}
 	}

@@ -77,14 +77,15 @@ export class ExponentPlatform extends GeneralPlatform {
 						  await XDL.startAdbReverse(this.projectPath);
 				let exponentUrl = "";
 				switch (this.runOptions.expoHostType) {
-					case "lan":
+					case "lan": {
 						exponentUrl = await XDL.getUrl(this.projectPath, {
 							dev: true,
 							minify: false,
 							hostType: "lan",
 						});
 						break;
-					case "local":
+					}
+					case "local": {
 						if (isAdbReversed) {
 							this.logger.info(
 								localize(
@@ -107,7 +108,7 @@ export class ExponentPlatform extends GeneralPlatform {
 							hostType: "localhost",
 						});
 						break;
-					case "tunnel":
+					}
 					default:
 						exponentUrl = await XDL.getUrl(this.projectPath, {
 							dev: true,

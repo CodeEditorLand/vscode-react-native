@@ -26,7 +26,7 @@ export interface IQuickPickParameters<T extends QuickPickItem> {
 	step?: number;
 	totalSteps?: number;
 	canGoBack?: boolean;
-	items: ReadonlyArray<T>;
+	items: readonly T[];
 	activeItem?: T;
 	placeholder: string;
 	buttons?: QuickInputButton[];
@@ -113,8 +113,8 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 					input.placeholder = placeholder;
 					input.ignoreFocusOut = true;
 					input.items = items;
-					input.matchOnDescription = matchOnDescription || false;
-					input.matchOnDetail = matchOnDetail || false;
+					input.matchOnDescription = matchOnDescription;
+					input.matchOnDetail = matchOnDetail;
 					if (activeItem) {
 						input.activeItems = [activeItem];
 					} else {

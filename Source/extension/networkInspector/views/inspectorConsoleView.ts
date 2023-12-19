@@ -68,17 +68,20 @@ export class InspectorConsoleView extends InspectorView {
 	public handleMessage(data: RequestParams): void {
 		if (data.params) {
 			switch (data.method) {
-				case "newRequest":
+				case "newRequest": {
 					this.handleRequest(data.params as Request);
 					break;
-				case "newResponse":
+				}
+				case "newResponse": {
 					this.handleResponse(data.params as Response);
 					break;
-				case "partialResponse":
+				}
+				case "partialResponse": {
 					this.handlePartialResponse(
 						data.params as Response | ResponseFollowupChunk,
 					);
 					break;
+				}
 			}
 		}
 	}
@@ -181,8 +184,7 @@ export class InspectorConsoleView extends InspectorView {
 	): Response | null {
 		const numChunks = partialResponseEntry.initialResponse?.totalChunks;
 		if (
-			!partialResponseEntry.initialResponse ||
-			!numChunks ||
+			!(partialResponseEntry.initialResponse && numChunks) ||
 			Object.keys(partialResponseEntry.followupChunks).length + 1 <
 				numChunks
 		) {

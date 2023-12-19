@@ -230,7 +230,7 @@ export class GeneralPlatform {
 
 		if (envFile) {
 			// .env variables never overwrite existing variables
-			const argsFromEnvFile = this.readEnvFile(envFile);
+			const argsFromEnvFile = GeneralPlatform.readEnvFile(envFile);
 			if (argsFromEnvFile != null) {
 				// eslint-disable-next-line no-restricted-syntax
 				for (const key in argsFromEnvFile) {

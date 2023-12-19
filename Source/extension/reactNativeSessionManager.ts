@@ -24,7 +24,7 @@ export class ReactNativeSessionManager
 		const rnSession = new RNSession(session);
 
 		let debugServer;
-		if (session.configuration.platform != "expoweb") {
+		if (session.configuration.platform !== "expoweb") {
 			debugServer = Net.createServer((socket) => {
 				const rnDebugSession =
 					session.type === DEBUG_TYPES.REACT_NATIVE

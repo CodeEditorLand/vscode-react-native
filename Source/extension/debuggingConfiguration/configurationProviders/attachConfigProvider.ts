@@ -55,7 +55,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 		input: MultiStepInput<DebugConfigurationState>,
 		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
-		delete config.platform;
+		config.platform = undefined;
 		await this.configurationProviderHelper.selectPlatform(
 			input,
 			config,
@@ -67,8 +67,8 @@ export class AttachConfigProvider extends BaseConfigProvider {
 		if (config.platform) {
 			config.useHermesEngine = false;
 		} else {
-			delete config.platform;
-			delete config.useHermesEngine;
+			config.platform = undefined;
+			config.useHermesEngine = undefined;
 		}
 
 		return () => this.configureAddress(input, config);

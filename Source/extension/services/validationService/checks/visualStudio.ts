@@ -15,7 +15,7 @@ const toLocale = nls.loadMessageBundle();
 const label = "Compilers, build tools, SDKs and Visual Studio";
 
 async function test(): Promise<ValidationResultT> {
-	let vswherePath = ``;
+	let vswherePath = "";
 	if (process.env["ProgramFiles(x86)"]) {
 		vswherePath = `"${process.env["ProgramFiles(x86)"]}\\Microsoft Visual Studio\\Installer\\vswhere.exe"`;
 	} else {

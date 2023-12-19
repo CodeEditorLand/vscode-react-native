@@ -60,7 +60,7 @@ export class RNDebugSession extends DebugSessionBase {
 	): Promise<void> {
 		try {
 			try {
-				if (launchArgs.platform != "exponent") {
+				if (launchArgs.platform !== "exponent") {
 					await ReactNativeProjectHelper.verifyMetroConfigFile(
 						launchArgs.cwd,
 					);

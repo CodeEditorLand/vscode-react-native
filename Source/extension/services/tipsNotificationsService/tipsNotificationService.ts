@@ -106,7 +106,7 @@ export class TipNotificationService implements vscode.Disposable {
 		isGeneralTip = true,
 		specificTipKey?: string,
 	): Promise<void> {
-		if (!isGeneralTip && !specificTipKey) {
+		if (!(isGeneralTip || specificTipKey)) {
 			this.logger.debug(
 				"The specific tip key parameter isn't passed for a specific tip",
 			);
@@ -313,9 +313,9 @@ export class TipNotificationService implements vscode.Disposable {
 	}
 
 	private async showRandomGeneralTipNotification(): Promise<GeneratedTipResponse> {
-		let generalTipsForRandom: Array<string>;
+		let generalTipsForRandom: string[];
 		const generalTips: Tips = this.tipsConfig.tips.generalTips;
-		const generalTipsKeys: Array<string> = Object.keys(
+		const generalTipsKeys: string[] = Object.keys(
 			this.tipsConfig.tips.generalTips,
 		);
 
@@ -330,8 +330,10 @@ export class TipNotificationService implements vscode.Disposable {
 		} else {
 			generalTipsForRandom = generalTipsKeys.filter(
 				(tipId) =>
-					!generalTips[tipId].knownDate &&
-					!generalTips[tipId].shownDate,
+					!(
+						generalTips[tipId].knownDate ||
+						generalTips[tipId].shownDate
+					),
 			);
 			if (generalTipsForRandom.length === 1) {
 				this.tipsConfig.allTipsShownFirstly = true;
@@ -346,12 +348,14 @@ export class TipNotificationService implements vscode.Disposable {
 					selection: undefined,
 					tipKey: "",
 				};
-			case 1:
+			case 1: {
 				leftIndex = 0;
 				break;
-			case 2:
+			}
+			case 2: {
 				leftIndex = 1;
 				break;
+			}
 			default:
 				leftIndex = 2;
 		}
@@ -463,7 +467,7 @@ export class TipNotificationService implements vscode.Disposable {
 	private deleteOutdatedKnownDate(): void {
 		const dateNow: Date = new Date();
 		const generalTips: Tips = this.tipsConfig.tips.generalTips;
-		const generalTipsKeys: Array<string> = Object.keys(
+		const generalTipsKeys: string[] = Object.keys(
 			this.tipsConfig.tips.generalTips,
 		);
 
@@ -477,7 +481,7 @@ export class TipNotificationService implements vscode.Disposable {
 				);
 			})
 			.forEach((tipKey) => {
-				delete generalTips[tipKey].knownDate;
+				generalTips[tipKey].knownDate = undefined;
 			});
 	}
 

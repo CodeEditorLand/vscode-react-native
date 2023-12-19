@@ -66,7 +66,7 @@ export class JsDebugConfigAdapter {
 
 		return Object.assign(
 			{},
-			this.getExistingExtraArgs(attachArgs),
+			JsDebugConfigAdapter.getExistingExtraArgs(attachArgs),
 			extraArgs,
 			{
 				type: pwaSessionName,

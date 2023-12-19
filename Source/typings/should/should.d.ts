@@ -170,8 +170,8 @@ interface Internal extends ShouldInternal {
 	inspect(value: any, obj: any): any;
 }
 
-declare var should: Internal;
-declare var Should: Internal;
+declare let should: Internal;
+declare let Should: Internal;
 interface Window {
 	Should: Internal;
 }

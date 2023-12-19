@@ -241,10 +241,11 @@ function fetch(url) {
 		this.sourcesStoragePath = sourcesStoragePath;
 		this.projectRootPath = projectRootPath;
 		this.cancellationToken = cancellationToken;
-		if (!this.sourcesStoragePath)
+		if (!this.sourcesStoragePath) {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.SourcesStoragePathIsNullOrEmpty,
 			);
+		}
 		this.webSocketConstructor = webSocketConstructor;
 		this.scriptImporter = new ScriptImporter(
 			this.packagerAddress,
@@ -435,7 +436,9 @@ function fetch(url) {
 	}
 
 	private killWorker() {
-		if (!this.singleLifetimeWorker) return;
+		if (!this.singleLifetimeWorker) {
+			return;
+		}
 		this.singleLifetimeWorker.stop();
 		this.singleLifetimeWorker = null;
 	}

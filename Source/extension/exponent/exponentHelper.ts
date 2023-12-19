@@ -90,7 +90,7 @@ export class ExponentHelper {
 		this.logger.logStream("\n");
 
 		const packageJson = await this.getAppPackageInformation();
-		if (!packageJson.name || !packageJson.version) {
+		if (!(packageJson.name && packageJson.version)) {
 			this.logger.warning(
 				localize(
 					"MissingFieldsInExpoApp",
@@ -164,15 +164,12 @@ export class ExponentHelper {
 
 	public async appHasExpoInstalled(): Promise<boolean> {
 		const packageJson = await this.getAppPackageInformation();
-		if (packageJson.dependencies && packageJson.dependencies.expo) {
+		if (packageJson.dependencies?.expo) {
 			this.logger.debug(
 				"'expo' package is found in 'dependencies' section of package.json",
 			);
 			return true;
-		} else if (
-			packageJson.devDependencies &&
-			packageJson.devDependencies.expo
-		) {
+		} else if (packageJson.devDependencies?.expo) {
 			this.logger.debug(
 				"'expo' package is found in 'devDependencies' section of package.json",
 			);
@@ -188,10 +185,14 @@ export class ExponentHelper {
 
 		try {
 			const expoInstalled = await this.appHasExpoInstalled();
-			if (!expoInstalled) return false;
+			if (!expoInstalled) {
+				return false;
+			}
 
 			const isBareWorkflowProject = await this.isBareWorkflowProject();
-			if (showProgress) this.logger.logStream(".");
+			if (showProgress) {
+				this.logger.logStream(".");
+			}
 			return !isBareWorkflowProject;
 		} catch (e) {
 			this.logger.error(e.message, e, e.stack);
@@ -261,7 +262,7 @@ export class ExponentHelper {
 
 	public removeNodeModulesPathFromEnvIfWasSet(): void {
 		if (this.nodeModulesGlobalPathAddedToEnv) {
-			delete process.env.NODE_MODULES;
+			process.env.NODE_MODULES = undefined;
 			this.nodeModulesGlobalPathAddedToEnv = false;
 		}
 	}
@@ -276,13 +277,10 @@ export class ExponentHelper {
 	private async isBareWorkflowProject(): Promise<boolean> {
 		const packageJson = await this.getAppPackageInformation();
 
-		if (packageJson.dependencies && packageJson.dependencies.expokit) {
+		if (packageJson.dependencies?.expokit) {
 			return false;
 		}
-		if (
-			packageJson.devDependencies &&
-			packageJson.devDependencies.expokit
-		) {
+		if (packageJson.devDependencies?.expokit) {
 			return false;
 		}
 
@@ -373,7 +371,7 @@ require('${entryPoint}');`;
 		const packageName = await this.getPackageName();
 
 		const expoConfig = <ExpConfig>(appJson.expo || {});
-		if (!expoConfig.name || !expoConfig.slug) {
+		if (!(expoConfig.name && expoConfig.slug)) {
 			expoConfig.slug =
 				expoConfig.slug ||
 				appJson.name ||
@@ -566,7 +564,7 @@ require('${entryPoint}');`;
 		const appJsonPath = this.pathToFileInWorkspace(APP_JSON);
 		try {
 			return JSON.parse(fs.readFileSync(appJsonPath, "utf-8")).expo
-				.owner == undefined
+				.owner === undefined
 				? null
 				: JSON.parse(fs.readFileSync(appJsonPath, "utf-8")).expo.owner;
 		} catch {
@@ -578,7 +576,7 @@ require('${entryPoint}');`;
 		const appJsonPath = this.pathToFileInWorkspace(APP_JSON);
 		try {
 			return JSON.parse(fs.readFileSync(appJsonPath, "utf-8")).expo.extra
-				.eas.projectId == undefined
+				.eas.projectId === undefined
 				? null
 				: JSON.parse(fs.readFileSync(appJsonPath, "utf-8")).expo.extra
 						.eas.projectId;
@@ -591,7 +589,7 @@ require('${entryPoint}');`;
 		const appJsonPath = this.pathToFileInWorkspace(APP_JSON);
 		try {
 			return JSON.parse(fs.readFileSync(appJsonPath, "utf-8")).expo
-				.name == undefined
+				.name === undefined
 				? null
 				: JSON.parse(fs.readFileSync(appJsonPath, "utf-8")).expo.name;
 		} catch {

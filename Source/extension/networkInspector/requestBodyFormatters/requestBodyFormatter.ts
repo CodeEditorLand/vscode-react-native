@@ -14,7 +14,7 @@ import { JSONFormatter } from "./jsonFormatter";
 export type FormattedBody =
 	| string
 	| Record<string, any>
-	| Array<Record<string, any>>;
+	| Record<string, any>[];
 
 export interface IFormatter {
 	formatRequest?: (
@@ -29,7 +29,7 @@ export interface IFormatter {
 
 export class RequestBodyFormatter {
 	protected logger: OutputChannelLogger;
-	private formatters: Array<IFormatter>;
+	private formatters: IFormatter[];
 
 	constructor(logger: OutputChannelLogger) {
 		this.logger = logger;
@@ -149,7 +149,7 @@ export function decodeBody(
  *
  * @format
  */
-export function getHeaderValue(headers: Array<Header>, key: string): string {
+export function getHeaderValue(headers: Header[], key: string): string {
 	for (const header of headers) {
 		if (header.key.toLowerCase() === key.toLowerCase()) {
 			return header.value;

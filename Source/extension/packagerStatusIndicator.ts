@@ -145,49 +145,55 @@ export class PackagerStatusIndicator implements Disposable {
 		this.togglePackagerItem.command = command;
 		this.togglePackagerItem.tooltip = tooltip;
 		switch (this.displayVersion) {
-			case PackagerStatusIndicator.FULL_VERSION:
+			case PackagerStatusIndicator.FULL_VERSION: {
 				this.togglePackagerItem.text = `${icon} ${PackagerStatusIndicator.PACKAGER_NAME}`;
 				this.togglePackagerItem.show();
 				this.restartPackagerItem.show();
 				break;
-			case PackagerStatusIndicator.SHORT_VERSION:
+			}
+			case PackagerStatusIndicator.SHORT_VERSION: {
 				this.togglePackagerItem.text = `${icon}`;
 				this.togglePackagerItem.show();
 				this.restartPackagerItem.show();
 				break;
+			}
 		}
 	}
 
 	public updatePackagerStatus(status: PackagerStatus): void {
 		switch (status) {
-			case PackagerStatus.PACKAGER_STOPPED:
+			case PackagerStatus.PACKAGER_STOPPED: {
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.START_ICON,
 					PackagerStatusIndicator.START_COMMAND,
 					PackagerStatusIndicator.START_TOOLTIP,
 				);
 				break;
-			case PackagerStatus.PACKAGER_STOPPING:
+			}
+			case PackagerStatus.PACKAGER_STOPPING: {
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.ACTIVITY_ICON,
 					undefined,
 					PackagerStatusIndicator.STOPPING_TOOLTIP,
 				);
 				break;
-			case PackagerStatus.PACKAGER_STARTED:
+			}
+			case PackagerStatus.PACKAGER_STARTED: {
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.STOP_ICON,
 					PackagerStatusIndicator.STOP_COMMAND,
 					PackagerStatusIndicator.STOP_TOOLTIP,
 				);
 				break;
-			case PackagerStatus.PACKAGER_STARTING:
+			}
+			case PackagerStatus.PACKAGER_STARTING: {
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.ACTIVITY_ICON,
 					undefined,
 					PackagerStatusIndicator.STARTING_TOOLTIP,
 				);
 				break;
+			}
 			default:
 				break;
 		}

@@ -21,10 +21,11 @@ async function test(): Promise<ValidationResultT> {
 	const command = "dotnet --info";
 	const data = await executeCommand(command);
 	if (data.stdout) {
-		if (data.stdout.includes("Microsoft.NETCore.App 3.1"))
+		if (data.stdout.includes("Microsoft.NETCore.App 3.1")) {
 			return {
 				status: "success",
 			};
+		}
 		return {
 			status: "failure",
 			comment: createVersionErrorMessage(label),

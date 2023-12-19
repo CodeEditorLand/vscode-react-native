@@ -22,8 +22,10 @@ export class ReactNativeProjectHelper {
 		projectRoot: string,
 	): Promise<boolean> {
 		if (
-			!projectRoot ||
-			!fs.existsSync(path.join(projectRoot, "package.json"))
+			!(
+				projectRoot &&
+				fs.existsSync(path.join(projectRoot, "package.json"))
+			)
 		) {
 			return false;
 		}
@@ -40,7 +42,7 @@ export class ReactNativeProjectHelper {
 
 	public static isHaulProject(projectRoot: string): boolean {
 		const packageJsonPath = path.join(projectRoot, "package.json");
-		if (!projectRoot || !fs.existsSync(packageJsonPath)) {
+		if (!(projectRoot && fs.existsSync(packageJsonPath))) {
 			return false;
 		}
 
@@ -61,7 +63,7 @@ export class ReactNativeProjectHelper {
 			"app",
 			"build.gradle",
 		);
-		if (!projectRoot || !fs.existsSync(buildGradlePath)) {
+		if (!(projectRoot && fs.existsSync(buildGradlePath))) {
 			return false;
 		}
 
@@ -74,7 +76,7 @@ export class ReactNativeProjectHelper {
 
 	public static isIOSHermesEnabled(projectRoot: string): boolean {
 		const podfilePath = path.join(projectRoot, "ios", "Podfile");
-		if (!projectRoot || !fs.existsSync(podfilePath)) {
+		if (!(projectRoot && fs.existsSync(podfilePath))) {
 			return false;
 		}
 
@@ -87,7 +89,7 @@ export class ReactNativeProjectHelper {
 
 	public static isMacOSHermesEnabled(projectRoot: string): boolean {
 		const podfilePath = path.join(projectRoot, "macos", "Podfile");
-		if (!projectRoot || !fs.existsSync(podfilePath)) {
+		if (!(projectRoot && fs.existsSync(podfilePath))) {
 			return false;
 		}
 
@@ -110,7 +112,7 @@ export class ReactNativeProjectHelper {
 			"windows",
 			"ExperimentalFeatures.props",
 		);
-		if (!projectRoot || !fs.existsSync(experimentalFeaturesPath)) {
+		if (!(projectRoot && fs.existsSync(experimentalFeaturesPath))) {
 			return false;
 		}
 

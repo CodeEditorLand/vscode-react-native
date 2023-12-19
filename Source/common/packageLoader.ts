@@ -63,10 +63,10 @@ export class PackageLoader {
 	}
 
 	public static getInstance(): PackageLoader {
-		if (!this.instance) {
-			this.instance = new PackageLoader();
+		if (!PackageLoader.instance) {
+			PackageLoader.instance = new PackageLoader();
 		}
-		return this.instance;
+		return PackageLoader.instance;
 	}
 
 	public installGlobalPackage(
@@ -111,7 +111,7 @@ export class PackageLoader {
 		return (load?: string[]) => {
 			let packageWasInstalled = false;
 			// Throw exception if we could not find package after installing
-			if (load && load.includes(packageConfig.getStringForInstall())) {
+			if (load?.includes(packageConfig.getStringForInstall())) {
 				packageWasInstalled = true;
 			}
 			return this.tryToRequire<T>(

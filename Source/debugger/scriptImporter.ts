@@ -237,7 +237,7 @@ export class ScriptImporter {
 	private overridePackagerPort(urlToOverride: string): string {
 		const components = url.parse(urlToOverride);
 		components.port = this.packagerPort.toString();
-		delete components.host; // We delete the host, if not the port change will be ignored
+		components.host = undefined; // We delete the host, if not the port change will be ignored
 		return url.format(components);
 	}
 }

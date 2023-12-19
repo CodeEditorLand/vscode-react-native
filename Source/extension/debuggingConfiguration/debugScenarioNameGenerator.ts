@@ -21,17 +21,20 @@ export class DebugScenarioNameGenerator {
 		isExperimental = false,
 	): string {
 		const debugScenarioName: DebugScenarioName =
-			this.createScenarioAccordingToDebugScenarioType(debugScenarioType);
-		debugScenarioName.platformType = this.getPlatformTypeName(platformType);
+			DebugScenarioNameGenerator.createScenarioAccordingToDebugScenarioType(
+				debugScenarioType,
+			);
+		debugScenarioName.platformType =
+			DebugScenarioNameGenerator.getPlatformTypeName(platformType);
 		if (debugType === DEBUG_TYPES.REACT_NATIVE) {
-			this.configureNotDirectModeScenario(
+			DebugScenarioNameGenerator.configureNotDirectModeScenario(
 				debugScenarioName,
 				debugScenarioType,
 				debugType,
 				platformType,
 			);
 		} else {
-			this.configureDirectModeScenario(
+			DebugScenarioNameGenerator.configureDirectModeScenario(
 				debugScenarioName,
 				debugScenarioType,
 				debugType,
@@ -48,7 +51,9 @@ export class DebugScenarioNameGenerator {
 			debugScenarioName.experimentalDescription = "- Experimental";
 		}
 
-		return this.debugScenarioNameToString(debugScenarioName);
+		return DebugScenarioNameGenerator.debugScenarioNameToString(
+			debugScenarioName,
+		);
 	}
 
 	private static createScenarioAccordingToDebugScenarioType(
@@ -98,11 +103,12 @@ export class DebugScenarioNameGenerator {
 					: "Hermes";
 		}
 		switch (platformType) {
-			case PlatformType.iOS:
+			case PlatformType.iOS: {
 				if (!useHermesEngine) {
 					debugScenarioName.prePlatformTypeDescription = "Direct";
 				}
 				break;
+			}
 		}
 	}
 

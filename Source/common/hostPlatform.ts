@@ -178,18 +178,22 @@ export class HostPlatform {
 	private static get platform(): IHostPlatform {
 		if (!HostPlatform.platformInstance) {
 			switch (process.platform) {
-				case "win32":
+				case "win32": {
 					HostPlatform.platformInstance = new WindowsHostPlatform();
 					break;
-				case "darwin":
+				}
+				case "darwin": {
 					HostPlatform.platformInstance = new OSXHostPlatform();
 					break;
-				case "linux":
+				}
+				case "linux": {
 					HostPlatform.platformInstance = new LinuxHostPlatform();
 					break;
-				default:
+				}
+				default: {
 					HostPlatform.platformInstance = new LinuxHostPlatform();
 					break;
+				}
 			}
 		}
 

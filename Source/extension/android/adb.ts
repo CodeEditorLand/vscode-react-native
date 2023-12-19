@@ -221,7 +221,7 @@ export class AdbHelper {
 		logger?: ILogger,
 	): string | null {
 		const matches = fileContent.match(/^sdk\.dir\s*=(.+)$/m);
-		if (!matches || !matches[1]) {
+		if (!matches?.[1]) {
 			if (logger) {
 				logger.info(
 					localize(

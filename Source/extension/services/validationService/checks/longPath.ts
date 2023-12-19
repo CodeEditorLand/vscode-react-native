@@ -18,10 +18,11 @@ async function test(): Promise<ValidationResultT> {
 		"reg query HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem /v LongPathsEnabled";
 	const data = await executeCommand(command);
 	if (data.stdout) {
-		if (data.stdout.includes(" 0x1"))
+		if (data.stdout.includes(" 0x1")) {
 			return {
 				status: "success",
 			};
+		}
 	}
 	return {
 		status: "failure",

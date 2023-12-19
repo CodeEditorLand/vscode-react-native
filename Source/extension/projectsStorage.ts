@@ -11,16 +11,21 @@ export class ProjectsStorage {
 		workspaceFolder: string,
 		appLauncher: AppLauncher,
 	): void {
-		this.projectsCache[workspaceFolder.toLowerCase()] = appLauncher;
+		ProjectsStorage.projectsCache[workspaceFolder.toLowerCase()] =
+			appLauncher;
 	}
 
 	public static getFolder(
 		workspaceFolder: vscode.WorkspaceFolder,
 	): AppLauncher {
-		return this.projectsCache[workspaceFolder.uri.fsPath.toLowerCase()];
+		return ProjectsStorage.projectsCache[
+			workspaceFolder.uri.fsPath.toLowerCase()
+		];
 	}
 
 	public static delFolder(workspaceFolder: vscode.WorkspaceFolder): void {
-		delete this.projectsCache[workspaceFolder.uri.fsPath.toLowerCase()];
+		delete ProjectsStorage.projectsCache[
+			workspaceFolder.uri.fsPath.toLowerCase()
+		];
 	}
 }

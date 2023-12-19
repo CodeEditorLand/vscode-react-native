@@ -9,17 +9,23 @@ export class LogCatMonitorManager {
 	} = {};
 
 	public static addMonitor(monitor: LogCatMonitor): void {
-		this.logCatMonitorsCache[monitor.deviceId.toLowerCase()] = monitor;
+		LogCatMonitorManager.logCatMonitorsCache[
+			monitor.deviceId.toLowerCase()
+		] = monitor;
 	}
 
 	public static getMonitor(deviceId: string): LogCatMonitor {
-		return this.logCatMonitorsCache[deviceId.toLowerCase()];
+		return LogCatMonitorManager.logCatMonitorsCache[deviceId.toLowerCase()];
 	}
 
 	public static delMonitor(deviceId: string): void {
-		if (this.logCatMonitorsCache[deviceId.toLowerCase()]) {
-			this.logCatMonitorsCache[deviceId.toLowerCase()].dispose();
-			delete this.logCatMonitorsCache[deviceId.toLowerCase()];
+		if (LogCatMonitorManager.logCatMonitorsCache[deviceId.toLowerCase()]) {
+			LogCatMonitorManager.logCatMonitorsCache[
+				deviceId.toLowerCase()
+			].dispose();
+			delete LogCatMonitorManager.logCatMonitorsCache[
+				deviceId.toLowerCase()
+			];
 		}
 	}
 

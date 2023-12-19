@@ -49,9 +49,9 @@ const localize = nls.loadMessageBundle();
 function transformCertificateExchangeMediumToType(
 	medium: number | undefined,
 ): CertificateExchangeMedium {
-	if (medium == 1) {
+	if (medium === 1) {
 		return "FS_ACCESS";
-	} else if (medium == 2) {
+	} else if (medium === 2) {
 		return "WWW";
 	} else {
 		return "FS_ACCESS";
@@ -181,7 +181,7 @@ export class NetworkInspectorServer {
 					serverFactory: serverFactory,
 				}),
 			});
-			rsServer && rsServer.start();
+			rsServer?.start();
 		});
 	}
 
@@ -228,7 +228,7 @@ export class NetworkInspectorServer {
 
 		socket.connectionStatus().subscribe({
 			onNext(payload) {
-				if (payload.kind == "ERROR" || payload.kind == "CLOSED") {
+				if (payload.kind === "ERROR" || payload.kind === "CLOSED") {
 					client.then((client) => {
 						server.logger.info(
 							localize(
@@ -444,7 +444,7 @@ export class NetworkInspectorServer {
 	private removeConnection(id: string) {
 		const clientDevice = this.connections.get(id);
 		if (clientDevice) {
-			clientDevice.connection && clientDevice.connection.close();
+			clientDevice.connection?.close();
 			this.connections.delete(id);
 		}
 	}

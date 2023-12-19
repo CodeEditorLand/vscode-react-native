@@ -175,23 +175,26 @@ export namespace Telemetry {
 					Object.keys(event.properties || {}).forEach(
 						(key: string) => {
 							switch (typeof event.properties[key]) {
-								case "string":
+								case "string": {
 									properties[key] = <string>(
 										event.properties[key]
 									);
 									break;
+								}
 
-								case "number":
+								case "number": {
 									measures[key] = <number>(
 										event.properties[key]
 									);
 									break;
+								}
 
-								default:
+								default: {
 									properties[key] = JSON.stringify(
 										event.properties[key],
 									);
 									break;
+								}
 							}
 						},
 					);

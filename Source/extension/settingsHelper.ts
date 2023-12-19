@@ -234,7 +234,7 @@ export class SettingsHelper {
 		settingsPath: string | undefined,
 	): Promise<any> {
 		// Handle non-workspace project and untitled workspace
-		if (!settingsPath || !fs.existsSync(settingsPath)) {
+		if (!(settingsPath && fs.existsSync(settingsPath))) {
 			return [];
 		}
 		// Get workspace settings

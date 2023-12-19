@@ -34,7 +34,7 @@ const localize = nls.loadMessageBundle();
 export class ReactNativeDebugConfigProvider
 	implements vscode.DebugConfigurationProvider
 {
-	private initialPickConfig: ReadonlyArray<vscode.QuickPickItem> = [
+	private initialPickConfig: readonly vscode.QuickPickItem[] = [
 		{
 			label: DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID,
 			description: localize(
@@ -174,33 +174,32 @@ export class ReactNativeDebugConfigProvider
 		},
 	];
 
-	private sequentialPickConfig: ReadonlyArray<DebugConfigurationQuickPickItem> =
-		[
-			{
-				label: "Run application",
-				description: localize(
-					"RunApplicationScenario",
-					"Run React Native application without debugging",
-				),
-				type: DebugScenarioType.RunApp,
-			},
-			{
-				label: "Debug application",
-				description: localize(
-					"DebugApplicationScenario",
-					"Debug React Native application",
-				),
-				type: DebugScenarioType.DebugApp,
-			},
-			{
-				label: "Attach to application",
-				description: localize(
-					"AttachApplicationScenario",
-					"Attach to running React Native application",
-				),
-				type: DebugScenarioType.AttachApp,
-			},
-		];
+	private sequentialPickConfig: readonly DebugConfigurationQuickPickItem[] = [
+		{
+			label: "Run application",
+			description: localize(
+				"RunApplicationScenario",
+				"Run React Native application without debugging",
+			),
+			type: DebugScenarioType.RunApp,
+		},
+		{
+			label: "Debug application",
+			description: localize(
+				"DebugApplicationScenario",
+				"Debug React Native application",
+			),
+			type: DebugScenarioType.DebugApp,
+		},
+		{
+			label: "Attach to application",
+			description: localize(
+				"AttachApplicationScenario",
+				"Attach to running React Native application",
+			),
+			type: DebugScenarioType.AttachApp,
+		},
+	];
 
 	public async provideDebugConfigurations(
 		folder: vscode.WorkspaceFolder | undefined, // eslint-disable-line @typescript-eslint/no-unused-vars

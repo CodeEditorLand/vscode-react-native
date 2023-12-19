@@ -60,18 +60,14 @@ export class TestDevEnvironment extends Command {
 			));
 
 		const shouldCheck = {
-			[ValidationCategoryE.Expo]:
-				(await project
-					?.getPackager()
-					.getExponentHelper()
-					.isExpoManagedApp(false)
-					.catch(() => false)) || false,
+			[ValidationCategoryE.Expo]: await project
+				?.getPackager()
+				.getExponentHelper()
+				.isExpoManagedApp(false)
+				.catch(() => false),
 
-			[ValidationCategoryE.Windows]:
-				(projectObserver && projectObserver.isRNWindowsProject) ||
-				false,
-			[ValidationCategoryE.macOS]:
-				(projectObserver && projectObserver.isRNMacosProject) || false,
+			[ValidationCategoryE.Windows]: projectObserver?.isRNWindowsProject,
+			[ValidationCategoryE.macOS]: projectObserver?.isRNMacosProject,
 		} as const;
 		if (project && projectObserver) {
 			await runChecks(

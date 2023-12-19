@@ -72,7 +72,7 @@ export function appNameWithUpdateHint(query: ClientQuery): string {
 		query.os === ClientOS.Android &&
 		(!query.sdk_version || query.sdk_version < 3)
 	) {
-		return query.app + " (Outdated SDK)";
+		return `${query.app} (Outdated SDK)`;
 	}
 	return query.app;
 }

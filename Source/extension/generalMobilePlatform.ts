@@ -105,8 +105,7 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 			}
 		} catch (error) {
 			if (
-				error &&
-				error.errorCode &&
+				error?.errorCode &&
 				error.errorCode === InternalErrorCode.TargetSelectionError
 			) {
 				TelemetryHelper.sendErrorEvent(

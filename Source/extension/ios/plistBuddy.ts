@@ -365,9 +365,7 @@ export class PlistBuddy {
 			`${parameterName} = (.+)$`,
 			"m",
 		).exec(buildSettings);
-		return targetBuildMatch && targetBuildMatch[1]
-			? targetBuildMatch[1].trim()
-			: null;
+		return targetBuildMatch?.[1] ? targetBuildMatch[1].trim() : null;
 	}
 	private findExecutable(folder: string): string[] {
 		return glob.sync("*.app", {

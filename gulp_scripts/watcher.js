@@ -5,7 +5,7 @@ const getBuilder = require("../gulp_scripts/builder");
 const getTester = require("../gulp_scripts/tester");
 const srcPath = "src";
 const testPath = "test";
-const sources = [srcPath, testPath].map((tsFolder) => tsFolder + "/**/*.ts");
+const sources = [srcPath, testPath].map((tsFolder) => `${tsFolder}/**/*.ts`);
 
 const watch = series(getBuilder.buildTask, function runWatch() {
 	log("Watching build sources...");

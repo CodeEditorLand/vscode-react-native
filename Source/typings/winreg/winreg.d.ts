@@ -3,7 +3,7 @@
 // Definitions by: RX14 <https://github.com/RX14>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-declare var Winreg: WinregStatic;
+declare let Winreg: WinregStatic;
 
 interface WinregStatic {
 	/**
@@ -40,7 +40,7 @@ interface WinregStatic {
 	/**
 	 * Array of available registry hives.
 	 */
-	HIVES: Array<string>;
+	HIVES: string[];
 
 	/**
 	 * Registry value type STRING.
@@ -94,7 +94,7 @@ interface WinregStatic {
 	/**
 	 * Array of available registry value types.
 	 */
-	REG_TYPES: Array<string>;
+	REG_TYPES: string[];
 }
 
 interface Winreg {
@@ -133,14 +133,14 @@ interface Winreg {
 	 *
 	 * @param cb Callback with an array of RegistryItem objects, one for each value.
 	 */
-	values(cb: (err: Error, result: Array<Winreg.RegistryItem>) => void): void;
+	values(cb: (err: Error, result: Winreg.RegistryItem[]) => void): void;
 
 	/**
 	 * Retrieves all subkeys of this registry key.
 	 *
 	 * @param cb Callback with an array of Winreg objects, one for each subkey.
 	 */
-	keys(cb: (err: Error, result: Array<Winreg>) => void): void;
+	keys(cb: (err: Error, result: Winreg[]) => void): void;
 
 	/**
 	 * Retrieves a named value from this registry key.

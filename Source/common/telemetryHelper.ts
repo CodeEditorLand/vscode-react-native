@@ -51,7 +51,7 @@ export class TelemetryHelper {
 		propertyValue: any,
 		pii?: boolean,
 	): ITelemetryPropertyInfo {
-		return { value: String(propertyValue), isPii: pii || false };
+		return { value: String(propertyValue), isPii: pii };
 	}
 
 	public static addPropertyToTelemetryProperties(
@@ -220,14 +220,14 @@ export class TelemetryHelper {
 			(<Record<string, any>>error)
 		);
 		if (errorWithErrorCode.errorCode) {
-			this.addTelemetryEventProperty(
+			TelemetryHelper.addTelemetryEventProperty(
 				event,
 				`${errorPropPrefix}error.code`,
 				errorWithErrorCode.errorCode,
 				false,
 			);
 			if (errorDescription) {
-				this.addTelemetryEventProperty(
+				TelemetryHelper.addTelemetryEventProperty(
 					event,
 					`${errorPropPrefix}error.message`,
 					errorDescription,
@@ -235,7 +235,7 @@ export class TelemetryHelper {
 				);
 			}
 		} else {
-			this.addTelemetryEventProperty(
+			TelemetryHelper.addTelemetryEventProperty(
 				event,
 				`${errorPropPrefix}error.code`,
 				InternalErrorCode.UnknownError,
@@ -259,7 +259,7 @@ export class TelemetryHelper {
 				if (typeof value !== "undefined") {
 					// We encrypt all options values unless they are specifically marked as nonPii
 					telemetryProperties[`options.${key}`] =
-						this.telemetryProperty(
+						TelemetryHelper.telemetryProperty(
 							value,
 							!nonPiiOptions.includes(key),
 						);
@@ -267,10 +267,10 @@ export class TelemetryHelper {
 			} else {
 				// This is a not known option. We"ll assume that both the option and the value are pii
 				telemetryProperties[`unknownOption${unknownOptionIndex}.name`] =
-					this.telemetryProperty(key, /* isPii*/ true);
+					TelemetryHelper.telemetryProperty(key, /* isPii*/ true);
 				telemetryProperties[
 					`unknownOption${unknownOptionIndex}.value`
-				] = this.telemetryProperty(value, /* isPii*/ true);
+				] = TelemetryHelper.telemetryProperty(value, /* isPii*/ true);
 				unknownOptionIndex++;
 			}
 		});
@@ -279,7 +279,7 @@ export class TelemetryHelper {
 
 	public static generate<T>(
 		name: string,
-		extendedParamsToSend: ICommandTelemetryProperties = {},
+		extendedParamsToSend: ICommandTelemetryProperties,
 		codeGeneratingTelemetry: {
 			(telemetry: TelemetryGenerator): Promise<T> | T;
 		},

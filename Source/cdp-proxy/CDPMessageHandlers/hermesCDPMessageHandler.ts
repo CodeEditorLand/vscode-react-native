@@ -38,7 +38,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 		const sendBack = false;
 		if (event.method === CDP_API_NAMES.DEBUGGER_PAUSED) {
 			event = this.handlePausedEvent(event);
-		} else if (event.result && event.result.result) {
+		} else if (event.result?.result) {
 			event = this.handleFunctionTypeResult(event);
 		}
 
@@ -94,7 +94,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 
 	private handleBreakpointSetting(event: any): any {
 		if (event.params) {
-			delete event.params.location.columnNumber;
+			event.params.location.columnNumber = undefined;
 		}
 		return event;
 	}

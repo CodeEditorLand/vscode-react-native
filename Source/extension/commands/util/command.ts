@@ -21,7 +21,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 	): T["prototype"] {
 		// 'any' because TypeScript is wrong
 		// workaround from https://github.com/microsoft/TypeScript/issues/5863
-		const that = this as any;
+		const that = Command as any;
 		const result = Command.instances.get(that) || new that();
 		Command.instances.set(that, result);
 		return result;
@@ -72,9 +72,10 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 					await fn.bind(this)(...args);
 				} catch (error) {
 					switch (error.errorCode) {
-						case InternalErrorCode.CommandCanceled:
+						case InternalErrorCode.CommandCanceled: {
 							generator.addError(error);
 							return;
+						}
 						default:
 							throw error;
 					}

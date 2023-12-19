@@ -468,7 +468,7 @@ export class AppLauncher {
 				},
 			);
 		} catch (error) {
-			if (error && error.errorCode) {
+			if (error?.errorCode) {
 				if (
 					error.errorCode ===
 					InternalErrorCode.ReactNativePackageIsNotInstalled
@@ -561,7 +561,7 @@ export class AppLauncher {
 				},
 			);
 		} catch (error) {
-			if (error && error.errorCode) {
+			if (error?.errorCode) {
 				if (
 					error.errorCode ===
 					InternalErrorCode.ReactNativePackageIsNotInstalled
@@ -594,16 +594,16 @@ export class AppLauncher {
 
 		// Launch browser
 		let browserFinder: BrowserHelper.IBrowserFinder;
-		if (launchArgs.platform == PlatformType.ExpoWeb) {
+		if (launchArgs.platform === PlatformType.ExpoWeb) {
 			switch (launchArgs.browserTarget) {
-				case BROWSER_TYPES.Edge:
+				case BROWSER_TYPES.Edge: {
 					browserFinder = new BrowserHelper.EdgeBrowserFinder(
 						process.env,
 						fs.promises,
 						execa,
 					);
 					break;
-				case BROWSER_TYPES.Chrome:
+				}
 				default:
 					browserFinder = new BrowserHelper.ChromeBrowserFinder(
 						process.env,
@@ -646,12 +646,12 @@ export class AppLauncher {
 
 	public getRunArguments(launchArgs: any): string[] {
 		let userDataDir;
-		if (launchArgs.browserTarget == BROWSER_TYPES.Chrome) {
+		if (launchArgs.browserTarget === BROWSER_TYPES.Chrome) {
 			userDataDir = path.join(
 				HostPlatform.getSettingsHome(),
 				AppLauncher.CHROME_DATA_DIR,
 			);
-		} else if (launchArgs.browserTarget == BROWSER_TYPES.Edge) {
+		} else if (launchArgs.browserTarget === BROWSER_TYPES.Edge) {
 			userDataDir = path.join(
 				HostPlatform.getSettingsHome(),
 				AppLauncher.EDGE_DATA_DIR,

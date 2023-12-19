@@ -23,9 +23,9 @@ async function test(inspectCodeCoverage = false) {
 	// }
 
 	if (options != null) {
-		log(`\nArgument passed.`);
+		log("\nArgument passed.");
 	} else {
-		log(`\nArgument not passed.`);
+		log("\nArgument not passed.");
 	}
 
 	try {
