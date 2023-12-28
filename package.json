@@ -1336,7 +1336,7 @@
 		"@vscode/debugadapter": "1.64.0",
 		"command-exists": "1.2.9",
 		"configstore": "6.0.0",
-		"extract-opts": "5.5.0",
+		"extract-opts": "5.7.0",
 		"flatten-source-map": "0.0.2",
 		"glob": "10.3.10",
 		"ip": "1.1.8",
@@ -1361,7 +1361,7 @@
 		"vscode-extension-telemetry": "0.4.5",
 		"vscode-js-debug-browsers": "1.0.5",
 		"vscode-nls": "5.2.0",
-		"ws": "8.15.1"
+		"ws": "8.16.0"
 	},
 	"devDependencies": {
 		"@mixer/parallel-prettier": "2.0.3",
