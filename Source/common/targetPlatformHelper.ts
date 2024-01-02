@@ -4,59 +4,58 @@
 import * as os from "os";
 import { PlatformType } from "../extension/launchArgs";
 import { ErrorHelper } from "./error/errorHelper";
-import { InternalErrorCode } from "./error/internalErrorCode";
 import { HostPlatform } from "./hostPlatform";
+import { InternalErrorCode } from "./error/internalErrorCode";
 /**
  * Defines the identifiers of all the mobile target platforms React Native supports.
  */
 export enum TargetPlatformId {
-	ANDROID = 0,
-	IOS = 1,
-	EXPONENT = 2,
-	WINDOWS = 3,
-	MACOS = 4,
-	EXPOWEB = 5,
+    ANDROID,
+    IOS,
+    EXPONENT,
+    WINDOWS,
+    MACOS,
+    EXPOWEB,
 }
 
 export class TargetPlatformHelper {
-	/**
-	 * Return the target platform identifier for a platform with name {platformName}.
-	 */
-	public static getTargetPlatformId(platformName: string): TargetPlatformId {
-		switch (platformName.toLowerCase()) {
-			case PlatformType.Android:
-				return TargetPlatformId.ANDROID;
-			case PlatformType.iOS:
-				return TargetPlatformId.IOS;
-			case PlatformType.Exponent:
-				return TargetPlatformId.EXPONENT;
-			case PlatformType.Windows:
-				return TargetPlatformId.WINDOWS;
-			case PlatformType.macOS:
-				return TargetPlatformId.MACOS;
-			case PlatformType.ExpoWeb:
-				return TargetPlatformId.EXPOWEB;
-			default:
-				throw ErrorHelper.getInternalError(
-					InternalErrorCode.PlatformNotSupported,
-					platformName,
-					os.platform(),
-				);
-		}
-	}
+    /**
+     * Return the target platform identifier for a platform with name {platformName}.
+     */
+    public static getTargetPlatformId(platformName: string): TargetPlatformId {
+        switch (platformName.toLowerCase()) {
+            case PlatformType.Android:
+                return TargetPlatformId.ANDROID;
+            case PlatformType.iOS:
+                return TargetPlatformId.IOS;
+            case PlatformType.Exponent:
+                return TargetPlatformId.EXPONENT;
+            case PlatformType.Windows:
+                return TargetPlatformId.WINDOWS;
+            case PlatformType.macOS:
+                return TargetPlatformId.MACOS;
+            case PlatformType.ExpoWeb:
+                return TargetPlatformId.EXPOWEB;
+            default:
+                throw ErrorHelper.getInternalError(
+                    InternalErrorCode.PlatformNotSupported,
+                    platformName,
+                    os.platform(),
+                );
+        }
+    }
 
-	/**
-	 * Checks whether the current host platform supports the target mobile platform.
-	 */
-	public static checkTargetPlatformSupport(platformName: string): void {
-		const targetPlatformId =
-			TargetPlatformHelper.getTargetPlatformId(platformName);
-		if (!HostPlatform.isCompatibleWithTarget(targetPlatformId)) {
-			throw ErrorHelper.getInternalError(
-				InternalErrorCode.PlatformNotSupported,
-				platformName,
-				os.platform(),
-			);
-		}
-	}
+    /**
+     * Checks whether the current host platform supports the target mobile platform.
+     */
+    public static checkTargetPlatformSupport(platformName: string): void {
+        const targetPlatformId = TargetPlatformHelper.getTargetPlatformId(platformName);
+        if (!HostPlatform.isCompatibleWithTarget(targetPlatformId)) {
+            throw ErrorHelper.getInternalError(
+                InternalErrorCode.PlatformNotSupported,
+                platformName,
+                os.platform(),
+            );
+        }
+    }
 }

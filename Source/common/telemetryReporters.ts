@@ -4,65 +4,63 @@
 import { Telemetry } from "./telemetry";
 
 export class RemoteTelemetryReporter implements Telemetry.ITelemetryReporter {
-	private extensionId: string;
-	private extensionVersion: string;
-	private appInsightsKey: string;
+    private extensionId: string;
+    private extensionVersion: string;
+    private appInsightsKey: string;
 
-	constructor(extensionId: string, extensionVersion: string, key: string) {
-		this.extensionId = extensionId;
-		this.extensionVersion = extensionVersion;
-		this.appInsightsKey = key;
-	}
-	public sendTelemetryEvent(
-		eventName: string,
-		properties?: Telemetry.ITelemetryEventProperties,
-		measures?: Telemetry.ITelemetryEventMeasures,
-	): void {
-		try {
-			Telemetry.sendExtensionTelemetry(
-				this.extensionId,
-				this.extensionVersion,
-				this.appInsightsKey,
-				eventName,
-				properties,
-				measures,
-			);
-		} catch (err) {
-			// don't notify a user
-		}
-	}
+    constructor(extensionId: string, extensionVersion: string, key: string) {
+        this.extensionId = extensionId;
+        this.extensionVersion = extensionVersion;
+        this.appInsightsKey = key;
+    }
+    public sendTelemetryEvent(
+        eventName: string,
+        properties?: Telemetry.ITelemetryEventProperties,
+        measures?: Telemetry.ITelemetryEventMeasures,
+    ): void {
+        try {
+            Telemetry.sendExtensionTelemetry(
+                this.extensionId,
+                this.extensionVersion,
+                this.appInsightsKey,
+                eventName,
+                properties,
+                measures,
+            );
+        } catch (err) {
+            // don't notify a user
+        }
+    }
 }
 
 export class NullTelemetryReporter implements Telemetry.ITelemetryReporter {
-	/* eslint-disable @typescript-eslint/no-unused-vars */
-	public sendTelemetryEvent(
-		eventName: string,
-		properties?: Telemetry.ITelemetryEventProperties,
-		measures?: Telemetry.ITelemetryEventMeasures,
-	): void {
-		// Don't do anything
-	}
-	/* eslint-enable @typescript-eslint/no-unused-vars */
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    public sendTelemetryEvent(
+        eventName: string,
+        properties?: Telemetry.ITelemetryEventProperties,
+        measures?: Telemetry.ITelemetryEventMeasures,
+    ): void {
+        // Don't do anything
+    }
+    /* eslint-enable @typescript-eslint/no-unused-vars */
 }
 
-export class ReassignableTelemetryReporter
-	implements Telemetry.ITelemetryReporter
-{
-	private reporter: Telemetry.ITelemetryReporter;
+export class ReassignableTelemetryReporter implements Telemetry.ITelemetryReporter {
+    private reporter: Telemetry.ITelemetryReporter;
 
-	constructor(initialReporter: Telemetry.ITelemetryReporter) {
-		this.reporter = initialReporter;
-	}
+    constructor(initialReporter: Telemetry.ITelemetryReporter) {
+        this.reporter = initialReporter;
+    }
 
-	public reassignTo(reporter: Telemetry.ITelemetryReporter): void {
-		this.reporter = reporter;
-	}
+    public reassignTo(reporter: Telemetry.ITelemetryReporter): void {
+        this.reporter = reporter;
+    }
 
-	public sendTelemetryEvent(
-		eventName: string,
-		properties?: Telemetry.ITelemetryEventProperties,
-		measures?: Telemetry.ITelemetryEventMeasures,
-	): void {
-		this.reporter.sendTelemetryEvent(eventName, properties, measures);
-	}
+    public sendTelemetryEvent(
+        eventName: string,
+        properties?: Telemetry.ITelemetryEventProperties,
+        measures?: Telemetry.ITelemetryEventMeasures,
+    ): void {
+        this.reporter.sendTelemetryEvent(eventName, properties, measures);
+    }
 }

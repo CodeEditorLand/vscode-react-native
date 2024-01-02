@@ -3,11 +3,11 @@
 
 import * as nls from "vscode-nls";
 import { basicCheck, createNotFoundMessage } from "../util";
-import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
+import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
 
 nls.config({
-	messageFormat: nls.MessageFormat.bundle,
-	bundleFormat: nls.BundleFormat.standalone,
+    messageFormat: nls.MessageFormat.bundle,
+    bundleFormat: nls.BundleFormat.standalone,
 })();
 
 const toLocale = nls.loadMessageBundle();
@@ -15,28 +15,28 @@ const toLocale = nls.loadMessageBundle();
 const label = "Expo CLI";
 
 async function test(): Promise<ValidationResultT> {
-	const result = await basicCheck({
-		command: "expo-cli",
-	});
+    const result = await basicCheck({
+        command: "expo-cli",
+    });
 
-	if (!result.exists) {
-		return {
-			status: "failure",
-			comment: createNotFoundMessage(label),
-		};
-	}
+    if (!result.exists) {
+        return {
+            status: "failure",
+            comment: createNotFoundMessage(label),
+        };
+    }
 
-	return { status: "success" };
+    return { status: "success" };
 }
 
 const main: IValidation = {
-	label,
-	description: toLocale(
-		"ExpoCliTestDescription",
-		"Required for installing and managing Expo applications",
-	),
-	category: ValidationCategoryE.Expo,
-	exec: test,
+    label,
+    description: toLocale(
+        "ExpoCliTestDescription",
+        "Required for installing and managing Expo applications",
+    ),
+    category: ValidationCategoryE.Expo,
+    exec: test,
 };
 
 export default main;
