@@ -101,3 +101,59 @@ jobs:
 
             - run: pnpm run test
               working-directory: .
+
+            - uses: actions/setup-node@v4.0.1
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "pnpm"
+                  cache-dependency-path: ./test/resources/sampleExpoProject/pnpm-lock.yaml
+
+            - run: pnpm install
+              working-directory: ./test/resources/sampleExpoProject
+
+            - uses: actions/setup-node@v4.0.1
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "pnpm"
+                  cache-dependency-path: ./test/resources/sampleReactNativeProject/pnpm-lock.yaml
+
+            - run: pnpm install
+              working-directory: ./test/resources/sampleReactNativeProject
+
+            - uses: actions/setup-node@v4.0.1
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "pnpm"
+                  cache-dependency-path: ./test/smoke/automation/pnpm-lock.yaml
+
+            - run: pnpm install
+              working-directory: ./test/smoke/automation
+
+            - run: pnpm run prepublishOnly
+              working-directory: .
+
+            - uses: actions/upload-artifact@v4.0.0
+              with:
+                  name: .-test-smoke-automation-Node-${{ matrix.node-version }}-Target
+                  path: ./test/smoke/automation/Target
+
+            - uses: actions/setup-node@v4.0.1
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "pnpm"
+                  cache-dependency-path: ./test/smoke/package/pnpm-lock.yaml
+
+            - run: pnpm install
+              working-directory: ./test/smoke/package
+
+            - uses: actions/setup-node@v4.0.1
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "pnpm"
+                  cache-dependency-path: ./test/smoke/package/resources/HermesReactNativeSample/TestExpressServer/pnpm-lock.yaml
+
+            - run: pnpm install
+              working-directory: ./test/smoke/package/resources/HermesReactNativeSample/TestExpressServer
+
+            - run: pnpm run test
+              working-directory: ./test/smoke/package/resources/HermesReactNativeSample/TestExpressServer

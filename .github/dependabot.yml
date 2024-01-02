@@ -18,3 +18,33 @@ updates:
       schedule:
           interval: "daily"
       versioning-strategy: increase
+
+    - package-ecosystem: "npm"
+      directory: "/test/resources/sampleExpoProject"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+
+    - package-ecosystem: "npm"
+      directory: "/test/resources/sampleReactNativeProject"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+
+    - package-ecosystem: "npm"
+      directory: "/test/smoke/automation"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+
+    - package-ecosystem: "npm"
+      directory: "/test/smoke/package"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+
+    - package-ecosystem: "npm"
+      directory: "/test/smoke/package/resources/HermesReactNativeSample/TestExpressServer"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
