@@ -12,7 +12,7 @@
     "@types/gulp-filter": "3.0.39",
     "@types/mkdirp": "1.0.2",
     "@types/mocha": "10.0.6",
-    "@types/node": "20.10.8",
+    "@types/node": "20.11.4",
     "@types/node-fetch": "2.x",
     "@types/rimraf": "3.0.2",
     "@types/semver": "7.5.6",
@@ -41,7 +41,7 @@
     "url-parse": "1.5.10",
     "vinyl-fs": "4.0.0",
     "vinyl-source-stream": "2.0.0",
-    "webdriverio": "8.27.0",
+    "webdriverio": "8.27.2",
     "xdl": "60.0.12"
   },
   "resolutions": {
