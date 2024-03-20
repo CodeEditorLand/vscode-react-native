@@ -1,13 +1,35 @@
 {
-  "name": "sampleReactNativeProject",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
-  },
-  "dependencies": {
-    "react": "17.0.2",
-    "react-native": "0.65.0",
-    "react-native-windows": "0.65.9"
-  }
+	"name": "sampleReactNativeProject",
+	"version": "0.0.1",
+	"private": false,
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"scripts": {
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"start": "node node_modules/react-native/local-cli/cli.js start"
+	},
+	"dependencies": {
+		"react": "17.0.2",
+		"react-native": "0.65.0",
+		"react-native-windows": "0.65.9"
+	},
+	"devDependencies": {
+		"typescript-esbuild": "latest"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
