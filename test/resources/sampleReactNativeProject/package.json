@@ -27,7 +27,7 @@
 		"react-native-windows": "0.65.9"
 	},
 	"devDependencies": {
-		"typescript-esbuild": "latest"
+		"typescript-esbuild": "0.4.5"
 	},
 	"publishConfig": {
 		"access": "public"
