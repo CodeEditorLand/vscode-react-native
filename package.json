@@ -1,34 +1,33 @@
 {
-	"name": "vscode-react-native",
-	"displayName": "React Native Tools",
-	"version": "0.0.1",
-	"private": false,
-	"description": "%reactNative.description%",
-	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
-	"bugs": {
-		"url": "https://github.com/CodeEditorLand/Foundation/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "Playform",
-		"email": "Hello@Playform.Cloud",
-		"url": "https://playform.cloud"
-	},
-	"type": "module",
-	"main": "./src/extension/rn-extension",
-	"scripts": {
-		"build": "gulp build",
-		"prepare": "husky install",
-		"prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
-		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
-		"test-localization": "node ./test/localization/runTest.js",
-		"vscode:prepublish": "gulp"
+	"activationEvents": [
+		"workspaceContains:node_modules/react-native",
+		"onDebugResolve:reactnative",
+		"onDebugResolve:reactnativedirect",
+		"onDebugDynamicConfigurations:reactnative",
+		"onDebugInitialConfigurations",
+		"onCommand:reactNative.runAndroidSimulator",
+		"onCommand:reactNative.runAndroidDevice",
+		"onCommand:reactNative.runIosSimulator",
+		"onCommand:reactNative.runIosDevice",
+		"onCommand:reactNative.runExponent",
+		"onCommand:reactNative.startPackager",
+		"onCommand:reactNative.stopPackager",
+		"onCommand:reactNative.restartPackager",
+		"onCommand:reactNative.publishToExpHost",
+		"onCommand:reactNative.showDevMenu",
+		"onCommand:reactNative.reloadApp",
+		"onCommand:reactNative.runInspector",
+		"onCommand:reactNative.testDevEnvironment"
+	],
+	"capabilities": {
+		"untrustedWorkspaces": {
+			"description": "%reactNative.workspaceTrust.description%",
+			"supported": "limited"
+		},
+		"virtualWorkspaces": {
+			"description": "%reactNative.virtualWorkspaces.description%",
+			"supported": false
+		}
 	},
 	"contributes": {
 		"breakpoints": [
@@ -1305,26 +1304,6 @@
 			}
 		]
 	},
-	"activationEvents": [
-		"workspaceContains:node_modules/react-native",
-		"onDebugResolve:reactnative",
-		"onDebugResolve:reactnativedirect",
-		"onDebugDynamicConfigurations:reactnative",
-		"onDebugInitialConfigurations",
-		"onCommand:reactNative.runAndroidSimulator",
-		"onCommand:reactNative.runAndroidDevice",
-		"onCommand:reactNative.runIosSimulator",
-		"onCommand:reactNative.runIosDevice",
-		"onCommand:reactNative.runExponent",
-		"onCommand:reactNative.startPackager",
-		"onCommand:reactNative.stopPackager",
-		"onCommand:reactNative.restartPackager",
-		"onCommand:reactNative.publishToExpHost",
-		"onCommand:reactNative.showDevMenu",
-		"onCommand:reactNative.reloadApp",
-		"onCommand:reactNative.runInspector",
-		"onCommand:reactNative.testDevEnvironment"
-	],
 	"dependencies": {
 		"@vscode/debugadapter": "^1.63.0",
 		"command-exists": "1.2.9",
@@ -1356,6 +1335,7 @@
 		"vscode-nls": "4.1.2",
 		"ws": "7.4.6"
 	},
+	"description": "%reactNative.description%",
 	"devDependencies": {
 		"@types/command-exists": "^1.2.0",
 		"@types/configstore": "4.0.0",
@@ -1416,25 +1396,26 @@
 		"webpack": "5.76.0",
 		"webpack-bundle-analyzer": "4.4.0"
 	},
+	"displayName": "React Native Tools",
 	"extensionDependencies": [
 		"ms-vscode.js-debug"
 	],
-	"publishConfig": {
-		"access": "public"
-	},
-	"icon": "resources/images/icon.png",
 	"galleryBanner": {
 		"color": "#3B3738",
 		"theme": "dark"
 	},
-	"capabilities": {
-		"untrustedWorkspaces": {
-			"description": "%reactNative.workspaceTrust.description%",
-			"supported": "limited"
-		},
-		"virtualWorkspaces": {
-			"description": "%reactNative.virtualWorkspaces.description%",
-			"supported": false
-		}
-	}
+	"icon": "resources/images/icon.png",
+	"main": "./src/extension/rn-extension",
+	"name": "vscode-react-native",
+	"scripts": {
+		"build": "gulp build",
+		"prepare": "husky install",
+		"prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
+		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
+		"test-localization": "node ./test/localization/runTest.js",
+		"vscode:prepublish": "gulp"
+	},
+	"type": "module"
 }
