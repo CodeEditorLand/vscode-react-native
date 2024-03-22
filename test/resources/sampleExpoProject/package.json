@@ -1,4 +1,30 @@
 {
+	"name": "sampleExpoProject",
+	"version": "0.0.1",
+	"private": false,
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"main": "node_modules/expo/AppEntry.js",
+	"scripts": {
+		"android": "expo start --android",
+		"ios": "expo start --ios",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"start": "expo start",
+		"web": "expo start --web"
+	},
 	"dependencies": {
 		"expo": "~49.0.7",
 		"expo-status-bar": "~1.6.0",
@@ -11,14 +37,7 @@
 		"@babel/core": "^7.20.0",
 		"typescript-esbuild": "0.4.5"
 	},
-	"main": "node_modules/expo/AppEntry.js",
-	"name": "sampleExpoProject",
-	"scripts": {
-		"android": "expo start --android",
-		"ios": "expo start --ios",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"start": "expo start",
-		"web": "expo start --web"
-	},
-	"type": "module"
+	"publishConfig": {
+		"access": "public"
+	}
 }

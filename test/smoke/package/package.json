@@ -1,4 +1,32 @@
 {
+	"name": "vscode-react-native-smoke-test",
+	"version": "0.0.1",
+	"private": false,
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"main": "./src/main.js",
+	"scripts": {
+		"postinstall": "tsc",
+		"mocha": "tsc && node ./node_modules/mocha/bin/_mocha --config ./.mocharc.js --reporter mocha-multi-reporters --reporter-options configFile=./mochaReporterConfig.json",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"watch": "tsc --watch"
+	},
+	"resolutions": {
+		"lodash": "^4.17.21"
+	},
 	"devDependencies": {
 		"@types/clipboardy": "^2.0.1",
 		"@types/gulp-filter": "^3.0.33",
@@ -39,16 +67,7 @@
 		"webdriverio": "7.16.14",
 		"xdl": "60.0.10"
 	},
-	"main": "./src/main.js",
-	"name": "vscode-react-native-smoke-test",
-	"resolutions": {
-		"lodash": "^4.17.21"
-	},
-	"scripts": {
-		"mocha": "tsc && node ./node_modules/mocha/bin/_mocha --config ./.mocharc.js --reporter mocha-multi-reporters --reporter-options configFile=./mochaReporterConfig.json",
-		"postinstall": "tsc",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"watch": "tsc --watch"
-	},
-	"type": "module"
+	"publishConfig": {
+		"access": "public"
+	}
 }
