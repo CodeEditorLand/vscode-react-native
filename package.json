@@ -19,6 +19,14 @@
 		"onCommand:reactNative.runInspector",
 		"onCommand:reactNative.testDevEnvironment"
 	],
+	"author": {
+		"email": "Land@Playform.Cloud",
+		"name": "Land",
+		"url": "HTTPS://Land.Playform.Cloud"
+	},
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative/issues"
+	},
 	"capabilities": {
 		"untrustedWorkspaces": {
 			"description": "%reactNative.workspaceTrust.description%",
@@ -1345,6 +1353,7 @@
 	"description": "%reactNative.description%",
 	"devDependencies": {
 		"@playform/build": "0.0.7",
+		"@playform/document": "0.0.6",
 		"@types/command-exists": "1.2.3",
 		"@types/configstore": "6.0.2",
 		"@types/ip": "1.1.3",
@@ -1390,9 +1399,19 @@
 		"color": "#3B3738",
 		"theme": "dark"
 	},
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative#readme",
 	"icon": "resources/images/icon.png",
+	"license": "SEE LICENSE IN LICENSE",
 	"main": "./src/extension/rn-extension",
 	"name": "vscode-react-native",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandReactNative.git"
+	},
 	"scripts": {
 		"Document": "Document 'Source/**/*.ts'",
 		"build": "gulp build",
@@ -1402,5 +1421,7 @@
 		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
 		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
 		"test-localization": "node ./test/localization/runTest.js"
-	}
+	},
+	"type": "module",
+	"version": "0.0.1"
 }
