@@ -71,7 +71,7 @@ export class IOSDebugModeManager extends ApplePlatformDebugModeManager {
                 executorClassName === IOSDebugModeManager.WEBSOCKET_EXECUTOR_NAME &&
                 remoteDebugEnabled === "true"
             );
-        } catch (e) {
+        } catch (_Error) {
             return false;
         }
     }

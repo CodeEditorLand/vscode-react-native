@@ -91,7 +91,7 @@ export function decodeBody(container: Request | Response, logger?: OutputChannel
                 // The request is gzipped, so convert the base64 back to the raw bytes first,
                 // then inflate. pako will detect the BOM headers and return a proper utf-8 string right away
                 return pako.inflate(dataArr, { to: "string" });
-            } catch (e) {
+            } catch (_Error) {
                 // on iOS, the stream send to flipper is already inflated, so the content-encoding will not
                 // match the actual data anymore, and we should skip inflating.
                 // In that case, we intentionally fall-through

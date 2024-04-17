@@ -29,7 +29,7 @@ export class RunMacOS extends ReactNativeCommand {
             await platform.beforeStartPackager();
             await platform.startPackager();
             await platform.disableJSDebuggingMode();
-        } catch (e) {}
+        } catch (_Error) {}
 
         await platform.runApp();
     }

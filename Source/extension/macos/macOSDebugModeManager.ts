@@ -59,7 +59,7 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
                 MacOSDebugModeManager.REMOTE_DEBUGGING_SETTING_NAME,
             );
             return remoteDebugEnabled === "true";
-        } catch (e) {
+        } catch (_Error) {
             return false;
         }
     }

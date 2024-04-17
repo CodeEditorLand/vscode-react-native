@@ -96,7 +96,7 @@ export class PackagerStatusIndicator implements Disposable {
                     this.projectRoot,
                 );
             }
-        } catch (e) {
+        } catch (_Error) {
             // We are trying to read the configuration from settings.json.
             // If this cannot be done, ignore the error and set the default value.
         }

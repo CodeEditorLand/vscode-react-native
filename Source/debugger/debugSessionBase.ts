@@ -321,7 +321,7 @@ export function getProjectRoot(args: any): string {
             parsedSettings["react-native-tools.projectRoot"] ||
             parsedSettings["react-native-tools"].projectRoot;
         return path.resolve(vsCodeRoot, projectRootPath);
-    } catch (e) {
+    } catch (_Error) {
         logger.verbose(
             `${settingsPath} file doesn't exist or its content is incorrect. This file will be ignored.`,
         );

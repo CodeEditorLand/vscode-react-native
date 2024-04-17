@@ -66,7 +66,7 @@ export class IWDPHelper {
                 targetPort: parseInt(device.url.split(":")[1], 10),
                 iOSVersion: device.deviceOSVersion,
             };
-        } catch (e) {
+        } catch (_Error) {
             throw ErrorHelper.getInternalError(
                 InternalErrorCode.IOSCouldNotFoundDeviceForDirectDebugging,
             );

@@ -132,7 +132,7 @@ export class PackageLoader {
             const module = customRequire(requiredPackage);
             resolve(module);
             return true;
-        } catch (e) {
+        } catch (_Error) {
             if (packageWasInstalled || e.code !== "MODULE_NOT_FOUND") {
                 reject(e);
                 return true;

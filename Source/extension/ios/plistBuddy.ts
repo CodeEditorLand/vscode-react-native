@@ -148,7 +148,7 @@ export class PlistBuddy {
         // Attempt to set the value, and if it fails due to the key not existing attempt to create the key
         try {
             await this.invokePlistBuddy(`Set ${property} ${value}`, plistFile);
-        } catch (e) {
+        } catch (_Error) {
             await this.invokePlistBuddy(`Add ${property} string ${value}`, plistFile);
         }
     }
@@ -160,7 +160,7 @@ export class PlistBuddy {
         // Attempt to set the value, and if it fails due to the key not existing attempt to create the key
         try {
             await this.invokePlistBuddy(`Set ${property} ${String(value)}`, plistFile);
-        } catch (e) {
+        } catch (_Error) {
             await this.invokePlistBuddy(`Add ${property} bool ${String(value)}`, plistFile);
         }
     }

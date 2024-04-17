@@ -311,7 +311,7 @@ export class AdbHelper {
         let fileContent: string;
         try {
             fileContent = fs.readFileSync(localPropertiesFilePath).toString();
-        } catch (e) {
+        } catch (_Error) {
             if (logger) {
                 logger.error(
                     localize(

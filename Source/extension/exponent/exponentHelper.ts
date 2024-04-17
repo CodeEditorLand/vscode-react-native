@@ -172,7 +172,7 @@ export class ExponentHelper {
             const isBareWorkflowProject = await this.isBareWorkflowProject();
             if (showProgress) this.logger.logStream(".");
             return !isBareWorkflowProject;
-        } catch (e) {
+        } catch (_Error) {
             this.logger.error(e.message, e, e.stack);
             if (showProgress) {
                 this.logger.logStream(".");
@@ -187,7 +187,7 @@ export class ExponentHelper {
         try {
             await this.addNodeModulesPathToEnvIfNotPresent();
             ngrokInstalled = await XDL.isNgrokInstalled(this.projectRootPath);
-        } catch (e) {
+        } catch (_Error) {
             ngrokInstalled = false;
         }
         if (!ngrokInstalled) {

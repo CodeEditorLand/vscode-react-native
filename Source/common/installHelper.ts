@@ -53,7 +53,7 @@ export async function installiOSApplication(project: AppLauncher, appPath: strin
         await childProcess.execToString(
             `tar -xf ${appPath} -C ${project.getPackager().getProjectPath()}/expoApp.app`,
         );
-    } catch (e) {
+    } catch (_Error) {
         throw e;
     }
 

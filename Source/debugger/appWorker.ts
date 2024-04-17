@@ -161,7 +161,7 @@ console.trace = (function() {
             Error.stackTraceLimit = 30;
             Error.captureStackTrace(err, console.trace);
             console.log(err.stack);
-        } catch (e) {
+        } catch (_Error) {
             console.error(e);
         }
     };

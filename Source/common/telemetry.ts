@@ -64,7 +64,7 @@ export module Telemetry {
                 TelemetryUtils.telemetrySettings = JSON.parse(
                     <any>fs.readFileSync(TelemetryUtils.telemetrySettingsFile),
                 );
-            } catch (e) {
+            } catch (_Error) {
                 // if file does not exist or fails to parse then assume no settings are saved and start over
                 TelemetryUtils.telemetrySettings = {};
             }
