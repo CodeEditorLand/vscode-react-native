@@ -4,6 +4,9 @@
 	"version": "0.0.1",
 	"private": false,
 	"description": "%reactNative.description%",
+	"keywords": [
+		"land"
+	],
 	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative#readme",
 	"bugs": {
 		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative/issues"
