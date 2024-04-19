@@ -86,7 +86,7 @@ jobs:
             - run: pnpm run prepublishOnly
               working-directory: .
 
-            - uses: actions/upload-artifact@v4.3.1
+            - uses: actions/upload-artifact@v4.3.2
               with:
                   name: .-SampleApplication-Node-${{ matrix.node-version }}-Target
                   path: ./SampleApplication/Target
@@ -103,7 +103,7 @@ jobs:
             - run: pnpm run build
               working-directory: .
 
-            - uses: actions/upload-artifact@v4.3.1
+            - uses: actions/upload-artifact@v4.3.2
               with:
                   name: .-Node-${{ matrix.node-version }}-Target
                   path: ./Target
@@ -111,7 +111,7 @@ jobs:
             - run: pnpm run prepublishOnly
               working-directory: .
 
-            - uses: actions/upload-artifact@v4.3.1
+            - uses: actions/upload-artifact@v4.3.2
               with:
                   name: .-Node-${{ matrix.node-version }}-Target
                   path: ./Target
