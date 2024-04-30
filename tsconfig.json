@@ -1,47 +1,52 @@
 {
-    "compilerOptions": {
-        "moduleResolution": "node",
-        "module": "commonjs",
-        "target": "es6",
-        "lib": [
-            "es2015"
-        ],
-        "rootDir": "./",
-        "outDir": "./",
-        "sourceMap": true,
-        "removeComments": false,
-        "preserveConstEnums": true,
-        "alwaysStrict": true,
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "ignoreDeprecations": "5.0",
-        "noImplicitThis": true,
-        "noImplicitReturns": true,
-        "noEmitOnError": true,
-        "noUnusedLocals": true,
-        "noFallthroughCasesInSwitch": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipLibCheck": true,
-        "skipDefaultLibCheck": true
-    },
-    "exclude": [
-        ".vscode-test",
-        "node_modules",
-        "node_modules/@types",
-        "node_modules/@types*",
-        "/node_modules",
-        "../node_modules",
-        "*node_modules*",
-        "/node_modules*",
-        "SampleApplication/",
-        "SampleApplication/node_modules",
-        "SampleApplication/.vscode",
-        "ReactTypings",
-        "tools/",
-        "test/resources/sampleReactNativeProject",
-        "test/smoke/"
-    ],
-    "compileOnSave": false,
-    "buildOnSave":false
+	"buildOnSave": false,
+	"compileOnSave": false,
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"baseUrl": "./",
+		"forceConsistentCasingInFileNames": true,
+		"ignoreDeprecations": "5.0",
+		"lib": [
+			"es2015"
+		],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noEmitOnError": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"outDir": "Target",
+		"preserveConstEnums": true,
+		"removeComments": false,
+		"rootDir": "Source",
+		"skipDefaultLibCheck": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strictNullChecks": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"target": "es6"
+	},
+	"exclude": [
+		".vscode-test",
+		"node_modules",
+		"node_modules/@types",
+		"node_modules/@types*",
+		"/node_modules",
+		"../node_modules",
+		"*node_modules*",
+		"/node_modules*",
+		"SampleApplication/",
+		"SampleApplication/node_modules",
+		"SampleApplication/.vscode",
+		"ReactTypings",
+		"tools/",
+		"test/resources/sampleReactNativeProject",
+		"test/smoke/"
+	],
+	"extends": "@playform/build/tsconfig",
+	"include": [
+		"Source"
+	]
 }
