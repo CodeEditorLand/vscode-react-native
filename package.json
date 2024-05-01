@@ -1,37 +1,41 @@
 {
-	"name": "vscode-react-native",
-	"displayName": "React Native Tools",
-	"version": "0.0.1",
-	"private": false,
-	"description": "%reactNative.description%",
-	"keywords": [
-		"land"
+	"activationEvents": [
+		"workspaceContains:node_modules/react-native",
+		"onDebugResolve:reactnative",
+		"onDebugResolve:reactnativedirect",
+		"onDebugDynamicConfigurations:reactnative",
+		"onDebugInitialConfigurations",
+		"onCommand:reactNative.runAndroidSimulator",
+		"onCommand:reactNative.runAndroidDevice",
+		"onCommand:reactNative.runIosSimulator",
+		"onCommand:reactNative.runIosDevice",
+		"onCommand:reactNative.runExponent",
+		"onCommand:reactNative.startPackager",
+		"onCommand:reactNative.stopPackager",
+		"onCommand:reactNative.restartPackager",
+		"onCommand:reactNative.publishToExpHost",
+		"onCommand:reactNative.showDevMenu",
+		"onCommand:reactNative.reloadApp",
+		"onCommand:reactNative.runInspector",
+		"onCommand:reactNative.testDevEnvironment"
 	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative#readme",
+	"author": {
+		"email": "Land@PlayForm.Cloud",
+		"name": "🌆 — Land —",
+		"url": "HTTPS://Land.PlayForm.Cloud"
+	},
 	"bugs": {
 		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative/issues"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandReactNative.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "🌆 — Land —",
-		"email": "Land@PlayForm.Cloud",
-		"url": "HTTPS://Land.PlayForm.Cloud"
-	},
-	"type": "module",
-	"main": "./src/extension/rn-extension",
-	"scripts": {
-		"Document": "Document 'Source/**/*.ts'",
-		"build": "gulp build",
-		"prepare": "husky install",
-		"prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
-		"prepublishOnly": "Build 'Source/**/*.ts'",
-		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
-		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
-		"test-localization": "node ./test/localization/runTest.js"
+	"capabilities": {
+		"untrustedWorkspaces": {
+			"description": "%reactNative.workspaceTrust.description%",
+			"supported": "limited"
+		},
+		"virtualWorkspaces": {
+			"description": "%reactNative.virtualWorkspaces.description%",
+			"supported": false
+		}
 	},
 	"contributes": {
 		"breakpoints": [
@@ -1320,26 +1324,6 @@
 			}
 		]
 	},
-	"activationEvents": [
-		"workspaceContains:node_modules/react-native",
-		"onDebugResolve:reactnative",
-		"onDebugResolve:reactnativedirect",
-		"onDebugDynamicConfigurations:reactnative",
-		"onDebugInitialConfigurations",
-		"onCommand:reactNative.runAndroidSimulator",
-		"onCommand:reactNative.runAndroidDevice",
-		"onCommand:reactNative.runIosSimulator",
-		"onCommand:reactNative.runIosDevice",
-		"onCommand:reactNative.runExponent",
-		"onCommand:reactNative.startPackager",
-		"onCommand:reactNative.stopPackager",
-		"onCommand:reactNative.restartPackager",
-		"onCommand:reactNative.publishToExpHost",
-		"onCommand:reactNative.showDevMenu",
-		"onCommand:reactNative.reloadApp",
-		"onCommand:reactNative.runInspector",
-		"onCommand:reactNative.testDevEnvironment"
-	],
 	"dependencies": {
 		"command-exists": "1.2.9",
 		"configstore": "6.0.0",
@@ -1366,6 +1350,7 @@
 		"uuid": "9.0.1",
 		"ws": "8.17.0"
 	},
+	"description": "%reactNative.description%",
 	"devDependencies": {
 		"@playform/build": "0.0.7",
 		"@playform/document": "0.0.6",
@@ -1406,25 +1391,40 @@
 		"through2": "4.0.2",
 		"ts-loader": "9.5.1"
 	},
+	"displayName": "React Native Tools",
 	"extensionDependencies": [
 		"ms-vscode.js-debug"
 	],
-	"publishConfig": {
-		"access": "public"
-	},
-	"icon": "resources/images/icon.png",
 	"galleryBanner": {
 		"color": "#3B3738",
 		"theme": "dark"
 	},
-	"capabilities": {
-		"untrustedWorkspaces": {
-			"description": "%reactNative.workspaceTrust.description%",
-			"supported": "limited"
-		},
-		"virtualWorkspaces": {
-			"description": "%reactNative.virtualWorkspaces.description%",
-			"supported": false
-		}
-	}
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative#readme",
+	"icon": "resources/images/icon.png",
+	"keywords": [
+		"land"
+	],
+	"license": "SEE LICENSE IN LICENSE",
+	"main": "./src/extension/rn-extension",
+	"name": "vscode-react-native",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandReactNative.git"
+	},
+	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
+		"build": "gulp build",
+		"prepare": "husky install",
+		"prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
+		"prepublishOnly": "Build 'Source/**/*.ts'",
+		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
+		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
+		"test-localization": "node ./test/localization/runTest.js"
+	},
+	"type": "module",
+	"version": "0.0.1"
 }
