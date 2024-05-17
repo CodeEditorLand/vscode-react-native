@@ -1,27 +1,7 @@
 {
 	"name": "vscode-react-native",
 	"displayName": "React Native Tools",
-	"version": "0.0.1",
-	"private": false,
 	"description": "%reactNative.description%",
-	"keywords": [
-		"land"
-	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative#readme",
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandReactNative/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandReactNative.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "🛬 Land —",
-		"email": "Land@PlayForm.Cloud",
-		"url": "HTTPS://Land.PlayForm.Cloud"
-	},
-	"type": "module",
 	"main": "./src/extension/rn-extension",
 	"scripts": {
 		"Document": "Document 'Source/**/*.ts'",
@@ -1368,7 +1348,6 @@
 	},
 	"devDependencies": {
 		"@playform/build": "0.0.7",
-		"@playform/document": "0.0.6",
 		"@types/command-exists": "1.2.3",
 		"@types/configstore": "6.0.2",
 		"@types/ip": "1.1.3",
@@ -1409,9 +1388,6 @@
 	"extensionDependencies": [
 		"ms-vscode.js-debug"
 	],
-	"publishConfig": {
-		"access": "public"
-	},
 	"icon": "resources/images/icon.png",
 	"galleryBanner": {
 		"color": "#3B3738",
