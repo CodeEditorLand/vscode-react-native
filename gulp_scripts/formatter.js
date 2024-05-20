@@ -44,7 +44,7 @@ function lintPrettier(cb) {
  * @param {OptionsT} options_
  */
 const runEslint = async options_ => {
-    
+    /** @type {OptionsT} */
     const options = Object.assign({ color: true, fix: false }, options_);
 
     const files = ["../src/**/*.ts"];
