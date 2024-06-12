@@ -21,12 +21,11 @@ nls.config({
 })();
 const localize = nls.loadMessageBundle();
 
-let QRCodeUrl = "";
-
 export class ExponentPlatform extends GeneralPlatform {
     private exponentTunnelPath: string | null;
     private exponentHelper: ExponentHelper;
     private qrCodeContentProvider: QRCodeContentProvider = new QRCodeContentProvider();
+
     constructor(runOptions: IExponentRunOptions, platformDeps: MobilePlatformDeps = {}) {
         super(runOptions, platformDeps);
         this.exponentHelper = this.packager.getExponentHelper();
@@ -109,7 +108,7 @@ export class ExponentPlatform extends GeneralPlatform {
                 throw ErrorHelper.getInternalError(InternalErrorCode.ExpectedExponentTunnelPath);
             }
 
-            this.exponentTunnelPath = QRCodeUrl = exponentUrl;
+            this.exponentTunnelPath = exponentUrl;
             const outputMessage = localize(
                 "ExponentServerIsRunningOpenToSeeIt",
                 "Expo server is running. Open your Expo app at {0} to see it.",
@@ -200,8 +199,4 @@ export class ExponentPlatform extends GeneralPlatform {
             this.exponentHelper.removeNodeModulesPathFromEnvIfWasSet();
         }
     }
-}
-
-export function getQRCodeUrl() {
-    return QRCodeUrl;
 }
