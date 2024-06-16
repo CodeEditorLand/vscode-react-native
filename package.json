@@ -1354,7 +1354,7 @@
 		"strip-json-comments": "5.0.1",
 		"tmp-promise": "3.0.3",
 		"uuid": "10.0.0",
-		"ws": "8.17.0"
+		"ws": "8.17.1"
 	},
 	"devDependencies": {
 		"@types/command-exists": "^1.2.3",
