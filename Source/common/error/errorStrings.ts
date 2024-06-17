@@ -415,8 +415,4 @@ export const ERROR_STRINGS = {
         "FailedToRunPrebuildClean",
         "Failed to run prebuild clean",
     ),
-    [InternalErrorCode.FailedToReopenQRCode]: localize(
-        "FailedToReopenQRCode",
-        "Failed to reopen QR code",
-    ),
 };
