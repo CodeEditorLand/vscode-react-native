@@ -24,7 +24,7 @@ jobs:
             id-token: write
 
         steps:
-            - uses: actions/checkout@v4.1.6
+            - uses: actions/checkout@v4.1.7
 
             - uses: actions/setup-node@v4.0.2
               with:
@@ -36,14 +36,6 @@ jobs:
             - name: Publish .
               continue-on-error: true
               working-directory: .
-              run: |
-                  npm publish --legacy-peer-deps --provenance --ignore-scripts
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-            - name: Publish ./test/smoke/automation
-              continue-on-error: true
-              working-directory: ./test/smoke/automation
               run: |
                   npm publish --legacy-peer-deps --provenance --ignore-scripts
               env:
