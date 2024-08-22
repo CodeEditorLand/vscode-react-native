@@ -1,0 +1,1231 @@
+<!DOCTYPE html><html class="default" lang="en"><head><meta charset="utf-8"/><meta name="keywords" content="@playform/document"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>SampleApplication</title><meta name="description" content="Documentation for SampleApplication"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><link rel="stylesheet" href="assets/custom.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">SampleApplication</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h2>SampleApplication</h2></div><div class="tsd-panel tsd-typography"><a id="md:react-native-tools" class="tsd-anchor"></a><h1 class="tsd-anchor-link">React Native Tools<a href="#md:react-native-tools" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p><a href="https://dev.azure.com/vscode-webdiag-extensions/VS%20Code%20WebDiag%20extensions/_build/latest?definitionId=60&amp;branchName=master"><img src="https://dev.azure.com/vscode-webdiag-extensions/VS%20Code%20WebDiag%20extensions/_apis/build/status/%5BUnit%20tests%5D%20vscode-react-native%20%5Bmaster%5D?branchName=master" alt="Build Status"></a></p>
+<p>Stable:
+<img src="https://img.shields.io/visual-studio-marketplace/v/msjsdiag.vscode-react-native?color=deep%20green&amp;label=Version" alt="Visual Studio Marketplace Version">
+<img src="https://img.shields.io/visual-studio-marketplace/stars/msjsdiag.vscode-react-native?label=Rating" alt="Visual Studio Marketplace Rating (Stars)"></p>
+<p>Preview:
+<img src="https://img.shields.io/visual-studio-marketplace/v/msjsdiag.vscode-react-native-preview?color=deep%20green&amp;label=Version" alt="Visual Studio Marketplace Version">
+<img src="https://img.shields.io/visual-studio-marketplace/stars/msjsdiag.vscode-react-native-preview?label=Rating" alt="Visual Studio Marketplace Rating (Stars)"></p>
+<a id="md:react-native-tools-preview" class="tsd-anchor"></a><h2 class="tsd-anchor-link">React Native Tools Preview<a href="#md:react-native-tools-preview" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The extension has a
+<a href="https://marketplace.visualstudio.com/items?itemName=msjsdiag.vscode-react-native-preview">nightly version</a>
+which is released on a daily basis at 9 PM PST on each day that changes occur.
+To avoid conflicts, if both extensions are installed - only stable version will
+be activated. So to use the preview version it is needed to disable or remove
+the stable version and reload VS Code.</p>
+<a id="md:about-the-extension" class="tsd-anchor"></a><h2 class="tsd-anchor-link">About the extension<a href="#md:about-the-extension" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This VS Code extension provides a development environment for React Native
+projects. Using this extension, you can <strong>debug your code and quickly run
+<code>react-native</code> commands</strong> from the command palette.</p>
+<p><img src="media/react-features.gif" alt="React Native features"></p>
+<!-- TABLE OF CONTENTS -->
+<a id="md:table-of-contents" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Table of Contents<a href="#md:table-of-contents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><ul>
+<li><a href="#md:react-native-tools-preview">React Native Tools Preview</a></li>
+<li><a href="#md:about-the-extension">About the extension</a></li>
+<li><a href="#md:getting-started">Getting started</a></li>
+<li><a href="#md:react-native-commands-in-the-command-palette">React Native commands in the Command Palette</a></li>
+<li><a href="#md:customize-metro-configuration">Customize metro configuration</a></li>
+<li><a href="#md:debugging-react-native-applications">Debugging React Native applications</a>
+<ul>
+<li><a href="#md:hermes-engine">Hermes engine</a></li>
+<li><a href="#md:android-applications">Android applications</a>
+<ul>
+<li><a href="#md:custom-build-for-android-apps">Custom build for android apps</a></li>
+</ul>
+</li>
+<li><a href="#md:ios-applications">iOS applications</a>
+<ul>
+<li><a href="#md:ios-devices">iOS devices</a></li>
+<li><a href="#md:custom-scheme-for-ios-apps">Custom scheme for iOS apps</a></li>
+<li><a href="#md:iOS-direct-debugging">iOS direct debugging</a></li>
+<li><a href="#md:ios-hermes-debugging">iOS Hermes debugging</a></li>
+</ul>
+</li>
+<li><a href="#md:expo-applications">Expo applications</a>
+<ul>
+<li><a href="#md:debug-on-expo-go">Debug on Expo Go</a></li>
+<li><a href="#md:debug-on-expo-dev-client">Debug on expo-dev-client</a></li>
+<li><a href="#md:debug-on-expo-web">Debug on Expo Web</a></li>
+<li><a href="#md:configuring-expo">Configuring Expo</a></li>
+<li><a href="#md:expo-hermes">Expo Hermes</a></li>
+</ul>
+</li>
+<li><a href="#md:react-native-for-windows">Windows applications</a>
+<ul>
+<li><a href="#md:windows-hermes-debugging">Windows Hermes debugging</a></li>
+</ul>
+</li>
+<li><a href="#md:react-native-for-macos">macOS applications</a>
+<ul>
+<li><a href="#md:macos-hermes-debugging">macOS Hermes debugging</a></li>
+</ul>
+</li>
+<li><a href="#md:debug-out-of-react-native-project-directory">Debug out of React Native project directory</a></li>
+<li><a href="#md:typescript-and-haul">TypeScript and Haul based applications</a></li>
+<li><a href="#md:debugger-configuration-properties">Debugger configuration properties</a></li>
+</ul>
+</li>
+<li><a href="#md:customization">Customization</a>
+<ul>
+<li><a href="#md:debug-in-vscode-workspace">Debug in vscode workspace</a></li>
+<li><a href="#md:logging">Logging</a></li>
+<li><a href="#md:build-apk-and-generate-bundle">Build APK and generate bundle</a></li>
+<li><a href="#md:specifying-custom-arguments-for-react-native-run--command">Specifying custom arguments for <code>react-native run-*</code> command</a></li>
+<li><a href="#md:setting-up-the-react-native-packager">Setting up the React Native packager</a></li>
+<li><a href="#md:change-project-root">Change project root</a></li>
+<li><a href="#md:configure-an-android-logcat-monitor">Configure an Android LogCat Monitor</a></li>
+<li><a href="#md:configure-dependencies-versions-for-debugging-expo-projects">Configure dependencies versions for debugging Expo projects</a></li>
+<li><a href="#md:configure-custom-key-bindings-for-extension-commands">Configure custom key bindings for extension commands</a></li>
+<li><a href="#md:configure-custom-colors-for-extension-output-logs">Configure custom colors for extension output logs</a></li>
+</ul>
+</li>
+<li><a href="#md:element-inspector">Element inspector</a></li>
+<li><a href="#md:network-inspector">Network Inspector</a></li>
+<li><a href="#md:developing-inside-a-docker-container">Developing inside a Docker Container</a></li>
+<li><a href="#md:contributing">Contributing</a></li>
+<li><a href="#md:known-issues">Known Issues</a></li>
+</ul>
+<a id="md:getting-started" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Getting started<a href="#md:getting-started" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>Before going any further make sure that you:</p>
+<ul>
+<li><a href="https://reactnative.dev/docs/environment-setup">have a working React Native environment</a>.</li>
+<li>have the
+<a href="https://developer.android.com/studio/run/emulator-commandline"><code>emulator</code></a>
+utility available in your <code>PATH</code> if you're developing Android applications</li>
+<li>are using <a href="https://code.visualstudio.com">VS Code</a> and have
+<a href="https://marketplace.visualstudio.com/items?itemName=msjsdiag.vscode-react-native">installed this extension from the Marketplace</a>.</li>
+<li>have your React Native project root folder open in VS Code.</li>
+<li>have launched &quot;React Native: Check development environment configuration&quot;
+command in order to make sure that all necessary software is installed and
+recognized correctly.</li>
+</ul>
+<p>Please notice that the extension uses <code>.vscode/.react</code> directory at the project
+root to store intermediate files required for debugging. Although these files
+usually get removed after debug session ends, you may want to add this directory
+to your project's <code>.gitignore</code> file.</p>
+<a id="md:react-native-commands-in-the-command-palette" class="tsd-anchor"></a><h1 class="tsd-anchor-link">React Native commands in the Command Palette<a href="#md:react-native-commands-in-the-command-palette" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>In the Command Palette, type <code>React Native</code> and choose a command.</p>
+<p><img src="media/command-palette.png" alt="React Native commands"></p>
+<p>The <strong>Run Android</strong> command triggers <code>react-native run-android</code> and starts your
+app for Android.</p>
+<p>The <strong>Run iOS</strong> command similarly triggers <code>react-native run-ios</code> and starts
+your app in the iOS simulator (e.g. iPhone 6).</p>
+<p>The <strong>Packager</strong> commands allow you to start/stop the
+<a href="https://github.com/facebook/metro-bundler"><strong>Metro Bundler</strong></a> (formerly React
+Packager).</p>
+<p>The full list of commands is:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Command ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Launch Android Emulator</td>
+<td><code>reactNative.launchAndroidSimulator</code></td>
+<td>Prompts you to select the name of the available Android emulator and launch it. If only one emulator is installed in the system, it will be selected automatically</td>
+</tr>
+<tr>
+<td>Launch iOS Simulator</td>
+<td><code>reactNative.launchIOSSimulator</code></td>
+<td>Prompts you to select the available system version of the iOS simulator, then select the simulator name for the selected system and launch it. If only one simulator is installed in the system, it will be selected automatically</td>
+</tr>
+<tr>
+<td>Launch ExpoWeb</td>
+<td><code>reactNative.launchExpoWeb</code></td>
+<td>Check if the current project is an Expo project. If so, lanuch ExpoWeb.</td>
+</tr>
+<tr>
+<td>Run Android on Emulator</td>
+<td><code>reactNative.runAndroidSimulator</code></td>
+<td>Run an Android application on Emulator. Launch order: check target platform support, load run arguments, start Packager, run app on the selected emulator. Make sure the <code>emulator</code> utility is added to <code>PATH</code></td>
+</tr>
+<tr>
+<td>Run Android on Device</td>
+<td><code>reactNative.runAndroidDevice</code></td>
+<td>Run an Android application on Device. Launch order: check target platform support, load run arguments, start Packager, run app in all connected devices</td>
+</tr>
+<tr>
+<td>Run iOS on Simulator</td>
+<td><code>reactNative.runIosSimulator</code></td>
+<td>Run an iOS application on Simulator. Launch order: load run arguments, check target platform support, start Packager, run app in only one connected emulator</td>
+</tr>
+<tr>
+<td>Run iOS on Device</td>
+<td><code>reactNative.runIosDevice</code></td>
+<td>Run an iOS application on Device. Launch order: load run arguments, check target platform support, start Packager, run app in only one connected device</td>
+</tr>
+<tr>
+<td>Run Expo</td>
+<td><code>reactNative.runExponent</code></td>
+<td>Run an Exponent application. Launch order: login to exponent, load run arguments, start Packager, run app</td>
+</tr>
+<tr>
+<td>Run Windows</td>
+<td><code>reactNative.runWindows</code></td>
+<td>Run a RNW application. Launch order: check target platform support, load run arguments, start Packager, run app</td>
+</tr>
+<tr>
+<td>Run MacOS</td>
+<td><code>reactNative.runMacOS</code></td>
+<td>Run a RNmacOS application. Launch order: check target platform support, load run arguments, start Packager, run app</td>
+</tr>
+<tr>
+<td>Start Packager</td>
+<td><code>reactNative.startPackager</code></td>
+<td>Start Packager in context project workspace folder</td>
+</tr>
+<tr>
+<td>Stop Packager</td>
+<td><code>reactNative.stopPackager</code></td>
+<td>Stop Packager</td>
+</tr>
+<tr>
+<td>Restart Packager</td>
+<td><code>reactNative.restartPackager</code></td>
+<td>Restart Packager and clear the Packager's cache</td>
+</tr>
+<tr>
+<td>Publish To Expo</td>
+<td><code>reactNative.publishToExpHost</code></td>
+<td>Publish to Exponent Host. Launch order: login to exponent, execute <code>Run Expo</code> command, then publish app to host</td>
+</tr>
+<tr>
+<td>Show Dev Menu</td>
+<td><code>reactNative.showDevMenu</code></td>
+<td>Show development menu for running aplication on iOS or Android device or emulator</td>
+</tr>
+<tr>
+<td>ReloadApp</td>
+<td><code>reactNative.reloadApp</code></td>
+<td>Reload an application</td>
+</tr>
+<tr>
+<td>Run Element Inspector</td>
+<td><code>reactNative.runInspector</code></td>
+<td>Load development tools for inspect application UI elements</td>
+</tr>
+<tr>
+<td>Stop Element Inspector</td>
+<td><code>reactNative.stopInspector</code></td>
+<td>Stop development tools for inspect application UI elements</td>
+</tr>
+<tr>
+<td>Run React Native LogCat Monitor</td>
+<td><code>reactNative.startLogCatMonitor</code></td>
+<td>Creates a LogCat Monitor for the chosen online Android device to see the device LogCat logs. Default filtering arguments: [&quot;*:S&quot;, &quot;ReactNative:V&quot;, &quot;ReactNativeJS:V&quot;]. <a href="#md:configure-an-Android-LogCat-Monitor">How to configure filtering.</a></td>
+</tr>
+<tr>
+<td>Stop React Native LogCat Monitor</td>
+<td><code>reactNative.stopLogCatMonitor</code></td>
+<td>Stops an existing LogCat Monitor and removes its output channel</td>
+</tr>
+<tr>
+<td>Run Network Inspector</td>
+<td><code>reactNative.startNetworkInspector</code></td>
+<td>Run <a href="#md:network-inspector">Network inspector</a></td>
+</tr>
+<tr>
+<td>Stop Network Inspector</td>
+<td><code>reactNative.stopNetworkInspector</code></td>
+<td>Stop <a href="#md:network-inspector">Network inspector</a></td>
+</tr>
+<tr>
+<td>Check development environment configuration</td>
+<td><code>reactNative.testDevEnvironment</code></td>
+<td>Checks your development environment for common problems</td>
+</tr>
+<tr>
+<td>Open the eas project in a web page</td>
+<td><code>reactNative.openEASProjectInWebPage</code></td>
+<td>Open EAS build in your EAS project portal</td>
+</tr>
+<tr>
+<td>Open react native upgrade helper in web page</td>
+<td><code>reactNative.openRNUpgradeHelper</code></td>
+<td>Open an official project upgrade tools in browser, support RN, RN for Windows, RN for MacOS</td>
+</tr>
+<tr>
+<td>Revert extension input in open package module</td>
+<td><code>reactNative.revertOpenModule</code></td>
+<td>Quickly revert some codes in Open Module which are changed by react-native-tools</td>
+</tr>
+<tr>
+<td>Run doctor</td>
+<td><code>reactNative.docter</code></td>
+<td>Execute react-native doctor to check basic environemt for react-native development</td>
+</tr>
+<tr>
+<td>Run expo doctor</td>
+<td><code>reactNative.ExpoDocter</code></td>
+<td>Execute expo docter to check basic environemt for Expo development</td>
+</tr>
+<tr>
+<td>Expo prebuild</td>
+<td><code>reactNative.expoPrebuild</code></td>
+<td>Create the android and ios directories for running your React code</td>
+</tr>
+<tr>
+<td>Expo prebuild cleanup</td>
+<td><code>reactNative.expoPrebuildClean</code></td>
+<td>Clean directories generated by prebuild</td>
+</tr>
+<tr>
+<td>Reopen QR Code in Expo</td>
+<td><code>reactNative.reopenQRCode</code></td>
+<td>Reopen expo generated QR code in webview</td>
+</tr>
+</tbody>
+</table>
+<a id="md:using-commands-in-vs-code-tasks" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Using commands in VS Code tasks<a href="#md:using-commands-in-vs-code-tasks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>To run React Native Tools commands via VS Code tasks, you can create a
+<code>.vscode/tasks.json</code> file in your project and add tasks configurations the
+following way:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;version&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;2.0.0&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;tasks&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">		{</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;label&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Run Android on Emulator&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;command&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${command:reactNative.runAndroidSimulator}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;problemMatcher&quot;</span><span class="hl-0">: []</span><br/><span class="hl-0">		}</span><br/><span class="hl-0">	]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:customize-metro-configuration" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Customize metro configuration<a href="#md:customize-metro-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>Metro is a JavaScript bundler for React Native and include in React Native
+package. Metro configuration can be customized in <code>metro.config.js</code>.</p>
+<p>Note: From React Native 0.72.0, the config loading setup for Metro in React
+Native CLI(<code>@react-native/metro-config</code>).</p>
+<a id="md:debugging-react-native-applications" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Debugging React Native applications<a href="#md:debugging-react-native-applications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>To start debugging create a new debug configuration for your ReactNative app in
+your <code>.vscode/launch.json</code>. Adding a new configuration can be done by opening
+your <code>launch.json</code> file and clicking on <code>Add Configuration...</code> button and then
+selecting <code>React Native</code> option. After that the extension will prompt you to
+create a debugging configuration by selecting debugging parameters in dropdown
+lists at the top of the editor. A new debugging configuration will be generated
+and added to the <code>launch.json</code> file automatically as shown in the image below.
+For Expo projects, please make sure choose <code>Application in direct mode(Hermes)</code>
+if you are using SDK 48 or a newer SDK.</p>
+<p><img src="media/add-debug-configuration.gif" alt="Add React Native debug configuration"></p>
+<p>In case you haven't created the <code>.vscode/launch.json</code> file yet, you can add a
+whole default debug configuration set. To do that click the debug icon
+<img src="media/debug-view-icon.png" alt="Choose React Native debugger"> in the
+View bar, and then click the configuration (gear) icon
+<img src="media/configure-gear-icon.png" alt="Configure-gear">, then choose the
+React Native debug environment.</p>
+<p><img src="media/choose-debugger.png" alt="Choose React Native debugger"></p>
+<p>VS Code will generate a <code>launch.json</code> in your project with some default
+configuration settings as shown below. You can safely close this file, choose
+the appropriate configuration in the Configuration dropdown, and then press F5
+(or click <em>Green Arrow</em> <img src="media/debug-icon.png" alt="Configure-gear">
+button) to start debugging your app in VS Code.</p>
+<p><img src="media/debug-targets.png" alt="React Native launch targets"></p>
+<p>The extension also allows to start debugging without creating the <code>launch.json</code>
+file in one of the following ways:</p>
+<ul>
+<li>
+<p>Using dynamic debugging configurations</p>
+<p>To use dynamic debugging configurations you can click on the
+<code>Show all automatic debug configurations</code> string in the <code>Run and Debug</code>
+panel, then select <code>React Native</code> in the list of extensions and choose the
+appropriate configuration in the Configuration list to start debugging.</p>
+<p><img src="media/dynamic-debugging-configuration.gif" alt="Run dynamic debugging configuration"></p>
+</li>
+<li>
+<p>Using <code>Debug</code> button in the Editor Title area menu</p>
+<p>To start debugging you can click the Debug button in the Editor Title area
+in the upper right corner. You can also select the appropriate debugging
+scenario by clicking the dropdown button beside the Debug button and
+choosing the scenario.</p>
+<p><img src="media/debug-commands-button.png" alt="Select and run debugging command"></p>
+</li>
+</ul>
+<p>Once app is loaded and running,
+<a href="https://reactnative.dev/docs/debugging#accessing-the-in-app-developer-menu">open the developer menu</a>
+inside your application and enable remote debugging by clicking on
+<code>Debug JS Remotely</code> button.</p>
+<p><img src="media/enable-remote-debug.png" alt="React Native enable remote debug"></p>
+<p>The extension allows you to debug multiple devices and configurations, please
+read the following sections for more information for your particular use case.</p>
+<a id="md:hermes-engine" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Hermes engine<a href="#md:hermes-engine" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>From <a href="https://github.com/facebook/react-native/releases/tag/v0.70.0">0.70.0</a>,
+react-native set Hermes as default engine. Please see
+<a href="https://reactnative.dev/blog/2022/07/08/hermes-as-the-default">official documentation</a>
+to get details.</p>
+<p>The Hermes engine is an open source JavaScript engine created by Facebook to
+optimize building and running React Native applications. It improves app
+performance and decreases app size.</p>
+<p>Click <a href="https://reactnative.dev/docs/hermes">here</a> to learn more about Hermes and
+how to enable it for your application. To turn off Hermes, you can do the same
+changes in documentation but set <code>Hermes Flag</code> to <code>False</code>.</p>
+<p>Debugging apps with Hermes enabled is currently experimental. Please see
+<a href="https://github.com/microsoft/vscode-react-native/issues/1266">this issue</a> for
+current known issues on Hermes support.</p>
+<a id="md:android-hermes" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Android Hermes<a href="#md:android-hermes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>To debug while using Hermes engine use <code>Debug Android Hermes - Experimental</code>
+launch configuration:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug Android Hermes - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;android&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:ios-hermes" class="tsd-anchor"></a><h3 class="tsd-anchor-link">iOS Hermes<a href="#md:ios-hermes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The extension provides experimental support of debugging iOS Hermes
+applications. See <a href="#md:ios-hermes-debugging">iOS Hermes debugging</a> for more
+details.</p>
+<a id="md:macos-hermes" class="tsd-anchor"></a><h3 class="tsd-anchor-link">macOS Hermes<a href="#md:macos-hermes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The extension provides experimental support of debugging macOS Hermes
+applications. See <a href="#md:macos-hermes-debugging">macOS Hermes debugging</a> for more
+details.</p>
+<a id="md:windows-hermes" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Windows Hermes<a href="#md:windows-hermes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The extension provides experimental support of debugging Windows Hermes
+applications. See <a href="#md:windows-hermes-debugging">Windows Hermes debugging</a> for more
+details.</p>
+<a id="md:attach-to-hermes-application" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Attach to Hermes application<a href="#md:attach-to-hermes-application" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>To attach to a running Hermes application use
+<code>Attach to Hermes application - Experimental</code> launch configuration:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Attach to Hermes application - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;attach&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:android-applications" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Android applications<a href="#md:android-applications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="md:custom-build-for-android-apps" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Custom build for Android apps<a href="#md:custom-build-for-android-apps" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>If you want to use a custom <code>applicationIdSuffix</code> for your application to launch
+specific build, you can either pass it as part of the <code>runArguments</code> parameter
+arguments as shown below:</p>
+<pre><code class="js"><span class="hl-2">&quot;runArguments&quot;</span><span class="hl-0">: [</span><span class="hl-2">&quot;--appIdSuffix&quot;</span><span class="hl-0">, </span><span class="hl-2">&quot;customAppIdSuffix&quot;</span><span class="hl-0">, ...]</span><br/><span class="hl-3">// or</span><br/><span class="hl-2">&quot;runArguments&quot;</span><span class="hl-0">: [</span><span class="hl-2">&quot;--appIdSuffix=customAppIdSuffix&quot;</span><span class="hl-0">, ...]</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:ios-applications" class="tsd-anchor"></a><h2 class="tsd-anchor-link">iOS applications<a href="#md:ios-applications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="md:ios-devices" class="tsd-anchor"></a><h3 class="tsd-anchor-link">iOS devices<a href="#md:ios-devices" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Debugging on an iOS device requires following manual steps:</p>
+<ul>
+<li>Install <a href="https://github.com/ios-control/ios-deploy">ios-deploy</a>
+<code>brew install ios-deploy</code>.</li>
+<li>Install a valid iOS development certificate.</li>
+<li>In your project's <code>launch.json</code> file set <code>target</code> to <code>device</code>. If you need
+to specify the exact device to run, you can set <code>target</code> to
+<code>&lt;iOS device name/udid&gt;</code>, or you can also use <code>runArguments</code> property to
+specify a particular device to run on in case multiple devices are connected
+(e.g. <code>&quot;runArguments&quot;: [ &quot;--device&quot;, &quot;My iPhone&quot; ]</code>)</li>
+<li>Choose the <strong>Debug iOS</strong> option from the &quot;Configuration&quot; dropdown and press
+F5.</li>
+<li>Shake the device to open the development menu and select &quot;Debug JS
+Remotely&quot;.</li>
+</ul>
+<a id="md:custom-scheme-for-ios-apps" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Custom scheme for iOS apps<a href="#md:custom-scheme-for-ios-apps" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>If you want to use a custom scheme for your application you can either pass it
+as part of the <code>runArguments</code> parameter arguments as shown below:</p>
+<pre><code class="js"><span class="hl-2">&quot;runArguments&quot;</span><span class="hl-0">: [</span><span class="hl-2">&quot;--scheme&quot;</span><span class="hl-0">, </span><span class="hl-2">&quot;customScheme&quot;</span><span class="hl-0">, ...]</span><br/><span class="hl-3">// or</span><br/><span class="hl-2">&quot;runArguments&quot;</span><span class="hl-0">: [</span><span class="hl-2">&quot;--scheme=customScheme&quot;</span><span class="hl-0">, ...]</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Please be aware, specifying the scheme value as a part of the <code>runArguments</code>
+parameter arguments will override the <code>scheme</code> configuration parameter value, if
+it set.</p>
+<a id="md:ios-direct-debugging" class="tsd-anchor"></a><h3 class="tsd-anchor-link">iOS direct debugging<a href="#md:ios-direct-debugging" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The extension provides experimental support of iOS direct debugging. See more
+info here:
+<a href="https://github.com/react-native-community/discussions-and-proposals/issues/40">react-native-community/discussions-and-proposals#40</a>,
+<a href="https://github.com/react-native-community/discussions-and-proposals/issues/206">react-native-community/discussions-and-proposals#206</a></p>
+<p>For now the extension supports iOS direct debugging only on real iOS devices.</p>
+<p>To be able to debug an iOS app directly, you need to install
+<a href="https://github.com/google/ios-webkit-debug-proxy">ios-webkit-debug-proxy</a>:</p>
+<ul>
+<li>Install <a href="https://brew.sh">HomeBrew</a> on your Mac.</li>
+<li>Open a Terminal and run
+<code>brew install ideviceinstaller ios-webkit-debug-proxy</code></li>
+</ul>
+<p>You can use the following debug scenarios to debug iOS apps directly:</p>
+<ul>
+<li>React Native Direct: Debug Direct iOS - Experimental</li>
+</ul>
+<pre><code class="json"><span class="hl-0">    </span><span class="hl-2">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug Direct iOS - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;ios&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;port&quot;</span><span class="hl-0">: </span><span class="hl-4">9221</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;target&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;device&quot;</span>
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>React Native Direct: Attach to the React Native iOS - Experimental</li>
+</ul>
+<pre><code class="json"><span class="hl-0">    </span><span class="hl-2">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Attach to the React Native iOS - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;attach&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;ios&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;port&quot;</span><span class="hl-0">: </span><span class="hl-4">9221</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:ios-hermes-debugging" class="tsd-anchor"></a><h3 class="tsd-anchor-link">iOS Hermes debugging<a href="#md:ios-hermes-debugging" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>You can enable Hermes engine for an iOS application by editing <code>ios/Podfile</code>
+file the following way:</p>
+<pre><code class="diff">-  use_react_native!(:path => config[:reactNativePath])
++  use_react_native!(:path => config[:reactNativePath], :hermes_enabled => true)
+</code><button type="button">Copy</button></pre>
+
+<p>After this change you need to execute <code>pod install</code> command in <code>ios</code> folder.
+After that you can use <code>Debug iOS Hermes - Experimental</code> launch configuration to
+debug an iOS Hermes application:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug iOS Hermes - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;ios&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:expo-applications" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Expo applications<a href="#md:expo-applications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>To debug a project created using Expo or the <code>create-react-native-app</code> task, you
+can use embedded support for Expo.</p>
+<p>Prepare your environment by following the
+<a href="https://reactnative.dev/docs/environment-setup">Expo CLI Quickstart instruction</a>.
+For correct work with Expo this extension <strong><code>requires Android SDK</code></strong>. So also
+pay attention to the <code>React Native CLI Quickstart</code> tab, where you can find the
+Android SDK installation guide:</p>
+<ul>
+<li>Install the <a href="https://getexponent.com/">Expo app</a> on the target device or
+emulator</li>
+<li>Ensure that the <code>Android SDK</code> is installed on your computer (You may install
+it using the
+<a href="https://reactnative.dev/docs/environment-setup"><code>React Native CLI Quickstart</code> guide</a>)</li>
+<li>Ensure that the <code>expo-cli</code> is installed globally (<code>npm install -g expo-cli</code>)</li>
+</ul>
+<p>You can verify that everything is working correctly and that the environment is
+ready for use with the <code>npx react-native doctor</code> command.</p>
+<a id="md:debug-on-expo-go" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Debug on Expo Go<a href="#md:debug-on-expo-go" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>If you're using <a href="https://expo.dev/expo-go">Expo Go</a>, follow below steps tp start
+debugging Expo application:</p>
+<ol>
+<li>
+<p>Open your project in VS Code with this extension installed.</p>
+</li>
+<li>
+<p>Create a debug configuration (as described in
+<a href="#md:debugging-react-native-applications">Debugging React Native applications</a>),
+select <code>Debug in Exponent</code> in the debug drop-down menu, and start debugging</p>
+</li>
+<li>
+<p>Wait while some dependencies are configured - the extension will install
+<a href="https://www.npmjs.com/package/xdl"><code>Expo Development Library(xdl)</code></a> when
+this feature is used for the first time.</p>
+</li>
+<li>
+<p>If you have not used Exponent on this system before, you will be prompted for
+an Exponent username and password. Exponent account allows you to use Expo
+cloud services. More info about how it works is available
+<a href="https://docs.expo.io/versions/latest/workflow/how-expo-works/">here</a>. If you
+have not created an Exponent account, then specifying a new username and
+password will create one. Note that there is no e-mail associated with the
+account, and no way to recover a forgotten password. If you don't want to
+create an Exponent account, you can specify <code>expoHostType</code> parameter in your
+debug configuration to make Expo work locally (via LAN or on localhost).</p>
+</li>
+<li>
+<p>Once the packager starts, the extension will open a separate tab with QR code
+to scan from the Expo Go. Once you do so, the Expo Go will connect to the
+packager and begin running your app.</p>
+</li>
+<li>
+<p>Once the app is loaded and running,
+<a href="https://reactnative.dev/docs/debugging#accessing-the-in-app-developer-menu">open the developer menu</a>
+and enable remote debugging by clicking on <code>Debug JS Remotely</code> button.</p>
+<p><img src="media/enable-remote-debug.png" alt="React Native developer menu"></p>
+</li>
+</ol>
+<a id="md:debug-on-expo-dev-client" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Debug on expo-dev-client<a href="#md:debug-on-expo-dev-client" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>If you want to debug Expo app using
+<a href="https://docs.expo.dev/development/getting-started/">expo-dev-client</a>, follow
+below steps to start debugging Expo application:</p>
+<ol>
+<li>Open your project in VS Code with this extension installed.</li>
+<li>In project folder, install expo-dev-client for your app using
+<code>npx expo install expo-dev-client</code></li>
+<li>Create your app in development mode
+<code>eas build --profile development --platform all</code>, replace <code>--platform all</code> to
+<code>android</code> or <code>iOS</code> to build specific platform application(need development
+account for <code>iOS</code> platform).</li>
+<li>After build success, download your build and install application to your
+device or simulator</li>
+<li>In project, using <code>npx expo start --dev-client</code> to start Metro and load
+application in device or simulator</li>
+<li>Using <code>CMD + D</code> or <code>Ctrl + M</code> to open dev menu, then enable local devtools</li>
+<li>If your Chrome or MS Edge open devtools after enabling local devtools,
+waiting the status is changed to <code>Status: Debugger session active</code>, then
+close browser devtools.</li>
+<li>Add <code>Attach to application</code> command <code>./.vscode/launch.json</code></li>
+</ol>
+<pre><code class="json"><span class="hl-0">    </span><span class="hl-2">&quot;configurations&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        {</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Attach to Hermes application&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;attach&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><br/><span class="hl-0">        }</span><br/><span class="hl-0">    ]</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="9">
+<li>Run <code>Attach</code> command in debug tab and debugger will start to work(If debugger
+not go into breakpoint, you need to reload app from Metro to refresh app
+since maybe it had some conflicts between Browser devtools debug session and
+RNT debug session).</li>
+</ol>
+<a id="md:debug-on-expo-web" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Debug on Expo Web<a href="#md:debug-on-expo-web" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Expo support open application in browser, the expo web application is generated
+by <a href="https://necolas.github.io/react-native-web/">react-native-web</a>. It can help
+user open application without any Android emulator, iOS simulator or device.
+React-native-tools supports debugging Expo Web application in Chrome and Edge.
+Follow below steps to start Expo Web debugging:</p>
+<ol>
+<li>Open your project in VS Code with this extension installed.</li>
+<li>Check and install related package: <code>react-dom</code>, <code>react-native-web</code> and
+<code>@expo/webpack-config</code> (this package is deprecated from Expo 49) by
+<code>npx expo install</code> command.</li>
+<li>Add Expo Web debugging configure in <code>launch.json</code>:</li>
+</ol>
+<pre><code class="json"><span class="hl-0">    </span><span class="hl-2">&quot;configurations&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">       {</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug Expo Web - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;expoweb&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;browserTarget&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;chrome&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-1">&quot;url&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;http://localhost:8081&quot;</span><br/><span class="hl-0">        }</span><br/><span class="hl-0">    ]</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="4">
+<li>Execute and start debugging</li>
+</ol>
+<a id="md:configuring-expo" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Configuring Expo<a href="#md:configuring-expo" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The extension supports running through Exponent not just the applications
+created with Expo but even pure React Native applications (in that case you need
+to add <code>expo</code> package to <code>node_modules</code> in order to make it work with Expo:
+<code>npm install expo --save-dev</code>. In either cases it uses <code>app.json</code> configuration
+file in the root of the project.)</p>
+<p>If you are running <code>Debug in Exponent</code> configuration or any of pallette commands
+like <code>Run in Exponent</code>, <code>Publish to Exponent</code> then this file will be created
+automatically if absent or updated with the following basic configuration
+section:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;expo&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;slug&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;MyApp&quot;</span><span class="hl-0">, </span><span class="hl-3">// Project slug</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;MyApp&quot;</span><span class="hl-0">, </span><span class="hl-3">// Project name</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;sdkVersion&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;31.0.0&quot;</span><span class="hl-0">, </span><span class="hl-3">// Expo SDK version</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;entryPoint&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;.vscode</span><span class="hl-5">\\</span><span class="hl-2">exponentIndex.js&quot;</span><span class="hl-0"> </span><span class="hl-3">// Entrypoint for the project</span><br/><span class="hl-0">	},</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;MyApp&quot;</span><span class="hl-0"> </span><span class="hl-3">// Project name</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Full list of configuration parameters for <code>expo</code> section in <code>app.json</code> may be
+found on
+<a href="https://docs.expo.io/versions/latest/workflow/configuration">official Expo documentation page</a>.</p>
+<p>For running <strong>pure React Native app</strong>, the extension, creates and uses
+<code>.vscode/exponentIndex.js</code> which points to the app entrypoint (<code>index.js</code> or
+<code>index.android.js</code> or <code>index.ios.js</code>) file.</p>
+<p>If you want to change your app entrypoint (for example, from <code>index.js</code> to
+<code>index.android.js</code>), delete <code>.vscode/exponentIndex.js</code> and then restart your
+debugging session.</p>
+<p><strong>NOTE</strong>: The extension caches the version of the exponent SDK used by your
+project. This is helpful since we don't want to install the SDK each time you
+run exponent. If you want the extension to update the SDK version based on your
+React Native version, just restart VS Code and if it is supported it should
+work. If it does not please open an issue.</p>
+<a id="md:expo-hermes" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Expo Hermes<a href="#md:expo-hermes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Expo app is supporting Hermes Engine, and please note that Hermes engine is the
+default Javascript engine used by Expo since SDK 48. SDK 47 and lower version
+will no longer be supported in the next release. (Please refer to
+<a href="https://docs.expo.dev/guides/using-hermes/">https://docs.expo.dev/guides/using-hermes/</a>) We suggest everyone to upgrade your
+Expo projects to use Expo 48 or newer SDKs.</p>
+<p>You can add or remove <code>&quot;jsEngine&quot;: &quot;hermes&quot;</code> in <code>app.json</code> to enable or disable
+Hermes Engine. And any changes for app engine you need to run <code>eas build</code> to
+rebuild your application.</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;expo&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;jsEngine&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;hermes&quot;</span><br/><span class="hl-0">	}</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p><strong>Note</strong>: You maybe need to create developer account to run <code>eas build</code>. Any
+other issue or limitiation, please see
+<a href="https://docs.expo.dev/guides/using-hermes/">expo hermes ducomentation</a>.</p>
+<a id="md:react-native-for-windows" class="tsd-anchor"></a><h2 class="tsd-anchor-link">React Native for Windows<a href="#md:react-native-for-windows" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="md:how-to-launch-and-debug-a-react-native-for-windows-application" class="tsd-anchor"></a><h3 class="tsd-anchor-link">How to launch and debug a React Native for Windows application<a href="#md:how-to-launch-and-debug-a-react-native-for-windows-application" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Before launching and debugging a React Native for Windows application, please
+make sure that your development environment is configured properly in accordance
+with
+<a href="https://microsoft.github.io/react-native-windows/docs/rnw-dependencies">the official system requirements</a>.</p>
+<p>You can debug UWP React Native for Windows applications by changing the
+<code>platform</code> in your <code>launch.json</code> configuration to <code>windows</code>:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug Windows&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnative&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;windows&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:how-to-attach-to-a-running-react-native-for-windows-application" class="tsd-anchor"></a><h3 class="tsd-anchor-link">How to attach to a running React Native for Windows application<a href="#md:how-to-attach-to-a-running-react-native-for-windows-application" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ol>
+<li>
+<p>Add the <code>Attach to packager</code> configuration to <code>.vscode/launch.json</code> in your
+project</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Attach to packager&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnative&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;attach&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+</li>
+<li>
+<p>(<strong>Optional</strong>) Start Metro packager by means of the
+<code>React Native: Start Packager</code> Command Palette command or run
+<code>npx react-native start</code> command in the terminal in the project root folder</p>
+</li>
+<li>
+<p>Select the <code>Attach to packager</code> configuration and click the <code>play</code> button. If
+Metro packager isn't running yet, the extension will start it automatically.</p>
+</li>
+<li>
+<p>Launch your React Native Windows application. Please make sure that the
+application is on remote debugging mode.</p>
+</li>
+</ol>
+<p>Then the extension should attach to the running application.</p>
+<p>You can find more information on how to setup your application to work with
+Windows in
+<a href="https://microsoft.github.io/react-native-windows/docs/getting-started">React Native for Windows Getting started instruction</a></p>
+<a id="md:windows-hermes-debugging" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Windows Hermes debugging<a href="#md:windows-hermes-debugging" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Please follow
+<a href="https://microsoft.github.io/react-native-windows/docs/hermes#hermes-on-windows">the official guide</a>
+to enable Hermes engine for a Windows application.</p>
+<p>To debug a Windows Hermes application you can use
+<code>Debug Windows Hermes - Experimental</code> debugging scenario:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug Windows Hermes - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;windows&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:react-native-for-macos" class="tsd-anchor"></a><h2 class="tsd-anchor-link">React Native for macOS<a href="#md:react-native-for-macos" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>You can debug React Native for macOS applications by changing the <code>platform</code> in
+your <code>launch.json</code> configuration to <code>macos</code>:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug macOS&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnative&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;macos&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>To attach to a running macOS application you can use the default
+<code>Attach to packager</code> debugging configuration. Please make sure that the
+application is on remote debugging mode.</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Attach to packager&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnative&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;attach&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>You can find more information on how to setup your application to work with
+macOS in
+<a href="https://microsoft.github.io/react-native-windows/docs/rnm-getting-started">React Native for macOS Getting started instruction</a></p>
+<a id="md:macos-hermes-debugging" class="tsd-anchor"></a><h3 class="tsd-anchor-link">macOS Hermes debugging<a href="#md:macos-hermes-debugging" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Please follow
+<a href="https://microsoft.github.io/react-native-windows/docs/hermes#available-on-macos">the official guide</a>
+to enable Hermes engine for a macOS application.</p>
+<p>To debug a macOS Hermes application you can use
+<code>Debug macOS Hermes - Experimental</code> debugging scenario:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug macOS Hermes - Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnativedirect&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;macos&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:debug-out-of-react-native-project-directory" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Debug out of React Native project directory<a href="#md:debug-out-of-react-native-project-directory" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>If your project structure like this:</p>
+<pre><code><span class="hl-6">common</span><br/><span class="hl-0">- </span><span class="hl-6">utils</span><span class="hl-0">.</span><span class="hl-6">ts</span><br/><span class="hl-6">app</span><br/><span class="hl-0">- </span><span class="hl-6">src</span><span class="hl-0">/</span><br/><span class="hl-0">- </span><span class="hl-6">metro</span><span class="hl-0">.</span><span class="hl-6">config</span><span class="hl-0">.</span><span class="hl-6">js</span>
+</code><button>Copy</button></pre>
+
+<p>When you import <code>utils.ts</code> in your project. Using</p>
+<pre><code class="js"><span class="hl-7">import</span><span class="hl-0"> { </span><span class="hl-6">commonFunction</span><span class="hl-0"> } </span><span class="hl-7">from</span><span class="hl-0"> </span><span class="hl-2">&quot;../../common/utils&quot;</span><span class="hl-0">;</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Will get error when start Metro:</p>
+<pre><code><span class="hl-8">error</span><span class="hl-0">: </span><span class="hl-6">bundling</span><span class="hl-0"> </span><span class="hl-8">failed</span><span class="hl-0">: </span><span class="hl-8">Error</span><span class="hl-0">: </span><span class="hl-6">Unable</span><span class="hl-0"> </span><span class="hl-6">to</span><span class="hl-0"> </span><span class="hl-6">resolve</span><span class="hl-0"> </span><span class="hl-9">module</span><span class="hl-0"> </span><span class="hl-2">`../../common/utils`</span><span class="hl-0"> </span><span class="hl-10">from</span><span class="hl-0"> </span><span class="hl-2">`src/App.js`</span>
+</code><button>Copy</button></pre>
+
+<p>To import files in <code>metro.config.js</code>, user can debug code out of react native
+project.</p>
+<ol>
+<li>Add extra module and watch folder for the file parent folder.</li>
+</ol>
+<pre><code class="js"><span class="hl-9">const</span><span class="hl-0"> </span><span class="hl-11">extraNodeModules</span><span class="hl-0"> = {</span><br/><span class="hl-0">	</span><span class="hl-6">common:</span><span class="hl-0"> </span><span class="hl-6">path</span><span class="hl-0">.</span><span class="hl-12">resolve</span><span class="hl-0">(</span><span class="hl-6">__dirname</span><span class="hl-0"> + </span><span class="hl-2">&quot;/../common&quot;</span><span class="hl-0">),</span><br/><span class="hl-0">};</span><br/><span class="hl-9">const</span><span class="hl-0"> </span><span class="hl-11">watchFolders</span><span class="hl-0"> = [</span><span class="hl-6">path</span><span class="hl-0">.</span><span class="hl-12">resolve</span><span class="hl-0">(</span><span class="hl-6">__dirname</span><span class="hl-0"> + </span><span class="hl-2">&quot;/../common&quot;</span><span class="hl-0">)];</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="2">
+<li>Add module and watch folder in metro config.</li>
+</ol>
+<pre><code class="js"><span class="hl-3">// React native &lt;= 0.72.0</span><br/><span class="hl-10">module</span><span class="hl-0">.</span><span class="hl-10">exports</span><span class="hl-0"> = {</span><br/><span class="hl-0">	</span><span class="hl-6">resolver:</span><span class="hl-0"> {</span><br/><span class="hl-0">		</span><span class="hl-6">extraNodeModules</span><span class="hl-0">,</span><br/><span class="hl-0">	},</span><br/><span class="hl-0">	</span><span class="hl-6">watchFolders</span><span class="hl-0">,</span><br/><span class="hl-0">};</span><br/><br/><span class="hl-3">// React native &gt;= 0.72.0</span><br/><span class="hl-9">const</span><span class="hl-0"> </span><span class="hl-11">config</span><span class="hl-0"> = {</span><br/><span class="hl-0">	</span><span class="hl-6">resolver:</span><span class="hl-0"> {</span><br/><span class="hl-0">		</span><span class="hl-6">extraNodeModules</span><span class="hl-0">,</span><br/><span class="hl-0">	},</span><br/><span class="hl-0">	</span><span class="hl-6">watchFolders</span><span class="hl-0">,</span><br/><span class="hl-0">};</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="3">
+<li>After mapping common key to common/ path, we can include any files inside
+common/ relative to this path. Metro is started, launching or debugging is
+working well.</li>
+</ol>
+<pre><code class="js"><span class="hl-7">import</span><span class="hl-0"> { </span><span class="hl-6">commonFunction</span><span class="hl-0"> } </span><span class="hl-7">from</span><span class="hl-0"> </span><span class="hl-2">&quot;common/utils&quot;</span><span class="hl-0">;</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:typescript-and-haul" class="tsd-anchor"></a><h2 class="tsd-anchor-link">TypeScript and Haul<a href="#md:typescript-and-haul" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="md:sourcemaps" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Sourcemaps<a href="#md:sourcemaps" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The debugger uses sourcemaps to let you debug with your original sources, but
+sometimes the sourcemaps aren't generated properly and overrides are needed. In
+the config we support <code>sourceMapPathOverrides</code>, a mapping of source paths from
+the sourcemap, to the locations of these sources on disk. Useful when the
+sourcemap isn't accurate or can't be fixed in the build process.</p>
+<p>The left hand side of the mapping is a pattern that can contain a wildcard, and
+will be tested against the <code>sourceRoot</code> + <code>sources</code> entry in the source map. If
+it matches, the source file will be resolved to the path on the right hand side,
+which should be an absolute path to the source file on disk.</p>
+<p>Below there are some examples of how sourcemaps could be resolved in different
+scenarios:</p>
+<pre><code class="javascript"><span class="hl-3">// webRoot = /Users/me/project</span><br/><span class="hl-2">&quot;sourceMapPathOverrides&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;webpack:///./~/*&quot;</span><span class="hl-6">:</span><span class="hl-0"> </span><span class="hl-2">&quot;${webRoot}/node_modules/*&quot;</span><span class="hl-0">,       </span><span class="hl-3">// Example: &quot;webpack:///./~/querystring/index.js&quot; -&gt; &quot;/Users/me/project/node_modules/querystring/index.js&quot;</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;webpack:///./*&quot;</span><span class="hl-6">:</span><span class="hl-0">   </span><span class="hl-2">&quot;${webRoot}/*&quot;</span><span class="hl-0">,                    </span><span class="hl-3">// Example: &quot;webpack:///./src/app.js&quot; -&gt; &quot;/Users/me/project/src/app.js&quot;,</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;webpack:///*&quot;</span><span class="hl-6">:</span><span class="hl-0">     </span><span class="hl-2">&quot;*&quot;</span><span class="hl-0">,                               </span><span class="hl-3">// Example: &quot;webpack:///project/app.ts&quot; -&gt; &quot;/project/app.ts&quot;</span><br/><span class="hl-0">    </span><span class="hl-2">&quot;webpack:///src/*&quot;</span><span class="hl-6">:</span><span class="hl-0"> </span><span class="hl-2">&quot;${webRoot}/*&quot;</span><span class="hl-0">                     </span><span class="hl-3">// Example: &quot;webpack:///src/app.js&quot; -&gt; &quot;/Users/me/project/app.js&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:haul-debugging" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Haul debugging<a href="#md:haul-debugging" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The extension provides functional to attach to
+<a href="https://callstack.github.io/haul/">Haul packager</a> based applications. You can
+use the <code>Attach to packager</code> scenario to attach to a Haul based app and debug
+it. For now launch scenarios aren't supported. You can find more info in
+<a href="https://github.com/microsoft/vscode-react-native/issues/883">the issue</a>.</p>
+<p>You can prepare your React Native application to work with <code>Haul</code> by following
+the
+<a href="https://github.com/callstack/haul#getting-started"><code>Haul Getting started</code> guide</a>.</p>
+<p>If you use the <a href="https://github.com/callstack/haul/tree/legacy">legacy version</a>
+of <code>Haul</code> as your React Native bundler instead of the default
+<a href="https://facebook.github.io/metro/">Metro</a>, it could be required to add
+<code>sourceMapPathOverrides</code> to the <code>launch.json</code> file.</p>
+<p>For example:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-3">// Other configurations</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;sourceMapPathOverrides&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;webpack:///./~/*&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceRoot}/node_modules/*&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;webpack:///./*&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceRoot}/*&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;webpack:///*&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;*&quot;</span><br/><span class="hl-0">	}</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:debugger-configuration-properties" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Debugger configuration properties<a href="#md:debugger-configuration-properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The following is a list of all the configuration properties the debugger accepts
+in <code>launch.json</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+<th>Defaults</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cwd</code></td>
+<td>The path to the project root folder</td>
+<td><code>string</code></td>
+<td><code>${workspaceFolder}</code></td>
+</tr>
+<tr>
+<td><code>sourceMaps</code></td>
+<td>Whether to use JavaScript source maps to map the generated bundled code back to its original sources</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>sourceMapPathOverrides</code></td>
+<td>A set of mappings for rewriting the locations of source files from what the source map says, to their locations on disk. See <a href="#md:sourcemaps">Sourcemaps</a> for details</td>
+<td><code>object</code></td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>sourceMapRenames</code></td>
+<td>Whether to use the &quot;names&quot; mapping in sourcemaps. This requires requesting source content, which could slow debugging</td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>enableDebug</code></td>
+<td>Whether to enable debug mode. If set to &quot;false&quot;, an application will be launched without debugging</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>webkitRangeMin</code>, <code>webkitRangeMax</code></td>
+<td>Combines to specify the port range that you want the <a href="https://github.com/google/ios-webkit-debug-proxy">ios-webkit-debug-proxy</a> to use to find the specific device described in the Direct iOS debug configuration</td>
+<td>9223, 9322</td>
+<td></td>
+</tr>
+<tr>
+<td><code>trace</code></td>
+<td>Logging level in debugger process. May be useful for diagnostics. If set to &quot;Trace&quot; all debugger process logs will be available in <code>Debug Console</code> output window</td>
+<td><code>string</code></td>
+<td><code>log</code></td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>TCP/IP address of packager to attach to for debugging</td>
+<td><code>string</code></td>
+<td><code>localhost</code></td>
+</tr>
+<tr>
+<td><code>port</code></td>
+<td>Port of packager to attach to for debugging</td>
+<td><code>string</code></td>
+<td><code>8081</code></td>
+</tr>
+<tr>
+<td><code>remoteRoot</code></td>
+<td>The source root of the remote host</td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>localRoot</code></td>
+<td>The local source root that corresponds to the 'remoteRoot'</td>
+<td><code>string</code></td>
+<td><code>${workspaceFolder}</code></td>
+</tr>
+<tr>
+<td><code>skipFiles</code></td>
+<td>An array of file or folder names, or glob patterns, to skip when debugging</td>
+<td><code>array</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>debuggerWorkerUrlPath</code></td>
+<td>Path to the app debugger worker to override. For example, if debugger tries to attach to <a href="http://localhost:8081/debugger-ui/debuggerWorker.js">http://localhost:8081/debugger-ui/debuggerWorker.js</a> and you get 404 error from packager output then you may want to change debuggerWorkerUrlPath to another value suitable for your packager (&quot;debugger-ui&quot; will be replaced with the value you provide)</td>
+<td><code>string</code></td>
+<td><code>debugger-ui/</code></td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td>The platform to target. Possible values: <code>android</code>, <code>ios</code>, <code>exponent</code>, <code>windows</code></td>
+<td><code>string</code></td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td>Target to run on. Possible values: <code>simulator</code>, <code>device</code>, <code>&lt;iOS target name/udid&gt;</code>, <a href="https://github.com/react-native-community/cli/blob/master/docs/commands.md#--deviceid-string"><code>&lt;Android target id&gt;</code></a>, <code>&lt;Android emulator AVD name&gt;</code>. If the value is <code>simulator</code> or <code>device</code> then the quick pick window will be expanded with the names of the available virtual or physical targets, then, in case there are more than one available target with specified type, the target value in <code>launch.json</code> will be changed to the name or id of the selected target. If you have only one target with specified type available, it will be selected automatically. If you're using Android emulator targets, please, make sure the <code>emulator</code> utility is added to <code>PATH</code></td>
+<td><code>string</code></td>
+<td><code>simulator</code></td>
+</tr>
+<tr>
+<td><code>logCatArguments</code></td>
+<td>Arguments to be used for LogCat (The LogCat output will appear on an Output Channel). It can be an array such as: <code>[&quot;:S&quot;, &quot;ReactNative:V&quot;, &quot;ReactNativeJS:V&quot;]</code></td>
+<td><code>array</code></td>
+<td><code>[&quot;*:S&quot;, &quot;ReactNative:V&quot;, &quot;ReactNativeJS:V&quot;]</code></td>
+</tr>
+<tr>
+<td><code>runArguments</code></td>
+<td>Run arguments to be passed to <code>react-native run-&lt;platform&gt;</code> command (override all other configuration params)</td>
+<td><code>array</code></td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>launchActivity</code></td>
+<td>The Android activity to be launched for debugging, e.g. it specifies <a href="https://github.com/react-native-community/cli/blob/master/docs/commands.md#--main-activity-string"><code>--main-activity</code></a> parameter in <code>react-native</code> run arguments</td>
+<td><code>string</code></td>
+<td><code>MainActivity</code></td>
+</tr>
+<tr>
+<td><code>expoHostType</code></td>
+<td>The connection type to be used on Expo debugging to communicate with a device or an emulator. Possible values: <ul><li><code>tunnel</code> - allows to deploy and debug an application by means of Expo cloud services</li><li><code>lan</code> - allows to deploy and install an application via your LAN</li><li><code>local</code> - allows to debug an application on an emulator or an Android device without network connection</li></ul></td>
+<td><code>string</code></td>
+<td><code>lan</code></td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>Environment variables passed to the debugger and <code>react-native run-&lt;platform&gt;</code> command</td>
+<td><code>object</code></td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>envFile</code></td>
+<td>Absolute path to a file containing environment variable definitions</td>
+<td><code>string</code></td>
+<td><code>${workspaceFolder}/.env</code></td>
+</tr>
+<tr>
+<td><code>variant</code></td>
+<td>A variant to be passed to <code>react-native run-android</code>, e.g. use <code>devDebug</code> to specify <code>--variant=devDebug</code></td>
+<td><code>string</code></td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>scheme</code></td>
+<td>A scheme name to be passed to <code>react-native run-ios</code>, e.g. <code>devDebug</code> to specify <code>--scheme=devDebug</code></td>
+<td><code>string</code></td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>productName</code></td>
+<td>iOS bundle display name e.g. <code>AwesomeProject</code> value means that the extension will search for <code>AwesomeProject.app</code> bundle</td>
+<td><code>string</code></td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>jsDebugTrace</code></td>
+<td>Enable trace collection for depended extension <code>vscode-js-debug</code></td>
+<td><code>boolean</code></td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<a id="md:customization" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Customization<a href="#md:customization" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>The extension can be further customized for other React Native scenarios. These
+are the most common:</p>
+<a id="md:debug-in-vscode-workspace" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Debug in vscode workspace<a href="#md:debug-in-vscode-workspace" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Extension supports vscode multiple root workspace for development. If you have
+several react-native project in workspace, extension will show project selection
+list when react-native packager is starting. Also you can add settings in
+workspace to ignore specific project in selection list.</p>
+<ul>
+<li>Open vscode command palette, select
+<code>Preferences: Open Workspace Settings (JSON)</code> to open workspace settings
+file.</li>
+<li>Add below settings in the file:</li>
+</ul>
+<pre><code><span class="hl-0">	</span><span class="hl-2">&quot;settings&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;react-native.workspace.exclude&quot;</span><span class="hl-6">:</span><span class="hl-0"> [</span><br/><span class="hl-0">			</span><span class="hl-2">&quot;ProjectFolderName1&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-2">&quot;ProjectFolderName2&quot;</span><br/><span class="hl-0">		]</span><br/><span class="hl-0">	}</span>
+</code><button>Copy</button></pre>
+
+<ul>
+<li>Since the folder selection list is handled by vscode rather than extension,
+we must set exclude folder when extension is not activated. If you add
+exclude folder after extension activating, you must re-activate you
+extension or reopen your vscode.</li>
+</ul>
+<a id="md:logging" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Logging<a href="#md:logging" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The extension logging is divided by several output channels:</p>
+<ul>
+<li>React Native - the main extension channel which collects outputs from React
+Native Packager and shows critical errors in the extension</li>
+<li>These channels are spawned only when the specific launch scenario is
+executed:
+<ul>
+<li>React Native: Run Android
+<ul>
+<li>LogCat monitor(to get LogCat output from Android device, can be
+filtered by debug configuration settings)</li>
+</ul>
+</li>
+<li>React Native: Run iOS</li>
+<li>React Native: Run macOS</li>
+<li>React Native: Run Windows</li>
+<li>React Native: Run exponent</li>
+</ul>
+</li>
+<li>Debug Console which is used to receive application logs and logs generated
+by the debug adapter (<code>console.log</code> and other <code>std</code> outputs from the app)</li>
+<li>Extension debugger verbose logs (these logs are shown up only if the
+<code>trace: &quot;verbose&quot;</code> option is enabled in debug scenarios)
+<ul>
+<li>React Native Chrome Proxy - shows what runs in and out to the debugger
+and application</li>
+<li>Debug Console becomes more informative and contains some debugging
+information from the debug adapter</li>
+<li>Global extension errors are controlled by VS Code and printed in VS Code
+Developer Tools</li>
+</ul>
+</li>
+</ul>
+<p>There are also some global extension technical logs that might be exposed to the
+output. To see them set the following properties in your VS Code Settings:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;react-native-tools&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;logLevel&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Trace&quot;</span><br/><span class="hl-0">	}</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p><code>logLevel</code> can be <code>None</code> (no logs), <code>Error</code>, <code>Warning</code>, <code>Info</code>, <code>Debug</code>, <code>Trace</code>
+(all logs). Default is <code>Info</code>.</p>
+<a id="md:build-apk-and-generate-bundle" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Build APK and generate bundle<a href="#md:build-apk-and-generate-bundle" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>You can add VSCode tasks to build an <code>.apk</code> file and generate iOS/Android
+bundles.</p>
+<p>The following is an example of a <code>tasks.json</code> for <code>react-native init</code> projects.
+Place it in the <code>.vscode</code> folder in your project to use it:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;version&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;2.0.0&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;presentation&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;reveal&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;always&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;panel&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;new&quot;</span><br/><span class="hl-0">	},</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;tasks&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">		{</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;label&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Build APK Debug&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;group&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;build&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;shell&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;windows&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">				</span><span class="hl-1">&quot;command&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;cd android; if($?) {./gradlew assembleDebug}&quot;</span><br/><span class="hl-0">			},</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;linux&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">				</span><span class="hl-1">&quot;command&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;cd android &amp;&amp; ./gradlew assembleDebug&quot;</span><br/><span class="hl-0">			}</span><br/><span class="hl-0">		},</span><br/><span class="hl-0">		{</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;label&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Build APK Release&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;group&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;build&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;shell&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;windows&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">				</span><span class="hl-1">&quot;command&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;cd android; if($?) {./gradlew assembleRelease}&quot;</span><br/><span class="hl-0">			},</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;linux&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">				</span><span class="hl-1">&quot;command&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;cd android &amp;&amp; ./gradlew assembleRelease&quot;</span><br/><span class="hl-0">			}</span><br/><span class="hl-0">		},</span><br/><span class="hl-0">		{</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;label&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Generate Android Bundle&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;group&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;build&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;shell&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;command&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/main.jsbundle&quot;</span><br/><span class="hl-0">		},</span><br/><span class="hl-0">		{</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;label&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Generate iOS Bundle&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;group&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;build&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;shell&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;command&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle&quot;</span><br/><span class="hl-0">		}</span><br/><span class="hl-0">	]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>To learn more about <code>tasks</code> in VSCode read
+<a href="https://code.visualstudio.com/docs/editor/tasks">the official documentation</a>.</p>
+<p>Visit <a href="https://reactnative.dev/docs/signed-apk-android">generating Signed APK</a>
+to learn more about this subject.</p>
+<a id="md:specifying-custom-arguments-for-react-native-run--command" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Specifying custom arguments for <code>react-native run-*</code> command<a href="#md:specifying-custom-arguments-for-react-native-run--command" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Using custom run arguments for <code>react-native run-&lt;platform&gt;</code>: <strong>NOTE:</strong> This
+overrides all other configuration parameters.</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;react-native.android.runArguments.simulator&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;--appFolder&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;/Users/test/AwesomeProject/android/app&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;--deviceId&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;emulator-5555&quot;</span><br/><span class="hl-0">	],</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;react-native.ios.runArguments.device&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;--project-path&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;ios&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;--device&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;Max&#39;s iPhone&quot;</span><br/><span class="hl-0">	]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p><strong>NOTE:</strong> You can get the list of installed simulator devices by:</p>
+<p>iOS devices (macOS only):</p>
+<pre><code><span class="hl-6">xcrun</span><span class="hl-0"> </span><span class="hl-6">simctl</span><span class="hl-0"> </span><span class="hl-6">list</span><span class="hl-0"> --</span><span class="hl-6">json</span><span class="hl-0"> </span><span class="hl-6">devices</span>
+</code><button>Copy</button></pre>
+
+<p>Android devices:</p>
+<pre><code><span class="hl-6">adb</span><span class="hl-0"> </span><span class="hl-6">devices</span>
+</code><button>Copy</button></pre>
+
+<p><strong>NOTE:</strong> If you want to run the application on an iOS device, make sure you
+have <code>ios-deploy</code> installed globally.</p>
+<p><code>brew install ios-deploy</code></p>
+<a id="md:setting-up-the-react-native-packager" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Setting up the React Native packager<a href="#md:setting-up-the-react-native-packager" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>To use a custom port for the <code>react-native</code> packager:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">  </span><span class="hl-1">&quot;react-native&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">    </span><span class="hl-1">&quot;packager&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">      </span><span class="hl-1">&quot;port&quot;</span><span class="hl-0">: </span><span class="hl-13">portNumber</span><br/><span class="hl-0">    }</span><br/><span class="hl-0">  }</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>If you change this port, then for iOS device and simulator scenarios you will
+have to modify the native code files.
+<a href="https://childofcode.com/react-native-0-63-running-on-device-by-other-port-solution/">Instructions here</a>.</p>
+<p>If you use Android, you need to change the debug server by:</p>
+<ol>
+<li><code>CTRL+M</code>(<code>CMD+M</code>) in the emulator</li>
+<li>Go to <code>Dev Settings</code></li>
+<li>Debug server host for device =&gt; enter <code>localhost:&lt;yourPortNumber&gt;</code>.</li>
+<li>Reload application (press <code>R</code> twice)</li>
+<li>(Hermes only) Hermes engine listens port 8081 for debugging by default, to
+change it you might need to modify your
+<a href="https://facebook.github.io/metro/docs/configuration/#port"><code>metro.config.js</code> file adding <code>&quot;port&quot;: portNumber</code> argument in there to the server settings</a>.</li>
+</ol>
+<pre><code class="js"><span class="hl-3">// Example of metro.config.js (&lt;= 0.72.0)</span><br/><span class="hl-10">module</span><span class="hl-0">.</span><span class="hl-10">exports</span><span class="hl-0"> = {</span><br/><span class="hl-0">	</span><span class="hl-6">server:</span><span class="hl-0"> {</span><br/><span class="hl-0">		</span><span class="hl-6">port:</span><span class="hl-0"> </span><span class="hl-4">9091</span><span class="hl-0">,</span><br/><span class="hl-0">	},</span><br/><span class="hl-0">};</span>
+</code><button type="button">Copy</button></pre>
+
+<p>OR</p>
+<pre><code class="js"><span class="hl-3">// Example of metro.config.js (0.72.0)</span><br/><span class="hl-9">const</span><span class="hl-0"> </span><span class="hl-11">config</span><span class="hl-0"> = {</span><br/><span class="hl-0">	</span><span class="hl-6">server:</span><span class="hl-0"> {</span><br/><span class="hl-0">		</span><span class="hl-6">port:</span><span class="hl-0"> </span><span class="hl-4">9091</span><span class="hl-0">,</span><br/><span class="hl-0">	},</span><br/><span class="hl-0">};</span>
+</code><button type="button">Copy</button></pre>
+
+<details>
+<summary>Port setup instruction</summary>
+<p><img src="media/select-dev-menu.png" alt="image"></p>
+<p><img src="media/dev-menu-setup-custom-host.png" alt="image"></p>
+<p><img src="media/custom-host-and-port.png" alt="image"></p>
+</details>
+<p><strong>NOTE:</strong> Some aspects of React Native hard-code the port to the default as
+specified in <a href="https://github.com/facebook/react-native/issues/9145">this issue</a>.</p>
+<a id="md:custom-environment-variables" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Custom environment variables<a href="#md:custom-environment-variables" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Extension supports passing custom environment variables to the React Native
+Packager process context. To add custom variables you can create <code>.env</code> file in
+the root folder of your project and add needed environment variables in the
+following format:</p>
+<pre><code><br/><span class="hl-6">Variable1_name</span><span class="hl-0">=</span><span class="hl-6">Variable1_value</span><br/><span class="hl-6">Variable2_name</span><span class="hl-0">=</span><span class="hl-6">Variable2_value</span><br/>
+</code><button>Copy</button></pre>
+
+<p>Variables that are declared in this <code>.env</code> file can override the original
+environment variables from <code>process.env</code> of the Packager process.</p>
+<p>It is possible to transfer environment variables (via <code>env</code> and <code>envFile</code>
+arguments in <code>launch.json</code>) from the <code>launch</code> or <code>attach</code> debug scenarios to the
+Packager. If these variables are defined, then they will be used, otherwise the
+<code>.env</code> file is used.</p>
+<a id="md:change-project-root" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Change project root<a href="#md:change-project-root" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>To specify a subfolder in which the react-native project is located, set
+<code>react-native-tools.projectRoot</code>. You can use either an absolute or relative
+path in your VS Code Settings:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;react-native-tools&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;projectRoot&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;./your/react-native/project&quot;</span><br/><span class="hl-0">	}</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:configure-an-android-logcat-monitor" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Configure an Android LogCat Monitor<a href="#md:configure-an-android-logcat-monitor" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>There are two ways to filter your LogCat Monitor output depending on how LogCat
+Monitor was launched:</p>
+<ol>
+<li>Since LogCat Monitor is launched for all Android launch scenarios by default,
+you can add <code>logCatArguments</code> to your debug scenario in <code>launch.json</code> file
+like in the following example:</li>
+</ol>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Debug Android&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;cwd&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;${workspaceFolder}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;type&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;reactnative&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;request&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;launch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;platform&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;android&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;logCatArguments&quot;</span><span class="hl-0">: [</span><span class="hl-2">&quot;ReactNativeJS:V&quot;</span><span class="hl-0">]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="2">
+<li>If you want to launch LogCat Monitor from the Command Palette command
+<code>React Native: Run React Native LogCat Monitor</code> with filtering options set
+<code>react-native.android.logCatArguments</code> settings in your <code>settings.json</code>:</li>
+</ol>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;react-native.android.logCatArguments&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;*:S&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;ReactNative:V&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;ReactNativeJS:V&quot;</span><br/><span class="hl-0">	]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>To have better understanding on how LogCat filtering works take into account
+that the extension launches LogCat with flag <code>-s</code> and then adds user-provided
+filters as arguments. Please see the
+<a href="https://developer.android.com/studio/command-line/logcat#filteringOutput">official instruction on how does LogCat filtering works</a>.</p>
+<a id="md:configure-dependencies-versions-for-debugging-expo-projects" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Configure dependencies versions for debugging Expo projects<a href="#md:configure-dependencies-versions-for-debugging-expo-projects" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>To debug Expo applications the extension requires additional dependencies, such
+as <code>xdl</code> and <code>@expo/metro-config</code>. These packages are installed automatically on
+the first start of the Expo debugging scenario. You can configure the
+dependencies versions by adding the <code>react-native.expo.dependencies</code> parameter,
+which contains packages names and appropriate versions, to the <code>settings.json</code>
+file:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;react-native.expo.dependencies&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;xdl&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;59.2.0&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;@expo/metro-config&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;0.2.0&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;@expo/ngrok&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;^4.1.0&quot;</span><br/><span class="hl-0">	}</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>To enable new versions of the dependencies, it's required to restart VS Code
+editor. After that the extension will download the new versions of the packages
+on the next Expo debugging starting.</p>
+<a id="md:configure-custom-key-bindings-for-extension-commands" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Configure custom key bindings for extension commands<a href="#md:configure-custom-key-bindings-for-extension-commands" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The extension provides context variables for the following features: |Context
+variable|Feature| |---|---| |<code>isRNPackagerRunning</code> - true if the packager is
+running|Metro packager| |<code>isRNTNetworkInspectorRunning</code> - true if the Network
+inspector is running|Network inspector|</p>
+<p>Using these context variables you can assign the same keyboard combination for
+some pair commands for more convenient use. For example, you can configure the
+same key bindings for <code>Start Packager</code> and <code>Stop Packager</code> commands using <code>when</code>
+clauses, as shown below: <img src="media/custom-keybindings.png" alt="image"></p>
+<a id="md:configure-custom-colors-for-extension-output-logs" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Configure custom colors for extension output logs<a href="#md:configure-custom-colors-for-extension-output-logs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The extension provides custom TextMate tokens, with the help of which it is now
+possible to customize the colors of the logs in output channels:
+|Scope|Description| |---|---| |<code>rnt.output.string</code>|Single and double quoted
+strings| |<code>rnt.output.url</code>|Links, email and ip address, filepaths|
+|<code>rnt.output.timestamp</code>|Date and time| |<code>rnt.output.numeric</code>|Constant decimal
+numbers| |<code>rnt.output.process</code>|Logs of processes such as npm, bundle, and other
+build tasks| |<code>rnt.output.error</code>|Errors, exceptions, fails and stack for them|
+|<code>rnt.output.warn</code>|Warning logs| |<code>rnt.output.info</code>|Info logs|
+|<code>rnt.output.debug</code>|Debug logs| |<code>rnt.output.verbose</code>|Verbose logs|
+|<code>rnt.output.constant</code>|Such values as <code>true</code>, <code>false</code>, <code>null</code>, <code>undefined</code>,
+<code>NaN</code>| |<code>rnt.output.success</code>|Logs indicating successful completion of the
+process, such as <code>BUILD SUCCESSFUL</code> and others|</p>
+<p>Now you can customize React Native Tools output logs with
+<code>editor.tokenColorCustomizations</code> parameter in <code>settings.json</code> this way:</p>
+<pre><code class="json"><span class="hl-2">&quot;editor.tokenColorCustomizations&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">  </span><span class="hl-1">&quot;textMateRules&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">    {</span><br/><span class="hl-0">      </span><span class="hl-1">&quot;settings&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-1">&quot;foreground&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;#c57ca0&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-1">&quot;fontStyle&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;bold&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">      },</span><br/><span class="hl-0">      </span><span class="hl-1">&quot;scope&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;rnt.output.string&quot;</span><br/><span class="hl-0">    }</span><br/><span class="hl-0">  ]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:element-inspector" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Element inspector<a href="#md:element-inspector" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>In the extension you can run React DevTools Element inspector to inspect the
+DOM-tree of your application. It's required to install the
+<a href="https://www.npmjs.com/package/react-devtools"><code>react-devtools</code></a> package
+globally to run React DevTools from the extension.</p>
+<pre><code><span class="hl-6">npm</span><span class="hl-0"> </span><span class="hl-6">install</span><span class="hl-0"> -</span><span class="hl-6">g</span><span class="hl-0"> </span><span class="hl-6">react</span><span class="hl-0">-</span><span class="hl-6">devtools</span>
+</code><button>Copy</button></pre>
+
+<a id="md:integration-with-react-native-inspector" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Integration with React Native Inspector<a href="#md:integration-with-react-native-inspector" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>You can open the in-app developer menu and choose &quot;Show Element Inspector&quot;. It
+will bring up an overlay that lets you tap on any UI element and see information
+about it:</p>
+<p><img src="media/element-inspector-usage.gif" alt="Element inspector usage"></p>
+<p>Using the <code>Run Element Inspector</code> Command Palette command you can launch React
+DevTools in the extension. Inspector will enter a special collapsed mode, and
+use the DevTools as primary UI. In this mode, clicking on something in the
+emulator will bring up the relevant components in the DevTools:</p>
+<p><img src="media/element-inspector-with-ui.png" alt="Element inspector usage"></p>
+<a id="md:network-inspector" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Network Inspector<a href="#md:network-inspector" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>The extension provides <code>Network inspector</code> feature to inspect outgoing network
+traffic in your apps. You can browse all requests being made and their responses
+in VS Code DevTools console.</p>
+<p><img src="media/network-inspector.png" alt="image"></p>
+<a id="md:network-inspector-requirements" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Network inspector requirements<a href="#md:network-inspector-requirements" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Before using the Network inspector, please make sure that your system meets the
+following requirements:</p>
+<ul>
+<li><code>OpenSSL</code> utility is installed and added to PATH. You can install <code>OpenSSL</code>
+the following way:
+<ul>
+<li>Windows: <code>choco install openssl</code></li>
+<li>macOS: <code>brew install openssl</code></li>
+<li>Linux: <code>sudo apt-get install openssl</code></li>
+</ul>
+</li>
+<li>(macOS only) <a href="https://fbidb.io/docs/installation/"><code>idb</code></a> utility is
+installed. It's required to interact with iOS physical devices</li>
+</ul>
+<p>The Network inspector uses functional of the Flipper plugin integrated to React
+Native apps. Please make sure that it's enabled in your application. You can use
+<a href="https://fbflipper.com/docs/getting-started/react-native/">this guide</a> to
+integate Flipper into your projects.</p>
+<a id="md:network-inspector-usage" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Network inspector usage<a href="#md:network-inspector-usage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>To run the Network inspector you can use <code>Run Network Inspector</code> Command
+Palette command</br> When the Network inspector detects a React Native
+application and connects to it, VS Code DevTools window will be opened
+automatically. But you can also open it manually, by opening <code>Help</code> menu and
+clicking <code>Toggle Developer Tools</code> option. After that you just need to open
+<code>Console</code> tab in DevTools, where network requests will be printed.</li>
+<li>To stop the Network inspector you can use <code>Stop Network Inspector</code> Command
+Palette command</li>
+</ul>
+<p>For now the Network inspector doesn't support Expo applications.</p>
+<a id="md:network-inspector-logs-theme" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Network inspector logs theme<a href="#md:network-inspector-logs-theme" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The extension provides “Dark” and “Light” color themes for Network Inspector
+logs. You can configure the theme in the extension configuration in your VS Code
+Settings.</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;react-native-tools.networkInspector.consoleLogsColorTheme&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Dark&quot;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="md:developing-inside-a-docker-container" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Developing inside a Docker Container<a href="#md:developing-inside-a-docker-container" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>The extension supports
+<a href="https://code.visualstudio.com/docs/remote/remote-overview">VS Code Remote Development</a>
+features on Linux. Please follow the
+<a href="https://code.visualstudio.com/docs/devcontainers/containers">VS Code official documentation</a>
+to setup your environment and install related
+extensions(<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development</a>
+is recommended) to use a remote development approach.</p>
+<p>You can use
+<a href="https://hub.docker.com/r/reactnativecommunity/react-native-android">official React Native Docker image</a>
+provided by the
+<a href="https://github.com/react-native-community/docker-android">react-native-community</a>.</p>
+<p>Here are the steps to run React Native debugging inside a Docker Container on a
+real Android device:</p>
+<ol>
+<li>
+<p>In the local react-native project, add <code>Dev Container</code> configure folder and
+files:</p>
+<pre><code><span class="hl-0">.</span><span class="hl-6">devcontainer</span><br/><span class="hl-0">  -</span><span class="hl-6">devcontainer</span><span class="hl-0">.</span><span class="hl-6">json</span><br/><span class="hl-0">  -</span><span class="hl-6">Dockerfile</span>
+</code><button>Copy</button></pre>
+
+</li>
+<li>
+<p>Сreate Dockerfile extending
+<a href="https://hub.docker.com/r/reactnativecommunity/react-native-android">reactnativecommunity/react-native-android image</a>.
+For example you can use the following Dockerfile:</p>
+<pre><code><span class="hl-11">FROM</span><span class="hl-0"> </span><span class="hl-6">reactnativecommunity</span><span class="hl-0">/</span><span class="hl-6">react</span><span class="hl-0">-</span><span class="hl-6">native</span><span class="hl-0">-</span><span class="hl-8">android</span><span class="hl-0">:</span><span class="hl-6">latest</span><br/><br/><span class="hl-11">RUN</span><span class="hl-0"> </span><span class="hl-6">npm</span><span class="hl-0"> </span><span class="hl-6">install</span><span class="hl-0"> -</span><span class="hl-6">g</span><span class="hl-0"> </span><span class="hl-6">expo</span><span class="hl-0">-</span><span class="hl-6">cli</span><span class="hl-0"> </span><span class="hl-6">react</span><span class="hl-0">-</span><span class="hl-6">native</span><span class="hl-0">-</span><span class="hl-6">cli</span>
+</code><button>Copy</button></pre>
+
+</li>
+<li>
+<p>Configure your <code>devcontainer.json</code> file as needed. Below is a sample
+configuration:</p>
+<pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;React Native Android Container&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">	</span><span class="hl-3">// Sets the run context to one level up instead of the .devcontainer folder.</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;context&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;..&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">	</span><span class="hl-3">// Update the &#39;dockerFile&#39; property if you aren&#39;t using the standard &#39;Dockerfile&#39; filename.</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;dockerFile&quot;</span><span class="hl-0">: </span><span class="hl-2">&quot;Dockerfile&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">	</span><span class="hl-3">// The optional &#39;runArgs&#39; property can be used to specify additional runtime arguments.</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;runArgs&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;--privileged&quot;</span><span class="hl-0">, </span><span class="hl-3">// give all capabilities to a container, in other words, the container can then do almost everything that the host can do</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;--net&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;host&quot;</span><span class="hl-0">, </span><span class="hl-3">// forwarding all host machine ports</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;-v&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">		</span><span class="hl-2">&quot;/dev/bus/usb:/dev/bus/usb&quot;</span><span class="hl-0"> </span><span class="hl-3">// mount connected USB devices to a container</span><br/><span class="hl-0">	],</span><br/><span class="hl-0">	</span><span class="hl-1">&quot;customizations&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">		</span><span class="hl-1">&quot;vscode&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;settings&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">				</span><span class="hl-3">// This will ignore your local shell user setting for Linux since shells like zsh are typically</span><br/><span class="hl-0">				</span><span class="hl-3">// not in base container images. You can also update this to an specific shell to ensure VS Code</span><br/><span class="hl-0">				</span><span class="hl-3">// uses the right one for terminals and tasks. For example, /bin/bash (or /bin/ash for Alpine).</span><br/><span class="hl-0">				</span><span class="hl-1">&quot;terminal.integrated.shell.linux&quot;</span><span class="hl-0">: </span><span class="hl-9">null</span><br/><span class="hl-0">			},</span><br/><span class="hl-0">			</span><span class="hl-3">// Add the IDs of extensions you want installed when the container is created in the array below.</span><br/><span class="hl-0">			</span><span class="hl-1">&quot;extensions&quot;</span><span class="hl-0">: [</span><span class="hl-2">&quot;msjsdiag.vscode-react-native&quot;</span><span class="hl-0">]</span><br/><span class="hl-0">		}</span><br/><span class="hl-0">	}</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+</li>
+<li>
+<p>Open Command Palette and run the following command
+<code>Dev Containers: Open Folder in Container</code> to reopen your project in a
+container</p>
+</li>
+<li>
+<p>Connect your device via USB and start debugging the same way as on local
+machine.</p>
+</li>
+</ol>
+<p>Currently the above scenario doesn't work on macOS and Windows. Docker Container
+implementation on these OS uses Virtual Machine tools which may have problems
+with USB forwarding for mobile devices.</p>
+<a id="md:contributing" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Contributing<a href="#md:contributing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>Please see our <a href="media/CONTRIBUTING.md">contributing guide</a> for more information.</p>
+<a id="md:known-issues" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Known Issues<a href="#md:known-issues" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>Here is the list of common known issues you may experience while using the
+extension:</p>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Debugger doesn't stop at breakpoints</td>
+<td>Breakpoints require sourcemaps to be correctly configured. If you are using TypeScript, then make sure to follow the <code>Getting started</code> section for how to ensure sourcemaps are correctly set up. Also, similar issues may occur on React Native version <code>0.58.*</code> in some special cases (see <a href="https://github.com/microsoft/vscode-react-native/issues/928">#928</a>, <a href="https://github.com/microsoft/vscode-react-native/issues/907">#907</a>), bumping dependencies versions of <code>react</code> and <code>react-native</code> package to the more recent ones should resolve these. If you are on Linux, make sure that the project folder which is opened is not a symbolic link to the real folder, that might cause problems with sourcemaps (see <a href="https://github.com/microsoft/vscode-react-native/issues/1456">#1456</a>)</td>
+</tr>
+<tr>
+<td>'adb: command not found'</td>
+<td>If you receive an error <code>adb: command not found</code>, you need to update your system Path to include the location of your <em>ADB</em> executable.The <em>ADB</em> executable file is located in a subdirectory along with your other Android SDK files.</td>
+</tr>
+<tr>
+<td>Targeting iPhone 6 doesn't work</td>
+<td>There was a known issue with React Native (<a href="https://github.com/facebook/react-native/issues/5850">#5850</a>) but it was fixed. Please upgrade your version of React Native.</td>
+</tr>
+<tr>
+<td>Can't communicate with socket pipe</td>
+<td>(Linux only) If you have two workspaces open that only differ in casing, the extension will fail to communicate effectively.</td>
+</tr>
+<tr>
+<td>&quot;Add configuration&quot; button doesn't work when trying to add debug configuration to <code>launch.json</code></td>
+<td>You have to add some json configuration to <code>launch.json</code> manually. Please, see (<a href="https://github.com/microsoft/vscode-react-native/issues/985">#985</a>).</td>
+</tr>
+<tr>
+<td>Error <code>None of these files exist: * .vscode/exponentIndex</code> appears when running React Native apps via Expo</td>
+<td>On some project configurations (mostly on macOS) there could be problems with running RN app via Expo for the first time. You can resolve this by explicitly adding <code>module.exports.watchFolders = ['.vscode'];</code> to your Metro config. This will help Metro bundler to find the custom entry point generated by the extension needed to work with Expo. For details you can see the issue (<a href="https://github.com/microsoft/vscode-react-native/issues/1327">#1327</a>).</td>
+</tr>
+<tr>
+<td>High CPU load notification while starting debugging Expo app</td>
+<td>When you start debugging the Expo application you may receive the notification <code>&quot;The extension 'React Native Tools' took a very long time to complete its last operation and it has prevented other extensions from running&quot;</code>. The issue occurs because of importing the <code>xdl</code> package, which extension uses for debugging Expo applications. The <code>xdl</code> package has the large size and some peculiarities of its structure, so it may cause high CPU load.</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/microsoft/vscode-react-native/issues?q=is%3Aissue+label%3Aknown-issues">Known-Issues</a>
+provides a complete list of active and resolved issues.</p>
+<a id="md:telemetry-reporting" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Telemetry reporting<a href="#md:telemetry-reporting" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>VS Code React Native extension collects usage data and sends it to Microsoft to
+help improve our products and services. Read our
+<a href="https://www.visualstudio.com/en-us/dn948229">privacy statement</a> to learn more.</p>
+<p>If you don’t wish to send usage data to Microsoft, edit
+<code>VSCodeTelemetrySettings.json</code> file at <code>~/.vscode-react-native</code> and add
+<code>optIn:false</code>.</p>
+<a id="md:code-of-conduct" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Code of conduct<a href="#md:code-of-conduct" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This project has adopted the
+<a href="https://opensource.microsoft.com/codeofconduct/">Microsoft Open Source Code of Conduct</a>.
+For more information see the
+<a href="https://opensource.microsoft.com/codeofconduct/faq/">Code of Conduct FAQ</a> or
+contact <a href="mailto:opencode@microsoft.com">opencode@microsoft.com</a> with any
+additional questions or comments.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#md:react-native-tools"><span>React <wbr/>Native <wbr/>Tools</span></a><ul><li><a href="#md:react-native-tools-preview"><span>React <wbr/>Native <wbr/>Tools <wbr/>Preview</span></a></li><li><a href="#md:about-the-extension"><span>About the extension</span></a></li></ul><a href="#md:table-of-contents"><span>Table of <wbr/>Contents</span></a><a href="#md:getting-started"><span>Getting started</span></a><a href="#md:react-native-commands-in-the-command-palette"><span>React <wbr/>Native commands in the <wbr/>Command <wbr/>Palette</span></a><ul><li><a href="#md:using-commands-in-vs-code-tasks"><span>Using commands in VS <wbr/>Code tasks</span></a></li></ul><a href="#md:customize-metro-configuration"><span>Customize metro configuration</span></a><a href="#md:debugging-react-native-applications"><span>Debugging <wbr/>React <wbr/>Native applications</span></a><ul><li><a href="#md:hermes-engine"><span>Hermes engine</span></a></li><li><ul><li><a href="#md:android-hermes"><span>Android <wbr/>Hermes</span></a></li><li><a href="#md:ios-hermes"><span>iOS <wbr/>Hermes</span></a></li><li><a href="#md:macos-hermes"><span>macOS <wbr/>Hermes</span></a></li><li><a href="#md:windows-hermes"><span>Windows <wbr/>Hermes</span></a></li><li><a href="#md:attach-to-hermes-application"><span>Attach to <wbr/>Hermes application</span></a></li></ul></li><li><a href="#md:android-applications"><span>Android applications</span></a></li><li><ul><li><a href="#md:custom-build-for-android-apps"><span>Custom build for <wbr/>Android apps</span></a></li></ul></li><li><a href="#md:ios-applications"><span>iOS applications</span></a></li><li><ul><li><a href="#md:ios-devices"><span>iOS devices</span></a></li><li><a href="#md:custom-scheme-for-ios-apps"><span>Custom scheme for iOS apps</span></a></li><li><a href="#md:ios-direct-debugging"><span>iOS direct debugging</span></a></li><li><a href="#md:ios-hermes-debugging"><span>iOS <wbr/>Hermes debugging</span></a></li></ul></li><li><a href="#md:expo-applications"><span>Expo applications</span></a></li><li><ul><li><a href="#md:debug-on-expo-go"><span>Debug on <wbr/>Expo <wbr/>Go</span></a></li><li><a href="#md:debug-on-expo-dev-client"><span>Debug on expo-<wbr/>dev-<wbr/>client</span></a></li><li><a href="#md:debug-on-expo-web"><span>Debug on <wbr/>Expo <wbr/>Web</span></a></li><li><a href="#md:configuring-expo"><span>Configuring <wbr/>Expo</span></a></li><li><a href="#md:expo-hermes"><span>Expo <wbr/>Hermes</span></a></li></ul></li><li><a href="#md:react-native-for-windows"><span>React <wbr/>Native for <wbr/>Windows</span></a></li><li><ul><li><a href="#md:how-to-launch-and-debug-a-react-native-for-windows-application"><span>How to launch and debug a <wbr/>React <wbr/>Native for <wbr/>Windows application</span></a></li><li><a href="#md:how-to-attach-to-a-running-react-native-for-windows-application"><span>How to attach to a running <wbr/>React <wbr/>Native for <wbr/>Windows application</span></a></li><li><a href="#md:windows-hermes-debugging"><span>Windows <wbr/>Hermes debugging</span></a></li></ul></li><li><a href="#md:react-native-for-macos"><span>React <wbr/>Native for macOS</span></a></li><li><ul><li><a href="#md:macos-hermes-debugging"><span>macOS <wbr/>Hermes debugging</span></a></li></ul></li><li><a href="#md:debug-out-of-react-native-project-directory"><span>Debug out of <wbr/>React <wbr/>Native project directory</span></a></li><li><a href="#md:typescript-and-haul"><span>Type<wbr/>Script and <wbr/>Haul</span></a></li><li><ul><li><a href="#md:sourcemaps"><span>Sourcemaps</span></a></li><li><a href="#md:haul-debugging"><span>Haul debugging</span></a></li></ul></li><li><a href="#md:debugger-configuration-properties"><span>Debugger configuration properties</span></a></li></ul><a href="#md:customization"><span>Customization</span></a><ul><li><a href="#md:debug-in-vscode-workspace"><span>Debug in vscode workspace</span></a></li><li><a href="#md:logging"><span>Logging</span></a></li><li><a href="#md:build-apk-and-generate-bundle"><span>Build APK and generate bundle</span></a></li><li><a href="#md:specifying-custom-arguments-for-react-native-run--command"><span>Specifying custom arguments for react-<wbr/>native run-<wbr/>* command</span></a></li><li><a href="#md:setting-up-the-react-native-packager"><span>Setting up the <wbr/>React <wbr/>Native packager</span></a></li><li><ul><li><a href="#md:custom-environment-variables"><span>Custom environment variables</span></a></li></ul></li><li><a href="#md:change-project-root"><span>Change project root</span></a></li><li><a href="#md:configure-an-android-logcat-monitor"><span>Configure an <wbr/>Android <wbr/>Log<wbr/>Cat <wbr/>Monitor</span></a></li><li><a href="#md:configure-dependencies-versions-for-debugging-expo-projects"><span>Configure dependencies versions for debugging <wbr/>Expo projects</span></a></li><li><a href="#md:configure-custom-key-bindings-for-extension-commands"><span>Configure custom key bindings for extension commands</span></a></li><li><a href="#md:configure-custom-colors-for-extension-output-logs"><span>Configure custom colors for extension output logs</span></a></li></ul><a href="#md:element-inspector"><span>Element inspector</span></a><ul><li><ul><li><a href="#md:integration-with-react-native-inspector"><span>Integration with <wbr/>React <wbr/>Native <wbr/>Inspector</span></a></li></ul></li></ul><a href="#md:network-inspector"><span>Network <wbr/>Inspector</span></a><ul><li><ul><li><a href="#md:network-inspector-requirements"><span>Network inspector requirements</span></a></li><li><a href="#md:network-inspector-usage"><span>Network inspector usage</span></a></li><li><a href="#md:network-inspector-logs-theme"><span>Network inspector logs theme</span></a></li></ul></li></ul><a href="#md:developing-inside-a-docker-container"><span>Developing inside a <wbr/>Docker <wbr/>Container</span></a><a href="#md:contributing"><span>Contributing</span></a><a href="#md:known-issues"><span>Known <wbr/>Issues</span></a><a href="#md:telemetry-reporting"><span>Telemetry reporting</span></a><a href="#md:code-of-conduct"><span>Code of conduct</span></a></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="assets/icons.svg#icon-1"></use></svg><span>SampleApplication</span></a><ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="."><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
