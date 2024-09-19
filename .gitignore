@@ -10,6 +10,7 @@ nls.*.json
 test/*.xml
 test/resources/projects/*
 
+# Compiled files
 src/**/*.js
 dist/**
 !src/extension/appcenter/lib/**/*.js
@@ -24,6 +25,7 @@ VSCodeUserData
 vscode-react-native-*.vsix
 *-report
 
+# Sample Application auto-generated files
 SampleApplication/.vscode/.react/debuggerWorker.js
 SampleApplication/.vscode/.react/index.android.bundle
 SampleApplication/.vscode/.react/index.android.map
