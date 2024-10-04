@@ -3,37 +3,42 @@
 
 /* This class can be used to limit how often can some code be executed e.g. Max once every 10 seconds */
 export class ExecutionsLimiter {
-    private executionToLastTimestamp: { [id: string]: number } = {};
+	private executionToLastTimestamp: { [id: string]: number } = {};
 
-    public execute(id: string, limitInSeconds: number, lambda: () => void): void {
-        const now = new Date().getTime();
+	public execute(
+		id: string,
+		limitInSeconds: number,
+		lambda: () => void,
+	): void {
+		const now = new Date().getTime();
 
-        const lastExecution = this.executionToLastTimestamp[id] || 0;
-        if (now - lastExecution >= limitInSeconds * 1000) {
-            this.executionToLastTimestamp[id] = now;
-            lambda();
-        }
-    }
+		const lastExecution = this.executionToLastTimestamp[id] || 0;
+		if (now - lastExecution >= limitInSeconds * 1000) {
+			this.executionToLastTimestamp[id] = now;
+			lambda();
+		}
+	}
 }
 
 export class ExecutionsFilterBeforeTimestamp {
-    private static MILLISECONDS_IN_ONE_SECOND = 1000;
+	private static MILLISECONDS_IN_ONE_SECOND = 1000;
 
-    private sinceWhenToStopFiltering: number;
+	private sinceWhenToStopFiltering: number;
 
-    constructor(delayInSeconds: number) {
-        this.sinceWhenToStopFiltering =
-            this.now() +
-            delayInSeconds * ExecutionsFilterBeforeTimestamp.MILLISECONDS_IN_ONE_SECOND;
-    }
+	constructor(delayInSeconds: number) {
+		this.sinceWhenToStopFiltering =
+			this.now() +
+			delayInSeconds *
+				ExecutionsFilterBeforeTimestamp.MILLISECONDS_IN_ONE_SECOND;
+	}
 
-    public execute(lambda: () => void): void {
-        if (this.now() >= this.sinceWhenToStopFiltering) {
-            lambda();
-        }
-    }
+	public execute(lambda: () => void): void {
+		if (this.now() >= this.sinceWhenToStopFiltering) {
+			lambda();
+		}
+	}
 
-    private now(): number {
-        return new Date().getTime();
-    }
+	private now(): number {
+		return new Date().getTime();
+	}
 }

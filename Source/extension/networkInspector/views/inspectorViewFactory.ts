@@ -4,32 +4,43 @@
 import { OutputChannelLogger } from "../../log/OutputChannelLogger";
 import { NETWORK_INSPECTOR_LOG_CHANNEL_NAME } from "../networkInspectorServer";
 import { InspectorConsoleView } from "./inspectorConsoleView";
-import { InspectorViewType, InspectorView } from "./inspectorView";
+import { InspectorView, InspectorViewType } from "./inspectorView";
 
 export class InspectorViewFactory {
-    private static cachedInspectorViews = new Map<InspectorViewType, InspectorView>();
+	private static cachedInspectorViews = new Map<
+		InspectorViewType,
+		InspectorView
+	>();
 
-    public static getInspectorView(inspectorViewType: InspectorViewType): InspectorView {
-        if (!InspectorViewFactory.cachedInspectorViews.has(inspectorViewType)) {
-            if (inspectorViewType === InspectorViewType.console) {
-                InspectorViewFactory.cachedInspectorViews.set(
-                    InspectorViewType.console,
-                    new InspectorConsoleView(
-                        OutputChannelLogger.getChannel(NETWORK_INSPECTOR_LOG_CHANNEL_NAME),
-                    ),
-                );
-            } else {
-                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                throw new Error(`Unsupported inspector view type: ${inspectorViewType}`);
-            }
-        }
-        return InspectorViewFactory.cachedInspectorViews.get(inspectorViewType) as InspectorView;
-    }
+	public static getInspectorView(
+		inspectorViewType: InspectorViewType,
+	): InspectorView {
+		if (!InspectorViewFactory.cachedInspectorViews.has(inspectorViewType)) {
+			if (inspectorViewType === InspectorViewType.console) {
+				InspectorViewFactory.cachedInspectorViews.set(
+					InspectorViewType.console,
+					new InspectorConsoleView(
+						OutputChannelLogger.getChannel(
+							NETWORK_INSPECTOR_LOG_CHANNEL_NAME,
+						),
+					),
+				);
+			} else {
+				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+				throw new Error(
+					`Unsupported inspector view type: ${inspectorViewType}`,
+				);
+			}
+		}
+		return InspectorViewFactory.cachedInspectorViews.get(
+			inspectorViewType,
+		) as InspectorView;
+	}
 
-    public static clearCache(): void {
-        InspectorViewFactory.cachedInspectorViews.forEach(inspectorView => {
-            inspectorView.dispose();
-        });
-        InspectorViewFactory.cachedInspectorViews.clear();
-    }
+	public static clearCache(): void {
+		InspectorViewFactory.cachedInspectorViews.forEach((inspectorView) => {
+			inspectorView.dispose();
+		});
+		InspectorViewFactory.cachedInspectorViews.clear();
+	}
 }
