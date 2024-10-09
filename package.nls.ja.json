@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "VS Code DevTools コンソールのネットワーク インスペクター ログのカラー テーマ",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "エディタタイトルエリアのメニューに「デバッグ」ボタンを表示するかどうか",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "拡張機能に関するヒントを表示するかどうか"
-  }
+}

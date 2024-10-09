@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "Das Farbthema für Netzwerkinspektorprotokolle in der VS Code DevTools-Konsole",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "Ob die Schaltfläche „Debuggen“ im Menü des Editor-Titelbereichs angezeigt werden soll",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "Ob Tipps zu Erweiterungsfunktionen angezeigt werden sollen"
-  }
+}

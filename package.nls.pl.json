@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "Motyw kolorów dzienników Inspektora sieci w konsoli VS Code DevTools",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "Określa, czy wyświetlać przycisk Debuguj w menu obszaru Tytuł edytora",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "Określa, czy wyświetlać wskazówki dotyczące funkcji rozszerzeń"
-  }
+}

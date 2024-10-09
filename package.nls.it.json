@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "Il tema colore per l'ispettore di rete accede alla console VS Code DevTools",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "Se mostrare il pulsante Debug nel menu dell'area Titolo dell'editor",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "Se mostrare suggerimenti sulle funzionalità dell'estensione"
-  }
+}

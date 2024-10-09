@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "VS Code DevTools 콘솔의 네트워크 검사기 로그에 대한 색상 테마",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "Editor Title 영역 메뉴에 Debug 버튼 표시 여부",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "확장 기능에 대한 팁 표시 여부"
-  }
+}

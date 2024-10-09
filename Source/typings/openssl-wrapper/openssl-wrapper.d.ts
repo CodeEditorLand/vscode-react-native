@@ -12,22 +12,22 @@
 // Definitions by: facebook/flipper <https://github.com/facebook/flipper>
 
 declare module "openssl-wrapper" {
-    export type Action =
-        | "cms.verify"
-        | "genrsa"
-        | "pkcs12"
-        | "req"
-        | "req.new"
-        | "req.verify"
-        | "verify"
-        | "rsa"
-        | "smime.verify"
-        | "x509.req"
-        | "x509";
+	export type Action =
+		| "cms.verify"
+		| "genrsa"
+		| "pkcs12"
+		| "req"
+		| "req.new"
+		| "req.verify"
+		| "verify"
+		| "rsa"
+		| "smime.verify"
+		| "x509.req"
+		| "x509";
 
-    export function exec(
-        action: Action,
-        options: { [key: string]: string },
-        cb: (error: Error | undefined, buffer: Buffer | undefined) => any,
-    ): void;
+	export function exec(
+		action: Action,
+		options: { [key: string]: string },
+		cb: (error: Error | undefined, buffer: Buffer | undefined) => any,
+	): void;
 }

@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "Barevný motiv pro protokoly Network inspector v konzole VS Code DevTools",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "Zda se má zobrazit tlačítko Debug v nabídce oblasti Název editoru",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "Zda se mají zobrazovat tipy ohledně funkcí rozšíření"
-  }
+}

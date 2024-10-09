@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "Цветовая тема для журналов сетевого инспектора в консоли VS Code DevTools.",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "Показывать ли кнопку «Отладка» в меню области заголовка редактора.",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "Показывать ли советы о функциях расширения"
-  }
+}

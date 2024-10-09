@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "O tema de cores para logs do inspetor de rede no console do VS Code DevTools",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "Se deve mostrar o botão Depurar no menu da área Título do Editor",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "Se deve mostrar dicas sobre recursos de extensão"
-  }
+}

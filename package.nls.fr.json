@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "Le thème de couleur pour les journaux de l'inspecteur réseau dans la console VS Code DevTools",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "S'il faut afficher le bouton Déboguer dans le menu de la zone Titre de l'éditeur",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "S'il faut afficher des conseils sur les fonctionnalités de l'extension"
-  }
+}

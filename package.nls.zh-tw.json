@@ -111,4 +111,4 @@
 	"reactNative.configuration.properties.react-native-tools.consoleLogsColorTheme.description": "VS Code DevTools 控制台中網路檢查器日誌的顏色主題",
 	"reactNative.configuration.properties.react-native-tools.displayDebuggingCommandsButton.description": "是否在編輯器標題區域選單中顯示“調試”按鈕",
 	"reactNative.configuration.properties.react-native-tools.showUserTips.description": "是否顯示有關擴充功能的提示"
-  }
+}
