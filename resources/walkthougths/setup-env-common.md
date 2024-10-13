@@ -5,9 +5,9 @@ get started with React Native Tools successfully.
 
 Make sure that you:
 
--   [have a working React Native environment](https://reactnative.dev/docs/environment-setup).
+-   [`have a working React Native environment`](https://reactnative.dev/docs/environment-setup).
 -   have the
-    [`emulator`](https://developer.android.com/studio/run/emulator-commandline)
+    [`emulator``](https://developer.android.com/studio/run/emulator-commandline)
     utility available in your `PATH` if you're developing Android applications
     using emulators.
 -   have your React Native project root folder open in VS Code.
