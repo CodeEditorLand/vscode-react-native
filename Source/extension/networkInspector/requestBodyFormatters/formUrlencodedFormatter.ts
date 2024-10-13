@@ -4,10 +4,11 @@
 /* eslint-disable */
 /* eslint-enable prettier/prettier*/
 
-import { IFormatter, decodeBody, FormattedBody } from "./requestBodyFormatter";
+import * as querystring from "querystring";
+
 import { OutputChannelLogger } from "../../log/OutputChannelLogger";
 import { Request } from "../networkMessageData";
-import * as querystring from "querystring";
+import { decodeBody, FormattedBody, IFormatter } from "./requestBodyFormatter";
 
 /**
  * @preserve
@@ -22,18 +23,21 @@ import * as querystring from "querystring";
  */
 
 export class FormUrlencodedFormatter implements IFormatter {
-    constructor(private logger: OutputChannelLogger) {}
+	constructor(private logger: OutputChannelLogger) {}
 
-    public formatRequest(request: Request, contentType: string): FormattedBody | null {
-        if (contentType.startsWith("application/x-www-form-urlencoded")) {
-            const decoded = decodeBody(request, this.logger);
-            if (!decoded) {
-                return null;
-            }
-            return querystring.parse(decoded);
-        }
-        return null;
-    }
+	public formatRequest(
+		request: Request,
+		contentType: string,
+	): FormattedBody | null {
+		if (contentType.startsWith("application/x-www-form-urlencoded")) {
+			const decoded = decodeBody(request, this.logger);
+			if (!decoded) {
+				return null;
+			}
+			return querystring.parse(decoded);
+		}
+		return null;
+	}
 }
 
 /**

@@ -2,12 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 
 import * as nls from "vscode-nls";
+
 import { basicCheck, createNotFoundMessage } from "../util";
-import { ValidationCategoryE, IValidation, ValidationResultT } from "./types";
+import { IValidation, ValidationCategoryE, ValidationResultT } from "./types";
 
 nls.config({
-    messageFormat: nls.MessageFormat.bundle,
-    bundleFormat: nls.BundleFormat.standalone,
+	messageFormat: nls.MessageFormat.bundle,
+	bundleFormat: nls.BundleFormat.standalone,
 })();
 
 const toLocale = nls.loadMessageBundle();
@@ -15,26 +16,29 @@ const toLocale = nls.loadMessageBundle();
 const label = "Watchman";
 
 async function test(): Promise<ValidationResultT> {
-    const result = await basicCheck({
-        command: "watchman",
-    });
+	const result = await basicCheck({
+		command: "watchman",
+	});
 
-    if (!result.exists) {
-        return {
-            status: "failure",
-            comment: createNotFoundMessage(label),
-        };
-    }
+	if (!result.exists) {
+		return {
+			status: "failure",
+			comment: createNotFoundMessage(label),
+		};
+	}
 
-    return { status: "success" };
+	return { status: "success" };
 }
 
 const main: IValidation = {
-    label,
-    platform: ["darwin"],
-    description: toLocale("WatchmanTestDescription", "Required for watching file changes"),
-    category: ValidationCategoryE.Common,
-    exec: test,
+	label,
+	platform: ["darwin"],
+	description: toLocale(
+		"WatchmanTestDescription",
+		"Required for watching file changes",
+	),
+	category: ValidationCategoryE.Common,
+	exec: test,
 };
 
 export default main;
