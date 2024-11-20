@@ -1,15 +1,33 @@
 {
-	"name": "vscode-react-native",
-	"displayName": "React Native Tools",
-	"description": "%reactNative.description%",
-	"main": "./src/extension/rn-extension",
-	"scripts": {
-		"build": "gulp build",
-		"prepare": "husky install",
-		"prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
-		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
-		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
-		"test-localization": "node ./test/localization/runTest.js"
+	"activationEvents": [
+		"workspaceContains:node_modules/react-native",
+		"onDebugResolve:reactnative",
+		"onDebugResolve:reactnativedirect",
+		"onDebugDynamicConfigurations:reactnative",
+		"onDebugInitialConfigurations",
+		"onCommand:reactNative.runAndroidSimulator",
+		"onCommand:reactNative.runAndroidDevice",
+		"onCommand:reactNative.runIosSimulator",
+		"onCommand:reactNative.runIosDevice",
+		"onCommand:reactNative.runExponent",
+		"onCommand:reactNative.startPackager",
+		"onCommand:reactNative.stopPackager",
+		"onCommand:reactNative.restartPackager",
+		"onCommand:reactNative.publishToExpHost",
+		"onCommand:reactNative.showDevMenu",
+		"onCommand:reactNative.reloadApp",
+		"onCommand:reactNative.runInspector",
+		"onCommand:reactNative.testDevEnvironment"
+	],
+	"capabilities": {
+		"untrustedWorkspaces": {
+			"description": "%reactNative.workspaceTrust.description%",
+			"supported": "limited"
+		},
+		"virtualWorkspaces": {
+			"description": "%reactNative.virtualWorkspaces.description%",
+			"supported": false
+		}
 	},
 	"contributes": {
 		"breakpoints": [
@@ -1340,26 +1358,6 @@
 			}
 		]
 	},
-	"activationEvents": [
-		"workspaceContains:node_modules/react-native",
-		"onDebugResolve:reactnative",
-		"onDebugResolve:reactnativedirect",
-		"onDebugDynamicConfigurations:reactnative",
-		"onDebugInitialConfigurations",
-		"onCommand:reactNative.runAndroidSimulator",
-		"onCommand:reactNative.runAndroidDevice",
-		"onCommand:reactNative.runIosSimulator",
-		"onCommand:reactNative.runIosDevice",
-		"onCommand:reactNative.runExponent",
-		"onCommand:reactNative.startPackager",
-		"onCommand:reactNative.stopPackager",
-		"onCommand:reactNative.restartPackager",
-		"onCommand:reactNative.publishToExpHost",
-		"onCommand:reactNative.showDevMenu",
-		"onCommand:reactNative.reloadApp",
-		"onCommand:reactNative.runInspector",
-		"onCommand:reactNative.testDevEnvironment"
-	],
 	"dependencies": {
 		"command-exists": "1.2.9",
 		"configstore": "7.0.0",
@@ -1387,6 +1385,7 @@
 		"uuid": "11.0.3",
 		"ws": "8.18.0"
 	},
+	"description": "%reactNative.description%",
 	"devDependencies": {
 		"@types/command-exists": "1.2.3",
 		"@types/configstore": "6.0.2",
@@ -1425,22 +1424,23 @@
 		"through2": "4.0.2",
 		"ts-loader": "9.5.1"
 	},
+	"displayName": "React Native Tools",
 	"extensionDependencies": [
 		"ms-vscode.js-debug"
 	],
-	"icon": "resources/images/icon.png",
 	"galleryBanner": {
 		"color": "#3B3738",
 		"theme": "dark"
 	},
-	"capabilities": {
-		"untrustedWorkspaces": {
-			"description": "%reactNative.workspaceTrust.description%",
-			"supported": "limited"
-		},
-		"virtualWorkspaces": {
-			"description": "%reactNative.virtualWorkspaces.description%",
-			"supported": false
-		}
+	"icon": "resources/images/icon.png",
+	"main": "./src/extension/rn-extension",
+	"name": "vscode-react-native",
+	"scripts": {
+		"build": "gulp build",
+		"prepare": "husky install",
+		"prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
+		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
+		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
+		"test-localization": "node ./test/localization/runTest.js"
 	}
 }
