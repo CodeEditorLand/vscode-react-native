@@ -9,8 +9,10 @@ export async function ensurePackagerRunning(
 	error: any,
 ): Promise<void> {
 	const statusURL = `http://${packagerAddress}:${packagerPort}/status`;
+
 	try {
 		const body = await Request.request(statusURL, true);
+
 		if (body !== "packager-status:running") {
 			return Promise.reject();
 		}

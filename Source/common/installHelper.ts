@@ -12,12 +12,14 @@ export async function installAndroidApplication(
 	appPath: string,
 ) {
 	const logger = OutputChannelLogger.getMainChannel();
+
 	const adbHelper = new AdbHelper(
 		project.getPackager().getProjectPath(),
 		project.getOrUpdateNodeModulesRoot(),
 	);
 
 	const targets = await adbHelper.getOnlineTargets();
+
 	if (targets.length == 0) {
 		throw new Error(
 			"No online target found, please check your emulator status.",
@@ -26,6 +28,7 @@ export async function installAndroidApplication(
 		logger.logStream(
 			`Found ${targets.length} online emulators, installing application on ${targets[0].id}. \n`,
 		);
+
 		try {
 			await adbHelper.installApplicationToEmulator(appPath);
 		} catch {
@@ -33,6 +36,7 @@ export async function installAndroidApplication(
 		}
 	} else {
 		logger.logStream(`Installing application on ${targets[0].id}. \n`);
+
 		try {
 			await adbHelper.installApplicationToEmulator(appPath);
 		} catch {
@@ -47,6 +51,7 @@ export async function installiOSApplication(
 	appPath: string,
 ) {
 	const logger = OutputChannelLogger.getMainChannel();
+
 	const childProcess: ChildProcess = new ChildProcess();
 
 	const targets = await SimctrlHelper.getBootediOSSimulatorList();
@@ -75,6 +80,7 @@ export async function installiOSApplication(
 				targets[0]
 			}. \n`,
 		);
+
 		try {
 			await SimctrlHelper.installApplicationToSimulator(
 				targets[0],
@@ -85,6 +91,7 @@ export async function installiOSApplication(
 		}
 	} else {
 		logger.logStream(`Installing application on ${targets[0]}. \n`);
+
 		try {
 			await SimctrlHelper.installApplicationToSimulator(
 				targets[0],

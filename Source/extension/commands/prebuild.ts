@@ -17,10 +17,14 @@ export class Prebuild extends ReactNativeCommand {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const projectRootPath = this.project.getPackager().getProjectPath();
+
 		const logger = OutputChannelLogger.getChannel("Expo Prebuild", true);
+
 		const nodeModulesRoot: string =
 			AppLauncher.getNodeModulesRootByProjectPath(projectRootPath);
+
 		const commandExecutor = new CommandExecutor(
 			nodeModulesRoot,
 			projectRootPath,

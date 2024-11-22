@@ -15,6 +15,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export abstract class GeneralMobilePlatform extends GeneralPlatform {
@@ -33,7 +34,9 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 		let collectTargetsCalled = false;
 
 		let isAnyTarget = false;
+
 		let isVirtualTarget: boolean;
+
 		if (targetString.toLowerCase() === TargetType.Simulator) {
 			isAnyTarget = true;
 			isVirtualTarget = true;
@@ -68,8 +71,10 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 						? true
 						: target.name === targetString ||
 							target.id === targetString;
+
 					const conditionForVirtualTarget =
 						isVirtualTarget === target.isVirtualTarget;
+
 					return (
 						conditionForVirtualTarget && conditionForNotAnyTarget
 					);
@@ -140,6 +145,7 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 		// avoid passing the target to the CLI command if it's not necessary to improve build performance.
 		// We should not pass target to run arguments in case there is only one online simulator or online target
 		const targets = await this.targetManager.getTargetList();
+
 		return targets.filter((target) => target.isOnline).length > 1;
 	}
 

@@ -28,6 +28,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class IOSPlatform extends GeneralMobilePlatform {
@@ -94,6 +95,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				this.runOptions.iosRelativeProjectPath ||
 				IOSPlatform.DEFAULT_IOS_PROJECT_RELATIVE_PATH,
 		);
+
 		const schemeFromArgs = IOSPlatform.getOptFromRunArgs(
 			this.runArguments,
 			"--scheme",
@@ -109,20 +111,25 @@ export class IOSPlatform extends GeneralMobilePlatform {
 	public async getTarget(): Promise<IOSTarget> {
 		if (!this.target) {
 			const targetFromRunArgs = await this.getTargetFromRunArgs();
+
 			if (targetFromRunArgs) {
 				this.target = targetFromRunArgs;
 			} else {
 				const targets =
 					(await this.targetManager.getTargetList()) as IDebuggableIOSTarget[];
+
 				const targetsBySpecifiedType = targets.filter((target) => {
 					switch (this.runOptions.target) {
 						case TargetType.Simulator:
 							return target.isVirtualTarget;
+
 						case TargetType.Device:
 							return !target.isVirtualTarget;
+
 						case undefined:
 						case "":
 							return true;
+
 						default:
 							return (
 								target.id === this.runOptions.target ||
@@ -130,6 +137,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 							);
 					}
 				});
+
 				if (targetsBySpecifiedType.length) {
 					this.target = IOSTarget.fromInterface(
 						targetsBySpecifiedType[0],
@@ -155,6 +163,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 
 	public async showDevMenu(appLauncher: AppLauncher): Promise<void> {
 		const worker = appLauncher.getAppWorker();
+
 		if (worker) {
 			worker.showDevMenuCommand();
 		}
@@ -162,6 +171,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 
 	public async reloadApp(appLauncher: AppLauncher): Promise<void> {
 		const worker = appLauncher.getAppWorker();
+
 		if (worker) {
 			worker.reloadAppCommand();
 		}
@@ -252,6 +262,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			this.logger.info(
 				"Application is running on a device, please shake device and select 'Debug JS Remotely' to enable debugging.",
 			);
+
 			return;
 		}
 
@@ -265,6 +276,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			),
 			this.getBundleId(),
 		]);
+
 		if (debugModeEnabled) {
 			return;
 		}
@@ -273,11 +285,13 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		// but that file is written to by the app on occasion. To avoid races, we shut the app
 		// down before writing to the file.
 		const childProcess = new ChildProcess();
+
 		const output = await childProcess.execToString(
 			"xcrun simctl spawn booted launchctl list",
 		);
 		// Try to find an entry that looks like UIKitApplication:com.example.myApp[0x4f37]
 		const regex = new RegExp(`(\\S+${String(bundleId)}\\S+)`);
+
 		const match = regex.exec(output);
 		// If we don't find a match, the app must not be running and so we do not need to close it
 		if (match) {
@@ -318,12 +332,14 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			this.runOptions.runArguments.length > 0
 		) {
 			runArguments = this.runOptions.runArguments;
+
 			if (this.runOptions.scheme) {
 				const schemeFromArgs = IOSPlatform.getOptFromRunArgs(
 					runArguments,
 					"--scheme",
 					false,
 				);
+
 				if (!schemeFromArgs) {
 					runArguments.push("--scheme", this.runOptions.scheme);
 				} else {
@@ -370,8 +386,10 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				this.runOptions.runArguments,
 				"--udid",
 			);
+
 			if (udid) {
 				const target = targets.find((target) => target.id === udid);
+
 				if (target) {
 					return IOSTarget.fromInterface(target);
 				}
@@ -388,11 +406,13 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				this.runOptions.runArguments,
 				"--device",
 			);
+
 			if (device) {
 				const target = targets.find(
 					(target) =>
 						!target.isVirtualTarget && target.name === device,
 				);
+
 				if (target) {
 					return IOSTarget.fromInterface(target);
 				}
@@ -409,11 +429,13 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				this.runOptions.runArguments,
 				"--simulator",
 			);
+
 			if (simulator) {
 				const target = targets.find(
 					(target) =>
 						target.isVirtualTarget && target.name === simulator,
 				);
+
 				if (target) {
 					return IOSTarget.fromInterface(target);
 				}
@@ -439,6 +461,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 	private async generateSuccessPatterns(version: string): Promise<string[]> {
 		// Clone RUN_IOS_SUCCESS_PATTERNS to avoid its runtime mutation
 		const successPatterns = [...IOSPlatform.RUN_IOS_SUCCESS_PATTERNS];
+
 		if (!(await this.getTarget()).isVirtualTarget) {
 			if (
 				semver.gte(version, IOSPlatform.NEW_RN_CLI_BEHAVIOUR_VERSION) ||
@@ -451,6 +474,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			return successPatterns;
 		}
 		const bundleId = await this.getBundleId();
+
 		if (
 			semver.gte(version, IOSPlatform.NEW_RN_CLI_BEHAVIOUR_VERSION) ||
 			ProjectVersionHelper.isCanaryVersion(version)
@@ -475,12 +499,14 @@ export class IOSPlatform extends GeneralMobilePlatform {
 
 	private getBundleId(): Promise<string> {
 		let scheme = this.runOptions.scheme;
+
 		if (!scheme) {
 			const schemeFromArgs = IOSPlatform.getOptFromRunArgs(
 				this.runArguments,
 				"--scheme",
 				false,
 			);
+
 			if (schemeFromArgs) {
 				scheme = schemeFromArgs;
 			}

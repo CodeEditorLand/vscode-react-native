@@ -10,12 +10,14 @@ import { removeModuleFromRequireCacheByName } from "../../common/utils";
 import { SettingsHelper } from "../settingsHelper";
 
 const XDL_PACKAGE = "xdl";
+
 const METRO_CONFIG_PACKAGE = "@expo/metro-config";
 
 const xdlPackageConfig = new PackageConfig(
 	XDL_PACKAGE,
 	SettingsHelper.getExpoDependencyVersion(XDL_PACKAGE),
 );
+
 const metroConfigPackageConfig = new PackageConfig(
 	METRO_CONFIG_PACKAGE,
 	SettingsHelper.getExpoDependencyVersion(METRO_CONFIG_PACKAGE),
@@ -52,6 +54,7 @@ export type IUser = XDLPackage.IUser;
 
 export async function configReactNativeVersionWarnings(): Promise<void> {
 	const xdlPackage = await getXDLPackage();
+
 	if (xdlPackage.Config.validation !== undefined) {
 		xdlPackage.Config.validation.reactNativeVersionWarnings = false;
 	}
@@ -66,6 +69,7 @@ export async function attachLoggerStream(
 
 export async function currentUser(): Promise<XDLPackage.IUser> {
 	const xdl = await getXDLPackage();
+
 	return await (xdl.User
 		? xdl.User.getCurrentUserAsync()
 		: xdl.UserManager.getCurrentUserAsync());
@@ -76,6 +80,7 @@ export async function login(
 	password: string,
 ): Promise<XDLPackage.IUser> {
 	const xdl = await getXDLPackage();
+
 	return await (xdl.User
 		? xdl.User.loginAsync("user-pass", { username, password })
 		: xdl.UserManager.loginAsync("user-pass", {
@@ -146,11 +151,13 @@ export async function getMetroConfig(
 
 export async function isNgrokInstalled(projectRoot: string): Promise<boolean> {
 	const ngrokResolver = await getNgrokResolver();
+
 	try {
 		const ngrok = await ngrokResolver.resolveNgrokAsync(projectRoot, {
 			shouldPrompt: false,
 			autoInstall: false,
 		});
+
 		return !!ngrok;
 	} catch (err) {
 		// If unsupported version of the "@expo/ngrok" package was detected, we need to update the package.
@@ -158,6 +165,7 @@ export async function isNgrokInstalled(projectRoot: string): Promise<boolean> {
 		// all processed modules, we have to remove this file from cache to be able to require a new version
 		// of that file after the update of the "@expo/ngrok" package
 		removeModuleFromRequireCacheByName(pathJoin("ngrok", "package.json"));
+
 		throw err;
 	}
 }

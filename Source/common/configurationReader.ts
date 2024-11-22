@@ -75,6 +75,7 @@ export class ConfigurationReader {
 		defaultValuePromise: Promise<number>,
 	): Promise<number> {
 		const defaultValue = await defaultValuePromise;
+
 		return this.readIntWithDefaultSync(value, defaultValue);
 	}
 

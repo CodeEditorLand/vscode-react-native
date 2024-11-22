@@ -31,6 +31,7 @@ export class SourceMapsCombinator {
 					try {
 						const consumer: SourceMapConsumer | null =
 							this.getSourceMapConsumerFrom(file);
+
 						if (consumer) result[file] = consumer;
 					} finally {
 						return result;
@@ -45,6 +46,7 @@ export class SourceMapsCombinator {
 		}
 
 		const generator = new SourceMapGenerator();
+
 		const bundleConsumer = new SourceMapConsumer(rawBundleSourcemap);
 
 		bundleConsumer.eachMapping((item: MappingItem) => {
@@ -72,6 +74,7 @@ export class SourceMapsCombinator {
 					line: item.originalLine,
 					column: item.originalColumn,
 				};
+
 				const tsPosition: NullableMappedPosition =
 					consumers[item.source].originalPositionFor(jsPosition);
 
@@ -95,6 +98,7 @@ export class SourceMapsCombinator {
 				// Update mapping w/ mapped position values
 				mapping.source = tsPosition.source;
 				mapping.name = tsPosition.name || mapping.name;
+
 				if (tsPosition.line !== null && tsPosition.column !== null) {
 					mapping.original = {
 						line: tsPosition.line,
@@ -117,6 +121,7 @@ export class SourceMapsCombinator {
 		const code = fs.readFileSync(generatedFile);
 
 		const consumer = this.readSourcemap(generatedFile, code.toString());
+
 		return consumer;
 	}
 
@@ -129,6 +134,7 @@ export class SourceMapsCombinator {
 			file,
 			readFileSync.bind(null, getDiskLetter(file)),
 		);
+
 		if (result === null) {
 			return null;
 		}
@@ -146,5 +152,6 @@ function readFileSync(diskLetter: string, filePath: string) {
 
 function getDiskLetter(filePath: string): string {
 	const matched = filePath.match(DISK_LETTER_RE);
+
 	return matched ? matched[0] : "";
 }

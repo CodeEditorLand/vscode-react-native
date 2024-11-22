@@ -103,6 +103,7 @@ export class RNProjectObserver {
 			this._isRNWindowsHermesProject ||
 			this._isRNAndroidHermesProject ||
 			this._isRNIosHermesProject;
+
 		return this._isRNHermesProject;
 	}
 
@@ -178,6 +179,7 @@ export class RNProjectObserver {
 
 	private updateRNHermesProjectState(): void {
 		const isRNHermesProjectPrev = this._isRNHermesProject;
+
 		if (isRNHermesProjectPrev !== this.isRNHermesProject) {
 			this.updateContextState(
 				CONTEXT_VARIABLES_NAMES.IS_RN_HERMES_PROJECT,

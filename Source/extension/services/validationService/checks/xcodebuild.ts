@@ -22,6 +22,7 @@ const label = "XCodeBuild";
 
 async function test(requiredVersion?: string): Promise<ValidationResultT> {
 	const command = "xcodebuild";
+
 	const result = await basicCheck({
 		command,
 		getVersion: parseVersion.bind(
@@ -31,6 +32,7 @@ async function test(requiredVersion?: string): Promise<ValidationResultT> {
 		),
 		versionRange: requiredVersion,
 	});
+
 	if (!result.exists) {
 		return {
 			status: "failure",

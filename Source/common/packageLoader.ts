@@ -76,6 +76,7 @@ export class PackageLoader {
 	): Promise<void> {
 		const nodeModulesRoot: string =
 			AppLauncher.getNodeModulesRootByProjectPath(projectRoot);
+
 		const commandExecutor = new CommandExecutor(
 			nodeModulesRoot,
 			projectRoot,
@@ -131,8 +132,10 @@ export class PackageLoader {
 		packageWasInstalled: boolean,
 	): Promise<boolean> {
 		const requiredPackage = packageConfig.getStringForRequire();
+
 		try {
 			this.logger.debug(`Getting ${requiredPackage} dependency.`);
+
 			if (packageConfig.getVersion()) {
 				const installedVersion =
 					await getVersionFromExtensionNodeModules(
@@ -146,20 +149,24 @@ export class PackageLoader {
 					this.logger.debug(
 						`Dependency ${requiredPackage} is present with another version. Retry after install this package with specific version...`,
 					);
+
 					return false;
 				}
 			}
 			const module = customRequire(requiredPackage);
 			resolve(module);
+
 			return true;
 		} catch (e) {
 			if (packageWasInstalled || e.code !== "MODULE_NOT_FOUND") {
 				reject(e);
+
 				return true;
 			}
 			this.logger.debug(
 				`Dependency ${requiredPackage} is not present. Retry after install...`,
 			);
+
 			return false;
 		}
 	}
@@ -174,6 +181,7 @@ export class PackageLoader {
 			this.packagesQueue.push(dependency.getStringForInstall());
 		});
 		this.requireQueue.push(tryToRequire);
+
 		if (!this.isCommandsExecuting) {
 			this.isCommandsExecuting = true;
 
@@ -193,6 +201,7 @@ export class PackageLoader {
 				this.packagesQueue = this.getUniquePackages(this.packagesQueue);
 
 				const load = this.packagesQueue.length;
+
 				const packagesForInstall = this.packagesQueue.slice(0, load);
 
 				await commandExecutor.spawnWithProgress(
@@ -212,6 +221,7 @@ export class PackageLoader {
 				const requiresToRemove: ((
 					load?: string[],
 				) => Promise<boolean>)[] = [];
+
 				for (tryToRequire of this.requireQueue) {
 					if (await tryToRequire(packagesForInstall)) {
 						requiresToRemove.push(tryToRequire);
@@ -220,6 +230,7 @@ export class PackageLoader {
 				// Remove resolved requires from queue
 				requiresToRemove.forEach((tryToRequire) => {
 					const index = this.requireQueue.indexOf(tryToRequire);
+
 					if (index > -1) {
 						this.requireQueue.splice(index, 1);
 					}
@@ -231,6 +242,7 @@ export class PackageLoader {
 					);
 					packagesForInstall.forEach((module) => {
 						const index = this.packagesQueue.indexOf(module);
+
 						if (index !== -1) {
 							this.packagesQueue.splice(index, 1);
 						}
@@ -253,6 +265,7 @@ export class PackageLoader {
 				resolve,
 				reject,
 			);
+
 			if (!(await tryToRequire())) {
 				this.tryToRequireAfterInstall(
 					tryToRequire,

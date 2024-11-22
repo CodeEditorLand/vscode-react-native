@@ -20,6 +20,7 @@ export class RunExponent extends ReactNativeCommand {
 		assert(this.project);
 
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
+
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				nodeModulesRoot,

@@ -29,6 +29,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class ReactNativeDebugConfigProvider
@@ -208,16 +209,20 @@ export class ReactNativeDebugConfigProvider
 	): Promise<vscode.DebugConfiguration[]> {
 		return new Promise<vscode.DebugConfiguration[]>((resolve) => {
 			const configPicker = this.prepareDebugConfigPicker();
+
 			const disposables: vscode.Disposable[] = [];
+
 			const pickHandler = () => {
 				const chosenConfigsEvent = TelemetryHelper.createTelemetryEvent(
 					"chosenDebugConfigurations",
 				);
+
 				const selected: string[] = configPicker.selectedItems.map(
 					(element) => element.label,
 				);
 				chosenConfigsEvent.properties.selectedItems = selected;
 				Telemetry.send(chosenConfigsEvent);
+
 				const launchConfig = this.gatherDebugScenarios(selected);
 				disposables.forEach((d) => d.dispose());
 				resolve(launchConfig);
@@ -238,6 +243,7 @@ export class ReactNativeDebugConfigProvider
 		token?: vscode.CancellationToken,
 	): Promise<vscode.DebugConfiguration | undefined> {
 		const config: Partial<ILaunchRequestArgs> = {};
+
 		const state = {
 			config,
 			scenarioType: DebugScenarioType.DebugApp,
@@ -302,6 +308,7 @@ export class ReactNativeDebugConfigProvider
 		state: DebugConfigurationState,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		state.config = {};
+
 		const pick = await input.showQuickPick<
 			DebugConfigurationQuickPickItem,
 			IQuickPickParameters<DebugConfigurationQuickPickItem>
@@ -314,8 +321,10 @@ export class ReactNativeDebugConfigProvider
 			activeItem: this.sequentialPickConfig[0],
 			items: this.sequentialPickConfig,
 		});
+
 		if (pick) {
 			const provider = ConfigProviderFactory.create(pick.type);
+
 			return provider.buildConfiguration.bind(provider);
 		}
 	}
@@ -326,6 +335,7 @@ export class ReactNativeDebugConfigProvider
 		const launchConfig: vscode.DebugConfiguration[] = selectedItems.map(
 			(element) => debugConfigurations[element],
 		);
+
 		return launchConfig;
 	}
 
@@ -341,6 +351,7 @@ export class ReactNativeDebugConfigProvider
 		// QuickPickItem property `picked` doesn't work, so this line will check first item in the list
 		// which is supposed to be Debug Android
 		debugConfigPicker.selectedItems = [this.initialPickConfig[0]];
+
 		return debugConfigPicker;
 	}
 }

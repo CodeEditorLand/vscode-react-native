@@ -13,7 +13,9 @@ export class SimctrlHelper {
 		const targetResult = await childProcess.execToString(
 			getBootedSimulatorCommand,
 		);
+
 		const targetList = targetResult.split("\n");
+
 		return targetList;
 	}
 

@@ -42,9 +42,12 @@ export class LaunchScenariosManager {
 
 	public updateLaunchScenario(launchArgs: any, updates: any): void {
 		this.readLaunchScenarios();
+
 		const launchConfigIndex =
 			this.getFirstScenarioIndexByParams(launchArgs);
+
 		const launchScenarios = this.getLaunchScenarios();
+
 		if (launchConfigIndex !== null && launchScenarios.configurations) {
 			Object.assign(
 				launchScenarios.configurations[launchConfigIndex],
@@ -64,6 +67,7 @@ export class LaunchScenariosManager {
 				i++
 			) {
 				const config = this.launchScenarios.configurations[i];
+
 				if (
 					scenario.name === config.name &&
 					scenario.platform === config.platform &&

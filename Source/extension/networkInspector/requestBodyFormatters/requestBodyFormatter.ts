@@ -22,6 +22,7 @@ export interface IFormatter {
 		request: Request,
 		contentType: string,
 	) => FormattedBody | null;
+
 	formatResponse?: (
 		response: Response,
 		contentType: string,
@@ -101,10 +102,13 @@ export function decodeBody(
 	try {
 		const isGzip =
 			getHeaderValue(container.headers, "Content-Encoding") === "gzip";
+
 		if (isGzip) {
 			try {
 				const binStr = Base64.atob(container.data);
+
 				const dataArr = new Uint8Array(binStr.length);
+
 				for (let i = 0; i < binStr.length; i++) {
 					dataArr[i] = binStr.charCodeAt(i);
 				}
@@ -130,6 +134,7 @@ export function decodeBody(
 				container.data.length
 			}): ${String(err.toString())}`,
 		);
+
 		return "";
 	}
 }

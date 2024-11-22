@@ -76,6 +76,7 @@ export class MacOSPlatform extends GeneralPlatform {
 		};
 
 		this.projectObserver?.updateRNMacosProjectState(true);
+
 		if (this.runOptions.isDirect) {
 			extProps.isDirect = {
 				value: true,
@@ -150,6 +151,7 @@ export class MacOSPlatform extends GeneralPlatform {
 				this.runOptions.target === TargetType.Simulator
 					? ""
 					: this.runOptions.target;
+
 			if (target) {
 				runArguments.push(`--${target}`);
 			}
@@ -170,6 +172,7 @@ export class MacOSPlatform extends GeneralPlatform {
 				this.getApplicationName(),
 			],
 		);
+
 		if (debugModeEnabled) {
 			return;
 		}
@@ -208,17 +211,20 @@ export class MacOSPlatform extends GeneralPlatform {
 				this.runOptions.productName,
 				this.getSchemeFromDebuggingParameters(),
 			);
+
 		return iOSBuildLocationData.executable;
 	}
 
 	private getSchemeFromDebuggingParameters(): string | undefined {
 		let scheme = this.runOptions.scheme;
+
 		if (!scheme) {
 			const schemeFromArgs = MacOSPlatform.getOptFromRunArgs(
 				this.runArguments,
 				"--scheme",
 				false,
 			);
+
 			if (schemeFromArgs) {
 				scheme = schemeFromArgs;
 			}
@@ -236,6 +242,7 @@ export class MacOSPlatform extends GeneralPlatform {
 		const searchResults = await childProcess.execToString(
 			`ps -ax | grep ${appName}`,
 		);
+
 		if (searchResults) {
 			const processIdRgx = /(^\d*)\s\?\?/g;
 			//  We are looking for a process whose path contains the "appName.app" part
@@ -245,6 +252,7 @@ export class MacOSPlatform extends GeneralPlatform {
 
 			if (processData) {
 				const match = processIdRgx.exec(processData.trim());
+
 				if (match && match[1]) {
 					await childProcess.execToString(`kill ${match[1]}`);
 				}

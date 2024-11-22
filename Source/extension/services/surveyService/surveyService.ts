@@ -14,6 +14,7 @@ nls.config({
     messageFormat: nls.MessageFormat.bundle,
     bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 enum SurveyNotificationReaction {
@@ -150,7 +151,9 @@ export class SurveyService implements vscode.Disposable {
 
     private async showSurveyNotification(): Promise<void> {
         const giveFeedbackButtonText = localize("giveFeedback", "Give Feedback");
+
         const remindLaterButtonText = localize("remindLater", "Remind Me later");
+
         const notificationText = localize(
             "surveyNotificationText",
             "Got a moment to help the React Native Tools team? Please tell us about your experience with the extension so far.",
@@ -213,6 +216,7 @@ export class SurveyService implements vscode.Disposable {
         surveyConfig.surveyUrl = remoteConfig.surveyUrl;
         surveyConfig.surveyName = remoteConfig.surveyName;
         surveyConfig.enabled = remoteConfig.enabled;
+
         return surveyConfig;
     }
 

@@ -30,6 +30,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 
 	public async start(): Promise<void> {
 		this.logger.debug("Start iOS device tracker");
+
 		if (await isXcodeDetected()) {
 			this.startDevicePortForwarders();
 		}
@@ -45,6 +46,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 	protected async queryDevices(): Promise<void> {
 		const simulators = await this.getRunningSimulators();
 		this.processDevices(simulators, true);
+
 		const devices = await this.getActiveDevices();
 		this.processDevices(devices, false);
 	}
@@ -151,6 +153,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 				`Port forwarding app exited with code ${String(code)}`,
 			);
 		});
+
 		return childProcess;
 	}
 
@@ -179,6 +182,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 	private getActiveDevices(): Promise<Array<DeviceTarget>> {
 		return iosUtil.targets().catch((e) => {
 			this.logger.error(e.message);
+
 			return [];
 		});
 	}

@@ -18,6 +18,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 const startDebug = (

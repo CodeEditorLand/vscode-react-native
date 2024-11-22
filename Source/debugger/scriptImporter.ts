@@ -59,6 +59,7 @@ export class ScriptImporter {
 		projectRootPath: string,
 	): Promise<DownloadedScript> {
 		const parsedScriptUrl = url.parse(scriptUrlString);
+
 		const overriddenScriptUrlString =
 			parsedScriptUrl.hostname === "localhost"
 				? this.overridePackagerPort(scriptUrlString)
@@ -79,6 +80,7 @@ export class ScriptImporter {
 		) {
 			const noSourceMappingUrlGenerated =
 				scriptBody.match(/sourceMappingURL=/g) === null;
+
 			if (noSourceMappingUrlGenerated) {
 				const sourceMapPathUrl = overriddenScriptUrlString.replace(
 					"bundle",
@@ -99,6 +101,7 @@ export class ScriptImporter {
 		); // sourceMappingUrl = "http://localhost:8081/index.ios.map?platform=ios&dev=true"
 
 		let waitForSourceMapping: Promise<void> = Promise.resolve();
+
 		if (sourceMappingUrl) {
 			/* handle source map - request it and store it locally */
 			waitForSourceMapping = this.writeAppSourceMap(
@@ -109,6 +112,7 @@ export class ScriptImporter {
 					scriptBody,
 					<IStrictUrl>sourceMappingUrl,
 				);
+
 				if (
 					semver.gte(
 						rnVersions.reactNativeVersion,
@@ -123,10 +127,12 @@ export class ScriptImporter {
 			});
 		}
 		await waitForSourceMapping;
+
 		const scriptFilePath = await this.writeAppScript(scriptBody, scriptUrl);
 		logger.verbose(
 			`Script ${overriddenScriptUrlString} downloaded to ${scriptFilePath}`,
 		);
+
 		return { contents: scriptBody, filepath: scriptFilePath };
 	}
 
@@ -148,10 +154,12 @@ export class ScriptImporter {
 
 		const rnVersions =
 			await ProjectVersionHelper.getReactNativeVersions(projectRootPath);
+
 		const debuggerWorkerURL = this.prepareDebuggerWorkerURL(
 			rnVersions.reactNativeVersion,
 			debuggerWorkerUrlPath,
 		);
+
 		const debuggerWorkerLocalPath = path.join(
 			sourcesStoragePath,
 			ScriptImporter.DEBUGGER_WORKER_FILENAME,
@@ -175,6 +183,7 @@ export class ScriptImporter {
 			debuggerWorkerURL = `http://${this.packagerAddress}:${this.packagerPort}/${debuggerWorkerUrlPath}${ScriptImporter.DEBUGGER_WORKER_FILENAME}`;
 		} else {
 			let newPackager = "";
+
 			if (
 				!semver.valid(
 					rnVersion,
@@ -204,6 +213,7 @@ export class ScriptImporter {
 			path.basename(scriptUrl.pathname),
 		); // scriptFilePath = "$TMPDIR/index.ios.bundle"
 		await new FileSystem().writeFile(scriptFilePath, scriptBody);
+
 		return scriptFilePath;
 	}
 
@@ -215,6 +225,7 @@ export class ScriptImporter {
 		scriptUrl: IStrictUrl,
 	): Promise<void> {
 		const sourceMapBody = await Request.request(sourceMapUrl.href, true);
+
 		const sourceMappingLocalPath = path.join(
 			this.sourcesStoragePath,
 			path.basename(sourceMapUrl.pathname),
@@ -227,6 +238,7 @@ export class ScriptImporter {
 			this.packagerRemoteRoot,
 			this.packagerLocalRoot,
 		);
+
 		return new FileSystem().writeFile(
 			sourceMappingLocalPath,
 			updatedContent,

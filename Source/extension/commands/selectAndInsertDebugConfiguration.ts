@@ -35,6 +35,7 @@ export class SelectAndInsertDebugConfiguration extends Command {
 		}
 
 		const folder = vscode.workspace.getWorkspaceFolder(document.uri);
+
 		const config =
 			await debugConfigProvider.provideDebugConfigurationSequentially(
 				folder,

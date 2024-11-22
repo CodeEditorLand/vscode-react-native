@@ -13,6 +13,7 @@ export async function downloadConfig<T extends IConfig | IConfig[]>(
 	endpointURL: string,
 ): Promise<T> {
 	const resString = await Request.request(endpointURL, false, true);
+
 	return JSON.parse(resString);
 }
 

@@ -25,6 +25,7 @@ export class ReactNativeSessionManager
 		const rnSession = new RNSession(session);
 
 		let debugServer;
+
 		if (session.configuration.platform != "expoweb") {
 			debugServer = Net.createServer((socket) => {
 				const rnDebugSession =
@@ -62,6 +63,7 @@ export class ReactNativeSessionManager
 		);
 
 		const connection = this.connections.get(terminateEvent.debugSession.id);
+
 		if (connection) {
 			if (terminateEvent.args.forcedStop) {
 				this.destroyConnection(connection);

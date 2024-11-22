@@ -18,6 +18,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export interface MobilePlatformDeps {
@@ -111,6 +112,7 @@ export class GeneralPlatform {
 				"Starting React Native Packager.",
 			),
 		);
+
 		if (await this.packager.isRunning()) {
 			if (
 				this.packager.getPackagerStatus() !==
@@ -139,6 +141,7 @@ export class GeneralPlatform {
 		binary: boolean,
 	): void {
 		const optIdx = runArguments.indexOf(optName);
+
 		if (optIdx > -1) {
 			if (binary) {
 				runArguments.splice(optIdx, 1);
@@ -154,7 +157,9 @@ export class GeneralPlatform {
 		value: string | boolean,
 	): void {
 		const isBinary = typeof value === "boolean";
+
 		const optIdx = runArguments.indexOf(optName);
+
 		if (optIdx > -1) {
 			if (isBinary && !value) {
 				GeneralPlatform.removeRunArgument(runArguments, optName, true);
@@ -180,6 +185,7 @@ export class GeneralPlatform {
 	): any {
 		if (runArguments.length > 0) {
 			const optIdx = runArguments.indexOf(optName);
+
 			let result: any;
 
 			if (optIdx > -1) {
@@ -228,11 +234,14 @@ export class GeneralPlatform {
 		envFile?: string,
 	): any {
 		let newVersion = SettingsHelper.getSettingNodeVersion();
+
 		let nodeEnv;
+
 		if (newVersion) {
 			newVersion = newVersion.includes("v")
 				? newVersion
 				: `v${newVersion}`;
+
 			const regex = /versions\/node\/v?\d+\.\d+\.\d+/g;
 			nodeEnv = {
 				NVM_BIN: processEnv.NVM_BIN?.replace(
@@ -250,9 +259,11 @@ export class GeneralPlatform {
 			};
 		}
 		const modifyEnv = Object.assign({}, processEnv, nodeEnv);
+
 		if (envFile) {
 			// .env variables never overwrite existing variables
 			const argsFromEnvFile = this.readEnvFile(envFile);
+
 			if (argsFromEnvFile != null) {
 				// eslint-disable-next-line no-restricted-syntax
 				for (const key in argsFromEnvFile) {
@@ -281,6 +292,7 @@ export class GeneralPlatform {
 	private static readEnvFile(filePath: string): any {
 		if (fs.existsSync(filePath)) {
 			let buffer = fs.readFileSync(filePath, "utf8");
+
 			const result = {};
 
 			// Strip BOM
@@ -290,9 +302,12 @@ export class GeneralPlatform {
 
 			buffer.split("\n").forEach((line: string) => {
 				const r = line.match(/^\s*([\w.\-]+)\s*=\s*(.*)?\s*$/);
+
 				if (r !== null) {
 					const key = r[1];
+
 					let value = r[2] || "";
+
 					if (
 						value.length > 0 &&
 						value.charAt(0) === '"' &&

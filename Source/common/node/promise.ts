@@ -53,6 +53,7 @@ export class PromiseUtil {
 		return arraySources.reduce(
 			async (previousReduction: Promise<void>, newSource: T) => {
 				await previousReduction;
+
 				return generateAsyncOperation(newSource);
 			},
 			Promise.resolve(),
@@ -95,6 +96,7 @@ export class PromiseUtil {
 			const tryToResolve = async (): Promise<boolean> => {
 				try {
 					const result = await condition();
+
 					if (result) {
 						cleanup();
 						resolve(result);
@@ -103,11 +105,13 @@ export class PromiseUtil {
 				} catch (err) {
 					cleanup();
 					reject(err);
+
 					return false;
 				}
 			};
 
 			const resolved = await tryToResolve();
+
 			if (resolved) {
 				return;
 			}
@@ -123,6 +127,7 @@ export class PromiseUtil {
 		context: Record<string, any> | null = null,
 	): (...args: any[]) => Promise<T> {
 		let promise: Promise<T> | undefined;
+
 		return (...args: any[]): Promise<T> => {
 			if (!promise) {
 				promise = func.apply(context, args) as Promise<T>;
@@ -141,7 +146,9 @@ export class PromiseUtil {
 		cancellationTokenSource?: CancellationTokenSource,
 	): Promise<T> {
 		const result = await operation();
+
 		const conditionResult = await condition(result);
+
 		if (conditionResult) {
 			return result;
 		}
@@ -154,6 +161,7 @@ export class PromiseUtil {
 			)
 		) {
 			await PromiseUtil.delay(delay);
+
 			return this.retryAsyncIteration(
 				operation,
 				condition,
@@ -198,9 +206,11 @@ export class Delayer<T> implements Disposable {
 			}).then(() => {
 				this.completionPromise = null;
 				this.doResolve = null;
+
 				if (this.task) {
 					const task = this.task;
 					this.task = null;
+
 					return task();
 				}
 				return undefined;
@@ -209,6 +219,7 @@ export class Delayer<T> implements Disposable {
 
 		this.timeout = setTimeout(() => {
 			this.timeout = null;
+
 			if (this.doResolve) {
 				this.doResolve(null);
 			}

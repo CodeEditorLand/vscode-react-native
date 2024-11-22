@@ -43,6 +43,7 @@ export class Package {
 			this.informationJsonFilePath(),
 			"utf8",
 		);
+
 		return <IPackageInformation>JSON.parse(data.toString());
 	}
 
@@ -60,6 +61,7 @@ export class Package {
 
 	public async version(): Promise<string> {
 		const version = await this.parseProperty("version");
+
 		if (typeof version === "string") {
 			return version;
 		}
@@ -73,6 +75,7 @@ export class Package {
 	public async setMainFile(value: string): Promise<void> {
 		const packageInformation = await this.parsePackageInformation();
 		packageInformation.main = value;
+
 		return this.fileSystem.writeFile(
 			this.informationJsonFilePath(),
 			JSON.stringify(<Record<string, any>>packageInformation),
@@ -102,6 +105,7 @@ export class Package {
 
 	private async parseProperty(name: string): Promise<any> {
 		const packageInformation = await this.parsePackageInformation();
+
 		return packageInformation[name];
 	}
 }

@@ -15,6 +15,7 @@ export class FileSystem {
 	public async ensureDirectory(dir: string): Promise<void> {
 		try {
 			const stat = await this.stat(dir);
+
 			if (!stat.isDirectory()) {
 				throw new Error(`Expected ${dir} to be a directory`);
 			}
@@ -32,8 +33,10 @@ export class FileSystem {
 	): Promise<void> {
 		try {
 			const stat = await this.stat(file);
+
 			if (stat.isFile()) {
 				const existingContents = await this.readFile(file);
+
 				if (contents !== existingContents) {
 					return this.writeFile(file, contents);
 				}
@@ -61,6 +64,7 @@ export class FileSystem {
 	public async exists(filename: string): Promise<boolean> {
 		try {
 			await this.stat(filename);
+
 			return true;
 		} catch (err) {
 			return false;
@@ -79,6 +83,7 @@ export class FileSystem {
 	 */
 	public makeDirectoryRecursiveSync(dirPath: string): void {
 		const parentPath = path.dirname(dirPath);
+
 		if (!this.existsSync(parentPath)) {
 			this.makeDirectoryRecursiveSync(parentPath);
 		}
@@ -136,6 +141,7 @@ export class FileSystem {
 	public async directoryExists(directoryPath: string): Promise<boolean> {
 		try {
 			const stats = await this.stat(directoryPath);
+
 			return stats.isDirectory();
 		} catch (err) {
 			if (err.code === "ENOENT") {
@@ -157,8 +163,10 @@ export class FileSystem {
 
 	public async removePathRecursivelyAsync(p: string): Promise<void> {
 		const exists = await this.exists(p);
+
 		if (exists) {
 			const stats = await this.stat(p);
+
 			if (stats.isDirectory()) {
 				const childPaths = await this.readDir(p);
 				await Promise.all(
@@ -179,6 +187,7 @@ export class FileSystem {
 	public removePathRecursivelySync(p: string): void {
 		if (this.fs.existsSync(p)) {
 			const stats = this.fs.statSync(p);
+
 			if (stats.isDirectory()) {
 				const contents = this.fs.readdirSync(p);
 				contents.forEach((childPath) =>

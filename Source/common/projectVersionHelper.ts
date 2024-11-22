@@ -46,6 +46,7 @@ export function RNPackageVersionsToPackageVersion(
 		item[key] = packageVersions[key];
 		res.push(item);
 	});
+
 	return res;
 }
 
@@ -90,6 +91,7 @@ export class ProjectVersionHelper {
 				projectRoot,
 				additionalPackagesToCheck,
 			);
+
 		if (
 			Object.values(versions).findIndex((packageVersion) =>
 				packageVersion.includes(this.SEMVER_INVALID),
@@ -117,6 +119,7 @@ export class ProjectVersionHelper {
 		args: ILaunchArgs,
 	): ParsedPackage[] {
 		const additionalPackages: ParsedPackage[] = [];
+
 		if (args.platform === PlatformType.Windows) {
 			additionalPackages.push(REACT_NATIVE_PACKAGES.REACT_NATIVE_WINDOWS);
 		}
@@ -159,11 +162,13 @@ export class ProjectVersionHelper {
 		});
 
 		const packageVersionArray = await Promise.all(versionPromises);
+
 		const packageVersions = packageVersionArray.reduce(
 			(allPackageVersions, packageVersion) =>
 				Object.assign(allPackageVersions, packageVersion),
 			{},
 		);
+
 		if (
 			ProjectVersionHelper.isVersionError(packageVersions["react-native"])
 		) {
@@ -198,6 +203,7 @@ export class ProjectVersionHelper {
 
 		try {
 			const dependencies = await rootProjectPackageJson.dependencies();
+
 			const devDependencies =
 				await rootProjectPackageJson.devDependencies();
 
@@ -267,6 +273,7 @@ export class ProjectVersionHelper {
 			const versionObj = useSemverCoerce
 				? semver.coerce(version)
 				: semver.clean(version.replace(/[<>^~]/g, ""), { loose: true });
+
 			return (versionObj && versionObj.toString()) || this.SEMVER_INVALID;
 		}
 	}
@@ -279,6 +286,7 @@ export class ProjectVersionHelper {
 			const version = await new Package(
 				projectRoot,
 			).getPackageVersionFromNodeModules(parsedPackage.packageName);
+
 			return {
 				[parsedPackage.packageName]:
 					ProjectVersionHelper.processVersion(

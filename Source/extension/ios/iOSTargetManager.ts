@@ -15,6 +15,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export interface IDebuggableIOSTarget extends IDebuggableMobileTarget {
@@ -79,6 +80,7 @@ export class IOSTargetManager extends MobileTargetManager {
 
 	public async collectTargets(targetType?: TargetType): Promise<void> {
 		this.targets = [];
+
 		if (targetType === undefined || targetType === TargetType.Simulator) {
 			const simulators = JSON.parse(
 				await this.childProcess.execToString(
@@ -121,10 +123,14 @@ export class IOSTargetManager extends MobileTargetManager {
 				.split("\n")
 				.map((line) => line.trim())
 				.filter((line) => !!line);
+
 			const firstDevicesIndex = lines.indexOf("== Devices ==") + 1;
+
 			const lastDevicesIndex = lines.indexOf("== Simulators ==") - 1;
+
 			for (let i = firstDevicesIndex; i <= lastDevicesIndex; i++) {
 				const line = lines[i];
+
 				const params = line
 					.split(" ")
 					.map((el) => el.trim())
@@ -154,6 +160,7 @@ export class IOSTargetManager extends MobileTargetManager {
 		filter?: (el: IDebuggableIOSTarget) => boolean,
 	): Promise<IOSTarget | undefined> {
 		const selectedTarget = await this.startSelection(filter);
+
 		if (selectedTarget) {
 			return !selectedTarget.isOnline && selectedTarget.isVirtualTarget
 				? this.launchSimulator(selectedTarget)
@@ -176,6 +183,7 @@ export class IOSTargetManager extends MobileTargetManager {
 						target.name === targetString,
 				)
 			)[0];
+
 			if (target) {
 				return target.isVirtualTarget;
 			}
@@ -195,6 +203,7 @@ export class IOSTargetManager extends MobileTargetManager {
 		filter?: (el: IDebuggableIOSTarget) => boolean,
 	): Promise<IDebuggableIOSTarget | undefined> {
 		const system = await this.selectSystem(filter);
+
 		if (system) {
 			return (await this.selectTarget(
 				(el: IDebuggableIOSTarget) =>
@@ -220,8 +229,11 @@ export class IOSTargetManager extends MobileTargetManager {
 		const names: Set<string> = new Set(
 			targets.map((target) => target.system),
 		);
+
 		const systemsList = Array.from(names);
+
 		let result: string | undefined = systemsList[0];
+
 		if (systemsList.length > 1) {
 			const quickPickOptions: QuickPickOptions = {
 				ignoreFocusOut: true,
@@ -241,6 +253,7 @@ export class IOSTargetManager extends MobileTargetManager {
 	): Promise<IOSTarget | undefined> {
 		return new Promise<IOSTarget | undefined>((resolve, reject) => {
 			let emulatorLaunchFailed = false;
+
 			const emulatorProcess = this.childProcess.spawn(
 				IOSTargetManager.XCRUN_COMMAND,
 				[
@@ -271,10 +284,12 @@ export class IOSTargetManager extends MobileTargetManager {
 				if (emulatorLaunchFailed)
 					throw new Error("iOS simulator launch failed unexpectedly");
 				await this.collectTargets(TargetType.Simulator);
+
 				const onlineTarget = (await this.getTargetList()).find(
 					(target) =>
 						target.id === virtualTarget.id && target.isOnline,
 				);
+
 				return onlineTarget ? true : null;
 			};
 

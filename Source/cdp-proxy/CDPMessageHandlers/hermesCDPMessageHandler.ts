@@ -21,6 +21,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 
     public processDebuggerCDPMessage(event: any): ProcessedCDPMessage {
         let sendBack = false;
+
         if (event.method === CDP_API_NAMES.DEBUGGER_SET_BREAKPOINT) {
             event = this.handleBreakpointSetting(event);
         } else if (event.method === CDP_API_NAMES.RUNTIME_CALL_FUNCTION_ON) {
@@ -36,6 +37,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 
     public processApplicationCDPMessage(event: any): ProcessedCDPMessage {
         const sendBack = false;
+
         if (event.method === CDP_API_NAMES.DEBUGGER_PAUSED) {
             event = this.handlePausedEvent(event);
         } else if (event.result && event.result.result) {

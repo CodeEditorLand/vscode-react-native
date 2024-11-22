@@ -35,10 +35,12 @@ export class OutputVerifier {
 		// Store all output
 		this.store(spawnResult.stdout, (newContent) => {
 			this.output += newContent;
+
 			return this.output;
 		});
 		this.store(spawnResult.stderr, (newContent) => {
 			this.errors += newContent;
+
 			return this.errors;
 		});
 
@@ -51,10 +53,13 @@ export class OutputVerifier {
 		}
 
 		const failurePatterns = await this.generatePatternToFailure();
+
 		const patternsError = this.findAnyFailurePattern(failurePatterns);
+
 		if (patternsError) {
 			if (processError) {
 				processError.message += `\n${patternsError.message}`;
+
 				throw processError;
 			}
 			throw patternsError;
@@ -87,10 +92,13 @@ export class OutputVerifier {
 		patterns: PatternToFailure[],
 	): InternalError | null {
 		const errorsAndOutput = this.errors + this.output;
+
 		let matches: RegExpMatchArray | string[] | null | undefined;
+
 		const patternThatAppeared = patterns.find((pattern) => {
 			if (pattern.pattern instanceof RegExp) {
 				matches = errorsAndOutput.match(pattern.pattern);
+
 				return matches && matches.length;
 			}
 			return errorsAndOutput.includes(pattern.pattern as string);
@@ -103,6 +111,7 @@ export class OutputVerifier {
 		if (errorCode) {
 			if (matches && matches.length) {
 				matches = matches.map((value) => value.trim());
+
 				return ErrorHelper.getInternalError(
 					errorCode,
 					matches.join("\n"),
@@ -117,6 +126,7 @@ export class OutputVerifier {
 	private areAllSuccessPatternsPresent(successPatterns: string[]): boolean {
 		return successPatterns.every((pattern) => {
 			const patternRe = new RegExp(pattern, "i");
+
 			return patternRe.test(this.output);
 		});
 	}

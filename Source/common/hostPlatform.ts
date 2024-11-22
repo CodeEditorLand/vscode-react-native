@@ -11,10 +11,15 @@ import { TargetPlatformId } from "./targetPlatformHelper";
  */
 interface IHostPlatform {
 	getUserHomePath(): string;
+
 	getSettingsHome(): string;
+
 	getNpmCliCommand(packageName: string): string;
+
 	getPlatformId(): HostPlatformId;
+
 	setEnvironmentVariable(name: string, value: string): Promise<void>;
+
 	getUserID(): string;
 	isCompatibleWithTarget(targetPlatformId: TargetPlatformId): boolean;
 }
@@ -41,6 +46,7 @@ class WindowsHostPlatform implements IHostPlatform {
 		value: string,
 	): Promise<any> {
 		const res = await new ChildProcess().exec(`setx ${name} ${value}`);
+
 		return res.outcome;
 	}
 
@@ -67,6 +73,7 @@ class WindowsHostPlatform implements IHostPlatform {
 			case TargetPlatformId.WINDOWS:
 			case TargetPlatformId.EXPOWEB:
 				return true;
+
 			default:
 				return false;
 		}
@@ -111,6 +118,7 @@ class OSXHostPlatform extends UnixHostPlatform {
 		const res = await new ChildProcess().exec(
 			`launchctl setenv ${name} ${value}`,
 		);
+
 		return res.outcome;
 	}
 
@@ -130,6 +138,7 @@ class OSXHostPlatform extends UnixHostPlatform {
 			case TargetPlatformId.MACOS:
 			case TargetPlatformId.EXPOWEB:
 				return true;
+
 			default:
 				return false;
 		}
@@ -145,6 +154,7 @@ class LinuxHostPlatform extends UnixHostPlatform {
 		value: string,
 	): Promise<any> {
 		const res = await new ChildProcess().exec(`export ${name}=${value}`);
+
 		return res.outcome;
 	}
 
@@ -161,6 +171,7 @@ class LinuxHostPlatform extends UnixHostPlatform {
 			case TargetPlatformId.ANDROID:
 			case TargetPlatformId.EXPONENT:
 				return true;
+
 			default:
 				return false;
 		}
@@ -181,15 +192,22 @@ export class HostPlatform {
 			switch (process.platform) {
 				case "win32":
 					HostPlatform.platformInstance = new WindowsHostPlatform();
+
 					break;
+
 				case "darwin":
 					HostPlatform.platformInstance = new OSXHostPlatform();
+
 					break;
+
 				case "linux":
 					HostPlatform.platformInstance = new LinuxHostPlatform();
+
 					break;
+
 				default:
 					HostPlatform.platformInstance = new LinuxHostPlatform();
+
 					break;
 			}
 		}

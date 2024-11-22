@@ -24,6 +24,7 @@ nls.config({
     messageFormat: nls.MessageFormat.bundle,
     bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 type IPlatformRunOptions =
@@ -82,12 +83,14 @@ export async function loginToExponent(project: AppLauncher): Promise<xdl.IUser> 
                 "An error has occurred. Please make sure you are logged in to Expo, your project is setup correctly for publishing and your packager is running as Expo.",
             ),
         );
+
         throw err;
     }
 }
 
 export async function selectProject(): Promise<AppLauncher> {
     const logger = OutputChannelLogger.getMainChannel();
+
     const projectKeys = Object.keys(ProjectsStorage.projectsCache);
 
     if (projectKeys.length === 0) {
@@ -99,6 +102,7 @@ export async function selectProject(): Promise<AppLauncher> {
 
     if (projectKeys.length === 1) {
         logger.debug(`Command palette: once project ${projectKeys[0]}`);
+
         return ProjectsStorage.projectsCache[projectKeys[0]];
     }
 
@@ -109,11 +113,13 @@ export async function selectProject(): Promise<AppLauncher> {
     }
 
     logger.debug(`Command palette: selected project ${selected}`);
+
     return ProjectsStorage.projectsCache[selected];
 }
 
 export async function sendMessageToMetro(method: "devMenu" | "reload", project: AppLauncher) {
     const port = SettingsHelper.getPackagerPort(project.getWorkspaceFolderUri().fsPath);
+
     const ws = new WebSocket(`ws://localhost:${port}/message`);
     await new Promise(resolve => {
         ws.addEventListener("open", resolve);

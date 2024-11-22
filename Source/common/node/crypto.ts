@@ -7,6 +7,7 @@ export class Crypto {
 	public hash(data: string): string {
 		const hasher = crypto.createHash("sha256");
 		hasher.update(data);
+
 		return hasher.digest("hex");
 	}
 }

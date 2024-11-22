@@ -80,6 +80,7 @@ export class TelemetryHelper {
 			"reactNativeVersion",
 			properties,
 		);
+
 		if (args.platform === PlatformType.Windows) {
 			if (
 				ProjectVersionHelper.isVersionError(
@@ -165,6 +166,7 @@ export class TelemetryHelper {
 		const event = TelemetryHelper.createTelemetryEvent(eventName, {
 			isDirect: true,
 		});
+
 		if (properties) {
 			TelemetryHelper.addTelemetryEventProperties(event, properties);
 		}
@@ -219,6 +221,7 @@ export class TelemetryHelper {
 		const errorWithErrorCode: IHasErrorCode = <IHasErrorCode>(
 			(<Record<string, any>>error)
 		);
+
 		if (errorWithErrorCode.errorCode) {
 			this.addTelemetryEventProperty(
 				event,
@@ -226,6 +229,7 @@ export class TelemetryHelper {
 				errorWithErrorCode.errorCode,
 				false,
 			);
+
 			if (errorDescription) {
 				this.addTelemetryEventProperty(
 					event,
@@ -254,6 +258,7 @@ export class TelemetryHelper {
 		let unknownOptionIndex = 1;
 		Object.keys(commandOptions).forEach((key: string) => {
 			const value: any = commandOptions[key];
+
 			if (Object.keys(knownOptions).includes(key)) {
 				// This is a known option. We"ll check the list to decide if it"s pii or not
 				if (typeof value !== "undefined") {
@@ -274,6 +279,7 @@ export class TelemetryHelper {
 				unknownOptionIndex++;
 			}
 		});
+
 		return telemetryProperties;
 	}
 
@@ -288,6 +294,7 @@ export class TelemetryHelper {
 			name,
 			extendedParamsToSend,
 		);
+
 		return generator
 			.time("", () => codeGeneratingTelemetry(generator))
 			.finally(() => generator.send());

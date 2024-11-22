@@ -6,5 +6,6 @@ import * as file from "./fileSystem";
 
 export namespace Node {
 	export const ChildProcess = childProcess.ChildProcess;
+
 	export const FileSystem = file.FileSystem;
 }

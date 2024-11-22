@@ -22,7 +22,9 @@ abstract class RunAndroid extends ReactNativeCommand {
 	async onBeforeExecute(): Promise<void> {
 		await super.onBeforeExecute();
 		assert(this.project);
+
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
+
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				nodeModulesRoot,

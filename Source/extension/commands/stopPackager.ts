@@ -20,6 +20,7 @@ export class StopPackager extends ReactNativeCommand<[AppLauncher]> {
 
 	async onBeforeExecute(appLauncher: AppLauncher): Promise<void> {
 		await super.onBeforeExecute(appLauncher);
+
 		if (appLauncher instanceof AppLauncher) {
 			this.project = appLauncher;
 		} else {

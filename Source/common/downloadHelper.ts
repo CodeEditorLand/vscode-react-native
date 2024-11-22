@@ -9,8 +9,11 @@ import { OutputChannelLogger } from "../extension/log/OutputChannelLogger";
 
 export async function downloadFile(url: any, targetFile: any) {
 	const logger = OutputChannelLogger.getMainChannel();
+
 	let progress = 0;
+
 	let newProgress = 0;
+
 	return await new Promise((resolve, reject) => {
 		const request = https
 			.get(url, (response) => {
@@ -21,6 +24,7 @@ export async function downloadFile(url: any, targetFile: any) {
 				}
 
 				const file = fs.createWriteStream(targetFile);
+
 				const totalLength = parseInt(
 					response.headers["content-length"] as string,
 					10,
@@ -29,10 +33,12 @@ export async function downloadFile(url: any, targetFile: any) {
 				response.pipe(file);
 				response.on("data", async function (chunk) {
 					newProgress += chunk.length;
+
 					const currentProgress =
 						parseFloat(
 							getDownloadProgress(newProgress, totalLength),
 						) * 100;
+
 					if (currentProgress - progress >= 5) {
 						progress = currentProgress;
 						logger.logStream(

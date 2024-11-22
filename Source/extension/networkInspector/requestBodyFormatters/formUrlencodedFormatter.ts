@@ -31,6 +31,7 @@ export class FormUrlencodedFormatter implements IFormatter {
 	): FormattedBody | null {
 		if (contentType.startsWith("application/x-www-form-urlencoded")) {
 			const decoded = decodeBody(request, this.logger);
+
 			if (!decoded) {
 				return null;
 			}

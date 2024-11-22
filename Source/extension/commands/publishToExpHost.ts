@@ -17,6 +17,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 const logger = OutputChannelLogger.getMainChannel();
@@ -54,6 +55,7 @@ export class PublishToExpHost extends ReactNativeCommand {
 		logger.debug(`Publishing as ${user.username}...`);
 
 		await RunExponent.prototype.baseFn.bind(this)();
+
 		const response = await XDL.publish(
 			this.project.getWorkspaceFolderUri().fsPath,
 		);
@@ -71,6 +73,7 @@ export class PublishToExpHost extends ReactNativeCommand {
 		logger.info(publishedOutput);
 
 		void vscode.window.showInformationMessage(publishedOutput);
+
 		return true;
 	}
 }

@@ -71,9 +71,11 @@ export class EntryPointHandler {
 	): Promise<void> {
 		try {
 			Telemetry.init(appName, appVersion, reporter);
+
 			return this.runFunction(appName, error, codeToRun, true, extProps);
 		} catch (error) {
 			this.logger.error(error);
+
 			throw error;
 		}
 	}
@@ -85,6 +87,7 @@ export class EntryPointHandler {
 	): Promise<void> {
 		resultOfCode.catch((reason) => {
 			const isDebugeeProcess = this.processType === ProcessType.Debugee;
+
 			const shouldLogStack = !errorsAreFatal || isDebugeeProcess;
 			this.logger.error(
 				error.message,

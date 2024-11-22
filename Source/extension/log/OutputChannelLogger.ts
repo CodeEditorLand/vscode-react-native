@@ -25,6 +25,7 @@ export class OutputChannelLogger implements ILogger {
 	public static disposeChannel(channelName: string): void {
 		if (channels[channelName]) {
 			channels[channelName].getOutputChannel().dispose();
+
 			if (channels[channelName].channelLogFileStream) {
 				channels[channelName].channelLogFileStream.end();
 			}
@@ -60,7 +61,9 @@ export class OutputChannelLogger implements ILogger {
 		logTimestamps: boolean = false,
 	) {
 		this.logTimestamps = logTimestamps;
+
 		const channelLogFolder = getLoggingDirectory();
+
 		if (channelLogFolder) {
 			const filename = channelName.replace(
 				OutputChannelLogger.forbiddenFileNameSymbols,
@@ -99,6 +102,7 @@ export class OutputChannelLogger implements ILogger {
 				this.logTimestamps,
 			);
 			this.channel.appendLine(message);
+
 			if (this.channelLogFileStream) {
 				this.channelLogFileStream.write(message);
 			}
@@ -121,6 +125,7 @@ export class OutputChannelLogger implements ILogger {
 				this.logTimestamps,
 			);
 			this.channel.appendLine(message);
+
 			if (this.channelLogFileStream) {
 				this.channelLogFileStream.write(message);
 			}
@@ -146,6 +151,7 @@ export class OutputChannelLogger implements ILogger {
 			this.logTimestamps,
 		);
 		this.channel.appendLine(message);
+
 		if (this.channelLogFileStream) {
 			this.channelLogFileStream.write(message);
 		}
@@ -153,6 +159,7 @@ export class OutputChannelLogger implements ILogger {
 		// Print the error stack if necessary
 		if (logStack && error && error.stack) {
 			this.channel.appendLine(`Stack: ${error.stack}`);
+
 			if (this.channelLogFileStream) {
 				this.channelLogFileStream.write(`Stack: ${error.stack}`);
 			}
@@ -165,6 +172,7 @@ export class OutputChannelLogger implements ILogger {
 
 	public logStream(data: Buffer | string): void {
 		this.channel.append(data.toString());
+
 		if (this.channelLogFileStream) {
 			this.channelLogFileStream.write(data);
 		}
@@ -204,6 +212,7 @@ export class OutputChannelLogger implements ILogger {
 			this.channelName,
 		);
 		this.outputChannel.show(this.preserveFocus);
+
 		return this.outputChannel;
 	}
 

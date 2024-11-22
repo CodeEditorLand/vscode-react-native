@@ -99,6 +99,7 @@ interface ShouldAssertion {
 	enumerables(...properties: string[]): ShouldAssertion;
 	startWith(expected: string, message?: any): ShouldAssertion;
 	endWith(expected: string, message?: any): ShouldAssertion;
+
 	throw(message?: any): ShouldAssertion;
 
 	//http
@@ -132,10 +133,12 @@ interface ShouldAssertion {
 	True(): ShouldAssertion;
 	False(): ShouldAssertion;
 	Arguments(): ShouldAssertion;
+
 	class(): ShouldAssertion;
 	deepEqual(expected: any, description?: string): ShouldAssertion;
 	exactly(expected: any, description?: string): ShouldAssertion;
 	instanceOf(constructor: Function, description?: string): ShouldAssertion;
+
 	throwError(message?: any): ShouldAssertion;
 	lengthOf(n: number, description?: string): ShouldAssertion;
 	key(key: string): ShouldAssertion;
@@ -164,8 +167,11 @@ interface Internal extends ShouldInternal {
 	notDeepEqual(actual: any, expected: any, message?: string): void;
 	strictEqual(actual: any, expected: any, message?: string): void;
 	notStrictEqual(actual: any, expected: any, message?: string): void;
+
 	throws(block: any, error?: any, message?: string): void;
+
 	doesNotThrow(block: any, message?: string): void;
+
 	ifError(value: any): void;
 	inspect(value: any, obj: any): any;
 }

@@ -111,6 +111,7 @@ export class TipNotificationService implements vscode.Disposable {
 			this.logger.debug(
 				"The specific tip key parameter isn't passed for a specific tip",
 			);
+
 			return;
 		}
 
@@ -121,10 +122,12 @@ export class TipNotificationService implements vscode.Disposable {
 		}
 
 		const curDate: Date = new Date();
+
 		let tipResponse: GeneratedTipResponse | undefined;
 
 		if (isGeneralTip) {
 			this.deleteOutdatedKnownDate();
+
 			if (this.tipsConfig.daysLeftBeforeGeneralTip === 0) {
 				tipResponse = await this.showRandomGeneralTipNotification();
 			} else if (
@@ -270,11 +273,13 @@ export class TipNotificationService implements vscode.Disposable {
 
 	private async initializeTipsConfig(): Promise<void> {
 		this.showTips = SettingsHelper.getShowTips();
+
 		if (this._tipsConfig) {
 			return;
 		}
 
 		let tipsConfig: TipsConfig;
+
 		if (!ExtensionConfigManager.config.has(this.TIPS_CONFIG_NAME)) {
 			tipsConfig = {
 				daysLeftBeforeGeneralTip: 0,
@@ -315,7 +320,9 @@ export class TipNotificationService implements vscode.Disposable {
 
 	private async showRandomGeneralTipNotification(): Promise<GeneratedTipResponse> {
 		let generalTipsForRandom: Array<string>;
+
 		const generalTips: Tips = this.tipsConfig.tips.generalTips;
+
 		const generalTipsKeys: Array<string> = Object.keys(
 			this.tipsConfig.tips.generalTips,
 		);
@@ -326,6 +333,7 @@ export class TipNotificationService implements vscode.Disposable {
 					!generalTips[tipId].knownDate &&
 					!generalTips[tipId].shownDate,
 			);
+
 			if (generalTipsForRandom.length === 1) {
 				this.tipsConfig.allTipsShownFirstly = true;
 			}
@@ -347,12 +355,17 @@ export class TipNotificationService implements vscode.Disposable {
 					selection: undefined,
 					tipKey: "",
 				};
+
 			case 1:
 				leftIndex = 0;
+
 				break;
+
 			case 2:
 				leftIndex = 1;
+
 				break;
+
 			default:
 				leftIndex = 2;
 		}
@@ -361,7 +374,9 @@ export class TipNotificationService implements vscode.Disposable {
 			leftIndex,
 			generalTipsForRandom.length - 1,
 		);
+
 		const selectedGeneralTipKey: string = generalTipsForRandom[randIndex];
+
 		const tipNotificationText = this.getGeneralTipNotificationTextByKey(
 			selectedGeneralTipKey,
 		);
@@ -370,6 +385,7 @@ export class TipNotificationService implements vscode.Disposable {
 			new Date();
 
 		this._tipsConfig = await this.mergeRemoteConfigToLocal(this.tipsConfig);
+
 		const daysBeforeNextTip: number = this.tipsConfig.allTipsShownFirstly
 			? getRandomIntInclusive(
 					this.tipsConfig.minDaysToRemind,
@@ -442,6 +458,7 @@ export class TipNotificationService implements vscode.Disposable {
 		tipsConfig.minDaysToRemind = remoteConfig.minDaysToRemind;
 		tipsConfig.maxDaysToRemind = remoteConfig.maxDaysToRemind;
 		tipsConfig.daysAfterLastUsage = remoteConfig.daysAfterLastUsage;
+
 		return tipsConfig;
 	}
 
@@ -463,7 +480,9 @@ export class TipNotificationService implements vscode.Disposable {
 
 	private deleteOutdatedKnownDate(): void {
 		const dateNow: Date = new Date();
+
 		const generalTips: Tips = this.tipsConfig.tips.generalTips;
+
 		const generalTipsKeys: Array<string> = Object.keys(
 			this.tipsConfig.tips.generalTips,
 		);
@@ -471,6 +490,7 @@ export class TipNotificationService implements vscode.Disposable {
 		generalTipsKeys
 			.filter((tipKey) => {
 				const knownDate = generalTips[tipKey].knownDate ?? new Date();
+
 				return (
 					generalTips[tipKey].knownDate &&
 					this.getDifferenceInDays(knownDate, dateNow) >
@@ -484,6 +504,7 @@ export class TipNotificationService implements vscode.Disposable {
 
 	private getDifferenceInDays(date1: Date, date2: Date): number {
 		const diffInMs = Math.abs(date2.getTime() - date1.getTime());
+
 		return diffInMs / (1000 * 60 * 60 * 24);
 	}
 
@@ -500,6 +521,7 @@ export class TipNotificationService implements vscode.Disposable {
 		) => {
 			tipsKeys.forEach((tipKey) => {
 				const tip = rawTipsConfig.tips[tipsType][tipKey];
+
 				if (tip.knownDate) {
 					rawTipsConfig.tips[tipsType][tipKey].knownDate = new Date(
 						tip.knownDate,

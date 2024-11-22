@@ -37,6 +37,7 @@ export class WindowsPlatform extends GeneralPlatform {
 
 	public async reloadApp(appLauncher: AppLauncher): Promise<void> {
 		const worker = appLauncher.getAppWorker();
+
 		if (worker) {
 			worker.reloadAppCommand();
 		}
@@ -58,6 +59,7 @@ export class WindowsPlatform extends GeneralPlatform {
 		};
 
 		this.projectObserver?.updateRNWindowsProjectState(true);
+
 		if (this.runOptions.isDirect) {
 			extProps.isDirect = {
 				value: true,
@@ -94,6 +96,7 @@ export class WindowsPlatform extends GeneralPlatform {
 					)
 				) {
 					this.runArguments.push("--logging");
+
 					if (enableDebug) {
 						this.runOptions.isDirect
 							? this.runArguments.push("--direct-debugging")
@@ -151,6 +154,7 @@ export class WindowsPlatform extends GeneralPlatform {
 				this.runOptions.target === TargetType.Simulator
 					? ""
 					: this.runOptions.target;
+
 			if (target) {
 				runArguments.push(`--${target}`);
 			}

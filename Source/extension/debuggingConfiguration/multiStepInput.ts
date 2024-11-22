@@ -103,6 +103,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 		acceptFilterBoxTextAsSelection,
 	}: P): Promise<MultiStepInputQuickPicResponseType<T, P>> {
 		const disposables: Disposable[] = [];
+
 		try {
 			return await new Promise<MultiStepInputQuickPicResponseType<T, P>>(
 				(resolve, reject) => {
@@ -115,6 +116,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 					input.items = items;
 					input.matchOnDescription = matchOnDescription || false;
 					input.matchOnDetail = matchOnDetail || false;
+
 					if (activeItem) {
 						input.activeItems = [activeItem];
 					} else {
@@ -147,6 +149,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 							})().catch(reject);
 						}),
 					);
+
 					if (acceptFilterBoxTextAsSelection) {
 						disposables.push(
 							input.onDidAccept(() => {
@@ -178,6 +181,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 		shouldResume,
 	}: P): Promise<MultiStepInputInputBoxResponseType<P>> {
 		const disposables: Disposable[] = [];
+
 		try {
 			return await new Promise<MultiStepInputInputBoxResponseType<P>>(
 				(resolve, reject) => {
@@ -195,6 +199,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 							: []),
 						...(buttons || []),
 					];
+
 					let validating = validate("");
 					disposables.push(
 						input.onDidTriggerButton((item) => {
@@ -208,6 +213,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 							const inputValue = input.value;
 							input.enabled = false;
 							input.busy = true;
+
 							if (!(await validate(inputValue))) {
 								resolve(inputValue);
 							}
@@ -217,7 +223,9 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 						input.onDidChangeValue(async (text) => {
 							const current = validate(text);
 							validating = current;
+
 							const validationMessage = await current;
+
 							if (current === validating) {
 								input.validationMessage = validationMessage;
 							}
@@ -232,6 +240,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 							})().catch(reject);
 						}),
 					);
+
 					if (this.current) {
 						this.current.dispose();
 					}
@@ -246,8 +255,10 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 
 	private async stepThrough(start: InputStep<S>, state: S) {
 		let step: InputStep<S> | void = start;
+
 		while (step) {
 			this.steps.push(step);
+
 			if (this.current) {
 				this.current.enabled = false;
 				this.current.busy = true;

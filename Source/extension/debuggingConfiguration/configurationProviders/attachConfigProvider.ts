@@ -26,6 +26,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		this.maxStepCount = 3;
 		state.config = {};
+
 		const config: Partial<ILaunchRequestArgs> = {
 			name: "Attach to application",
 			request: "attach",
@@ -46,6 +47,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 
 		if (state.config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT) {
 			this.maxStepCount++;
+
 			return () => this.configureDirectPlatform(input, state.config);
 		}
 		return () => this.configureAddress(input, state.config);
@@ -85,6 +87,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 			this.maxStepCount,
 			this.defaultAddress,
 		);
+
 		return () => this.configurePort(input, config);
 	}
 

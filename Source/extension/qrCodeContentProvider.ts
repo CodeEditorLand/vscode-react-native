@@ -9,6 +9,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class QRCodeContentProvider implements TextDocumentContentProvider {
@@ -27,10 +28,12 @@ export class QRCodeContentProvider implements TextDocumentContentProvider {
 			'Expo is running. Open your Expo app at<br/><span style="text-decoration: underline">{0}</span><br/>or scan QR code below:',
 			stringUri,
 		);
+
 		const outputMessage = localize(
 			"QRCodeOutputMessage",
 			"Tips: You can get current QR code in<br/>Output Window as well if you close this tab.",
 		);
+
 		return `<!DOCTYPE html>
         <html>
         <body>

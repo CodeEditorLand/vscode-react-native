@@ -22,8 +22,11 @@ export class LaunchAndroidEmulator extends Command {
 		assert(this.project);
 
 		const projectPath = this.project.getPackager().getProjectPath();
+
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
+
 		const adbHelper = new AdbHelper(projectPath, nodeModulesRoot);
+
 		const androidEmulatorManager = new AndroidTargetManager(adbHelper);
 		await androidEmulatorManager.collectTargets(TargetType.Simulator);
 		await androidEmulatorManager.selectAndPrepareTarget(

@@ -14,6 +14,7 @@ import { getRunOptions } from "./util";
 import { Command } from "./util/command";
 
 const localize = nls.loadMessageBundle();
+
 const logger = OutputChannelLogger.getMainChannel();
 
 export class launchExpoWeb extends Command {
@@ -25,6 +26,7 @@ export class launchExpoWeb extends Command {
 
 	async baseFn(launchArgs: any): Promise<any> {
 		assert(this.project);
+
 		const expoHelper = this.project.getExponentHelper();
 		logger.info(
 			localize(
@@ -32,11 +34,14 @@ export class launchExpoWeb extends Command {
 				"Checking Expo project environment.",
 			),
 		);
+
 		const isExpo = await expoHelper.isExpoManagedApp(true);
+
 		if (!isExpo) {
 			logger.info(
 				localize("NotAnExpoProject", "This is not an Expo project."),
 			);
+
 			return;
 		}
 		await runExpoWeb(this.project);

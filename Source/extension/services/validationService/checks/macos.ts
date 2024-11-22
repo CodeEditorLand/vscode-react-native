@@ -15,6 +15,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const toLocale = nls.loadMessageBundle();
 
 const label = "macOS version";
@@ -25,6 +26,7 @@ async function test(): Promise<ValidationResultT> {
 		getVersion: parseVersion.bind(null, "sw_vers", /\d+\.\d+\.\d+/gi),
 		versionRange: "10.13",
 	});
+
 	if (result.exists) {
 		if (result.versionCompare === -1) {
 			return {

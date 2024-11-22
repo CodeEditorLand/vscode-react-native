@@ -23,6 +23,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 		state: DebugConfigurationState,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		state.config = {};
+
 		const config: Partial<ILaunchRequestArgs> = {
 			name: "Debug application",
 			request: "launch",
@@ -48,6 +49,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 		) {
 			return async () => {
 				await this.configureApplicationType(input, state.config);
+
 				if (
 					state.config.platform === PlatformType.iOS &&
 					state.config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT
@@ -111,6 +113,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 			3,
 			this.maxStepCount,
 		);
+
 		if (config.useHermesEngine) {
 			delete config.useHermesEngine;
 		}

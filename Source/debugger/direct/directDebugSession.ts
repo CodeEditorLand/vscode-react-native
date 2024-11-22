@@ -31,6 +31,7 @@ nls.config({
     messageFormat: nls.MessageFormat.bundle,
     bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class DirectDebugSession extends DebugSessionBase {
@@ -146,6 +147,7 @@ export class DirectDebugSession extends DebugSessionBase {
             await this.initializeSettings(attachArgs);
 
             const packager = this.appLauncher.getPackager();
+
             const args: Parameters<typeof packager.forMessage> = [
                 // message indicates that another debugger has connected
                 "Already connected:",
@@ -189,6 +191,7 @@ export class DirectDebugSession extends DebugSessionBase {
                     : attachArgs.platform === PlatformType.iOS
                     ? attachArgs.port || IWDPHelper.iOS_WEBKIT_DEBUG_PROXY_DEFAULT_PORT
                     : null;
+
                 if (port === null) {
                     throw ErrorHelper.getInternalError(
                         InternalErrorCode.CouldNotDirectDebugWithoutHermesEngine,
@@ -225,6 +228,7 @@ export class DirectDebugSession extends DebugSessionBase {
                         attachArgs.webkitRangeMin,
                         attachArgs.webkitRangeMax,
                     );
+
                     const results = await this.iOSWKDebugProxyHelper.getSimulatorProxyPort(
                         attachArgs,
                     );
@@ -250,6 +254,7 @@ export class DirectDebugSession extends DebugSessionBase {
                     });
 
                 const settingsPorts = SettingsHelper.getPackagerPort(attachArgs.cwd);
+
                 const browserInspectUri = await this.debuggerEndpointHelper.retryGetWSEndpoint(
                     `http://localhost:${attachArgs.port}`,
                     90,
@@ -284,6 +289,7 @@ export class DirectDebugSession extends DebugSessionBase {
         this.onDidStartDebugSessionHandler.dispose();
         this.appLauncher.getPackager().closeWsConnection();
         this.appTargetConnectionClosedHandlerDescriptor?.dispose();
+
         return super.disconnectRequest(response, args, request);
     }
 
@@ -302,6 +308,7 @@ export class DirectDebugSession extends DebugSessionBase {
                 consoleMode: vscode.DebugConsoleMode.MergeWithParent,
             },
         );
+
         if (!childDebugSessionStarted) {
             throw new Error(
                 localize("CouldNotStartChildDebugSession", "Couldn't start child debug session"),
@@ -336,6 +343,7 @@ export class DirectDebugSession extends DebugSessionBase {
 
     protected async initializeSettings(args: any): Promise<any> {
         await super.initializeSettings(args);
+
         if (args.useHermesEngine === undefined) {
             args.useHermesEngine = true;
         }

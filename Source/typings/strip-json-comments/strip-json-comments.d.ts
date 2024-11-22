@@ -3,5 +3,6 @@ declare module "strip-json-comments" {
 		input: string,
 		options?: { whitespace: boolean },
 	): string;
+
 	export = stripJsonComments;
 }

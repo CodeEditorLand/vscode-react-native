@@ -26,6 +26,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class ConfigurationProviderHelper {
@@ -56,6 +57,7 @@ export class ConfigurationProviderHelper {
 		}
 
 		config.platform = pick.type;
+
 		return config;
 	}
 
@@ -88,6 +90,7 @@ export class ConfigurationProviderHelper {
 		}
 
 		config.type = pick.type;
+
 		return config;
 	}
 
@@ -155,6 +158,7 @@ export class ConfigurationProviderHelper {
 		}
 
 		config.expoHostType = pick.type as ExpoHostType;
+
 		return config;
 	}
 
@@ -192,6 +196,7 @@ export class ConfigurationProviderHelper {
 		}
 
 		config.browserTarget = pick.type as BROWSER_TYPES;
+
 		return config;
 	}
 
@@ -203,6 +208,7 @@ export class ConfigurationProviderHelper {
 		defaultAddress: string,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		delete config.address;
+
 		const address = await input.showInputBox({
 			title: localize("AddressInputTitle", "The address of the host"),
 			step,
@@ -237,6 +243,7 @@ export class ConfigurationProviderHelper {
 		totalSteps: number,
 	): Promise<Partial<ILaunchRequestArgs>> {
 		delete config.port;
+
 		const defaultPort = String(
 			config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT &&
 				config.platform === PlatformType.iOS &&
@@ -244,6 +251,7 @@ export class ConfigurationProviderHelper {
 				? IWDPHelper.iOS_WEBKIT_DEBUG_PROXY_DEFAULT_PORT
 				: Packager.DEFAULT_PORT,
 		);
+
 		const portRegex = /^\d+$/;
 
 		const portStr = await input.showInputBox({
@@ -267,6 +275,7 @@ export class ConfigurationProviderHelper {
 		});
 
 		let portNumber: number | undefined;
+
 		if (portStr && portRegex.test(portStr.trim())) {
 			portNumber = parseInt(portStr, 10);
 		}

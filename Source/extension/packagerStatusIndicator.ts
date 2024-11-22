@@ -17,6 +17,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /**
@@ -123,6 +124,7 @@ export class PackagerStatusIndicator implements Disposable {
 
 	public updateDisplayVersion(): void {
 		this.displayVersion = PackagerStatusIndicator.FULL_VERSION;
+
 		try {
 			if (this.projectRoot) {
 				this.displayVersion =
@@ -149,6 +151,7 @@ export class PackagerStatusIndicator implements Disposable {
 		this.updateDisplayVersion();
 		this.togglePackagerItem.command = command;
 		this.togglePackagerItem.tooltip = tooltip;
+
 		if (!this.isShowIndicator) {
 			icon = PackagerStatusIndicator.NOT_SHOW_INDICATOR;
 		}
@@ -157,11 +160,14 @@ export class PackagerStatusIndicator implements Disposable {
 				this.togglePackagerItem.text = `${icon} ${PackagerStatusIndicator.PACKAGER_NAME}`;
 				this.togglePackagerItem.show();
 				this.restartPackagerItem.show();
+
 				break;
+
 			case PackagerStatusIndicator.SHORT_VERSION:
 				this.togglePackagerItem.text = `${icon}`;
 				this.togglePackagerItem.show();
 				this.restartPackagerItem.show();
+
 				break;
 		}
 	}
@@ -174,28 +180,36 @@ export class PackagerStatusIndicator implements Disposable {
 					PackagerStatusIndicator.START_COMMAND,
 					PackagerStatusIndicator.START_TOOLTIP,
 				);
+
 				break;
+
 			case PackagerStatus.PACKAGER_STOPPING:
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.ACTIVITY_ICON,
 					undefined,
 					PackagerStatusIndicator.STOPPING_TOOLTIP,
 				);
+
 				break;
+
 			case PackagerStatus.PACKAGER_STARTED:
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.STOP_ICON,
 					PackagerStatusIndicator.STOP_COMMAND,
 					PackagerStatusIndicator.STOP_TOOLTIP,
 				);
+
 				break;
+
 			case PackagerStatus.PACKAGER_STARTING:
 				this.setupPackagerStatusIndicatorItems(
 					PackagerStatusIndicator.ACTIVITY_ICON,
 					undefined,
 					PackagerStatusIndicator.STARTING_TOOLTIP,
 				);
+
 				break;
+
 			default:
 				break;
 		}

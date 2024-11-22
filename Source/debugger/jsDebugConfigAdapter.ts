@@ -32,6 +32,7 @@ export class JsDebugConfigAdapter {
         sessionId: string,
     ) {
         const extraArgs: any = {};
+
         const versions = await ProjectVersionHelper.getReactNativeVersions(attachArgs.cwd);
         // Handle project file path from 0.76
         if (semver.gte(versions.reactNativeVersion, JsDebugConfigAdapter.RNVersion_Direct_Debug)) {
@@ -76,6 +77,7 @@ export class JsDebugConfigAdapter {
 
     private static getExistingExtraArgs(attachArgs: IAttachRequestArgs): any {
         const existingExtraArgs: any = {};
+
         if (attachArgs.env) {
             existingExtraArgs.env = attachArgs.env;
         }
@@ -84,6 +86,7 @@ export class JsDebugConfigAdapter {
         }
         existingExtraArgs.sourceMaps = attachArgs.sourceMaps;
         existingExtraArgs.sourceMapRenames = attachArgs.sourceMapRenames;
+
         if (attachArgs.sourceMapPathOverrides) {
             existingExtraArgs.sourceMapPathOverrides = attachArgs.sourceMapPathOverrides;
         }

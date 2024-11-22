@@ -61,6 +61,7 @@ export class IOSDebugModeManager extends ApplePlatformDebugModeManager {
 			configuration,
 			productName,
 		);
+
 		try {
 			// Attempt to read from the file, but if the property is not defined then return the empty string
 			const [executorClassName, remoteDebugEnabled] = await Promise.all([
@@ -73,6 +74,7 @@ export class IOSDebugModeManager extends ApplePlatformDebugModeManager {
 					IOSDebugModeManager.REMOTE_DEBUGGING_SETTING_NAME,
 				),
 			]);
+
 			return (
 				executorClassName ===
 					IOSDebugModeManager.WEBSOCKET_EXECUTOR_NAME &&
@@ -96,6 +98,7 @@ export class IOSDebugModeManager extends ApplePlatformDebugModeManager {
 			this.logger.debug(
 				`Failed one attempt to find plist file: ${String(reason)}`,
 			);
+
 			return "";
 		}
 	}

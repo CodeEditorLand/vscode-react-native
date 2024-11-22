@@ -44,6 +44,7 @@ export function buildClientId(
 		}
 	}
 	const escapedName = escape(clientInfo.app);
+
 	return `${escapedName}#${clientInfo.os}#${clientInfo.device}#${clientInfo.device_id}`;
 }
 

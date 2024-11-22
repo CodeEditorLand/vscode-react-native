@@ -24,8 +24,10 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 		// 'any' because TypeScript is wrong
 		// workaround from https://github.com/microsoft/TypeScript/issues/5863
 		const that = this as any;
+
 		const result = Command.instances.get(that) || new that();
 		Command.instances.set(that, result);
+
 		return result;
 	}
 
@@ -76,7 +78,9 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 					switch (error.errorCode) {
 						case InternalErrorCode.CommandCanceled:
 							generator.addError(error);
+
 							return;
+
 						default:
 							throw error;
 					}
@@ -136,6 +140,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 						InternalErrorCode.CommandCanceled,
 						this.label,
 					);
+
 				default:
 					throw error;
 			}
@@ -152,11 +157,13 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 
 	public register = (() => {
 		let isCalled = false;
+
 		return (entryPointHandler: EntryPointHandler) => {
 			this.entryPointHandler = entryPointHandler;
 
 			assert(!isCalled, "Command can only be registered once");
 			isCalled = true;
+
 			return vscode.commands.registerCommand(
 				`reactNative.${this.codeName}`,
 				this.createHandler(),

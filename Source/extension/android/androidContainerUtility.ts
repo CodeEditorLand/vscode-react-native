@@ -7,9 +7,13 @@ import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { AdbHelper } from "./adb";
 
 const allowedAppNameRegex = /^[\w.-]+$/;
+
 const appNotApplicationRegex = /not an application/;
+
 const appNotDebuggableRegex = /debuggable/;
+
 const operationNotPermittedRegex = /not permitted/;
+
 const deviceTmpDir = "/data/local/tmp/";
 
 // The code is borrowed from https://github.com/facebook/flipper/blob/master/desktop/app/src/utils/androidContainerUtility.tsx,
@@ -94,7 +98,9 @@ export async function pushFile(
 	logger?: OutputChannelLogger,
 ): Promise<void> {
 	const validApp = await validateAppName(app);
+
 	const validFilepath = await validateFilePath(destFilepath);
+
 	return _pushFile(
 		adbHelper,
 		deviceId,
@@ -114,6 +120,7 @@ async function _pushFile(
 	logger?: OutputChannelLogger,
 ): Promise<void> {
 	const destFileName = path.basename(destFilepath);
+
 	const tmpFilePath = deviceTmpDir + destFileName;
 
 	try {
@@ -122,7 +129,9 @@ async function _pushFile(
 			`push ${sourceFilepath} ${tmpFilePath}`,
 		);
 		logger?.debug(pushRes);
+
 		const command = `cp "${tmpFilePath}" "${destFilepath}" && chmod 644 "${destFilepath}"`;
+
 		const appCommandRes = await executeCommandAsApp(
 			adbHelper,
 			deviceId,
@@ -181,6 +190,7 @@ function _push(
 	logger?: OutputChannelLogger,
 ): Promise<void> {
 	const command = `echo \\"${contents}\\" > "${filename}" && chmod 644 "${filename}"`;
+
 	return executeCommandAsApp(adbHelper, deviceId, app, command)
 		.then((res) => {
 			logger?.debug(res);
@@ -192,6 +202,7 @@ function _push(
 					.then(() => undefined)
 					.catch((e) => {
 						logger?.debug(e.toString());
+
 						throw error;
 					});
 			}
@@ -207,6 +218,7 @@ function _pull(
 	logger?: OutputChannelLogger,
 ): Promise<string> {
 	const command = `cat "${path}"`;
+
 	return executeCommandAsApp(adbHelper, deviceId, app, command).catch(
 		(error) => {
 			if (error instanceof RunAsError) {
@@ -219,6 +231,7 @@ function _pull(
 				).catch((e) => {
 					// Throw the original error.
 					logger?.debug(e.toString());
+
 					throw error;
 				});
 			}

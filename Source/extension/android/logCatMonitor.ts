@@ -13,6 +13,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /* This class will print the LogCat messages to an Output Channel. The configuration for logcat can be cutomized in
@@ -51,6 +52,7 @@ export class LogCatMonitor implements vscode.Disposable {
 
 	public async start(): Promise<void> {
 		const logCatArguments = this.getLogCatArguments();
+
 		const adbParameters = ["-s", this.deviceId, "logcat"].concat(
 			logCatArguments,
 		);

@@ -20,6 +20,7 @@ nls.config({
 })();
 
 const localize = nls.loadMessageBundle();
+
 const logger = OutputChannelLogger.getMainChannel();
 
 export class RevertOpenModule extends ReactNativeCommand {
@@ -32,13 +33,16 @@ export class RevertOpenModule extends ReactNativeCommand {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const NODE_MODULES_FODLER_NAME = "node_modules";
+
 		const projectRootPath = this.project.getWorkspaceFolder().uri.fsPath;
 
 		const packageJsonPath = findFileInFolderHierarchy(
 			projectRootPath,
 			"package.json",
 		);
+
 		const rnVersion = packageJsonPath
 			? JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"))
 					.dependencies["react-native"]
@@ -58,6 +62,7 @@ export class RevertOpenModule extends ReactNativeCommand {
 
 		if (fs.existsSync(openModulePath)) {
 			const mainFilePath = path.resolve(openModulePath, "open-main.js");
+
 			if (fs.existsSync(mainFilePath)) {
 				try {
 					await fs.unlinkSync(mainFilePath);
@@ -82,9 +87,11 @@ export class RevertOpenModule extends ReactNativeCommand {
 				openModulePath,
 				"package.json",
 			);
+
 			const packageJson = JSON.parse(
 				fs.readFileSync(packageFilePath, "utf-8"),
 			);
+
 			if (packageJson.main == "open-main.js") {
 				try {
 					delete packageJson.main;

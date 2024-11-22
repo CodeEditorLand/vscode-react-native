@@ -16,12 +16,14 @@ declare module xdl {
     var User: {
         loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
         logoutAsync(): Promise<void>;
+
         getCurrentUserAsync(): Promise<IUser>;
     }
 
     var UserManager: {
         loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
         logoutAsync(): Promise<void>;
+
         getCurrentUserAsync(): Promise<IUser>;
     }
 
@@ -81,6 +83,7 @@ declare module xdl {
     var Project: {
         startAsync(projectRoot: string, options?: IStartOptions): Promise<void>;
         stopAsync(projectRoot: string): Promise<void>;
+
         getUrlAsync(projectRoot: string, options?: IUrlOptions): Promise<string>;
         publishAsync(projectRoot: string, options?: IPublishOptions): Promise<IPublishResponse>;
         startExpoServerAsync(projectRoot: string): Promise<void>;

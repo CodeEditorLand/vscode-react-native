@@ -28,7 +28,9 @@ export class DefaultsHelper {
 
 	private async invokeDefaultsCommand(command: string): Promise<string> {
 		const res = await this.nodeChildProcess.exec(`defaults ${command}`);
+
 		const outcome = await res.outcome;
+
 		return outcome.toString().trim();
 	}
 }

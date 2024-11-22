@@ -22,7 +22,9 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
+
 const logger = OutputChannelLogger.getMainChannel();
 
 export class InstallExpoGoApplication extends Command {
@@ -34,15 +36,18 @@ export class InstallExpoGoApplication extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const item = await vscode.window.showQuickPick(["Android", "iOS"], {
 			placeHolder: "Select type for mobile OS",
 		});
+
 		const installItem = await vscode.window.showQuickPick(
 			["Manual", "Auto"],
 			{
 				placeHolder: "How to install application",
 			},
 		);
+
 		const expoHelper = this.project.getExponentHelper();
 		logger.info(
 			localize(
@@ -50,14 +55,18 @@ export class InstallExpoGoApplication extends Command {
 				"Checking Expo project environment.",
 			),
 		);
+
 		const isExpo = await expoHelper.isExpoManagedApp(true);
 
 		const expoGoListAPI = "https://api.expo.dev/v2/versions";
+
 		const apiJson = await fetchJson(expoGoListAPI);
+
 		const jsonContent = JSON.parse(apiJson);
 
 		if (isExpo) {
 			const currentSdkVersion = await expoHelper.exponentSdk(true);
+
 			const expoUrlInfo = jsonContent.sdkVersions[currentSdkVersion];
 
 			if (item == "Android") {
@@ -72,8 +81,10 @@ export class InstallExpoGoApplication extends Command {
 				);
 
 				const targetUrl = expoUrlInfo.androidClientUrl;
+
 				const androidClientVersion =
 					expoUrlInfo.androidClientVersion as string;
+
 				const fileName = `${this.project
 					.getPackager()
 					.getProjectPath()}/expogo_${androidClientVersion}.apk`;
@@ -130,6 +141,7 @@ export class InstallExpoGoApplication extends Command {
 				);
 
 				const targetUrl = expoUrlInfo.iosClientUrl;
+
 				const iOSClientVersion = expoUrlInfo.iosClientVersion as string;
 
 				const tarFile = `${this.project

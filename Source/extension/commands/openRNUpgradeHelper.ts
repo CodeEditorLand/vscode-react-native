@@ -15,7 +15,9 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
+
 const logger = OutputChannelLogger.getMainChannel();
 
 export class OpenRNUpgradeHelper extends Command {
@@ -27,14 +29,18 @@ export class OpenRNUpgradeHelper extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const RNUrl =
 			"https://react-native-community.github.io/upgrade-helper/?package=react-native";
+
 		const RNWUrl =
 			"https://react-native-community.github.io/upgrade-helper/?package=react-native-windows&language=cpp";
+
 		const RNMUrl =
 			"https://react-native-community.github.io/upgrade-helper/?package=react-native-macos";
 
 		await wait();
+
 		const item = await vscode.window.showQuickPick(
 			["React Native", "React Native Windows", "React Native MacOS"],
 			{
@@ -52,13 +58,19 @@ export class OpenRNUpgradeHelper extends Command {
 		switch (item) {
 			case "React Native":
 				await vscode.env.openExternal(vscode.Uri.parse(RNUrl));
+
 				break;
+
 			case "React Native Windows":
 				await vscode.env.openExternal(vscode.Uri.parse(RNWUrl));
+
 				break;
+
 			case "React Native MacOS":
 				await vscode.env.openExternal(vscode.Uri.parse(RNMUrl));
+
 				break;
+
 			default:
 		}
 	}

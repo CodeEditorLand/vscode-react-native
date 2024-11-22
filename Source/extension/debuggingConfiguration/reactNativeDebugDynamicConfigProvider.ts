@@ -33,8 +33,10 @@ export class ReactNativeDebugDynamicConfigProvider
 
 		if (folder) {
 			const rootPath = folder.uri.fsPath;
+
 			const projectRootPath =
 				SettingsHelper.getReactNativeProjectRoot(rootPath);
+
 			const versions =
 				await ProjectVersionHelper.tryToGetRNSemverValidVersionsFromProjectPackage(
 					projectRootPath,
@@ -43,9 +45,12 @@ export class ReactNativeDebugDynamicConfigProvider
 				);
 
 			let macOSHermesEnabled = false;
+
 			let windowsHermesEnabled = false;
+
 			const androidHermesEnabled =
 				ReactNativeProjectHelper.isAndroidHermesEnabled(rootPath);
+
 			const iOSHermesEnabled =
 				ReactNativeProjectHelper.isIOSHermesEnabled(rootPath);
 
@@ -63,6 +68,7 @@ export class ReactNativeDebugDynamicConfigProvider
 			} else {
 				windowsHermesEnabled =
 					ReactNativeProjectHelper.isWindowsHermesEnabled(rootPath);
+
 				if (!windowsHermesEnabled) {
 					delete debugConfigurationsToShow[
 						DEBUG_CONFIGURATION_NAMES
@@ -85,6 +91,7 @@ export class ReactNativeDebugDynamicConfigProvider
 			} else {
 				macOSHermesEnabled =
 					ReactNativeProjectHelper.isMacOSHermesEnabled(rootPath);
+
 				if (!macOSHermesEnabled) {
 					delete debugConfigurationsToShow[
 						DEBUG_CONFIGURATION_NAMES
@@ -146,6 +153,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				},
 			);
 			Telemetry.send(chosenConfigsEvent);
+
 			if (config.request === "attach") {
 				await this.configureAttachScenario(folder, config, token);
 			}
@@ -168,7 +176,9 @@ export class ReactNativeDebugDynamicConfigProvider
 			folder,
 			token,
 		};
+
 		const picker = new MultiStepInput<DebugConfigurationState>();
+
 		const configurationProviderHelper = new ConfigurationProviderHelper();
 		await picker.run(async (input, s) => {
 			await configurationProviderHelper.selectExpoHostType(
@@ -193,7 +203,9 @@ export class ReactNativeDebugDynamicConfigProvider
 			folder,
 			token,
 		};
+
 		const picker = new MultiStepInput<DebugConfigurationState>();
+
 		const configurationProviderHelper = new ConfigurationProviderHelper();
 
 		const configurePort = async (
@@ -219,6 +231,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				2,
 				"localhost",
 			);
+
 			return () => configurePort(input, config);
 		};
 

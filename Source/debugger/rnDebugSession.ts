@@ -28,6 +28,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class RNDebugSession extends DebugSessionBase {
@@ -294,6 +295,7 @@ export class RNDebugSession extends DebugSessionBase {
 						this.debugSessionStatus =
 							DebugSessionStatus.ConnectionDone;
 						this.setConnectionAllowedIfPossible();
+
 						if (resolve) {
 							this.debugSessionStatus =
 								DebugSessionStatus.ConnectionAllowed;
@@ -304,6 +306,7 @@ export class RNDebugSession extends DebugSessionBase {
 							DebugSessionStatus.ConnectionFailed;
 						this.setConnectionAllowedIfPossible();
 						this.resetFirstConnectionStatus();
+
 						throw new Error("Cannot start child debug session");
 					}
 				},
@@ -312,6 +315,7 @@ export class RNDebugSession extends DebugSessionBase {
 						DebugSessionStatus.ConnectionFailed;
 					this.setConnectionAllowedIfPossible();
 					this.resetFirstConnectionStatus();
+
 					throw err;
 				},
 			);

@@ -75,12 +75,14 @@ async function queryTargetsWithoutXcodeDependency(
 				logger.warn(
 					`Failed to query idb_companion --list 1 --only device for physical targets: ${e}`,
 				);
+
 				return [];
 			});
 	} else {
 		logger.warn(
 			`Unable to locate idb_companion in ${idbCompanionPath}. Try running sudo yum install -y fb-idb`,
 		);
+
 		return [];
 	}
 }
@@ -119,6 +121,7 @@ export async function idbListTargets(
 		)
 		.catch((e: Error) => {
 			logger.warn(`Failed to query idb for targets: ${e}`);
+
 			return [];
 		});
 }
@@ -128,8 +131,10 @@ async function targets(): Promise<Array<DeviceTarget>> {
 		return [];
 	}
 	const isXcodeInstalled = await isXcodeDetected();
+
 	if (!isXcodeInstalled) {
 		const idbCompanionPath = path.dirname(idbPath) + "/idb_companion";
+
 		return queryTargetsWithoutXcodeDependency(
 			idbCompanionPath,
 			isAvailable,
@@ -148,20 +153,25 @@ async function targets(): Promise<Array<DeviceTarget>> {
 				.execToString("xcrun xctrace list devices")
 				.then((stdout) => {
 					const targets: DeviceTarget[] = [];
+
 					const lines = stdout
 						.split("\n")
 						.map((line) => line.trim())
 						.filter((line) => !!line);
+
 					const firstDevicesIndex =
 						lines.indexOf("== Devices ==") + 1;
+
 					const lastDevicesIndex =
 						lines.indexOf("== Simulators ==") - 1;
+
 					for (
 						let i = firstDevicesIndex;
 						i <= lastDevicesIndex;
 						i++
 					) {
 						const line = lines[i];
+
 						const params = line
 							.split(" ")
 							.map((el) => el.trim())
@@ -189,6 +199,7 @@ async function targets(): Promise<Array<DeviceTarget>> {
 					logger.warn(
 						`Failed to query for devices using xctrace: ${e}`,
 					);
+
 					return [];
 				});
 }
@@ -202,6 +213,7 @@ async function push(
 ): Promise<void> {
 	const cp = new ChildProcess();
 	await checkIdbIsInstalled();
+
 	return wrapWithErrorMessage(
 		cp
 			.execToString(
@@ -224,6 +236,7 @@ async function pull(
 ): Promise<void> {
 	const cp = new ChildProcess();
 	await checkIdbIsInstalled();
+
 	return wrapWithErrorMessage(
 		cp
 			.execToString(
@@ -239,6 +252,7 @@ async function pull(
 
 export async function checkIdbIsInstalled(): Promise<void> {
 	const isInstalled = await isIdbAvailable();
+
 	if (!isInstalled) {
 		throw new Error(
 			`idb is required to use iOS devices. Please install it with instructions from https://github.com/facebook/idb.`,

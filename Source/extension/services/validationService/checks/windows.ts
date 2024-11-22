@@ -11,6 +11,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const toLocale = nls.loadMessageBundle();
 
 const label = "Windows version > 10.0.16299.0";

@@ -11,12 +11,14 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const toLocale = nls.loadMessageBundle();
 
 const label = "Compilers, build tools, SDKs and Visual Studio";
 
 async function test(): Promise<ValidationResultT> {
 	let vswherePath = ``;
+
 	if (process.env["ProgramFiles(x86)"]) {
 		vswherePath = `"${process.env["ProgramFiles(x86)"]}\\Microsoft Visual Studio\\Installer\\vswhere.exe"`;
 	} else {
@@ -29,16 +31,22 @@ async function test(): Promise<ValidationResultT> {
 		"Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core",
 		"Microsoft.VisualStudio.Component.Windows10SDK.19041",
 	];
+
 	const command = `${vswherePath} -property catalog_productDisplayVersion`;
+
 	const result = await executeCommand(command);
+
 	if (result.stdout) {
 		const versions = normizeStr(result.stdout).split("\n");
+
 		const valid = (version: string) => semver.gtr(version, "16.5");
+
 		if (versions.some(valid)) {
 			for (const comp of components) {
 				const pathToComponent = await executeCommand(
 					`${vswherePath}  -requires ${comp}  -property productPath`,
 				);
+
 				if (!pathToComponent.stdout) {
 					return {
 						status: "failure",

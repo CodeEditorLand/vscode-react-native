@@ -82,9 +82,11 @@ export abstract class TelemetryGeneratorBase {
 		const errorWithErrorCode: IHasErrorCode = <IHasErrorCode>(
 			(<Record<string, any>>error)
 		);
+
 		const errorCode =
 			errorWithErrorCode.errorCode || InternalErrorCode.UnknownError;
 		this.add(`error.code${++this.errorIndex}`, errorCode, /* isPii*/ false);
+
 		return this;
 	}
 
@@ -96,9 +98,11 @@ export abstract class TelemetryGeneratorBase {
 
 		try {
 			const code = codeToMeasure();
+
 			return await code;
 		} catch (error) {
 			this.addError(error);
+
 			return Promise.reject(error);
 		} finally {
 			this.finishTime(name, startTime);
@@ -114,6 +118,7 @@ export abstract class TelemetryGeneratorBase {
 		this.currentStep = name;
 		this.telemetryProperties = {};
 		this.currentStepStartTime = process.hrtime();
+
 		return this;
 	}
 
@@ -127,6 +132,7 @@ export abstract class TelemetryGeneratorBase {
 
 	private sendCurrentStep(): void {
 		this.add("step", this.currentStep, /* isPii*/ false);
+
 		const telemetryEvent: Telemetry.TelemetryEvent =
 			new Telemetry.TelemetryEvent(this.componentName);
 		TelemetryHelper.addTelemetryEventProperties(
@@ -184,6 +190,7 @@ export abstract class TelemetryGeneratorBase {
 		const nonNullComponents: string[] = components.filter(
 			(component: string) => !!component,
 		);
+
 		return nonNullComponents.join(".");
 	}
 

@@ -50,12 +50,15 @@ export function getLoggingOptions(): DevLogToFileSettings {
  */
 export function getLoggingDirectory(): string | null {
 	const loggingOptions = getLoggingOptions();
+
 	if (loggingOptions.LogsDirectory) {
 		const dirPath = loggingOptions.LogsDirectory;
+
 		if (!path.isAbsolute(dirPath)) {
 			return null;
 		}
 		mkdirp.sync(dirPath);
+
 		return dirPath;
 	}
 	return null;
@@ -65,6 +68,7 @@ function getLogLevel() {
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const SettingsHelper = require("../settingsHelper").SettingsHelper;
+
 		return SettingsHelper.getLogLevel();
 	} catch (err) {
 		// Debugger context

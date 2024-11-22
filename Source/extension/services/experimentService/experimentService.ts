@@ -88,11 +88,13 @@ export class ExperimentService implements vscode.Disposable {
 		const curExperimentParameters = ExtensionConfigManager.config.get(
 			expConfig.experimentName,
 		);
+
 		const expInstance = this.experimentsInstances.get(
 			expConfig.experimentName,
 		);
 
 		let expResult: ExperimentResult;
+
 		if (expInstance && expConfig.enabled) {
 			try {
 				expResult = await expInstance.run(

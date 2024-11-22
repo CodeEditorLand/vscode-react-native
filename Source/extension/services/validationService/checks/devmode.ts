@@ -10,6 +10,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const toLocale = nls.loadMessageBundle();
 
 const label = "DeveloperMode";
@@ -17,7 +18,9 @@ const label = "DeveloperMode";
 async function test(): Promise<ValidationResultT> {
 	const command =
 		"reg query HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock /v AllowDevelopmentWithoutDevLicense";
+
 	const data = await executeCommand(command);
+
 	if (data.stdout) {
 		if (data.stdout.includes(" 0x1"))
 			return {

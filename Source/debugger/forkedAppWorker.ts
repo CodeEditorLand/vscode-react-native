@@ -73,6 +73,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 			this.sourcesStoragePath,
 			ScriptImporter.DEBUGGER_WORKER_FILENAME,
 		);
+
 		const port = generateRandomPortNumber();
 
 		// Note that we set --inspect-brk flag to pause the process on the first line - this is
@@ -99,6 +100,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 				// discarded by spawned process
 				if (message && message.workerLoaded) {
 					this.workerLoaded = Promise.resolve();
+
 					return;
 				}
 
@@ -164,6 +166,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 			if (rnMessage.method !== "executeApplicationScript") {
 				// Before sending messages, make sure that the app script executed
 				await this.bundleLoaded;
+
 				return rnMessage;
 			}
 			// When packager asks worker to load bundle we download that bundle and
@@ -179,12 +182,14 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 				logger.verbose(
 					`Packager requested runtime to load script from ${String(rnMessage.url)}`,
 				);
+
 				const downloadedScript =
 					await this.scriptImporter.downloadAppScript(
 						<string>rnMessage.url,
 						this.projectRootPath,
 					);
 				this.bundleLoaded = Promise.resolve();
+
 				return Object.assign({}, rnMessage, {
 					url: `${this.pathToFileUrl(downloadedScript.filepath)}`,
 				});
@@ -208,6 +213,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 					reason,
 				),
 		);
+
 		return promise;
 	}
 
@@ -215,6 +221,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 	public pathToFileUrl(url: string): string {
 		const filePrefix =
 			process.platform === "win32" ? "file:///" : "file://";
+
 		return filePrefix + url;
 	}
 }

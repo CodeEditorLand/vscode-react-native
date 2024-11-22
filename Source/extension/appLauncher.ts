@@ -53,6 +53,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class AppLauncher {
@@ -80,6 +81,7 @@ export class AppLauncher {
 	): AppLauncher {
 		const appLauncher =
 			ProjectsStorage.projectsCache[projectRootPath.toLowerCase()];
+
 		if (!appLauncher) {
 			throw new Error(
 				`Could not find AppLauncher by the project root path ${projectRootPath}`,
@@ -94,9 +96,11 @@ export class AppLauncher {
 	): Promise<AppLauncher> {
 		let appLauncher =
 			ProjectsStorage.projectsCache[projectRootPath.toLowerCase()];
+
 		if (!appLauncher) {
 			const appLauncherFolder =
 				createAdditionalWorkspaceFolder(projectRootPath);
+
 			if (appLauncherFolder) {
 				await onFolderAdded(appLauncherFolder);
 				appLauncher =
@@ -243,7 +247,9 @@ export class AppLauncher {
 		const document = await vscode.workspace.openTextDocument(
 			vscode.Uri.file(filename),
 		);
+
 		const editor = await vscode.window.showTextDocument(document);
+
 		const range = editor.document.lineAt(lineNumber - 1).range;
 		editor.selection = new vscode.Selection(range.start, range.end);
 		editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
@@ -259,6 +265,7 @@ export class AppLauncher {
 		>vscode.workspace.getWorkspaceFolder(
 			vscode.Uri.file(args.cwd || args.program),
 		);
+
 		const baseRunOptions: IBaseArgs = {
 			platform: args.platform,
 			workspaceRoot: workspaceFolder.uri.fsPath,
@@ -271,6 +278,7 @@ export class AppLauncher {
 				args.cwd || args.program,
 			),
 		};
+
 		return baseRunOptions;
 	}
 
@@ -393,6 +401,7 @@ export class AppLauncher {
 								generator.step(
 									"mobilePlatform.enableHermesDebuggingMode",
 								);
+
 								if (mobilePlatformOptions.enableDebug) {
 									this.logger.info(
 										localize(
@@ -414,6 +423,7 @@ export class AppLauncher {
 								generator.step(
 									"mobilePlatform.enableIosDirectDebuggingMode",
 								);
+
 								if (mobilePlatformOptions.enableDebug) {
 									this.logger.info(
 										localize(
@@ -464,6 +474,7 @@ export class AppLauncher {
 						}
 						generator.addError(error);
 						this.logger.error(error);
+
 						throw error;
 					}
 				},
@@ -493,6 +504,7 @@ export class AppLauncher {
 				}
 			}
 			this.logger.error(error);
+
 			throw error;
 		}
 	}
@@ -557,6 +569,7 @@ export class AppLauncher {
 					} catch (error) {
 						generator.addError(error);
 						this.logger.error(error);
+
 						throw error;
 					}
 				},
@@ -586,6 +599,7 @@ export class AppLauncher {
 				}
 			}
 			this.logger.error(error);
+
 			throw error;
 		}
 	}
@@ -595,6 +609,7 @@ export class AppLauncher {
 
 		// Launch browser
 		let browserFinder: BrowserHelper.IBrowserFinder;
+
 		if (launchArgs.platform == PlatformType.ExpoWeb) {
 			switch (launchArgs.browserTarget) {
 				case BROWSER_TYPES.Edge:
@@ -603,7 +618,9 @@ export class AppLauncher {
 						fs.promises,
 						execa,
 					);
+
 					break;
+
 				case BROWSER_TYPES.Chrome:
 				default:
 					browserFinder = new BrowserHelper.ChromeBrowserFinder(
@@ -613,6 +630,7 @@ export class AppLauncher {
 					);
 			}
 			const browserPath = (await browserFinder.findAll())[0];
+
 			if (browserPath) {
 				this.browserProc = child_process.spawn(
 					browserPath.path,
@@ -648,6 +666,7 @@ export class AppLauncher {
 
 	public getRunArguments(launchArgs: any): string[] {
 		let userDataDir;
+
 		if (launchArgs.browserTarget == BROWSER_TYPES.Chrome) {
 			userDataDir = path.join(
 				HostPlatform.getSettingsHome(),
@@ -668,6 +687,7 @@ export class AppLauncher {
 			"--no-default-browser-check",
 			`--user-data-dir=${userDataDir}`,
 		];
+
 		if (launchArgs.url) {
 			args.push(launchArgs.url);
 		}
@@ -685,6 +705,7 @@ export class AppLauncher {
 			const isAnyTarget =
 				launchArgs.target.toLowerCase() === TargetType.Simulator ||
 				launchArgs.target.toLowerCase() === TargetType.Device;
+
 			const resultTarget = await mobilePlatform.resolveMobileTarget(
 				launchArgs.target,
 			);
@@ -697,6 +718,7 @@ export class AppLauncher {
 							target.isVirtualTarget ===
 							resultTarget.isVirtualTarget,
 					);
+
 				if (targetsCount > 1) {
 					this.launchScenariosManager.updateLaunchScenario(
 						launchArgs,
@@ -718,6 +740,7 @@ export class AppLauncher {
 		>vscode.workspace.getWorkspaceFolder(
 			vscode.Uri.file(args.cwd || args.program),
 		);
+
 		const mobilePlatformOptions: any = Object.assign(
 			{ target: args.target, enableDebug: args.enableDebug },
 			this.prepareBaseRunOptions(args),

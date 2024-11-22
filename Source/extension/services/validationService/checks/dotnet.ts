@@ -14,18 +14,22 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const toLocale = nls.loadMessageBundle();
 
 const label = ".NET Core 3.1";
 
 async function test(): Promise<ValidationResultT> {
 	const command = "dotnet --info";
+
 	const data = await executeCommand(command);
+
 	if (data.stdout) {
 		if (data.stdout.includes("Microsoft.NETCore.App 3.1"))
 			return {
 				status: "success",
 			};
+
 		return {
 			status: "failure",
 			comment: createVersionErrorMessage(label),

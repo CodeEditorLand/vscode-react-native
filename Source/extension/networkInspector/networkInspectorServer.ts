@@ -33,6 +33,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /**
@@ -115,6 +116,7 @@ export class NetworkInspectorServer {
 			);
 			resolve();
 		});
+
 		return this.initialisePromise;
 	}
 
@@ -171,6 +173,7 @@ export class NetworkInspectorServer {
 						);
 						resolve(rsServer!);
 					});
+
 				return transportServer;
 			};
 			rsServer = new RSocketServer({
@@ -192,6 +195,7 @@ export class NetworkInspectorServer {
 	): Partial<Responder<string, any>> => {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const server = this;
+
 		if (!payload.data) {
 			return {};
 		}
@@ -208,6 +212,7 @@ export class NetworkInspectorServer {
 			csr_path,
 			medium,
 		} = clientData;
+
 		const transformedMedium =
 			transformCertificateExchangeMediumToType(medium);
 
@@ -225,6 +230,7 @@ export class NetworkInspectorServer {
 		).then((client) => {
 			return (resolvedClient = client);
 		});
+
 		let resolvedClient: ClientDevice | undefined;
 
 		socket.connectionStatus().subscribe({
@@ -284,12 +290,14 @@ export class NetworkInspectorServer {
 				}
 
 				let rawData;
+
 				try {
 					rawData = JSON.parse(payload.data);
 				} catch (err) {
 					this.logger.error(
 						`Network inspector: invalid JSON: ${payload.data}`,
 					);
+
 					return new Single(() => {});
 				}
 
@@ -304,6 +312,7 @@ export class NetworkInspectorServer {
 					this.logger.debug("CSR received from device");
 
 					const { csr, destination, medium } = json;
+
 					return new Single((subscriber) => {
 						subscriber.onSubscribe(undefined);
 						this.certificateProvider
@@ -348,17 +357,20 @@ export class NetworkInspectorServer {
 							medium: number | undefined;
 					  }
 					| undefined;
+
 				try {
 					json = JSON.parse(payload.data);
 				} catch (err) {
 					this.logger.error(
 						`Network inspector: invalid JSON: ${payload.data}`,
 					);
+
 					return;
 				}
 
 				if (json && json.method === "signCertificate") {
 					this.logger.debug("CSR received from device");
+
 					const { csr, destination, medium } = json;
 					this.certificateProvider
 						.processCertificateSigningRequest(
@@ -444,6 +456,7 @@ export class NetworkInspectorServer {
 
 	private removeConnection(id: string) {
 		const clientDevice = this.connections.get(id);
+
 		if (clientDevice) {
 			clientDevice.connection && clientDevice.connection.close();
 			this.connections.delete(id);

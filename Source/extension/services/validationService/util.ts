@@ -25,6 +25,7 @@ interface IBasicCheckResult {
 
 export const basicCheck = async (arg: {
 	command: string;
+
 	getVersion?: () => Promise<string | null | undefined>;
 	versionRange?: semver.Range | string;
 }): Promise<IBasicCheckResult> => {
@@ -34,16 +35,19 @@ export const basicCheck = async (arg: {
 
 	if (!commandExists.sync(arg.command)) {
 		result.exists = false;
+
 		return result;
 	}
 
 	const version = await arg.getVersion?.();
+
 	if (!version) {
 		return result;
 	}
 
 	if (!arg.versionRange) {
 		result.versionCompare = 0;
+
 		return result;
 	}
 
@@ -63,10 +67,12 @@ export const parseVersion = async (
 	prop: "stdout" | "stderr" = "stdout",
 ): Promise<semver.SemVer | null> => {
 	const data = await executeCommand(command).catch(() => {});
+
 	if (!data) {
 		return null;
 	}
 	const text = normizeStr(data[prop]);
+
 	return semver.coerce(reg ? reg.exec(text)?.[0] : text);
 };
 
@@ -77,6 +83,7 @@ export const fromEntries = <T = any, J extends PropertyKey = PropertyKey>(
 	[...entries].reduce(
 		(obj, [key, val]) => {
 			obj[key] = val;
+
 			return obj;
 		},
 		{} as Record<J, T>,

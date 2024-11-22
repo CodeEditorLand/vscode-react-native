@@ -47,10 +47,12 @@ export class RunMacOS extends ReactNativeCommand {
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
 			"debuggingRNWAndMacOSApps",
 		);
+
 		const additionalPackagesToCheck: ParsedPackage[] = [
 			REACT_NATIVE_PACKAGES.REACT_NATIVE_MACOS,
 		];
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.macOS);
+
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				this.project.getOrUpdateNodeModulesRoot(),

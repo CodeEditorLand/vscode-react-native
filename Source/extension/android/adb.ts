@@ -16,6 +16,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 // See android versions usage at: http://developer.android.com/about/dashboards/index.html
@@ -69,6 +70,7 @@ export class AdbHelper {
 		const output = await this.childProcess.execToString(
 			`${this.adbExecutable} devices`,
 		);
+
 		return this.parseConnectedTargets(output);
 	}
 
@@ -82,10 +84,14 @@ export class AdbHelper {
 
 	public async getAvdsNames(): Promise<string[]> {
 		const res = await this.childProcess.execToString("emulator -list-avds");
+
 		let emulatorsNames: string[] = [];
+
 		if (res) {
 			emulatorsNames = res.split(/\r?\n|\r/g);
+
 			const indexOfBlank = emulatorsNames.indexOf("");
+
 			if (indexOfBlank >= 0) {
 				emulatorsNames.splice(indexOfBlank, 1);
 			}
@@ -138,6 +144,7 @@ export class AdbHelper {
 		// We should stop and start application again after RELOAD_APP_ACTION, otherwise app going to hangs up
 		await PromiseUtil.delay(200); // We need a little delay after broadcast command
 		await this.stopApp(projectRoot, packageName, debugTarget, appIdSuffix);
+
 		return this.launchApp(
 			projectRoot,
 			packageName,
@@ -160,6 +167,7 @@ export class AdbHelper {
 		} shell am start -n ${packageName}${appIdSuffix ? `.${appIdSuffix}` : ""}/${packageName}.${
 			this.launchActivity
 		}`;
+
 		return new CommandExecutor(projectRoot).execute(launchAppCommand);
 	}
 
@@ -172,6 +180,7 @@ export class AdbHelper {
 		const stopAppCommand = `${this.adbExecutable} ${
 			debugTarget ? `-s ${debugTarget}` : ""
 		} shell am force-stop ${packageName}${appIdSuffix ? `.${appIdSuffix}` : ""}`;
+
 		return new CommandExecutor(projectRoot).execute(stopAppCommand);
 	}
 
@@ -180,6 +189,7 @@ export class AdbHelper {
 			deviceId,
 			"shell getprop ro.build.version.sdk",
 		);
+
 		return parseInt(output, 10);
 	}
 
@@ -191,6 +201,7 @@ export class AdbHelper {
 		const command = `${this.adbExecutable} ${
 			deviceId ? `-s ${deviceId}` : ""
 		} shell input keyevent ${KeyEvents.KEYCODE_MENU}`;
+
 		return this.commandExecutor.execute(command);
 	}
 
@@ -198,11 +209,13 @@ export class AdbHelper {
 		const command = `${this.adbExecutable} ${
 			deviceId ? `-s ${deviceId}` : ""
 		} shell input text "RR"`;
+
 		return this.commandExecutor.execute(command);
 	}
 
 	public async getOnlineTargets(): Promise<IDebuggableMobileTarget[]> {
 		const devices = await this.getConnectedTargets();
+
 		return devices.filter((device) => device.isOnline);
 	}
 
@@ -218,6 +231,7 @@ export class AdbHelper {
 		logger?: ILogger,
 	): string | null {
 		const matches = fileContent.match(/^sdk\.dir\s*=(.+)$/m);
+
 		if (!matches || !matches[1]) {
 			if (logger) {
 				logger.info(
@@ -231,6 +245,7 @@ export class AdbHelper {
 		}
 
 		let sdkLocation = matches[1].trim();
+
 		if (os.platform() === "win32") {
 			// For Windows we need to unescape files separators and drive letter separators
 			sdkLocation = sdkLocation
@@ -255,13 +270,16 @@ export class AdbHelper {
 			projectRoot,
 			logger,
 		);
+
 		if (sdkLocation) {
 			const localPropertiesSdkPath = path.join(
 				sdkLocation as string,
 				"platform-tools",
 				os.platform() === "win32" ? "adb.exe" : "adb",
 			);
+
 			const isExist = fs.existsSync(localPropertiesSdkPath);
+
 			if (isExist) {
 				return `"${localPropertiesSdkPath}"`;
 			}
@@ -297,8 +315,11 @@ export class AdbHelper {
 
 	private parseConnectedTargets(input: string): IDebuggableMobileTarget[] {
 		const result: IDebuggableMobileTarget[] = [];
+
 		const regex = new RegExp("^(\\S+)\\t(\\S+)$", "mg");
+
 		let match = regex.exec(input);
+
 		while (match != null) {
 			result.push({
 				id: match[1],
@@ -336,6 +357,7 @@ export class AdbHelper {
 			"android",
 			"local.properties",
 		);
+
 		if (!fs.existsSync(localPropertiesFilePath)) {
 			if (logger) {
 				logger.info(
@@ -349,6 +371,7 @@ export class AdbHelper {
 		}
 
 		let fileContent: string;
+
 		try {
 			fileContent = fs.readFileSync(localPropertiesFilePath).toString();
 		} catch (e) {

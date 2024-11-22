@@ -54,6 +54,7 @@ export class InspectorConsoleView extends InspectorView {
 			await vscode.commands.executeCommand(
 				this.openDeveloperToolsCommand,
 			);
+
 			if (EditorColorThemesHelper.isAutoDetectColorSchemeEnabled()) {
 				this.setupConsoleLogsColor(
 					EditorColorThemesHelper.getCurrentSystemColorTheme(),
@@ -71,14 +72,19 @@ export class InspectorConsoleView extends InspectorView {
 			switch (data.method) {
 				case "newRequest":
 					this.handleRequest(data.params as Request);
+
 					break;
+
 				case "newResponse":
 					this.handleResponse(data.params as Response);
+
 					break;
+
 				case "partialResponse":
 					this.handlePartialResponse(
 						data.params as Response | ResponseFollowupChunk,
 					);
+
 					break;
 			}
 		}
@@ -98,6 +104,7 @@ export class InspectorConsoleView extends InspectorView {
 
 	private handleResponse(data: Response): void {
 		this.responses.set(data.id, data);
+
 		if (this.requests.has(data.id)) {
 			this.printNetworkRequestData(
 				this.createNetworkRequestData(
@@ -126,11 +133,14 @@ export class InspectorConsoleView extends InspectorView {
         */
 
 		let newPartialResponseEntry;
+
 		let responseId;
+
 		if (data.index !== undefined && data.index > 0) {
 			// It's a follow up chunk
 			const followupChunk: ResponseFollowupChunk =
 				data as ResponseFollowupChunk;
+
 			const partialResponseEntry = this.partialResponses.get(
 				followupChunk.id,
 			) ?? {
@@ -144,6 +154,7 @@ export class InspectorConsoleView extends InspectorView {
 		} else {
 			// It's an initial chunk
 			const partialResponse: Response = data as Response;
+
 			const partialResponseEntry = this.partialResponses.get(
 				partialResponse.id,
 			) ?? {
@@ -158,6 +169,7 @@ export class InspectorConsoleView extends InspectorView {
 		const response = this.assembleChunksIfResponseIsComplete(
 			newPartialResponseEntry,
 		);
+
 		if (response) {
 			this.handleResponse(response);
 			this.partialResponses.delete(responseId);
@@ -181,6 +193,7 @@ export class InspectorConsoleView extends InspectorView {
 		partialResponseEntry: PartialResponse,
 	): Response | null {
 		const numChunks = partialResponseEntry.initialResponse?.totalChunks;
+
 		if (
 			!partialResponseEntry.initialResponse ||
 			!numChunks ||
@@ -193,6 +206,7 @@ export class InspectorConsoleView extends InspectorView {
 		// Partial response has all required chunks, convert it to a full Response.
 
 		const response: Response = partialResponseEntry.initialResponse;
+
 		const allChunks: string[] =
 			response.data != null
 				? [
@@ -206,6 +220,7 @@ export class InspectorConsoleView extends InspectorView {
 							.map(([_k, v]: [string, string]) => v),
 					]
 				: [];
+
 		const data = combineBase64Chunks(allChunks);
 
 		const newResponse = {
@@ -227,6 +242,7 @@ export class InspectorConsoleView extends InspectorView {
 		response: Response,
 	): ConsoleNetworkRequestDataView {
 		const url = new URL(request.url);
+
 		const networkRequestConsoleView = {
 			title: `%cNetwork request: ${request.method} ${
 				url ? url.host + url.pathname : "<unknown>"
@@ -266,6 +282,7 @@ export class InspectorConsoleView extends InspectorView {
 		searchParams.forEach((value: string, key: string) => {
 			formattedSearchParams[key] = value;
 		});
+
 		return formattedSearchParams;
 	}
 
@@ -281,6 +298,7 @@ export class InspectorConsoleView extends InspectorView {
 	): Record<string, string> {
 		return headers.reduce((headersViewObject, header) => {
 			headersViewObject[header.key] = header.value;
+
 			return headersViewObject;
 		}, {});
 	}
@@ -290,6 +308,7 @@ export class InspectorConsoleView extends InspectorView {
 	): void {
 		const responseBody =
 			networkRequestData.networkRequestData["Response Body"];
+
 		if (
 			responseBody &&
 			typeof responseBody === "string" &&

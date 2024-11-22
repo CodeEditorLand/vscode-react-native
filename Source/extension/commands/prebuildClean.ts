@@ -19,13 +19,17 @@ export class PrebuildClean extends ReactNativeCommand {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const projectRootPath = this.project.getPackager().getProjectPath();
+
 		const logger = OutputChannelLogger.getChannel(
 			"Expo Prebuild Clean",
 			true,
 		);
+
 		const nodeModulesRoot: string =
 			AppLauncher.getNodeModulesRootByProjectPath(projectRootPath);
+
 		const commandExecutor = new CommandExecutor(
 			nodeModulesRoot,
 			projectRootPath,

@@ -26,6 +26,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /**
@@ -97,7 +98,9 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	public async getTarget(): Promise<AndroidTarget> {
 		if (!this.target) {
 			const onlineTargets = await this.adbHelper.getOnlineTargets();
+
 			const target = await this.getTargetFromRunArgs();
+
 			if (target) {
 				this.target = target;
 			} else {
@@ -106,16 +109,20 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 						switch (this.runOptions.target) {
 							case TargetType.Simulator:
 								return target.isVirtualTarget;
+
 							case TargetType.Device:
 								return !target.isVirtualTarget;
+
 							case undefined:
 							case "":
 								return true;
+
 							default:
 								return target.id === this.runOptions.target;
 						}
 					},
 				);
+
 				if (onlineTargetsBySpecifiedType.length) {
 					this.target = AndroidTarget.fromInterface(
 						onlineTargetsBySpecifiedType[0],
@@ -212,6 +219,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 					this.projectPath,
 					this.logger,
 				).spawnReactCommand("run-android", this.runArguments, { env });
+
 				const output = new OutputVerifier(
 					() =>
 						Promise.resolve(
@@ -225,10 +233,13 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				).process(runAndroidSpawn);
 
 				let devicesIdsForLaunch: string[] = [];
+
 				const onlineTargetsIds = (
 					await this.adbHelper.getOnlineTargets()
 				).map((target) => target.id);
+
 				let targetId: string | undefined;
+
 				try {
 					try {
 						await output;
@@ -333,6 +344,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				this.runOptions.runArguments,
 				"--deviceId",
 			);
+
 			if (deviceId) {
 				return new AndroidTarget(
 					true,
@@ -348,6 +360,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		onlineTargetsIds: string[],
 	): Promise<string> {
 		let deviceId: string | undefined;
+
 		if (
 			this.runOptions.runArguments &&
 			this.runOptions.runArguments.length
@@ -369,6 +382,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 
 	private getAppIdSuffixFromRunArgumentsIfExists(): string | undefined {
 		const appIdSuffixIndex = this.runArguments.indexOf("--appIdSuffix");
+
 		if (appIdSuffixIndex > -1) {
 			return this.runArguments[appIdSuffixIndex + 1];
 		}
@@ -379,6 +393,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		deviceId: string,
 	): Promise<void> {
 		await this.configureADBReverseWhenApplicable(deviceId);
+
 		if (this.needsToLaunchApps) {
 			await this.adbHelper.launchApp(
 				this.runOptions.projectRoot,
@@ -397,6 +412,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	): Promise<void> {
 		// For other emulators and devices we try to enable adb reverse
 		const apiVersion = await this.adbHelper.apiVersion(deviceId);
+
 		if (apiVersion >= AndroidAPILevel.LOLLIPOP) {
 			// If we support adb reverse
 			try {
@@ -432,6 +448,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 
 	private async getPackageName(): Promise<string> {
 		const appName = await new Package(this.runOptions.projectRoot).name();
+
 		return new PackageNameResolver(appName).resolvePackageName(
 			this.runOptions.projectRoot,
 		);

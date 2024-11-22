@@ -22,6 +22,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export interface RNAppMessage {
@@ -75,6 +76,7 @@ function fileUrlToPath(url) {
 
 function getNativeModules() {
     var NativeModules;
+
     try {
         // This approach is for old RN versions
         NativeModules = global.require('NativeModules');
@@ -82,8 +84,11 @@ function getNativeModules() {
         // ignore error and try another way for more recent RN versions
         try {
             var nativeModuleId;
+
             var modules = global.__r.getModules();
+
             var ids = Object.keys(modules);
+
             for (var i = 0; i < ids.length; i++) {
               if (modules[ids[i]].verboseName) {
                  var packagePath = new String(modules[ids[i]].verboseName);
@@ -108,12 +113,14 @@ function getNativeModules() {
 var vscodeHandlers = {
     'vscode_reloadApp': function () {
         var NativeModules = getNativeModules();
+
         if (NativeModules && NativeModules.DevSettings) {
             NativeModules.DevSettings.reload();
         }
     },
     'vscode_showDevMenu': function () {
         var NativeModules = getNativeModules();
+
         if (NativeModules && NativeModules.DevMenu) {
             NativeModules.DevMenu.show();
         }
@@ -138,8 +145,10 @@ if (!self.postMessage) {
 
 var importScripts = (function(){
     var fs=require('fs'), vm=require('vm');
+
     return function(scriptUrl){
         scriptUrl = fileUrlToPath(scriptUrl);
+
         var scriptCode = fs.readFileSync(scriptUrl, 'utf8');
         // Add a 'debugger;' statement to stop code execution
         // to wait for the sourcemaps to be processed by the debug adapter
@@ -242,6 +251,7 @@ function fetch(url) {
 		this.sourcesStoragePath = sourcesStoragePath;
 		this.projectRootPath = projectRootPath;
 		this.cancellationToken = cancellationToken;
+
 		if (!this.sourcesStoragePath)
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.SourcesStoragePathIsNullOrEmpty,
@@ -296,10 +306,12 @@ function fetch(url) {
 			this.projectRootPath,
 			this.debuggerWorkerUrlPath,
 		);
+
 		const workerContent = await this.nodeFileSystem.readFile(
 			scriptToRunPath,
 			"utf8",
 		);
+
 		const isHaulProject = ReactNativeProjectHelper.isHaulProject(
 			this.projectRootPath,
 		);
@@ -313,6 +325,7 @@ function fetch(url) {
 			workerContent,
 			MultipleLifetimesAppWorker.WORKER_DONE,
 		].join("\n");
+
 		return this.nodeFileSystem.writeFile(
 			scriptToRunPath,
 			modifiedDebuggeeContent,
@@ -348,6 +361,7 @@ function fetch(url) {
 			this.packagerLocalRoot,
 		);
 		logger.verbose("A new app worker lifetime was created.");
+
 		const startedEvent = await this.singleLifetimeWorker.start();
 		this.emit("connected", startedEvent);
 	}
@@ -373,6 +387,7 @@ function fetch(url) {
 						 * https://github.com/facebook/react-native/blob/588f01e9982775f0699c7bfd56623d4ed3949810/local-cli/server/util/webSocketProxy.js#L38
 						 */
 						const msgKey = "_closeMessage";
+
 						if (
 							this.socketToApp[msgKey] ===
 							"Another debugger is already connected"
@@ -391,6 +406,7 @@ function fetch(url) {
 						);
 					},
 				);
+
 				if (!this.cancellationToken.isCancellationRequested) {
 					setTimeout(() => {
 						void this.start(true /* retryAttempt */);
@@ -446,7 +462,9 @@ function fetch(url) {
 	private onMessage(message: string) {
 		try {
 			logger.verbose(`From RN APP: ${message}`);
+
 			const object = <RNAppMessage>JSON.parse(message);
+
 			if (object.method === "prepareJSRuntime") {
 				// In RN 0.40 Android runtime doesn't seem to be sending "$disconnected" event
 				// when user reloads an app, hence we need to try to kill it here either.
@@ -497,6 +515,7 @@ function fetch(url) {
 
 	private sendMessageToApp(message: any): void {
 		let stringified = "";
+
 		try {
 			stringified = JSON.stringify(message);
 			logger.verbose(`To RN APP: ${stringified}`);

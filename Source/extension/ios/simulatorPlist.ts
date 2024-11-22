@@ -16,6 +16,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class SimulatorPlist {
@@ -63,12 +64,14 @@ export class SimulatorPlist {
 				.exec("xcrun simctl getenv booted HOME")
 				.then((res) => res.outcome), // Find the path of the simulator we are running
 		]);
+
 		const pathBefore = path.join(
 			pathBuffer.toString().trim(),
 			"Containers",
 			"Data",
 			"Application",
 		);
+
 		const pathAfter = path.join(
 			"Library",
 			"Preferences",
@@ -81,9 +84,11 @@ export class SimulatorPlist {
 				apps,
 			)}`,
 		);
+
 		const plistCandidates = apps
 			.map((app: string) => path.join(pathBefore, app, pathAfter))
 			.filter((filePath) => this.nodeFileSystem.existsSync(filePath));
+
 		if (plistCandidates.length === 0) {
 			throw new Error(`Unable to find plist file for ${bundleId}`);
 		} else if (plistCandidates.length > 1) {

@@ -19,6 +19,7 @@ nls.config({
 })();
 
 const toLocale = nls.loadMessageBundle();
+
 const outputChannel = OutputChannelLogger.getMainChannel();
 
 const evaluteChecks = async (checks: IValidation[]) => {
@@ -81,6 +82,7 @@ export const runChecks = async (
 	outputChannel.info(
 		toLocale("DevEnvVerificationStart", "Starting Environment check..."),
 	);
+
 	const checks = await evaluteChecks(
 		getChecks(versions).filter((it) => options?.[it.category] === true),
 	);

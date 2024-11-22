@@ -19,6 +19,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 let QRCodeUrl = "";
@@ -28,6 +29,7 @@ export class ExponentPlatform extends GeneralPlatform {
 	private exponentHelper: ExponentHelper;
 	private qrCodeContentProvider: QRCodeContentProvider =
 		new QRCodeContentProvider();
+
 	constructor(
 		runOptions: IExponentRunOptions,
 		platformDeps: MobilePlatformDeps = {},
@@ -56,6 +58,7 @@ export class ExponentPlatform extends GeneralPlatform {
 			extProps,
 			async () => {
 				await this.loginToExponentOrSkip(this.runOptions.expoHostType);
+
 				const port = this.packager.getPort();
 				await XDL.setOptions(this.projectPath, { packagerPort: port });
 				await XDL.startExponentServer(this.projectPath);
@@ -75,7 +78,9 @@ export class ExponentPlatform extends GeneralPlatform {
 						? false
 						: // we need to execute 'adb reverse' command to bind ports used by Expo and RN of local machine to ports of a connected Android device or a running emulator
 							await XDL.startAdbReverse(this.projectPath);
+
 				let exponentUrl = "";
+
 				switch (this.runOptions.expoHostType) {
 					case "lan":
 						exponentUrl = await XDL.getUrl(this.projectPath, {
@@ -83,7 +88,9 @@ export class ExponentPlatform extends GeneralPlatform {
 							minify: false,
 							hostType: "lan",
 						});
+
 						break;
+
 					case "local":
 						if (isAdbReversed) {
 							this.logger.info(
@@ -106,7 +113,9 @@ export class ExponentPlatform extends GeneralPlatform {
 							minify: false,
 							hostType: "localhost",
 						});
+
 						break;
+
 					case "tunnel":
 					default:
 						exponentUrl = await XDL.getUrl(this.projectPath, {
@@ -127,6 +136,7 @@ export class ExponentPlatform extends GeneralPlatform {
 				}
 
 				this.exponentTunnelPath = QRCodeUrl = exponentUrl;
+
 				const outputMessage = localize(
 					"ExponentServerIsRunningOpenToSeeIt",
 					"Expo server is running. Open your Expo app at {0} to see it.",
@@ -145,6 +155,7 @@ export class ExponentPlatform extends GeneralPlatform {
 						this.qrCodeContentProvider.provideTextDocumentContent(
 							vscode.Uri.parse(exponentUrl),
 						);
+
 					const outputMessage = localize(
 						"QRCodeOutputInstructions",
 						"Scan below QR code to open your app:",
@@ -188,16 +199,19 @@ export class ExponentPlatform extends GeneralPlatform {
 				})) || "",
 			async (message) => {
 				const okButton = { title: "Ok" };
+
 				const cancelButton = {
 					title: "Cancel",
 					isCloseAffordance: true,
 				};
+
 				const answer = await vscode.window.showInformationMessage(
 					message,
 					{ modal: true },
 					okButton,
 					cancelButton,
 				);
+
 				if (answer === cancelButton) {
 					throw ErrorHelper.getInternalError(
 						InternalErrorCode.UserCancelledExpoLogin,

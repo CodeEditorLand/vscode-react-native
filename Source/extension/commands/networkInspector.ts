@@ -20,6 +20,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 interface NetworkInspectorModule {
@@ -51,6 +52,7 @@ export class StartNetworkInspector extends Command {
 					"Another Network inspector is already running",
 				),
 			);
+
 			return;
 		}
 
@@ -58,8 +60,11 @@ export class StartNetworkInspector extends Command {
 			this.project.getPackager().getProjectPath(),
 			this.project.getOrUpdateNodeModulesRoot(),
 		);
+
 		const networkInspector = new NetworkInspectorServer();
+
 		const androidDeviceTracker = new AndroidDeviceTracker(adbHelper);
+
 		const iOSDeviceTracker =
 			(process.platform === "darwin" && new IOSDeviceTracker()) ||
 			undefined;
@@ -83,6 +88,7 @@ export class StartNetworkInspector extends Command {
 			);
 		} catch (err) {
 			await stopNetworkInspector();
+
 			throw err;
 		}
 	}

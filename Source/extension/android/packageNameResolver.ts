@@ -34,6 +34,7 @@ export class PackageNameResolver {
 			this,
 			[projectRoot].concat(PackageNameResolver.DefaultManifestLocation),
 		);
+
 		return this.readPackageName(expectedAndroidManifestPath);
 	}
 
@@ -44,12 +45,16 @@ export class PackageNameResolver {
 	private async readPackageName(manifestPath: string): Promise<string> {
 		if (manifestPath) {
 			const fs = new FileSystem();
+
 			const exists = await fs.exists(manifestPath);
+
 			if (exists) {
 				const manifestContent = await fs.readFile(manifestPath);
+
 				let packageName = this.parsePackageName(
 					manifestContent.toString(),
 				);
+
 				if (!packageName) {
 					packageName = this.getDefaultPackageName(
 						this.applicationName,
@@ -80,6 +85,7 @@ export class PackageNameResolver {
 		const match = manifestContents.match(
 			PackageNameResolver.PackageNameRegexp,
 		);
+
 		return match ? match[1] : null;
 	}
 }

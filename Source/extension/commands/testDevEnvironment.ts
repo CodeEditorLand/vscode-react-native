@@ -26,9 +26,11 @@ export class TestDevEnvironment extends Command {
 
 	private async createRNProjectObserver(project: AppLauncher) {
 		const nodeModulesRoot = project.getOrUpdateNodeModulesRoot();
+
 		const projectRootPath = SettingsHelper.getReactNativeProjectRoot(
 			project.getWorkspaceFolderUri().fsPath,
 		);
+
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				nodeModulesRoot,
@@ -37,17 +39,20 @@ export class TestDevEnvironment extends Command {
 					REACT_NATIVE_PACKAGES.REACT_NATIVE_MACOS,
 				],
 			);
+
 		return new RNProjectObserver(projectRootPath, versions);
 	}
 
 	async baseFn(): Promise<void> {
 		let project: AppLauncher | undefined;
+
 		try {
 			project = await this.selectProject();
 		} catch (error) {
 			switch (error.errorCode) {
 				case InternalErrorCode.WorkspaceNotFound:
 					break;
+
 				default:
 					throw error;
 			}
@@ -73,6 +78,7 @@ export class TestDevEnvironment extends Command {
 			[ValidationCategoryE.macOS]:
 				(projectObserver && projectObserver.isRNMacosProject) || false,
 		} as const;
+
 		if (project && projectObserver) {
 			await runChecks(
 				shouldCheck,

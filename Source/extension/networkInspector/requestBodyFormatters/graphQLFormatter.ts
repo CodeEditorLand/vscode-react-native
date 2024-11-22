@@ -31,10 +31,12 @@ export class GraphQLFormatter implements IFormatter {
 	): FormattedBody | null {
 		if (request.url.indexOf("graphql") > 0) {
 			const decoded = decodeBody(request, this.logger);
+
 			if (!decoded) {
 				return null;
 			}
 			const data = querystring.parse(decoded);
+
 			if (typeof data.variables === "string") {
 				data.variables = JSON.parse(data.variables);
 			}
@@ -58,8 +60,10 @@ export class GraphQLFormatter implements IFormatter {
 			contentType.startsWith("application/x-fb-flatbuffer")
 		) {
 			let decoded = decodeBody(response, this.logger);
+
 			try {
 				const data = JSON.parse(decoded);
+
 				return data;
 			} catch (SyntaxError) {
 				// Multiple top level JSON roots, map them one by one

@@ -11,6 +11,7 @@ declare module Sinon {
 		thisValue: any;
 		args: any[];
 		exception: any;
+
 		returnValue: any;
 
 		// Methods
@@ -20,6 +21,7 @@ declare module Sinon {
 		calledWithMatch(...args: any[]): boolean;
 		notCalledWith(...args: any[]): boolean;
 		notCalledWithMatch(...args: any[]): boolean;
+
 		returned(value: any): boolean;
 		threw(): boolean;
 		threw(type: string): boolean;
@@ -28,9 +30,13 @@ declare module Sinon {
 		callArgOn(pos: number, obj: any, ...args: any[]): void;
 		callArgWith(pos: number, ...args: any[]): void;
 		callArgOnWith(pos: number, obj: any, ...args: any[]): void;
+
 		yield(...args: any[]): void;
+
 		yieldOn(obj: any, ...args: any[]): void;
+
 		yieldTo(property: string, ...args: any[]): void;
+
 		yieldToOn(property: string, obj: any, ...args: any[]): void;
 	}
 
@@ -55,6 +61,7 @@ declare module Sinon {
 		thisValues: any[];
 		args: any[][];
 		exceptions: any[];
+
 		returnValues: any[];
 
 		// Methods
@@ -74,6 +81,7 @@ declare module Sinon {
 		alwaysThrew(obj: any): boolean;
 		alwaysReturned(): boolean;
 		invokeCallback(...args: any[]): void;
+
 		getCall(n: number): SinonSpyCall;
 		reset(): void;
 		printf(format: string, ...args: any[]): string;
@@ -92,10 +100,15 @@ declare module Sinon {
 
 	interface SinonStub extends SinonSpy {
 		resetBehavior(): void;
+
 		returns(obj: any): SinonStub;
+
 		returnsArg(index: number): SinonStub;
+
 		returnsThis(): SinonStub;
+
 		throws(type?: string): SinonStub;
+
 		throws(obj: any): SinonStub;
 		callsArg(index: number): SinonStub;
 		callsArgOn(index: number, context: any): SinonStub;
@@ -113,13 +126,21 @@ declare module Sinon {
 		onFirstCall(): SinonStub;
 		onSecondCall(): SinonStub;
 		onThirdCall(): SinonStub;
+
 		yields(...args: any[]): SinonStub;
+
 		yieldsOn(context: any, ...args: any[]): SinonStub;
+
 		yieldsTo(property: string, ...args: any[]): SinonStub;
+
 		yieldsToOn(property: string, context: any, ...args: any[]): SinonStub;
+
 		yieldsAsync(...args: any[]): SinonStub;
+
 		yieldsOnAsync(context: any, ...args: any[]): SinonStub;
+
 		yieldsToAsync(property: string, ...args: any[]): SinonStub;
+
 		yieldsToOnAsync(
 			property: string,
 			context: any,
@@ -177,12 +198,14 @@ declare module Sinon {
 	interface SinonFakeTimers {
 		now: number;
 		create(now: number): SinonFakeTimers;
+
 		setTimeout(
 			callback: (...args: any[]) => void,
 			timeout: number,
 			...args: any[]
 		): number;
 		clearTimeout(id: number): void;
+
 		setInterval(
 			callback: (...args: any[]) => void,
 			timeout: number,
@@ -269,13 +292,16 @@ declare module Sinon {
 		requestBody: string;
 		status: number;
 		statusText: string;
+
 		async: boolean;
 		username: string;
 		password: string;
 		withCredentials: boolean;
 		upload: SinonFakeUploadProgress;
 		responseXML: Document;
+
 		getResponseHeader(header: string): string;
+
 		getAllResponseHeaders(): any;
 
 		// Methods
@@ -290,7 +316,9 @@ declare module Sinon {
 				password: string,
 			) => boolean,
 		): void;
+
 		setResponseHeaders(headers: any): void;
+
 		setResponseBody(body: string): void;
 		respond(status: number, headers: any, body: string): void;
 		autoRespond(ms: number): void;
@@ -310,6 +338,7 @@ declare module Sinon {
 		autoRespond: boolean;
 		autoRespondAfter: number;
 		fakeHTTPMethods: boolean;
+
 		getHTTPMethod: (request: SinonFakeXMLHttpRequest) => string;
 		requests: SinonFakeXMLHttpRequest[];
 		respondImmediately: boolean;
@@ -483,6 +512,7 @@ declare module Sinon {
 	// Utility overridables
 	interface SinonStatic {
 		createStubInstance(constructor: any): SinonStub;
+
 		format(obj: any): string;
 		log(message: string): void;
 		restore(object: any): void;

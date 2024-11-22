@@ -19,10 +19,13 @@ export class EditorColorThemesHelper {
 		if (EditorColorThemesHelper.isAutoDetectColorSchemeEnabled()) {
 			const workbenchConfiguration =
 				vscode.workspace.getConfiguration("workbench");
+
 			const currentTheme = workbenchConfiguration.get("colorTheme");
+
 			const preferredDarkColorTheme = workbenchConfiguration.get(
 				"preferredDarkColorTheme",
 			);
+
 			return currentTheme === preferredDarkColorTheme
 				? SystemColorTheme.Dark
 				: SystemColorTheme.Light;

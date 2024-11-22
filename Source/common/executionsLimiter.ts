@@ -13,6 +13,7 @@ export class ExecutionsLimiter {
 		const now = new Date().getTime();
 
 		const lastExecution = this.executionToLastTimestamp[id] || 0;
+
 		if (now - lastExecution >= limitInSeconds * 1000) {
 			this.executionToLastTimestamp[id] = now;
 			lambda();

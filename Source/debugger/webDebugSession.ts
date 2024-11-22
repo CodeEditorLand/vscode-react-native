@@ -30,6 +30,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class WebDebugSession extends DebugSessionBase {
@@ -123,11 +124,13 @@ export class WebDebugSession extends DebugSessionBase {
 						logger.log(
 							localize("AttachingToApp", "Attaching to app"),
 						);
+
 						const processedAttachArgs = Object.assign(
 							{},
 							attachArgs,
 							{},
 						);
+
 						if (processedAttachArgs.webSocketDebuggerUrl) {
 							this.cdpProxy.setBrowserInspectUri(
 								processedAttachArgs.webSocketDebuggerUrl,
@@ -154,6 +157,7 @@ export class WebDebugSession extends DebugSessionBase {
 				);
 			} catch (error) {
 				this.debugSessionStatus = DebugSessionStatus.ConnectionFailed;
+
 				throw error;
 			}
 		};
@@ -203,11 +207,13 @@ export class WebDebugSession extends DebugSessionBase {
 					consoleMode: vscode.DebugConsoleMode.MergeWithParent,
 				},
 			);
+
 			if (!childDebugSessionStarted) {
 				const error = localize(
 					"FailedToStartDebugSession",
 					"Cannot start child debug session",
 				);
+
 				throw new Error(error);
 			}
 		} else {
@@ -215,6 +221,7 @@ export class WebDebugSession extends DebugSessionBase {
 				"NoReactNativeCdpProxy",
 				"Cannot get react native cdp proxy",
 			);
+
 			throw new Error(error);
 		}
 	}
@@ -253,7 +260,9 @@ export class WebDebugSession extends DebugSessionBase {
 		const exponentHelper = this.appLauncher
 			.getPackager()
 			.getExponentHelper();
+
 		const sdkVersion = await exponentHelper.exponentSdk(true);
+
 		if (parseInt(sdkVersion.substring(0, 2)) >= 49) {
 			// If Expo SDK >= 49, add web metro bundler in app.json for expo web debugging
 			logger.log("Check and add metro bundler field to app.json.");
@@ -263,15 +272,18 @@ export class WebDebugSession extends DebugSessionBase {
 		} else {
 			// If Expo SDK < 49, using @expo/webpack-config for expo web debugging
 			const nodeModulePath = path.join(launchArgs.cwd, "node_modules");
+
 			const expoWebpackConfigPath = path.join(
 				nodeModulePath,
 				"@expo",
 				"webpack-config",
 			);
+
 			if (!fs.existsSync(expoWebpackConfigPath)) {
 				logger.log(
 					"@expo/webpack-config is not found in current project.",
 				);
+
 				throw new Error(
 					"Required dependencies not found: Please check and install @expo/webpack-config by running: npx expo install @expo/webpack-config.",
 				);
@@ -281,18 +293,23 @@ export class WebDebugSession extends DebugSessionBase {
 
 	private verifyExpoWebRequiredDependencies(launchArgs: any): void {
 		logger.log("Checking expo web required dependencies");
+
 		const nodeModulePath = path.join(launchArgs.cwd, "node_modules");
+
 		const reactDomPath = path.join(nodeModulePath, "react-dom");
+
 		const reactNativeWebPath = path.join(
 			nodeModulePath,
 			"react-native-web",
 		);
+
 		if (fs.existsSync(reactDomPath) && fs.existsSync(reactNativeWebPath)) {
 			logger.log("All required dependencies installed");
 		} else {
 			logger.log(
 				"react-native-web, react-dom is not found in current project.",
 			);
+
 			throw new Error(
 				"Required dependencies not found: Please check and install react-native-web, react-dom by running: npx expo install react-native-web react-dom",
 			);
@@ -302,6 +319,7 @@ export class WebDebugSession extends DebugSessionBase {
 	private async isRunning(launchArgs: any): Promise<boolean> {
 		try {
 			await Request.request(launchArgs.url);
+
 			return true;
 		} catch {
 			return false;

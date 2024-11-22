@@ -18,6 +18,7 @@ export class RestartPackager extends ReactNativeCommand {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
 		await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 			nodeModulesRoot,

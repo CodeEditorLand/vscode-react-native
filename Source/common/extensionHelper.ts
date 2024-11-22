@@ -12,6 +12,7 @@ export function getExtensionVersion(): string | null {
 		__dirname,
 		"package.json",
 	);
+
 	return packageJsonPath
 		? JSON.parse(fs.readFileSync(packageJsonPath, "utf-8")).version
 		: null;
@@ -22,6 +23,7 @@ export function getExtensionName(): string | null {
 		__dirname,
 		"package.json",
 	);
+
 	return packageJsonPath
 		? JSON.parse(fs.readFileSync(packageJsonPath, "utf-8")).name
 		: null;
@@ -32,11 +34,13 @@ export function findFileInFolderHierarchy(
 	filename: string,
 ): string | null {
 	let parentPath: string;
+
 	let projectRoot: string = dir;
 
 	while (!fs.existsSync(path.join(projectRoot, filename))) {
 		// Navigate up one level until either config.xml is found
 		parentPath = path.resolve(projectRoot, "..");
+
 		if (parentPath !== projectRoot) {
 			projectRoot = parentPath;
 		} else {
@@ -56,7 +60,9 @@ export function getNodeModulesInFolderHierarchy(
 	projectRoot: string,
 ): string | null {
 	const NODE_MODULES_FOLDER = "node_modules";
+
 	const REACT_NATIVE_MODULE = "react-native";
+
 	const pathToReactNativeModule: string = path.join(
 		NODE_MODULES_FOLDER,
 		REACT_NATIVE_MODULE,
@@ -66,6 +72,7 @@ export function getNodeModulesInFolderHierarchy(
 		projectRoot,
 		pathToReactNativeModule,
 	);
+
 	return nodeModulesPath ? path.resolve(nodeModulesPath, "..", "..") : null;
 }
 
@@ -84,8 +91,10 @@ export async function getVersionFromExtensionNodeModules(
 		__dirname,
 		"package.json",
 	);
+
 	if (packageJsonPath) {
 		const rootDirecory = path.resolve(packageJsonPath, "..");
+
 		try {
 			return await new Package(
 				rootDirecory,

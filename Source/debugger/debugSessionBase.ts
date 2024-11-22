@@ -38,6 +38,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /**
@@ -174,6 +175,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 	protected async initializeSettings(args: any): Promise<void> {
 		if (!this.isSettingsInitialized) {
 			let chromeDebugCoreLogs = getLoggingDirectory();
+
 			if (chromeDebugCoreLogs) {
 				chromeDebugCoreLogs = path.join(
 					chromeDebugCoreLogs,
@@ -181,6 +183,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 				);
 			}
 			let logLevel: string = args.trace;
+
 			if (logLevel) {
 				logLevel = logLevel.replace(
 					logLevel[0],
@@ -219,10 +222,12 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			const projectRootPath = SettingsHelper.getReactNativeProjectRoot(
 				args.cwd,
 			);
+
 			const isReactProject =
 				await ReactNativeProjectHelper.isReactNativeProject(
 					projectRootPath,
 				);
+
 			if (!isReactProject) {
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.NotInReactNativeFolderError,
@@ -237,6 +242,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			this.projectRootPath = projectRootPath;
 			this.isSettingsInitialized = true;
 			this.appLauncher.getOrUpdateNodeModulesRoot(true);
+
 			if (this.vsCodeDebugSession.workspaceFolder) {
 				this.appLauncher.updateDebugConfigurationRoot(
 					this.vsCodeDebugSession.workspaceFolder.uri.fsPath,
@@ -244,6 +250,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 			}
 			const settingsPort =
 				this.appLauncher.getPackagerPort(projectRootPath);
+
 			if (this.appLauncher.getPackager().getPort() != settingsPort) {
 				this.appLauncher.getPackager().resetToSettingsPort();
 			}
@@ -338,6 +345,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 		// We can't print error messages via debug session logger after the session is stopped. This could break the extension work.
 		if (this.debugSessionStatus === DebugSessionStatus.Stopped) {
 			OutputChannelLogger.getMainChannel().error(error.message);
+
 			return;
 		}
 		logger.error(error.message);
@@ -357,18 +365,24 @@ export function getProjectRoot(args: any): string {
 	const vsCodeRoot = args.cwd
 		? path.resolve(args.cwd)
 		: path.resolve(args.program, "../..");
+
 	const settingsPath = path.resolve(vsCodeRoot, ".vscode/settings.json");
+
 	try {
 		const settingsContent = fs.readFileSync(settingsPath, "utf8");
+
 		const parsedSettings = stripJsonTrailingComma(settingsContent);
+
 		const projectRootPath =
 			parsedSettings["react-native-tools.projectRoot"] ||
 			parsedSettings["react-native-tools"].projectRoot;
+
 		return path.resolve(vsCodeRoot, projectRootPath);
 	} catch (e) {
 		logger.verbose(
 			`${settingsPath} file doesn't exist or its content is incorrect. This file will be ignored.`,
 		);
+
 		return args.cwd
 			? path.resolve(args.cwd)
 			: path.resolve(args.program, "../..");

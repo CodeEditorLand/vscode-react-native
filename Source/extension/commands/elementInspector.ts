@@ -15,6 +15,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 // #todo!> commands should not maintain state
@@ -57,6 +58,7 @@ export class RunElementInspector extends Command {
 			ELECTRON_RUN_AS_NODE,
 			...env
 		} = process.env;
+
 		const command = HostPlatform.getNpmCliCommand("react-devtools");
 
 		elementInspector = child_process.spawn(command, [], {
@@ -66,6 +68,7 @@ export class RunElementInspector extends Command {
 
 		if (!elementInspector.pid) {
 			elementInspector = undefined;
+
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.ReactDevtoolsIsNotInstalled,
 			);

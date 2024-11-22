@@ -28,6 +28,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /**
@@ -46,20 +47,30 @@ export type CertificateExchangeMedium = "FS_ACCESS" | "WWW";
 
 // Desktop file paths
 const caKey = getFilePath("ca.key");
+
 const caCert = getFilePath("ca.crt");
+
 const serverKey = getFilePath("server.key");
+
 const serverCsr = getFilePath("server.csr");
+
 const serverSrl = getFilePath("server.srl");
+
 const serverCert = getFilePath("server.crt");
 
 // Device file paths
 const csrFileName = "app.csr";
+
 const deviceCAcertFile = "sonarCA.crt";
+
 const deviceClientCertFile = "device.crt";
 
 const caSubject = "/C=US/ST=CA/L=Redmond/O=Microsoft/CN=ReactNativeExtensionCA";
+
 const serverSubject = "/C=US/ST=CA/L=Redmond/O=Microsoft/CN=localhost";
+
 const minCertExpiryWindowSeconds = 24 * 60 * 60;
+
 const allowedAppNameRegex = /^[\w.-]+$/;
 
 /*
@@ -120,14 +131,18 @@ export class CertificateProvider {
 		medium: CertificateExchangeMedium,
 	): Promise<{ deviceId: string }> {
 		const csr = this.santitizeString(unsanitizedCsr);
+
 		if (csr === "") {
 			return Promise.reject(
 				new Error(`Received empty CSR from ${os} device`),
 			);
 		}
 		this.ensureOpenSSLIsAvailable();
+
 		const rootFolder = (await tmp.dir()).path;
+
 		const certFolder = path.join(rootFolder, "FlipperCerts");
+
 		return this.certificateSetup
 			.then(() => this.getCACertificate())
 			.then((caCert) =>
@@ -201,6 +216,7 @@ export class CertificateProvider {
 			})
 			.then((subject) => {
 				const matches = subject.trim().match(x509SubjectCNRegex);
+
 				if (!matches || matches.length < 2) {
 					throw new Error(`Cannot extract CN from ${subject}`);
 				}
@@ -267,6 +283,7 @@ export class CertificateProvider {
 
 	private getRelativePathInAppContainer(absolutePath: string) {
 		const matches = /Application\/[^/]+\/(.*)/.exec(absolutePath);
+
 		if (matches && matches.length === 2) {
 			return matches[1];
 		}
@@ -298,6 +315,7 @@ export class CertificateProvider {
 			const deviceIdPromise = appNamePromise.then((app) =>
 				this.getTargetAndroidDeviceId(app, destination, csr),
 			);
+
 			return Promise.all([deviceIdPromise, appNamePromise]).then(
 				([deviceId, appName]) => {
 					if (process.platform === "win32") {
@@ -337,6 +355,7 @@ export class CertificateProvider {
 						// Writing directly to FS failed. It's probably a physical device.
 						const relativePathInsideApp =
 							this.getRelativePathInAppContainer(destination);
+
 						return appNamePromise
 							.then((appName) => {
 								return this.getTargetiOSDeviceId(
@@ -412,6 +431,7 @@ export class CertificateProvider {
 						this.logger.error(
 							`Unable to check for matching CSR in ${device.id}:${appName}`,
 						);
+
 						return {
 							id: device.id,
 							isMatch: false,
@@ -420,12 +440,15 @@ export class CertificateProvider {
 						};
 					}),
 			);
+
 			return Promise.all(deviceMatchList).then((devices) => {
 				const matchingIds = devices
 					.filter((m) => m.isMatch)
 					.map((m) => m.id);
+
 				if (matchingIds.length == 0) {
 					const erroredDevice = devices.find((d) => d.error);
+
 					if (erroredDevice) {
 						throw erroredDevice.error;
 					}
@@ -441,6 +464,7 @@ export class CertificateProvider {
             Found these:
 
             ${foundCsrs.join("\n\n")}`);
+
 					throw new Error(
 						`No matching device found for app: ${appName}`,
 					);
@@ -461,6 +485,7 @@ export class CertificateProvider {
 		csr: string,
 	): Promise<string> {
 		const matches = /\/Devices\/([^/]+)\//.exec(deviceCsrFilePath);
+
 		if (matches && matches.length == 2) {
 			// It's a simulator, the deviceId is in the filepath.
 			return Promise.resolve(matches[1]);
@@ -479,10 +504,12 @@ export class CertificateProvider {
 					return { id: target.id, isMatch };
 				}),
 			);
+
 			return Promise.all(deviceMatchList).then((devices) => {
 				const matchingIds = devices
 					.filter((m) => m.isMatch)
 					.map((m) => m.id);
+
 				if (matchingIds.length == 0) {
 					throw new Error(
 						`No matching device found for app: ${appName}`,
@@ -514,7 +541,9 @@ export class CertificateProvider {
 					deviceCsr.toString(),
 					csr,
 				].map((s) => this.santitizeString(s));
+
 				const isMatch = sanitizedDeviceCsr === sanitizedClientCsr;
+
 				return { isMatch: isMatch, foundCsr: sanitizedDeviceCsr };
 			});
 	}
@@ -528,6 +557,7 @@ export class CertificateProvider {
 		const originalFile = this.getRelativePathInAppContainer(
 			path.resolve(directory, csrFileName),
 		);
+
 		return tmp
 			.dir({ unsafeCleanup: true })
 			.then((dir) => {
@@ -555,6 +585,7 @@ export class CertificateProvider {
 					})
 					.then((fileName) => {
 						const copiedFile = path.resolve(dir.path, fileName);
+
 						return fs.promises
 							.readFile(copiedFile)
 							.then((data) =>
@@ -602,6 +633,7 @@ export class CertificateProvider {
 						filename,
 					),
 				);
+
 				throw e;
 			})
 			.then(() =>
@@ -613,12 +645,15 @@ export class CertificateProvider {
 			)
 			.then((endDateOutput) => {
 				const dateString = endDateOutput.trim().split("=")[1].trim();
+
 				const expiryDate = Date.parse(dateString);
+
 				if (isNaN(expiryDate)) {
 					this.logger.error(
 						"Unable to parse certificate expiry date: " +
 							endDateOutput,
 					);
+
 					throw new Error(
 						"Cannot parse certificate expiry date. Assuming it has expired.",
 					);
@@ -639,8 +674,10 @@ export class CertificateProvider {
 			[key: string]: any;
 		} = { CAfile: caCert };
 		options[serverCert] = false;
+
 		return openssl("verify", options).then((output) => {
 			const verified = output.match(/[^:]+: OK/);
+
 			if (!verified) {
 				// This should never happen, but if it does, we need to notice so we can
 				// generate a valid one, or no clients will trust our server.
@@ -670,6 +707,7 @@ export class CertificateProvider {
 
 	private async ensureServerCertExists(): Promise<void> {
 		this.ensureOpenSSLIsAvailable();
+
 		if (
 			!(
 				fs.existsSync(serverKey) &&

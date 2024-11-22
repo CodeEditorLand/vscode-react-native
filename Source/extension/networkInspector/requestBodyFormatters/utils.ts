@@ -25,16 +25,21 @@ export function combineBase64Chunks(chunks: string[]): string {
 			Uint8Array.from(Base64.atob(b64Chunk), (c) => c.charCodeAt(0))
 				.buffer,
 	);
+
 	const size = byteArray
 		.map((b) => b.byteLength)
 		.reduce((prev, curr) => prev + curr, 0);
+
 	const buffer = new Uint8Array(size);
+
 	let offset = 0;
+
 	for (let i = 0; i < byteArray.length; i++) {
 		buffer.set(new Uint8Array(byteArray[i]), offset);
 		offset += byteArray[i].byteLength;
 	}
 	const data = new TextDecoder("utf-8").decode(buffer);
+
 	return data;
 }
 

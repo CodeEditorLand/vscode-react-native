@@ -21,6 +21,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class AndroidTarget extends MobileTarget {
@@ -74,6 +75,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			}
 			const onlineTarget =
 				await this.adbHelper.findOnlineTargetById(target);
+
 			if (onlineTarget) {
 				return onlineTarget.isVirtualTarget;
 			} else if ((await this.adbHelper.getAvdsNames()).includes(target)) {
@@ -93,6 +95,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 		filter?: (el: IMobileTarget) => boolean,
 	): Promise<AndroidTarget | undefined> {
 		const selectedTarget = await this.startSelection(filter);
+
 		if (selectedTarget) {
 			if (!selectedTarget.isOnline && selectedTarget.isVirtualTarget) {
 				return this.launchSimulator(selectedTarget);
@@ -108,8 +111,10 @@ export class AndroidTargetManager extends MobileTargetManager {
 
 	public async collectTargets(targetType?: TargetType): Promise<void> {
 		const targetList: IMobileTarget[] = [];
+
 		const collectSimulators =
 			!targetType || targetType === TargetType.Simulator;
+
 		const collectDevices = !targetType || targetType === TargetType.Device;
 
 		try {
@@ -140,12 +145,15 @@ export class AndroidTargetManager extends MobileTargetManager {
 		}
 
 		const onlineTargets = await this.adbHelper.getOnlineTargets();
+
 		for (const device of onlineTargets) {
 			if (device.isVirtualTarget && collectSimulators) {
 				const avdName = await this.adbHelper.getAvdNameById(device.id);
+
 				const emulatorTarget = targetList.find(
 					(target) => target.name === avdName,
 				);
+
 				if (emulatorTarget) {
 					emulatorTarget.isOnline = true;
 					emulatorTarget.id = device.id;
@@ -173,6 +181,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 	): Promise<AndroidTarget> {
 		return new Promise<AndroidTarget>((resolve, reject) => {
 			let emulatorLaunchFailed = false;
+
 			const emulatorProcess = this.childProcess.spawn(
 				AndroidTargetManager.EMULATOR_COMMAND,
 				[
@@ -186,6 +195,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			);
 			emulatorProcess.outcome.catch((error) => {
 				emulatorLaunchFailed = true;
+
 				if (
 					process.platform == "win32" &&
 					process.env.SESSIONNAME &&
@@ -211,12 +221,15 @@ export class AndroidTargetManager extends MobileTargetManager {
 					throw new Error(
 						"Android emulator launch failed unexpectedly",
 					);
+
 				const connectedDevices =
 					await this.adbHelper.getOnlineTargets();
+
 				for (const target of connectedDevices) {
 					const onlineAvdName = await this.adbHelper.getAvdNameById(
 						target.id,
 					);
+
 					if (onlineAvdName === emulatorTarget.name) {
 						return target.id;
 					}

@@ -23,6 +23,7 @@ export class DebugScenarioNameGenerator {
 		const debugScenarioName: DebugScenarioName =
 			this.createScenarioAccordingToDebugScenarioType(debugScenarioType);
 		debugScenarioName.platformType = this.getPlatformTypeName(platformType);
+
 		if (debugType === DEBUG_TYPES.REACT_NATIVE) {
 			this.configureNotDirectModeScenario(
 				debugScenarioName,
@@ -59,10 +60,12 @@ export class DebugScenarioNameGenerator {
 				return {
 					debugScenarioType: "Run",
 				};
+
 			case DebugScenarioType.DebugApp:
 				return {
 					debugScenarioType: "Debug",
 				};
+
 			case DebugScenarioType.AttachApp:
 				return {
 					debugScenarioType: "Attach to",
@@ -112,16 +115,22 @@ export class DebugScenarioNameGenerator {
 		switch (platformType) {
 			case PlatformType.Android:
 				return "Android";
+
 			case PlatformType.iOS:
 				return "iOS";
+
 			case PlatformType.Exponent:
 				return "Exponent";
+
 			case PlatformType.Windows:
 				return "Windows";
+
 			case PlatformType.macOS:
 				return "macOS";
+
 			case PlatformType.ExpoWeb:
 				return "Expo Web";
+
 			default:
 				return "";
 		}
@@ -131,6 +140,7 @@ export class DebugScenarioNameGenerator {
 		debugScenarioName: DebugScenarioName,
 	): string {
 		let debugScenarioNameStr = debugScenarioName.debugScenarioType;
+
 		if (debugScenarioName.prePlatformTypeDescription) {
 			debugScenarioNameStr += ` ${debugScenarioName.prePlatformTypeDescription}`;
 		}

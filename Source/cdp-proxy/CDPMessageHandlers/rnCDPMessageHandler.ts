@@ -17,6 +17,7 @@ export class RnCDPMessageHandler extends BaseCDPMessageHandler {
 
 	public processDebuggerCDPMessage(event: any): ProcessedCDPMessage {
 		const sendBack = false;
+
 		if (event.method === CDP_API_NAMES.CLOSE) {
 			this.handleDebuggerDisconnect();
 		}
@@ -29,6 +30,7 @@ export class RnCDPMessageHandler extends BaseCDPMessageHandler {
 
 	public processApplicationCDPMessage(event: any): ProcessedCDPMessage {
 		const sendBack = false;
+
 		if (event.method === CDP_API_NAMES.DEBUGGER_PAUSED && this.firstStop) {
 			event.params = this.handleAppBundleFirstPauseEvent(event);
 		}
@@ -48,6 +50,7 @@ export class RnCDPMessageHandler extends BaseCDPMessageHandler {
 	 */
 	private handleAppBundleFirstPauseEvent(event: IProtocolCommand): any {
 		const params: any = event.params;
+
 		if (params.reason && params.reason === "other") {
 			this.firstStop = false;
 			params.reason = "Break on start";

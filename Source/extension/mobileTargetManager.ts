@@ -11,6 +11,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export abstract class MobileTargetManager {
@@ -67,8 +68,10 @@ export abstract class MobileTargetManager {
 		filter?: (el: IMobileTarget) => boolean,
 	): Promise<IMobileTarget | undefined> {
 		const targetList = await this.getTargetList(filter);
+
 		let result: string | undefined =
 			targetList[0]?.name || targetList[0]?.id;
+
 		if (targetList.length > 1) {
 			const quickPickOptions: QuickPickOptions = {
 				ignoreFocusOut: true,

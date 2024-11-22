@@ -14,7 +14,9 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
+
 const logger = OutputChannelLogger.getMainChannel();
 
 export class OpenEASProject extends ReactNativeCommand {
@@ -27,6 +29,7 @@ export class OpenEASProject extends ReactNativeCommand {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const expoHelper = this.project.getExponentHelper();
 		logger.info(
 			localize(
@@ -34,6 +37,7 @@ export class OpenEASProject extends ReactNativeCommand {
 				"Checking Expo project environment.",
 			),
 		);
+
 		const isExpo = await expoHelper.isExpoManagedApp(true);
 
 		if (isExpo) {
@@ -42,14 +46,17 @@ export class OpenEASProject extends ReactNativeCommand {
 				await expoHelper.getExpoEasProjectId().then((result) => {
 					id = result;
 				});
+
 				let owner = null;
 				await expoHelper.getExpoEasProjectOwner().then((result) => {
 					owner = result;
 				});
+
 				let name = null;
 				await expoHelper.getExpoEasProjectName().then((result) => {
 					name = result;
 				});
+
 				if (id == null || owner == null) {
 					const error = localize(
 						"ExpoProjectNotLinkToEAS",

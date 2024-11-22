@@ -28,16 +28,22 @@ export class TargetPlatformHelper {
 		switch (platformName.toLowerCase()) {
 			case PlatformType.Android:
 				return TargetPlatformId.ANDROID;
+
 			case PlatformType.iOS:
 				return TargetPlatformId.IOS;
+
 			case PlatformType.Exponent:
 				return TargetPlatformId.EXPONENT;
+
 			case PlatformType.Windows:
 				return TargetPlatformId.WINDOWS;
+
 			case PlatformType.macOS:
 				return TargetPlatformId.MACOS;
+
 			case PlatformType.ExpoWeb:
 				return TargetPlatformId.EXPOWEB;
+
 			default:
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.PlatformNotSupported,
@@ -53,6 +59,7 @@ export class TargetPlatformHelper {
 	public static checkTargetPlatformSupport(platformName: string): void {
 		const targetPlatformId =
 			TargetPlatformHelper.getTargetPlatformId(platformName);
+
 		if (!HostPlatform.isCompatibleWithTarget(targetPlatformId)) {
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.PlatformNotSupported,

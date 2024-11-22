@@ -44,10 +44,12 @@ export class RunWindows extends ReactNativeCommand {
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
 			"debuggingRNWAndMacOSApps",
 		);
+
 		const additionalPackagesToCheck: ParsedPackage[] = [
 			REACT_NATIVE_PACKAGES.REACT_NATIVE_WINDOWS,
 		];
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.Windows);
+
 		const versions =
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				this.project.getOrUpdateNodeModulesRoot(),

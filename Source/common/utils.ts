@@ -16,6 +16,7 @@ const JSON5 = require("json5");
 
 export function removeModuleFromRequireCacheByName(moduleName: string): void {
     const moduleKey = Object.keys(customRequire.cache).find(key => key.includes(moduleName));
+
     if (moduleKey) {
         delete customRequire.cache[moduleKey];
     }
@@ -23,6 +24,7 @@ export function removeModuleFromRequireCacheByName(moduleName: string): void {
 
 export function getNodeModulesGlobalPath(): Promise<string> {
     const childProcess = new ChildProcess();
+
     return childProcess.execToString(`${HostPlatform.getNpmCliCommand("npm")} root -g`);
 }
 
@@ -49,18 +51,23 @@ export function areSameDates(date1: Date, date2: Date): boolean {
 export function getRandomIntInclusive(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
+
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export function getFormattedTimeString(date: Date): string {
     const hourString = padZeroes(2, String(date.getUTCHours()));
+
     const minuteString = padZeroes(2, String(date.getUTCMinutes()));
+
     const secondString = padZeroes(2, String(date.getUTCSeconds()));
+
     return `${hourString}:${minuteString}:${secondString}`;
 }
 
 export function getFormattedDateString(date: Date): string {
     const month = date.getUTCMonth() + 1;
+
     return `${date.getUTCFullYear()}-${month}-${date.getUTCDate()}`;
 }
 
@@ -76,8 +83,11 @@ function padZeroes(minDesiredLength: number, numberToPad: string): string {
 
 export function stripJsonTrailingComma(str: string): any {
     const endOfStringTrailingCommaRegex = /,\s*$/g;
+
     const result = str.replace(endOfStringTrailingCommaRegex, "");
+
     let objResult;
+
     try {
         logger.log("Start parsing .json file...");
         objResult = JSON5.parse(result);
@@ -100,8 +110,11 @@ export async function wait(time?: number): Promise<void> {
 
 export function getTimestamp(): string {
     const date = new Date(Date.now());
+
     const year = date.getFullYear();
+
     const month = date.getMonth() + 1;
+
     const time = `${date.getDate()}${String(date.getHours()).padStart(2, "0")}${String(
         date.getMinutes(),
     ).padStart(2, "0")}${String(date.getSeconds()).padStart(2, "0")}`;
@@ -111,6 +124,7 @@ export function getTimestamp(): string {
 
 export function getTSVersion(projectPath: string): Promise<string> {
     const childProcess = new ChildProcess();
+
     return childProcess.execToString("npx tsc -v", { cwd: projectPath });
 }
 
@@ -118,10 +132,12 @@ export function ipToBuffer(ip: string): Buffer {
     if (net.isIPv4(ip)) {
         // Handle IPv4 addresses
         const address = new Address4(ip);
+
         return Buffer.from(address.toArray());
     } else if (net.isIPv6(ip)) {
         // Handle IPv6 addresses
         const address = new Address6(ip);
+
         return Buffer.from(address.toByteArray());
     }
     throw new Error("Invalid IP address format.");
@@ -136,8 +152,11 @@ export async function switchBundleOptions(projectRootPath: string, flag: boolean
         "lib",
         "splitBundleOptions.js",
     );
+
     const splitBundleOptionsContent = fs.readFileSync(splitBundleOptionsPath, "utf-8");
+
     let modifiedData;
+
     if (flag) {
         modifiedData = splitBundleOptionsContent.replace(
             /excludeSource:\s*options\.excludeSource/,

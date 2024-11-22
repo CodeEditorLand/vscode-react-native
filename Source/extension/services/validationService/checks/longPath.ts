@@ -10,6 +10,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const toLocale = nls.loadMessageBundle();
 
 const label = "LongPathSupport";
@@ -17,7 +18,9 @@ const label = "LongPathSupport";
 async function test(): Promise<ValidationResultT> {
 	const command =
 		"reg query HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem /v LongPathsEnabled";
+
 	const data = await executeCommand(command);
+
 	if (data.stdout) {
 		if (data.stdout.includes(" 0x1"))
 			return {

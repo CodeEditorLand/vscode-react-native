@@ -35,6 +35,7 @@ export class ReactNativeProjectHelper {
 			undefined,
 			projectRoot,
 		);
+
 		return !ProjectVersionHelper.isVersionError(
 			versions.reactNativeVersion,
 		);
@@ -42,6 +43,7 @@ export class ReactNativeProjectHelper {
 
 	public static isHaulProject(projectRoot: string): boolean {
 		const packageJsonPath = path.join(projectRoot, "package.json");
+
 		if (!projectRoot || !fs.existsSync(packageJsonPath)) {
 			return false;
 		}
@@ -49,10 +51,12 @@ export class ReactNativeProjectHelper {
 		const packageJson = JSON.parse(
 			fs.readFileSync(packageJsonPath, "utf-8"),
 		);
+
 		const haulVersion =
 			packageJson.devDependencies &&
 			(packageJson.devDependencies.haul ||
 				packageJson.devDependencies["@haul-bundler/cli"]);
+
 		return !!haulVersion;
 	}
 
@@ -63,37 +67,45 @@ export class ReactNativeProjectHelper {
 			"app",
 			"build.gradle",
 		);
+
 		if (!projectRoot || !fs.existsSync(buildGradlePath)) {
 			return false;
 		}
 
 		const buildGradleContent = fs.readFileSync(buildGradlePath, "utf-8");
+
 		const hermesEnabled = /enableHermes\s*:\s*true/.test(
 			buildGradleContent,
 		);
+
 		return hermesEnabled;
 	}
 
 	public static isIOSHermesEnabled(projectRoot: string): boolean {
 		const podfilePath = path.join(projectRoot, "ios", "Podfile");
+
 		if (!projectRoot || !fs.existsSync(podfilePath)) {
 			return false;
 		}
 
 		const podfileContent = fs.readFileSync(podfilePath, "utf-8");
+
 		const matches = podfileContent.match(
 			/#?\s*:hermes_enabled\s*=>\s*true/,
 		);
+
 		return !!(matches && !matches[0].startsWith("#"));
 	}
 
 	public static isMacOSHermesEnabled(projectRoot: string): boolean {
 		const podfilePath = path.join(projectRoot, "macos", "Podfile");
+
 		if (!projectRoot || !fs.existsSync(podfilePath)) {
 			return false;
 		}
 
 		const podfileContent = fs.readFileSync(podfilePath, "utf-8");
+
 		let matches = podfileContent.match(
 			/#?\s*:hermes_enabled\s*=>\s*(true|false)/,
 		);
@@ -103,6 +115,7 @@ export class ReactNativeProjectHelper {
 		}
 
 		matches = podfileContent.match(/#?\s*pod\s*'hermes'/);
+
 		return !!(matches && !matches[0].startsWith("#"));
 	}
 
@@ -112,6 +125,7 @@ export class ReactNativeProjectHelper {
 			"windows",
 			"ExperimentalFeatures.props",
 		);
+
 		if (!projectRoot || !fs.existsSync(experimentalFeaturesPath)) {
 			return false;
 		}
@@ -120,15 +134,19 @@ export class ReactNativeProjectHelper {
 			experimentalFeaturesPath,
 			"utf-8",
 		);
+
 		const hermesEnabled = /<UseHermes>\s*true\s*<\/UseHermes>/.test(
 			experimentalFeaturesContent,
 		);
+
 		return hermesEnabled;
 	}
 
 	public static async UpdateMertoBundlerForExpoWeb(launchArgs: any) {
 		const appJsonPath = path.join(launchArgs.cwd, "app.json");
+
 		const fs = new FileSystem();
+
 		const appJson = await fs.readFile(appJsonPath).then((content) => {
 			return stripJsonTrailingComma(content.toString());
 		});
@@ -146,6 +164,7 @@ export class ReactNativeProjectHelper {
 		);
 
 		let version;
+
 		try {
 			version =
 				await ProjectVersionHelper.getReactNativeVersions(projectRoot);
@@ -158,6 +177,7 @@ export class ReactNativeProjectHelper {
 		}
 
 		let content = "";
+
 		if (fs.existsSync(path.join(projectRoot, "metro.config.js"))) {
 			content = fs.readFileSync(
 				path.join(projectRoot, "metro.config.js"),
@@ -173,6 +193,7 @@ export class ReactNativeProjectHelper {
 		}
 
 		const isNewMetroConfig = content.includes("getDefaultConfig");
+
 		if (
 			semver.gte(version.reactNativeVersion, "0.73.0") &&
 			!isNewMetroConfig

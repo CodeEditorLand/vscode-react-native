@@ -15,8 +15,11 @@ import { HostPlatform } from "./hostPlatform";
  */
 export module Telemetry {
 	export let appName: string;
+
 	export let isOptedIn: boolean = false;
+
 	export let reporter: ITelemetryReporter;
+
 	export let reporterDictionary: { [key: string]: ITelemetryReporter } = {};
 
 	export interface ITelemetryProperties {
@@ -39,6 +42,7 @@ export module Telemetry {
 
 		private static get telemetrySettingsFile(): string {
 			let settingsHome = HostPlatform.getSettingsHome();
+
 			return path.join(
 				settingsHome,
 				TelemetryUtils.TELEMETRY_SETTINGS_FILENAME,
@@ -51,6 +55,7 @@ export module Telemetry {
 		): void {
 			TelemetryUtils.loadSettings();
 			Telemetry.reporter = reporterToUse;
+
 			const telemetryVsSettings =
 				TelemetryUtils.getTelemetryOptInVscodeSetting();
 			Telemetry.isOptedIn =
@@ -72,6 +77,7 @@ export module Telemetry {
 		public static getTelemetryOptInVscodeSetting() {
 			const SettingsHelper =
 				require("../extension/settingsHelper").SettingsHelper;
+
 			return SettingsHelper.getWorkspaceTelemetry();
 		}
 
@@ -96,6 +102,7 @@ export module Telemetry {
 		 */
 		private static saveSettings(): void {
 			let settingsHome = HostPlatform.getSettingsHome();
+
 			if (!fs.existsSync(settingsHome)) {
 				fs.mkdirSync(settingsHome);
 			}
@@ -126,6 +133,7 @@ export module Telemetry {
 				"sha256",
 				Buffer.from(TelemetryEvent.PII_HASH_KEY, "utf8"),
 			);
+
 			let hashedValue: string = hmac.update(value).digest("hex");
 
 			this.properties[name] = hashedValue;
@@ -186,6 +194,7 @@ export module Telemetry {
 
 				if (Telemetry.reporter) {
 					let properties: ITelemetryEventProperties = {};
+
 					let measures: ITelemetryEventMeasures = {};
 
 					Object.keys(event.properties || {}).forEach(function (
@@ -194,16 +203,19 @@ export module Telemetry {
 						switch (typeof event.properties[key]) {
 							case "string":
 								properties[key] = <string>event.properties[key];
+
 								break;
 
 							case "number":
 								measures[key] = <number>event.properties[key];
+
 								break;
 
 							default:
 								properties[key] = JSON.stringify(
 									event.properties[key],
 								);
+
 								break;
 						}
 					});

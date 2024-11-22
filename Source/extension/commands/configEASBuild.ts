@@ -15,7 +15,9 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
+
 const logger = OutputChannelLogger.getMainChannel();
 
 export class ConfigEASBuild extends ReactNativeCommand {
@@ -28,7 +30,9 @@ export class ConfigEASBuild extends ReactNativeCommand {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const projectRootPath = this.project.getPackager().getProjectPath();
+
 		const expoHelper = this.project.getExponentHelper();
 		logger.info(
 			localize(
@@ -36,11 +40,14 @@ export class ConfigEASBuild extends ReactNativeCommand {
 				"Checking Expo project environment.",
 			),
 		);
+
 		const isExpo = await expoHelper.isExpoManagedApp(true);
 
 		if (isExpo) {
 			const fs = new FileSystem();
+
 			const exists = await fs.exists(`${projectRootPath}/eas.json`);
+
 			if (exists) {
 				logger.info(
 					localize(

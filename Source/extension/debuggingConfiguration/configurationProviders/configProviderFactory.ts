@@ -12,10 +12,13 @@ export class ConfigProviderFactory {
 		switch (configurationType) {
 			case DebugScenarioType.RunApp:
 				return new RunConfigProvider();
+
 			case DebugScenarioType.DebugApp:
 				return new DebugConfigProvider();
+
 			case DebugScenarioType.AttachApp:
 				return new AttachConfigProvider();
+
 			default:
 				throw new Error(
 					`Couldn't find ${configurationType} config adapter type`,

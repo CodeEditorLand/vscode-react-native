@@ -19,11 +19,14 @@ export class expoDoctor extends ReactNativeCommand {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const projectRootPath = this.project.getPackager().getProjectPath();
+
 		const res = await new ChildProcess().exec("npx expo-doctor", {
 			cwd: projectRootPath,
 		});
 		logger.info("Running diagnostics...");
+
 		const outcome = await res.outcome;
 		logger.info(outcome);
 	}

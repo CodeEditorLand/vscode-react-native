@@ -19,11 +19,14 @@ export class SettingsHelper {
 	 */
 	public static getPackagerPort(fsPath: string): number {
 		const projectRoot = SettingsHelper.getReactNativeProjectRoot(fsPath);
+
 		const uri = vscode.Uri.file(projectRoot);
+
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native.packager",
 			uri,
 		);
+
 		if (workspaceConfiguration.has("port")) {
 			return ConfigurationReader.readInt(
 				workspaceConfiguration.get("port"),
@@ -42,10 +45,12 @@ export class SettingsHelper {
 			"react-native-tools",
 			null,
 		);
+
 		if (workspaceConfiguration.has("logLevel")) {
 			const logLevelString: string = ConfigurationReader.readString(
 				workspaceConfiguration.get("logLevel"),
 			);
+
 			return <LogLevel>parseInt(LogLevel[<any>logLevelString], 10);
 		}
 		return LogLevel.Info;
@@ -56,14 +61,17 @@ export class SettingsHelper {
 	 */
 	public static getReactNativeProjectRoot(fsPath: string): string {
 		const uri = vscode.Uri.file(fsPath);
+
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native-tools",
 			uri,
 		);
+
 		if (workspaceConfiguration.has("projectRoot")) {
 			const projectRoot: string = ConfigurationReader.readString(
 				workspaceConfiguration.get("projectRoot"),
 			);
+
 			return path.isAbsolute(projectRoot)
 				? projectRoot
 				: path.resolve(uri.fsPath, projectRoot);
@@ -81,6 +89,7 @@ export class SettingsHelper {
 			"react-native-tools",
 			uri,
 		);
+
 		if (workspaceConfiguration.has("reactNativeGlobalCommandName")) {
 			return ConfigurationReader.readString(
 				workspaceConfiguration.get("reactNativeGlobalCommandName"),
@@ -100,7 +109,9 @@ export class SettingsHelper {
 	): string[] {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
+
 		const configKey = `${platform}.runArguments.${target}`;
+
 		if (workspaceConfiguration.has(configKey)) {
 			return ConfigurationReader.readArray(
 				workspaceConfiguration.get(configKey),
@@ -117,7 +128,9 @@ export class SettingsHelper {
 	): any {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
+
 		const configKey = `${platform}.env.${target}`;
+
 		if (workspaceConfiguration.has(configKey)) {
 			return ConfigurationReader.readObject(
 				workspaceConfiguration.get(configKey),
@@ -134,7 +147,9 @@ export class SettingsHelper {
 	): string {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
+
 		const configKey = `${platform}.envFile.${target}`;
+
 		if (workspaceConfiguration.has(configKey)) {
 			return ConfigurationReader.readString(
 				workspaceConfiguration.get(configKey),
@@ -149,11 +164,13 @@ export class SettingsHelper {
 			"react-native-tools.networkInspector",
 			null,
 		);
+
 		if (workspaceConfiguration.has("consoleLogsColorTheme")) {
 			const consoleLogsColorTheme: string =
 				ConfigurationReader.readString(
 					workspaceConfiguration.get("consoleLogsColorTheme"),
 				);
+
 			return SystemColorTheme[consoleLogsColorTheme];
 		}
 		return SystemColorTheme.Light;
@@ -164,15 +181,19 @@ export class SettingsHelper {
 	 */
 	public static getPackagerStatusIndicatorPattern(fsPath: string): string {
 		const projectRoot = SettingsHelper.getReactNativeProjectRoot(fsPath);
+
 		const uri = vscode.Uri.file(projectRoot);
+
 		const workspaceConfiguration = vscode.workspace.getConfiguration(
 			"react-native.packager",
 			uri,
 		);
+
 		if (workspaceConfiguration.has("status-indicator")) {
 			const version = ConfigurationReader.readString(
 				workspaceConfiguration.get("status-indicator"),
 			);
+
 			if (
 				version === PackagerStatusIndicator.FULL_VERSION ||
 				version === PackagerStatusIndicator.SHORT_VERSION
@@ -188,6 +209,7 @@ export class SettingsHelper {
 	): string[] | undefined {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native", uri);
+
 		if (workspaceConfiguration.has("android.logCatArguments")) {
 			return ConfigurationReader.readArray(
 				workspaceConfiguration.get("android.logCatArguments"),
@@ -201,10 +223,12 @@ export class SettingsHelper {
 	): string | undefined {
 		const workspaceConfiguration: vscode.WorkspaceConfiguration =
 			vscode.workspace.getConfiguration("react-native.expo.dependencies");
+
 		if (workspaceConfiguration.has(packageName)) {
 			const packageVersion = ConfigurationReader.readString(
 				workspaceConfiguration.get(packageName),
 			);
+
 			return packageVersion;
 		}
 		return undefined;
@@ -215,6 +239,7 @@ export class SettingsHelper {
 			"react-native-tools",
 			null,
 		);
+
 		if (workspaceConfiguration.has("showUserTips")) {
 			return ConfigurationReader.readBoolean(
 				workspaceConfiguration.get("showUserTips"),
@@ -228,6 +253,7 @@ export class SettingsHelper {
 			"react-native-tools",
 			null,
 		);
+
 		if (workspaceConfiguration.has("showUserTips")) {
 			await workspaceConfiguration.update("showUserTips", showTips, true);
 		}
@@ -244,12 +270,14 @@ export class SettingsHelper {
 		const workspaceSettingsContent = stripJsonTrailingComma(
 			stripJsonComments(fs.readFileSync(settingsPath, "utf-8")),
 		);
+
 		if (workspaceSettingsContent) {
 			if (workspaceSettingsContent.settings) {
 				const exclude =
 					workspaceSettingsContent.settings[
 						"react-native.workspace.exclude"
 					];
+
 				return exclude ? exclude : [];
 			}
 			return [];
@@ -262,6 +290,7 @@ export class SettingsHelper {
 			"react-native-tools.telemetry",
 			null,
 		);
+
 		if (workspaceConfiguration.has("optIn")) {
 			return workspaceConfiguration.get("optIn");
 		}
@@ -273,6 +302,7 @@ export class SettingsHelper {
 			"react-native-tools",
 			null,
 		);
+
 		if (workspaceConfiguration.has("showPackagerIndicator")) {
 			return ConfigurationReader.readBoolean(
 				workspaceConfiguration.get("showPackagerIndicator"),
@@ -286,6 +316,7 @@ export class SettingsHelper {
 			"react-native-tools",
 			null,
 		);
+
 		if (workspaceConfiguration.has("setNodeVersion")) {
 			return ConfigurationReader.readString(
 				workspaceConfiguration.get("setNodeVersion"),

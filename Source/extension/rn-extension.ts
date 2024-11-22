@@ -57,16 +57,19 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /* all components use the same packager instance */
 const outputChannelLogger = OutputChannelLogger.getMainChannel();
+
 const entryPointHandler = new EntryPointHandler(
 	ProcessType.Extension,
 	outputChannelLogger,
 );
 // #todo> are we sure we need null here and this is the correct place for this?
 export let debugConfigProvider: ReactNativeDebugConfigProvider | null;
+
 const APP_NAME = "react-native-tools";
 
 interface ISetupableDisposable extends vscode.Disposable {
@@ -85,7 +88,9 @@ export async function activate(
 	context: vscode.ExtensionContext,
 ): Promise<void> {
 	const extensionName = getExtensionName();
+
 	const appVersion = getExtensionVersion();
+
 	if (!appVersion) {
 		throw new Error(
 			localize(
@@ -97,6 +102,7 @@ export async function activate(
 
 	if (extensionName) {
 		const extensionFirstTimeInstalled = !cachedVersionExists();
+
 		const isUpdatedExtension = isUpdatedVersion(appVersion);
 
 		if (extensionName.includes("preview")) {
@@ -124,18 +130,25 @@ export async function activate(
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const ExtensionTelemetryReporter =
 		require("vscode-extension-telemetry").default;
+
 	const reporter = new ExtensionTelemetryReporter(
 		APP_NAME,
 		appVersion,
 		Telemetry.APPINSIGHTS_INSTRUMENTATIONKEY,
 	);
+
 	const configProvider = (debugConfigProvider =
 		new ReactNativeDebugConfigProvider());
+
 	const dymConfigProvider = new ReactNativeDebugDynamicConfigProvider();
+
 	const completionItemProviderInst = new LaunchJsonCompletionProvider();
+
 	const workspaceFolders: readonly vscode.WorkspaceFolder[] | undefined =
 		vscode.workspace.workspaceFolders;
+
 	let extProps: ICommandTelemetryProperties = {};
+
 	if (workspaceFolders) {
 		extProps = {
 			workspaceFoldersCount: {
@@ -233,7 +246,9 @@ export async function activate(
 			const activateExtensionEvent =
 				TelemetryHelper.createTelemetryEvent("activate");
 			Telemetry.send(activateExtensionEvent);
+
 			const promises: Promise<void>[] = [];
+
 			if (workspaceFolders) {
 				outputChannelLogger.debug(
 					`Projects found: ${workspaceFolders.length}`,
@@ -309,12 +324,15 @@ export function createAdditionalWorkspaceFolder(
 ): vscode.WorkspaceFolder | null {
 	if (fs.existsSync(folderPath)) {
 		const folderUri = vscode.Uri.file(folderPath);
+
 		const folderName = path.basename(folderPath);
+
 		const newFolder = {
 			uri: folderUri,
 			name: folderName,
 			index: ++COUNT_WORKSPACE_FOLDERS,
 		};
+
 		return newFolder;
 	}
 	return null;
@@ -328,13 +346,17 @@ export async function onFolderAdded(
 	folder: vscode.WorkspaceFolder,
 ): Promise<void> {
 	const workspacePath = vscode.workspace.workspaceFile?.fsPath;
+
 	const excludeFolders =
 		await SettingsHelper.getWorkspaceFileExcludeFolder(workspacePath);
+
 	let isExclude = false;
+
 	if (excludeFolders.length != 0) {
 		for (let i = 0; i < excludeFolders.length; i++) {
 			if (folder.name == excludeFolders[i]) {
 				isExclude = true;
+
 				break;
 			}
 		}
@@ -343,8 +365,10 @@ export async function onFolderAdded(
 		return;
 	}
 	const rootPath = folder.uri.fsPath;
+
 	const projectRootPath = SettingsHelper.getReactNativeProjectRoot(rootPath);
 	outputChannelLogger.debug(`Add project: ${projectRootPath}`);
+
 	const versions =
 		await ProjectVersionHelper.tryToGetRNSemverValidVersionsFromProjectPackage(
 			projectRootPath,
@@ -354,7 +378,9 @@ export async function onFolderAdded(
 	outputChannelLogger.debug(
 		`React Native version: ${versions.reactNativeVersion}`,
 	);
+
 	const promises = [];
+
 	if (ProjectVersionHelper.isVersionError(versions.reactNativeVersion)) {
 		outputChannelLogger.debug(
 			`react-native package version is not found in ${projectRootPath}. Reason: ${versions.reactNativeVersion}`,
@@ -377,6 +403,7 @@ export async function onFolderAdded(
 				),
 				async () => {
 					const reactDirManager = new ReactDirManager(rootPath);
+
 					const projectObserver = new RNProjectObserver(
 						projectRootPath,
 						versions,
@@ -439,6 +466,7 @@ async function setupAndDispose<T extends ISetupableDisposable>(
 ): Promise<T> {
 	await setuptableDisposable.setup();
 	EXTENSION_CONTEXT.subscriptions.push(setuptableDisposable);
+
 	return setuptableDisposable;
 }
 
@@ -451,13 +479,16 @@ function isSupportedVersion(version: string): boolean {
 		TelemetryHelper.sendSimpleEvent("unsupportedRNVersion", {
 			rnVersion: version,
 		});
+
 		const shortMessage = localize(
 			"ReactNativeToolsRequiresMoreRecentVersionThan019",
 			"React Native Tools need React Native version 0.19.0 or later to be installed in <PROJECT_ROOT>/node_modules/",
 		);
+
 		const longMessage = `${shortMessage}: ${version}`;
 		void vscode.window.showWarningMessage(shortMessage);
 		outputChannelLogger.warning(longMessage);
+
 		return false;
 	}
 	// !!semver.valid(version) === false is OK for us, someone can use custom RN implementation with custom version e.g. -> "0.2018.0107-v1"
@@ -472,6 +503,7 @@ function showTwoVersionFoundNotification(): boolean {
 				"React Native Tools: Both Stable and Preview extensions are installed. Stable will be used. Disable or remove it to work with Preview version.",
 			),
 		);
+
 		return true;
 	}
 	return false;
@@ -483,6 +515,7 @@ function isUpdatedVersion(currentVersion: string): boolean {
 		ExtensionConfigManager.config.get("version") !== currentVersion
 	) {
 		ExtensionConfigManager.config.set("version", currentVersion);
+
 		return true;
 	}
 	return false;
@@ -494,6 +527,7 @@ function cachedVersionExists(): boolean {
 
 function showChangelogNotificationOnUpdate(currentVersion: string) {
 	const changelogFile = findFileInFolderHierarchy(__dirname, "CHANGELOG.md");
+
 	if (changelogFile) {
 		void vscode.window
 			.showInformationMessage(

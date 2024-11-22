@@ -19,6 +19,7 @@ export abstract class AbstractDeviceTracker {
 	protected async queryDevicesLoop(): Promise<void> {
 		try {
 			await this.queryDevices();
+
 			if (!this.isStop) {
 				// It's important to schedule the next check AFTER the current one has completed
 				// to avoid simultaneous queries which can cause multiple user input prompts.

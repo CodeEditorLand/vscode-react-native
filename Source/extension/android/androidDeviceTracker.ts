@@ -29,6 +29,7 @@ export class AndroidDeviceTracker extends AbstractDeviceTracker {
 
 	protected async queryDevices(): Promise<void> {
 		const onlineDevices = await this.adbHelper.getOnlineTargets();
+
 		const currentDevicesIds = new Set(
 			[...DeviceStorage.devices.keys()].filter(
 				(key) =>

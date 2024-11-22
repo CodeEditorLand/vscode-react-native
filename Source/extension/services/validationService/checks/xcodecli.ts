@@ -10,6 +10,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 const label = "Xcode CLI";
@@ -18,6 +19,7 @@ async function test(): Promise<ValidationResultT> {
 	const result = await basicCheck({
 		command: "xcode-select",
 	});
+
 	if (result.exists) {
 		return {
 			status: "success",

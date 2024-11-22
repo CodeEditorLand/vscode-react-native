@@ -103,6 +103,7 @@ export class SourceMapUtil {
 			delete sourceMap.sourcesContent;
 			sourceMap.sourceRoot = "";
 			sourceMap.file = scriptPath;
+
 			return JSON.stringify(sourceMap);
 		} catch (exception) {
 			return sourceMapBody;
@@ -114,6 +115,7 @@ export class SourceMapUtil {
 		sourceMappingUrl: string,
 	): string {
 		scriptBody += `//# sourceMappingURL=${sourceMappingUrl}`;
+
 		return scriptBody;
 	}
 
@@ -125,6 +127,7 @@ export class SourceMapUtil {
 		sourceMappingUrl: IStrictUrl,
 	): string {
 		const sourceMapMatch = this.searchSourceMapURL(scriptBody);
+
 		if (sourceMapMatch) {
 			// Update the body with the new location of the source map on storage.
 			return scriptBody.replace(
@@ -161,6 +164,7 @@ export class SourceMapUtil {
 			// # sourceMappingURL=//localhost:8081/index.map?platform=macos&dev=true&minify=false
 			// Add 'http:' protocol to avoid errors in further processing
 			const el = sourceMapMatch[2];
+
 			const macOsOrWin =
 				(el.includes("platform=macos") ||
 					el.includes("platform=window")) &&
@@ -176,6 +180,7 @@ export class SourceMapUtil {
 		const matchesList = str
 			.match(SourceMapUtil.SourceMapURLGlobalRegex)
 			?.filter((s) => !s.includes("\\n"));
+
 		if (matchesList && matchesList.length) {
 			return matchesList[matchesList.length - 1].match(
 				SourceMapUtil.SourceMapURLRegex,
@@ -205,6 +210,7 @@ export class SourceMapUtil {
 			);
 		}
 		const relativeSourcePath = path.relative(sourcesRootPath, sourcePath);
+
 		return this.makeUnixStylePath(relativeSourcePath);
 	}
 
@@ -214,6 +220,7 @@ export class SourceMapUtil {
 	 */
 	private makeUnixStylePath(p: string): string {
 		const pathArgs = p.split(path.sep);
+
 		return path.posix.join.apply(null, pathArgs);
 	}
 }

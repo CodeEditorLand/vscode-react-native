@@ -164,6 +164,7 @@ export class ReactNativeCDPProxy {
 			JSON.stringify(event, null, 2),
 			this.logLevel,
 		);
+
 		const processedMessage =
 			this.CDPMessageHandler.processDebuggerCDPMessage(event);
 
@@ -180,6 +181,7 @@ export class ReactNativeCDPProxy {
 			JSON.stringify(event, null, 2),
 			this.logLevel,
 		);
+
 		const processedMessage =
 			this.CDPMessageHandler.processApplicationCDPMessage(event);
 
@@ -198,6 +200,7 @@ export class ReactNativeCDPProxy {
 			JSON.stringify(event, null, 2),
 			this.logLevel,
 		);
+
 		const processedMessage =
 			this.CDPMessageHandler.processDebuggerCDPMessage(event);
 
@@ -216,6 +219,7 @@ export class ReactNativeCDPProxy {
 			JSON.stringify(event, null, 2),
 			this.logLevel,
 		);
+
 		const processedMessage =
 			this.CDPMessageHandler.processApplicationCDPMessage(event);
 

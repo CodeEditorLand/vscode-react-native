@@ -37,6 +37,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 interface MetroEventData {
@@ -149,15 +150,18 @@ export class Packager {
 			this.projectPath,
 		);
 		this.nodeVersion = await getNodeVersion(this.projectPath, env);
+
 		if (this.nodeVersion) {
 			const isNodeSupported = semver.gte(
 				this.nodeVersion,
 				Packager.NODE_AVAIABLE,
 			);
+
 			const isRNWithPackerIssue = semver.gte(
 				versionInfo.reactNativeVersion,
 				Packager.RN_VERSION_WITH_PACKER_ISSUE,
 			);
+
 			return isRNWithPackerIssue && !isNodeSupported;
 		}
 		return false;
@@ -166,6 +170,7 @@ export class Packager {
 	private async verifiyTSVersion() {
 		try {
 			const tsVersion = await getTSVersion(this.projectPath);
+
 			if (
 				semver.lt(
 					tsVersion.replace("Version", ""),
@@ -195,6 +200,7 @@ export class Packager {
 		}
 
 		const isExpo = await this.getExponentHelper().isExpoManagedApp(false);
+
 		if (isExpo) {
 			// Arguments below using for Expo apps
 			if (!semver.gte(rnVersion, "0.57.0")) {
@@ -231,9 +237,13 @@ export class Packager {
 		this.packagerStatusIndicator.updatePackagerStatus(
 			PackagerStatus.PACKAGER_STARTING,
 		);
+
 		let executedStartPackagerCmd = false;
+
 		let rnVersion: string;
+
 		let reactEnv = {};
+
 		if (!(await this.isRunning())) {
 			if (this.packagerProcess) {
 				this.logger.warning(
@@ -244,6 +254,7 @@ export class Packager {
 						),
 					),
 				);
+
 				return;
 			}
 
@@ -269,6 +280,7 @@ export class Packager {
 			// CI="true" env property breaks RN fast refresh feature, so we need to remove it from default env variables
 			// See more info in the issue https://github.com/microsoft/vscode-react-native/issues/1529
 			delete env.CI;
+
 			if (
 				this.runOptions &&
 				(this.runOptions.env || this.runOptions.envFile)
@@ -300,6 +312,7 @@ export class Packager {
 				AppLauncher.getNodeModulesRootByProjectPath(this.projectPath);
 
 			let packagerSpawnResult;
+
 			if (
 				this.runOptions?.platform != "exponent" &&
 				this.runOptions?.platform != "expoweb"
@@ -330,12 +343,14 @@ export class Packager {
 
 		if (await this.stopWithlowNode(reactEnv)) {
 			await this.stop();
+
 			throw new Error(
 				`React Native needs Node.js >= 18. You're currently on version ${this.nodeVersion}. Please upgrade Node.js to a supported version and try again.`,
 			);
 		}
 		await this.verifiyTSVersion();
 		await this.awaitStart();
+
 		if (executedStartPackagerCmd) {
 			this.logger.info(localize("PackagerStarted", "Packager started."));
 			this.packagerStatus = PackagerStatus.PACKAGER_STARTED;
@@ -351,6 +366,7 @@ export class Packager {
 					"Packager is already running in this port, you can either stop the packager or use a different port for this project.",
 				),
 			);
+
 			if (!this.packagerProcess) {
 				this.logger.warning(
 					ErrorHelper.getWarning(
@@ -361,6 +377,7 @@ export class Packager {
 					),
 				);
 				this.setPackagerStopStateUI();
+
 				return;
 			}
 		}
@@ -374,6 +391,7 @@ export class Packager {
 		this.packagerStatusIndicator.updatePackagerStatus(
 			PackagerStatus.PACKAGER_STOPPING,
 		);
+
 		let successfullyStopped = false;
 
 		if (await this.isRunning()) {
@@ -414,6 +432,7 @@ export class Packager {
 			CONTEXT_VARIABLES_NAMES.IS_RN_PACKAGER_RUNNING,
 			false,
 		);
+
 		return successfullyStopped;
 	}
 
@@ -427,6 +446,7 @@ export class Packager {
 		}
 
 		const successfullyStopped = await this.stop();
+
 		if (successfullyStopped) {
 			await this.start(true);
 		}
@@ -439,6 +459,7 @@ export class Packager {
 
 		if (await this.isRunning()) {
 			const defaultIndex = path.resolve(this.projectPath, "index.js");
+
 			const oldIndex = path.resolve(
 				this.projectPath,
 				`index.${platform}.js`,
@@ -451,6 +472,7 @@ export class Packager {
 				]);
 
 				let bundleName = "";
+
 				if (defaultIndexExists) {
 					bundleName = "index.bundle";
 				} else if (oldIndexExists) {
@@ -463,6 +485,7 @@ export class Packager {
 							platform,
 						),
 					);
+
 					return;
 				}
 
@@ -486,8 +509,10 @@ export class Packager {
 
 	public async isRunning(): Promise<boolean> {
 		const statusURL = `http://${this.getHost()}/status`;
+
 		try {
 			const body = await Request.request(statusURL);
+
 			return body === "packager-status:running";
 		} catch (error) {
 			return false;
@@ -514,6 +539,7 @@ export class Packager {
 		return new Promise<void>((resolve, reject) => {
 			const resolveHandler = async (handlerArg: string) => {
 				const parsed: MetroEventData = JSON.parse(handlerArg);
+
 				const value = parsed.data?.[0];
 
 				if (
@@ -559,6 +585,7 @@ export class Packager {
 			);
 		} catch (error) {
 			this.setPackagerStopStateUI();
+
 			throw error;
 		}
 	}
@@ -613,12 +640,15 @@ export class Packager {
 				flatDependencyPackagePath,
 				nestedDependencyPackagePath,
 			];
+
 			const paths = await Promise.all(
 				possiblePaths.map(async (fsPath) =>
 					(await fsHelper.exists(fsPath)) ? fsPath : "",
 				),
 			);
+
 			const packagePath = paths.find((fsPath) => !!fsPath);
+
 			if (packagePath) {
 				return packagePath;
 			}
@@ -638,6 +668,7 @@ export class Packager {
 	): Promise<void> {
 		// Finds the 'opn' or 'open' package
 		const opnIndexFilePath = await this.findOpnPackage(ReactNativeVersion);
+
 		const destnFilePath = opnIndexFilePath;
 		// Read the package's "package.json"
 		const opnPackage = new Package(
@@ -645,15 +676,18 @@ export class Packager {
 		);
 
 		const packageJson = await opnPackage.parsePackageInformation();
+
 		const JS_INJECTOR_FILENAME =
 			semver.gte(ReactNativeVersion, Packager.RN_VERSION_WITH_OPEN_PKG) ||
 			ProjectVersionHelper.isCanaryVersion(ReactNativeVersion)
 				? Packager.JS_INJECTOR_FILENAME.new
 				: Packager.JS_INJECTOR_FILENAME.old;
+
 		const JS_INJECTOR_FILEPATH = path.resolve(
 			Packager.JS_INJECTOR_DIRPATH,
 			JS_INJECTOR_FILENAME,
 		);
+
 		if (packageJson.main !== JS_INJECTOR_FILENAME) {
 			this.logger.info(
 				localize(
@@ -681,6 +715,7 @@ export class Packager {
 					"Add open-main.js entry to package.json 'main' field...",
 				),
 			);
+
 			return opnPackage.setMainFile(JS_INJECTOR_FILENAME);
 		}
 		this.logger.info(
@@ -710,6 +745,7 @@ export class Packager {
 			this.logger,
 		).killReactPackager(this.packagerProcess);
 		this.packagerProcess = undefined;
+
 		if (
 			await new ExponentHelper(
 				this.workspacePath,
@@ -717,6 +753,7 @@ export class Packager {
 			).isExpoManagedApp(false)
 		) {
 			this.logger.debug("Stopping Exponent");
+
 			try {
 				await XDL.stopAll(this.projectPath);
 				this.logger.debug("Exponent Stopped");

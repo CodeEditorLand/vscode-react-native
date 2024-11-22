@@ -23,6 +23,7 @@ export class LaunchJsonCompletionHelper {
 		commaPosition?: PositionOfComma,
 	): string {
 		const json = JSON.stringify(config);
+
 		if (cursorPosition === "AfterItem") {
 			// If we already have a comma immediatley before the cursor, then no need of adding a comma.
 			return commaPosition === "BeforeCursor" ? json : `,${json}`;
@@ -42,7 +43,9 @@ export class LaunchJsonCompletionHelper {
 		}
 		const scanner = createScanner(document.getText(), true);
 		scanner.setPosition(document.offsetAt(position));
+
 		const nextToken = scanner.scan();
+
 		if (
 			nextToken === SyntaxKind.CommaToken ||
 			nextToken === SyntaxKind.CloseBracketToken
@@ -65,6 +68,7 @@ export class LaunchJsonCompletionHelper {
 		const currentLine = document.getText(
 			new Range(line.range.start, position),
 		);
+
 		if (currentLine.trim().endsWith(",")) {
 			return true;
 		}
@@ -75,8 +79,10 @@ export class LaunchJsonCompletionHelper {
 
 		// Keep walking backwards until we hit a non-comma character or a comm character.
 		let startLineNumber = position.line - 1;
+
 		while (startLineNumber > 0) {
 			const lineText = document.lineAt(startLineNumber).text;
+
 			if (lineText.trim().endsWith(",")) {
 				return true;
 			}
@@ -96,6 +102,7 @@ export class LaunchJsonCompletionHelper {
 		}) as {
 			configurations: [];
 		};
+
 		return (
 			!configuration ||
 			!Array.isArray(configuration.configurations) ||

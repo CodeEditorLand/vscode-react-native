@@ -23,28 +23,39 @@ export class EnableHermes extends Command {
 
     async baseFn(): Promise<void> {
         assert(this.project);
+
         const type = await vscode.window.showQuickPick(["Android", "iOS"], {
             placeHolder: "Select type for mobile OS",
         });
+
         const isHermesEnabled = await vscode.window.showQuickPick(["true", "false"], {
             placeHolder: "Whether to enable Hermes",
         });
+
         const projectRoot = this.project.getPackager().getProjectPath();
 
         if (type === undefined || isHermesEnabled === undefined) return;
+
         if (type === "iOS") {
             const podfilePath = path.join(projectRoot, "ios", "Podfile");
+
             if (!projectRoot || !fs.existsSync(podfilePath)) {
                 logger.warning("Podfile not found");
+
                 return;
             }
 
             const podfileContent = fs.readFileSync(podfilePath, "utf-8");
+
             const hermesMatches = podfileContent.match(/#?\s*:hermes_enabled\s*=>\s*\w*/);
+
             const regex = /(use_react_native!\s*\([^)]*?)(\n\s*\))/;
+
             const rnMatches = podfileContent.match(regex);
+
             const nodeModulesRoot: string =
                 AppLauncher.getNodeModulesRootByProjectPath(projectRoot);
+
             const commandExecutor = new CommandExecutor(
                 nodeModulesRoot,
                 `${projectRoot}/ios`,
@@ -60,12 +71,14 @@ export class EnableHermes extends Command {
                 await commandExecutor.spawn("pod", ["install"]);
             } else if (rnMatches) {
                 let content = rnMatches[1];
+
                 const closing = rnMatches[2];
 
                 if (!content.trim().endsWith(",")) {
                     content += ",";
                 }
                 content += `\n    :hermes_enabled => ${isHermesEnabled}`;
+
                 const newData = podfileContent.replace(regex, content + closing);
                 await this.nodeFileSystem.writeFile(podfilePath, newData);
                 await commandExecutor.spawn("pod", ["install"]);
@@ -73,13 +86,17 @@ export class EnableHermes extends Command {
         }
         if (type === "Android") {
             const gradleFilePath = path.join(projectRoot, "android", "gradle.properties");
+
             if (!projectRoot || !fs.existsSync(gradleFilePath)) {
                 logger.warning("gradle.properties file not found");
+
                 return;
             }
 
             const gradleFileContent = fs.readFileSync(gradleFilePath, "utf-8");
+
             const hermesMatches = gradleFileContent.match(/hermesEnabled\s*=\s*\w*/);
+
             if (hermesMatches && !hermesMatches[0].startsWith("#")) {
                 const updatedHermes = gradleFileContent.replace(
                     /hermesEnabled\s*=\s*\w*/,

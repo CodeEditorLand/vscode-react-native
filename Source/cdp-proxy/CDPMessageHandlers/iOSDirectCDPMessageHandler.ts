@@ -28,6 +28,7 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 
 	public processDebuggerCDPMessage(event: any): ProcessedCDPMessage {
 		const sendBack = false;
+
 		if (
 			!this.isBackcompatConfigured &&
 			event.method === CDP_API_NAMES.RUNTIME_ENABLE
@@ -94,6 +95,7 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 				isDefault: true,
 			},
 		};
+
 		try {
 			this.sendCustomRequestToDebuggerTarget(
 				CDP_API_NAMES.EXECUTION_CONTEXT_CREATED,

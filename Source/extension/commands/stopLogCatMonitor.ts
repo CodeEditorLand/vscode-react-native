@@ -28,10 +28,12 @@ export class StopLogCatMonitor extends Command {
 
 function selectLogCatMonitor() {
 	const logger = OutputChannelLogger.getMainChannel();
+
 	const keys = Object.keys(LogCatMonitorManager.logCatMonitorsCache);
 
 	if (keys.length === 1) {
 		logger.debug(`Command palette: once LogCat monitor ${keys[0]}`);
+
 		return LogCatMonitorManager.logCatMonitorsCache[keys[0]];
 	}
 
@@ -48,6 +50,7 @@ function selectLogCatMonitor() {
 			logger.debug(
 				`Command palette: selected LogCat monitor ${selected}`,
 			);
+
 			return LogCatMonitorManager.logCatMonitorsCache[selected];
 		});
 	}

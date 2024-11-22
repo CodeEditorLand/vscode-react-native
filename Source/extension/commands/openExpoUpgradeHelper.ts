@@ -17,6 +17,7 @@ export class openExpoUpgradeHelper extends Command {
 
     async baseFn(): Promise<void> {
         assert(this.project);
+
         const ExpoUrl = "https://docs.expo.dev/bare/upgrade";
         logger.info("Open expo upgrade helper in web browser.");
         await vscode.env.openExternal(vscode.Uri.parse(ExpoUrl));

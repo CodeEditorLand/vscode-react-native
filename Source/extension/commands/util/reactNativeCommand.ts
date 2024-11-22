@@ -36,9 +36,11 @@ export abstract class ReactNativeCommand<
 		assert(this.project);
 
 		const logger = OutputChannelLogger.getMainChannel();
+
 		const projectRoot = SettingsHelper.getReactNativeProjectRoot(
 			this.project.getWorkspaceFolder().uri.fsPath,
 		);
+
 		const isRNProject =
 			await ReactNativeProjectHelper.isReactNativeProject(projectRoot);
 
@@ -60,6 +62,7 @@ export abstract class ReactNativeCommand<
 					void vscode.window.showErrorMessage(
 						`${projectRoot} workspace is not a React Native project.`,
 					);
+
 					return;
 				}
 

@@ -53,6 +53,7 @@ export class IWDPHelper {
 			`http://localhost:${attachArgs.port}/json`,
 			true,
 		);
+
 		try {
 			// An example of a json response from IWDP
 			// [{
@@ -64,6 +65,7 @@ export class IWDPHelper {
 			const endpointsList = JSON.parse(response);
 
 			let devices = endpointsList;
+
 			if (attachArgs.target) {
 				devices = endpointsList.filter((entry: { deviceId: string }) =>
 					attachArgs.target?.toLowerCase() === "device"

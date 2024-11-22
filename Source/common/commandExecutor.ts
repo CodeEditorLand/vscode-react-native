@@ -18,6 +18,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export enum CommandVerbosity {
@@ -61,6 +62,7 @@ export class CommandExecutor {
 				CommandStatus.Start,
 			),
 		);
+
 		try {
 			const stdout = await this.childProcess.execToString(command, {
 				cwd: this.currentWorkingDirectory,
@@ -87,6 +89,7 @@ export class CommandExecutor {
 				cwd: this.currentWorkingDirectory,
 				env: options.env,
 			});
+
 			return stdout;
 		} catch (reason) {
 			return reason;
@@ -132,6 +135,7 @@ export class CommandExecutor {
 		const versions = await ProjectVersionHelper.getReactNativeVersions(
 			this.currentWorkingDirectory,
 		);
+
 		return versions.reactNativeVersion;
 	}
 
@@ -169,6 +173,7 @@ export class CommandExecutor {
 		const reactCommand = HostPlatform.getNpmCliCommand(
 			this.selectReactNativeCLI(),
 		);
+
 		return this.spawnChildProcess(
 			reactCommand,
 			[command, ...args],
@@ -185,6 +190,7 @@ export class CommandExecutor {
 		options: Options = {},
 	): ISpawnResult {
 		const expoCommand = HostPlatform.getNpmCliCommand(this.selectExpoCLI());
+
 		return this.spawnChildProcess(expoCommand, [command, ...args], options);
 	}
 
@@ -205,12 +211,16 @@ export class CommandExecutor {
 			{ cwd: this.currentWorkingDirectory },
 			options,
 		);
+
 		const commandWithArgs = `${command} ${args.join(" ")}`;
+
 		const timeBetweenDots = 1500;
+
 		let lastDotTime = 0;
 
 		const printDot = () => {
 			const now = Date.now();
+
 			if (now - lastDotTime > timeBetweenDots) {
 				lastDotTime = now;
 				this.logger.logStream(".", process.stdout);
@@ -246,6 +256,7 @@ export class CommandExecutor {
 
 		try {
 			await result.outcome;
+
 			if (options.verbosity === CommandVerbosity.OUTPUT) {
 				this.logger.debug(
 					CommandExecutor.getCommandStatusString(
@@ -292,6 +303,7 @@ export class CommandExecutor {
 				shell: true,
 			},
 		);
+
 		const commandWithArgs = `${command} ${args.join(" ")}`;
 
 		this.logger.debug(
@@ -300,6 +312,7 @@ export class CommandExecutor {
 				CommandStatus.Start,
 			),
 		);
+
 		const result = this.childProcess.spawn(command, args, spawnOptions);
 
 		result.stderr.on("data", (data: Buffer) => {
@@ -321,6 +334,7 @@ export class CommandExecutor {
 			(reason) =>
 				this.generateRejectionForCommand(commandWithArgs, reason),
 		);
+
 		return result;
 	}
 
@@ -346,8 +360,10 @@ export class CommandExecutor {
 		switch (status) {
 			case CommandStatus.Start:
 				return `Executing command: ${command}`;
+
 			case CommandStatus.End:
 				return `Finished executing: ${command}`;
+
 			default:
 				throw ErrorHelper.getInternalError(
 					InternalErrorCode.UnsupportedCommandStatus,

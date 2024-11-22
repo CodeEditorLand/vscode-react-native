@@ -21,9 +21,11 @@ export class EnableExpoHermes extends Command {
 
     async baseFn(): Promise<void> {
         assert(this.project);
+
         const platform = await vscode.window.showQuickPick(["Expo", "Android", "iOS"], {
             placeHolder: "Select platform",
         });
+
         const jsEngine = await vscode.window.showQuickPick(["hermes", "jsc"], {
             placeHolder: "Select JavaScript engine",
         });
@@ -32,15 +34,20 @@ export class EnableExpoHermes extends Command {
             return;
         }
         const projectRoot = this.project.getPackager().getProjectPath();
+
         const appJsonPath = path.join(projectRoot, "app.json");
+
         if (!fs.existsSync(appJsonPath)) {
             logger.warning("app.json not found");
+
             return;
         }
         const appJson = fs.readFileSync(appJsonPath, "utf-8");
+
         const regex = new RegExp(
             `"${platform?.toLocaleLowerCase()}":\\s*{[^{}]*"jsEngine":\\s*"[^"]*"`,
         );
+
         const allMatches = appJson.match(regex);
 
         if (allMatches) {
@@ -51,6 +58,7 @@ export class EnableExpoHermes extends Command {
             await this.nodeFileSystem.writeFile(appJsonPath, updatedJsEngine);
         } else {
             const appJsonObj = JSON.parse(appJson);
+
             if (platform === "Expo") {
                 appJsonObj.expo.jsEngine = jsEngine;
             } else {

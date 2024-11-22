@@ -119,6 +119,7 @@ export class ClientDevice {
 
 	public async init(): Promise<void> {
 		const plugins = await this.loadPlugins();
+
 		if (plugins.includes(this.networkInspectorPluginName)) {
 			this.initNetworkInspectorPlugin();
 		}
@@ -131,10 +132,12 @@ export class ClientDevice {
 		}
 
 		let rawData;
+
 		try {
 			rawData = JSON.parse(msg);
 		} catch (err) {
 			this.logger.error(`Invalid JSON: ${msg}`);
+
 			return;
 		}
 
@@ -148,6 +151,7 @@ export class ClientDevice {
 
 		if (!data.id) {
 			const { error } = data;
+
 			if (error) {
 				this.logger.error(
 					`Error received from device ${
@@ -162,6 +166,7 @@ export class ClientDevice {
 
 		if (this.sdkVersion < 1) {
 			const callbacks = this.requestCallbacks.get(data.id);
+
 			if (!callbacks) {
 				return;
 			}
@@ -180,6 +185,7 @@ export class ClientDevice {
 			"getPlugins",
 			false,
 		).then((data) => data.plugins);
+
 		return plugins;
 	}
 
@@ -188,6 +194,7 @@ export class ClientDevice {
 			method,
 			params,
 		};
+
 		if (this._connection) {
 			this._connection.fireAndForget({ data: JSON.stringify(data) });
 		}
@@ -200,6 +207,7 @@ export class ClientDevice {
 	): Promise<T> {
 		return new Promise((resolve, reject) => {
 			const id = this.messageIdCounter++;
+
 			const metadata: RequestMetadata = {
 				method,
 				id,
@@ -270,7 +278,9 @@ export class ClientDevice {
 			resolve && resolve(data.success);
 		} else if (data.error) {
 			reject(data.error);
+
 			const { error } = data;
+
 			if (error) {
 				this.logger.debug(error.message);
 			}

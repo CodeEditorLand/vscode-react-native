@@ -25,20 +25,26 @@ export class rnDoctor extends ReactNativeCommand {
 	label = "React Native Doctor";
 	nodeModulesRoot: string;
 	error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunRNDoctor);
+
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const projectRootPath = this.project.getPackager().getProjectPath();
+
 		const logger = OutputChannelLogger.getChannel(
 			"ReactNativeRunDoctor",
 			true,
 		);
+
 		const nodeModulesRoot: string =
 			AppLauncher.getNodeModulesRootByProjectPath(projectRootPath);
+
 		const commandExecutor = new CommandExecutor(
 			nodeModulesRoot,
 			projectRootPath,
 			logger,
 		);
+
 		const res = commandExecutor.spawnReactCommand("doctor");
 
 		const output = new OutputVerifier(

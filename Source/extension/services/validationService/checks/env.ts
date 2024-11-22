@@ -47,6 +47,7 @@ async function test(
 	const notFoundPath = Object.entries(resolvedEnv).find(
 		([, val]) => val.resolved && !fs.existsSync(val.resolved),
 	)?.[0];
+
 	if (notFoundPath) {
 		return {
 			status: "failure",

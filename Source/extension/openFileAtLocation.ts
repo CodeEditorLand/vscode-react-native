@@ -13,6 +13,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 /* Usage:
@@ -31,6 +32,7 @@ const localize = nls.loadMessageBundle();
 	}
 
 	let fullpath: string;
+
 	let workspace: string;
 
 	if (process.argv.length === 3) {
@@ -46,9 +48,13 @@ const localize = nls.loadMessageBundle();
 	// In Windows this should make sure c:\ is always lowercase and in
 	// Unix '/'.toLowerCase() = '/'
 	const normalizedDirname = dirname.toLowerCase();
+
 	const filenameAndNumber = path.basename(fullpath);
+
 	const fileInfo = filenameAndNumber.split(":");
+
 	const filename = path.join(normalizedDirname, fileInfo[0]);
+
 	let lineNumber = 1;
 
 	if (fileInfo.length >= 2) {
@@ -59,6 +65,7 @@ const localize = nls.loadMessageBundle();
 		.then((projectRootPath) => {
 			const appLauncher =
 				AppLauncher.getAppLauncherByProjectRootPath(projectRootPath);
+
 			return appLauncher.openFileAtLocation(filename, lineNumber);
 		})
 		.catch((reason) => {
@@ -91,6 +98,7 @@ async function getReactNativeWorkspaceForFile(
 async function getPathForRNParentWorkspace(dir: string): Promise<string> {
 	const isRNProject =
 		await ReactNativeProjectHelper.isReactNativeProject(dir);
+
 	if (isRNProject) {
 		return dir;
 	}

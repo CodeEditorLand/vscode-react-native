@@ -20,6 +20,7 @@ nls.config({
 	messageFormat: nls.MessageFormat.bundle,
 	bundleFormat: nls.BundleFormat.standalone,
 })();
+
 const localize = nls.loadMessageBundle();
 
 export class StartLogCatMonitor extends Command {
@@ -32,16 +33,22 @@ export class StartLogCatMonitor extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		const logger = OutputChannelLogger.getMainChannel();
 
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
 			"logCatMonitor",
 		);
+
 		const projectPath = this.project.getPackager().getProjectPath();
+
 		const nodeModulesRoot: string =
 			this.project.getOrUpdateNodeModulesRoot();
+
 		const adbHelper = new AdbHelper(projectPath, nodeModulesRoot);
+
 		const targetManager = new AndroidTargetManager(adbHelper);
+
 		const target = await targetManager.selectAndPrepareTarget(
 			(target) => target.isOnline,
 		);
@@ -53,6 +60,7 @@ export class StartLogCatMonitor extends Command {
 					"Could not find a proper online Android device to start a LogCat monitor",
 				),
 			);
+
 			return;
 		}
 

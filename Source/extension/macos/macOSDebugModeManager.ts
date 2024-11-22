@@ -59,12 +59,14 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 			configuration,
 			productName,
 		);
+
 		try {
 			// Attempt to read from the file, but if the property is not defined then return the empty string
 			const remoteDebugEnabled = await this.plistBuddy.readPlistProperty(
 				plistFile,
 				MacOSDebugModeManager.REMOTE_DEBUGGING_SETTING_NAME,
 			);
+
 			return remoteDebugEnabled === "true";
 		} catch (e) {
 			return false;
@@ -81,6 +83,7 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 			this.logger.debug(
 				`Failed one attempt to find plist file: ${String(reason)}`,
 			);
+
 			return "";
 		}
 	}
@@ -104,7 +107,9 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 			"Preferences",
 			`${bundleId}.plist`,
 		);
+
 		const exist = await this.nodeFileSystem.exists(plistFilePath);
+
 		if (!exist) {
 			throw new Error(`Unable to find plist file for ${bundleId}`);
 		} else {

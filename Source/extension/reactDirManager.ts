@@ -26,9 +26,11 @@ export class ReactDirManager implements vscode.Disposable {
 
 	public async setup(): Promise<void> {
 		this.isDisposed = false;
+
 		const fs = new FileSystem();
 		/* if the folder exists, remove it, then recreate it */
 		await fs.removePathRecursivelyAsync(this.reactDirPath);
+
 		if (!fs.existsSync(this.vscodeDirPath)) {
 			await fs.mkDir(this.vscodeDirPath);
 		}
