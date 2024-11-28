@@ -54,6 +54,7 @@ type MultiStepInputQuickPicResponseType<T, P> =
 type MultiStepInputInputBoxResponseType<P> =
 	| string
 	| (P extends { buttons: (infer I)[] } ? I : never);
+
 export interface IMultiStepInput<S> {
 	run(start: InputStep<S>, state: S): Promise<void>;
 	showQuickPick<T extends QuickPickItem, P extends IQuickPickParameters<T>>({

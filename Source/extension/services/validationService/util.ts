@@ -7,10 +7,12 @@ import * as commandExists from "command-exists";
 import * as semver from "semver";
 
 export const executeCommand = promisify(cp.exec);
+
 export const normizeStr = (str: string): string => str.replace(/\r\n/g, "\n");
 
 export const createNotFoundMessage = (str: string): string =>
 	`Command not found. Make sure ${str} is installed`;
+
 export const createVersionErrorMessage = (str: string): string =>
 	`Version check failed. Make sure ${str} is working correctly`;
 

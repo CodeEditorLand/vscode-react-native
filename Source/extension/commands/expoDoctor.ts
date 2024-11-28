@@ -10,6 +10,7 @@ import { OutputChannelLogger } from "../log/OutputChannelLogger";
 import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 const logger = OutputChannelLogger.getMainChannel();
+
 export class expoDoctor extends ReactNativeCommand {
 	codeName = "ExpoDoctor";
 	label = "Expo Doctor";

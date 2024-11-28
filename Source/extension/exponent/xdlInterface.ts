@@ -40,10 +40,12 @@ export const getXDLPackage: () => Promise<typeof XDLPackage> =
 		xdlPackageConfig,
 		...EXPO_DEPS,
 	);
+
 export const getMetroConfigPackage: () => Promise<typeof MetroConfigPackage> =
 	PackageLoader.getInstance().generateGetPackageFunction<
 		typeof MetroConfigPackage
 	>(metroConfigPackageConfig, ...EXPO_DEPS);
+
 export const getNgrokResolver: () => Promise<XDLPackage.ResolveNgrok> =
 	PackageLoader.getInstance().generateGetPackageFunction<XDLPackage.ResolveNgrok>(
 		ngrokPackageConfig,
