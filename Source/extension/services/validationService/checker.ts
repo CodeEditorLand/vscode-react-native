@@ -38,6 +38,7 @@ const evaluteChecks = async (checks: IValidation[]) => {
 								outputChannel.warning(
 									`Check ${it.label} failed with error`,
 								);
+
 								outputChannel.warning(err);
 
 								return {
@@ -79,6 +80,7 @@ export const runChecks = async (
 	);
 
 	outputChannel.setFocusOnLogChannel();
+
 	outputChannel.info(
 		toLocale("DevEnvVerificationStart", "Starting Environment check..."),
 	);
@@ -104,6 +106,7 @@ export const runChecks = async (
 
 			if (execResult.status !== "success") {
 				outStr += ` - ${validation.description}\n`;
+
 				outStr += `  ${execResult.comment || ""}`;
 			}
 

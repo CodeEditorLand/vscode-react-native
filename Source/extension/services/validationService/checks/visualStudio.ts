@@ -24,6 +24,7 @@ async function test(): Promise<ValidationResultT> {
 	} else {
 		vswherePath = `"C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe"`;
 	}
+
 	const components = [
 		"Microsoft.Component.MSBuild",
 		"Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
@@ -54,10 +55,12 @@ async function test(): Promise<ValidationResultT> {
 					};
 				}
 			}
+
 			return {
 				status: "success",
 			};
 		}
+
 		return {
 			status: "partial-success",
 			comment:
@@ -65,6 +68,7 @@ async function test(): Promise<ValidationResultT> {
 				"Please update Visual Studio in case of errors",
 		};
 	}
+
 	return {
 		status: "failure",
 		comment: createNotFoundMessage(label),

@@ -18,26 +18,37 @@ import { PlatformType } from "../launchArgs";
 
 export interface ConfigurationData {
 	fullProductName: string;
+
 	configurationFolder: string;
 }
 export interface IOSBuildLocationData {
 	executable: string;
+
 	configurationFolder: string;
 }
 export class PlistBuddy {
 	private static readonly plistBuddyExecutable = "/usr/libexec/PlistBuddy";
+
 	private static readonly SCHEME_IN_PRODUCTS_FOLDER_PATH_VERSION = "0.59.0";
+
 	private static readonly NEW_RN_IOS_CLI_LOCATION_VERSION = "0.60.0";
+
 	private static readonly RN69_FUND_XCODE_PROJECT_LOCATION_VERSION = "0.69.0";
+
 	private static readonly RN_VERSION_CLI_PLATFORM_APPLE = "0.74.0";
+
 	private static readonly RN_VERSION_CLI_CONFIG_APPLE = "0.76.2";
+
 	private readonly TARGET_BUILD_DIR_SEARCH_KEY = "TARGET_BUILD_DIR";
+
 	private readonly FULL_PRODUCT_NAME_SEARCH_KEY = "FULL_PRODUCT_NAME";
+
 	private nodeChildProcess: ChildProcess;
 
 	constructor({ nodeChildProcess = new Node.ChildProcess() } = {}) {
 		this.nodeChildProcess = nodeChildProcess;
 	}
+
 	public async getBundleId(
 		platformProjectRoot: string,
 		projectRoot: string,
@@ -71,6 +82,7 @@ export class PlistBuddy {
 			infoPlistPath,
 		);
 	}
+
 	public async getExecutableAndConfigurationFolder(
 		platformProjectRoot: string,
 		projectRoot: string,
@@ -104,6 +116,7 @@ export class PlistBuddy {
 					scheme = `${scheme}-macOS`;
 				}
 			}
+
 			productsFolder = path.join(
 				platformProjectRoot,
 				"build",
@@ -119,6 +132,7 @@ export class PlistBuddy {
 				"Products",
 			);
 		}
+
 		const sdkType =
 			platform === PlatformType.iOS
 				? this.getSdkType(simulator, scheme)
@@ -144,6 +158,7 @@ export class PlistBuddy {
 					configurationFolder,
 					sdkType,
 				);
+
 				configurationFolder = configurationData.configurationFolder;
 			}
 		} else {
@@ -159,7 +174,9 @@ export class PlistBuddy {
 					configurationFolder,
 					sdkType,
 				);
+
 				configurationFolder = configurationData_1.configurationFolder;
+
 				executableList.push(configurationData_1.fullProductName);
 			} else if (executableList.length > 1) {
 				throw ErrorHelper.getInternalError(
@@ -167,13 +184,16 @@ export class PlistBuddy {
 					configurationFolder,
 				);
 			}
+
 			executable = `${executableList[0]}`;
 		}
+
 		return {
 			executable,
 			configurationFolder,
 		};
 	}
+
 	public async setPlistProperty(
 		plistFile: string,
 		property: string,
@@ -189,6 +209,7 @@ export class PlistBuddy {
 			);
 		}
 	}
+
 	public async setPlistBooleanProperty(
 		plistFile: string,
 		property: string,
@@ -207,6 +228,7 @@ export class PlistBuddy {
 			);
 		}
 	}
+
 	public async deletePlistProperty(
 		plistFile: string,
 		property: string,
@@ -219,12 +241,14 @@ export class PlistBuddy {
 			}
 		}
 	}
+
 	public readPlistProperty(
 		plistFile: string,
 		property: string,
 	): Promise<string> {
 		return this.invokePlistBuddy(`Print ${property}`, plistFile);
 	}
+
 	public getBuildPathAndProductName(
 		platformProjectRoot: string,
 		projectWorkspaceConfigName: string,
@@ -242,6 +266,7 @@ export class PlistBuddy {
 		if (sdkType) {
 			xcodebuildParams.push("-sdk", sdkType);
 		}
+
 		xcodebuildParams.push(
 			"-configuration",
 			configuration,
@@ -270,14 +295,17 @@ export class PlistBuddy {
 		if (!targetBuildDir) {
 			throw new Error("Failed to get the target build directory.");
 		}
+
 		if (!fullProductName) {
 			throw new Error("Failed to get full product name.");
 		}
+
 		return {
 			fullProductName,
 			configurationFolder: targetBuildDir,
 		};
 	}
+
 	public getInferredScheme(
 		platformProjectRoot: string,
 		projectRoot: string,
@@ -291,6 +319,7 @@ export class PlistBuddy {
 
 		return getFileNameWithoutExtension(projectWorkspaceConfigName);
 	}
+
 	public getSdkType(simulator: boolean, scheme?: string): string {
 		const sdkSuffix = simulator ? "simulator" : "os";
 
@@ -301,6 +330,7 @@ export class PlistBuddy {
 
 		return `${deviceType}${sdkSuffix}`;
 	}
+
 	public getProjectWorkspaceConfigName(
 		platformProjectRoot: string,
 		projectRoot: string,
@@ -358,8 +388,10 @@ export class PlistBuddy {
 				`Could not find Xcode project files in "${platformProjectRoot}" folder`,
 			);
 		}
+
 		return xcodeProject.name;
 	}
+
 	public getConfigurationData(
 		projectRoot: string,
 		reactNativeVersion: string,
@@ -375,6 +407,7 @@ export class PlistBuddy {
 				oldConfigurationFolder,
 			);
 		}
+
 		const projectWorkspaceConfigName = this.getProjectWorkspaceConfigName(
 			platformProjectRoot,
 			projectRoot,
@@ -407,11 +440,13 @@ export class PlistBuddy {
 			? targetBuildMatch[1].trim()
 			: null;
 	}
+
 	private findExecutable(folder: string): string[] {
 		return glob.sync("*.app", {
 			cwd: folder,
 		});
 	}
+
 	private async invokePlistBuddy(
 		command: string,
 		plistFile: string,

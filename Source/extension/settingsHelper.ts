@@ -32,6 +32,7 @@ export class SettingsHelper {
 				workspaceConfiguration.get("port"),
 			);
 		}
+
 		return Packager.DEFAULT_PORT;
 	}
 
@@ -53,6 +54,7 @@ export class SettingsHelper {
 
 			return <LogLevel>parseInt(LogLevel[<any>logLevelString], 10);
 		}
+
 		return LogLevel.Info;
 	}
 
@@ -76,6 +78,7 @@ export class SettingsHelper {
 				? projectRoot
 				: path.resolve(uri.fsPath, projectRoot);
 		}
+
 		return uri.fsPath;
 	}
 
@@ -173,6 +176,7 @@ export class SettingsHelper {
 
 			return SystemColorTheme[consoleLogsColorTheme];
 		}
+
 		return SystemColorTheme.Light;
 	}
 
@@ -201,6 +205,7 @@ export class SettingsHelper {
 				return version;
 			}
 		}
+
 		return PackagerStatusIndicator.FULL_VERSION;
 	}
 
@@ -215,6 +220,7 @@ export class SettingsHelper {
 				workspaceConfiguration.get("android.logCatArguments"),
 			);
 		}
+
 		return undefined;
 	}
 
@@ -231,6 +237,7 @@ export class SettingsHelper {
 
 			return packageVersion;
 		}
+
 		return undefined;
 	}
 
@@ -245,6 +252,7 @@ export class SettingsHelper {
 				workspaceConfiguration.get("showUserTips"),
 			);
 		}
+
 		return false;
 	}
 
@@ -280,8 +288,10 @@ export class SettingsHelper {
 
 				return exclude ? exclude : [];
 			}
+
 			return [];
 		}
+
 		return [];
 	}
 
@@ -294,6 +304,7 @@ export class SettingsHelper {
 		if (workspaceConfiguration.has("optIn")) {
 			return workspaceConfiguration.get("optIn");
 		}
+
 		return "";
 	}
 
@@ -308,6 +319,7 @@ export class SettingsHelper {
 				workspaceConfiguration.get("showPackagerIndicator"),
 			);
 		}
+
 		return true;
 	}
 
@@ -322,6 +334,7 @@ export class SettingsHelper {
 				workspaceConfiguration.get("setNodeVersion"),
 			);
 		}
+
 		return "";
 	}
 }

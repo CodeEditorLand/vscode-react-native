@@ -135,14 +135,17 @@ export async function sendMessageToMetro(
 	);
 
 	const ws = new WebSocket(`ws://localhost:${port}/message`);
+
 	await new Promise((resolve) => {
 		ws.addEventListener("open", resolve);
 	});
+
 	ws.send(
 		JSON.stringify({
 			version: 2,
 			method,
 		}),
 	);
+
 	ws.close();
 }

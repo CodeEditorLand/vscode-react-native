@@ -36,8 +36,10 @@ export function combineBase64Chunks(chunks: string[]): string {
 
 	for (let i = 0; i < byteArray.length; i++) {
 		buffer.set(new Uint8Array(byteArray[i]), offset);
+
 		offset += byteArray[i].byteLength;
 	}
+
 	const data = new TextDecoder("utf-8").decode(buffer);
 
 	return data;

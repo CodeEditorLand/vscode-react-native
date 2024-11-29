@@ -23,8 +23,11 @@ let elementInspector: child_process.ChildProcess | undefined;
 
 export class RunElementInspector extends Command {
 	codeName = "runInspector";
+
 	label = "Run Element Inspector";
+
 	requiresTrust = false;
+
 	requiresProject = false;
 
 	error = ErrorHelper.getInternalError(
@@ -77,9 +80,11 @@ export class RunElementInspector extends Command {
 		elementInspector.stdout.on("data", (data: string) => {
 			logger.info(data);
 		});
+
 		elementInspector.stderr.on("data", (data: string) => {
 			logger.error(data);
 		});
+
 		elementInspector.once("exit", () => {
 			elementInspector = undefined;
 		});
@@ -88,8 +93,11 @@ export class RunElementInspector extends Command {
 
 export class StopElementInspector extends Command {
 	codeName = "stopInspector";
+
 	label = "Stop Element Inspector";
+
 	requiresTrust = false;
+
 	requiresProject = false;
 
 	error = ErrorHelper.getInternalError(

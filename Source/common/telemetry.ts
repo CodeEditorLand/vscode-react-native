@@ -28,15 +28,21 @@ export module Telemetry {
 
 	export interface TelemetryRequest {
 		extensionId: string;
+
 		extensionVersion: string;
+
 		appInsightsKey: string;
+
 		eventName: string;
+
 		properties: Telemetry.ITelemetryEventProperties;
+
 		measures: Telemetry.ITelemetryEventMeasures;
 	}
 
 	class TelemetryUtils {
 		private static telemetrySettings: ITelemetrySettings;
+
 		private static TELEMETRY_SETTINGS_FILENAME: string =
 			"VSCodeTelemetrySettings.json";
 
@@ -54,14 +60,17 @@ export module Telemetry {
 			reporterToUse: ITelemetryReporter,
 		): void {
 			TelemetryUtils.loadSettings();
+
 			Telemetry.reporter = reporterToUse;
 
 			const telemetryVsSettings =
 				TelemetryUtils.getTelemetryOptInVscodeSetting();
+
 			Telemetry.isOptedIn =
 				telemetryVsSettings === ""
 					? TelemetryUtils.getTelemetryOptInSetting()
 					: telemetryVsSettings;
+
 			TelemetryUtils.saveSettings();
 		}
 
@@ -119,12 +128,15 @@ export module Telemetry {
 	 */
 	export class TelemetryEvent {
 		public name: string;
+
 		public properties: ITelemetryProperties;
+
 		private static PII_HASH_KEY: string =
 			"959069c9-9e93-4fa1-bf16-3f8120d7db0c";
 
 		constructor(name: string, properties?: ITelemetryProperties) {
 			this.name = name;
+
 			this.properties = properties || {};
 		}
 
@@ -147,10 +159,12 @@ export module Telemetry {
 	 */
 	export class TelemetryActivity extends TelemetryEvent {
 		private startTime: [number, number];
+
 		private endTime: [number, number];
 
 		constructor(name: string, properties?: ITelemetryProperties) {
 			super(name, properties);
+
 			this.start();
 		}
 
@@ -176,6 +190,7 @@ export module Telemetry {
 	): void {
 		try {
 			Telemetry.appName = appNameValue;
+
 			TelemetryUtils.init(appVersion, reporterToUse);
 		} catch (err) {
 			console.error(err);
@@ -234,9 +249,13 @@ export module Telemetry {
 
 	interface ITelemetrySettings {
 		[settingKey: string]: any;
+
 		userId?: string;
+
 		machineId?: string;
+
 		optIn?: boolean;
+
 		userType?: string;
 	}
 
@@ -273,11 +292,13 @@ export module Telemetry {
 		if (!extensionTelemetryReporter) {
 			let TelemetryReporter =
 				require("vscode-extension-telemetry").default;
+
 			Telemetry.reporterDictionary[extensionId] = new TelemetryReporter(
 				extensionId,
 				extensionVersion,
 				appInsightsKey,
 			);
+
 			extensionTelemetryReporter =
 				Telemetry.reporterDictionary[extensionId];
 		}

@@ -33,11 +33,15 @@ function printDebuggingError(error: Error, reason: any) {
  */
 export class ForkedAppWorker implements IDebuggeeWorker {
 	protected scriptImporter: ScriptImporter;
+
 	protected debuggeeProcess: cp.ChildProcess | null = null;
 	/** A promise that we use to make sure that worker has been loaded completely before start sending IPC messages */
 	protected workerLoaded: Promise<void> | undefined;
+
 	private bundleLoaded: Promise<void> | undefined;
+
 	private logWriteStream: fs.WriteStream;
+
 	private logDirectory: string | null;
 
 	constructor(
@@ -63,7 +67,9 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 			logger.verbose(
 				`About to kill debuggee with pid ${this.debuggeeProcess.pid}`,
 			);
+
 			this.debuggeeProcess.kill();
+
 			this.debuggeeProcess = null;
 		}
 	}
@@ -122,6 +128,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 			this.logWriteStream = fs.createWriteStream(
 				path.join(this.logDirectory, "nodeProcessLog.txt"),
 			);
+
 			this.logWriteStream.on("error", (err) => {
 				logger.error(
 					`Error creating log file at path: ${String(this.logDirectory)}. Error: ${String(
@@ -129,8 +136,11 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 					)}\n`,
 				);
 			});
+
 			this.debuggeeProcess.stdout.pipe(this.logWriteStream);
+
 			this.debuggeeProcess.stderr.pipe(this.logWriteStream);
+
 			this.debuggeeProcess.on("close", () => {
 				this.logWriteStream.end();
 			});
@@ -154,6 +164,7 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 				const checkWorkerLoaded = setInterval(() => {
 					if (this.workerLoaded) {
 						clearInterval(checkWorkerLoaded);
+
 						resolve();
 					}
 				}, 1000);
@@ -174,11 +185,14 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 			// will take our modified bundle
 			if (rnMessage.url) {
 				const packagerUrl = url.parse(rnMessage.url);
+
 				packagerUrl.host = `${this.packagerAddress}:${this.packagerPort}`;
+
 				rnMessage = {
 					...rnMessage,
 					url: url.format(packagerUrl),
 				};
+
 				logger.verbose(
 					`Packager requested runtime to load script from ${String(rnMessage.url)}`,
 				);
@@ -188,16 +202,19 @@ export class ForkedAppWorker implements IDebuggeeWorker {
 						<string>rnMessage.url,
 						this.projectRootPath,
 					);
+
 				this.bundleLoaded = Promise.resolve();
 
 				return Object.assign({}, rnMessage, {
 					url: `${this.pathToFileUrl(downloadedScript.filepath)}`,
 				});
 			}
+
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.RNMessageWithMethodExecuteApplicationScriptDoesntHaveURLProperty,
 			);
 		})();
+
 		promise.then(
 			(message: RNAppMessage) => {
 				if (this.debuggeeProcess) {

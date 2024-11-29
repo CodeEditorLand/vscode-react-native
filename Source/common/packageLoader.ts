@@ -27,13 +27,16 @@ export class PackageConfig {
 	public getPackageName(): string {
 		return this.packageName;
 	}
+
 	public getRequirePath(): string | undefined {
 		return this.requirePath;
 	}
+
 	public getVersion(withPrefix = false): string | undefined {
 		if (withPrefix) {
 			return this.version ? `@${this.version}` : "";
 		}
+
 		return this.version;
 	}
 
@@ -50,16 +53,22 @@ export class PackageConfig {
 
 export class PackageLoader {
 	private logger: OutputChannelLogger;
+
 	private packagesQueue: string[];
+
 	private requireQueue: ((load?: string[]) => Promise<boolean>)[];
+
 	private isCommandsExecuting: boolean;
 
 	private static instance: PackageLoader;
 
 	private constructor() {
 		this.logger = OutputChannelLogger.getMainChannel();
+
 		this.packagesQueue = [];
+
 		this.requireQueue = [];
+
 		this.isCommandsExecuting = false;
 	}
 
@@ -67,6 +76,7 @@ export class PackageLoader {
 		if (!this.instance) {
 			this.instance = new PackageLoader();
 		}
+
 		return this.instance;
 	}
 
@@ -116,6 +126,7 @@ export class PackageLoader {
 			if (load && load.includes(packageConfig.getStringForInstall())) {
 				packageWasInstalled = true;
 			}
+
 			return this.tryToRequire<T>(
 				packageConfig,
 				resolve,
@@ -146,6 +157,7 @@ export class PackageLoader {
 					if (packageWasInstalled) {
 						throw WRONG_VERSION_ERROR;
 					}
+
 					this.logger.debug(
 						`Dependency ${requiredPackage} is present with another version. Retry after install this package with specific version...`,
 					);
@@ -153,7 +165,9 @@ export class PackageLoader {
 					return false;
 				}
 			}
+
 			const module = customRequire(requiredPackage);
+
 			resolve(module);
 
 			return true;
@@ -163,6 +177,7 @@ export class PackageLoader {
 
 				return true;
 			}
+
 			this.logger.debug(
 				`Dependency ${requiredPackage} is not present. Retry after install...`,
 			);
@@ -177,9 +192,11 @@ export class PackageLoader {
 		...additionalDependencies: PackageConfig[]
 	): Promise<void> {
 		this.packagesQueue.push(packageConfig.getStringForInstall());
+
 		additionalDependencies.forEach((dependency) => {
 			this.packagesQueue.push(dependency.getStringForInstall());
 		});
+
 		this.requireQueue.push(tryToRequire);
 
 		if (!this.isCommandsExecuting) {
@@ -240,6 +257,7 @@ export class PackageLoader {
 					this.packagesQueue = this.getUniquePackages(
 						this.packagesQueue,
 					);
+
 					packagesForInstall.forEach((module) => {
 						const index = this.packagesQueue.indexOf(module);
 
@@ -251,6 +269,7 @@ export class PackageLoader {
 					this.packagesQueue = [];
 				}
 			}
+
 			this.isCommandsExecuting = false;
 		}
 	}

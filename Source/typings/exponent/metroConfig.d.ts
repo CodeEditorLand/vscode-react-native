@@ -4,10 +4,15 @@
 declare module metroConfig {
 	interface ILoadOptions {
 		config?: string;
+
 		maxWorkers?: number;
+
 		port?: number;
+
 		reporter?: Reporter;
+
 		resetCache?: boolean;
+
 		target?: ProjectTarget;
 	}
 

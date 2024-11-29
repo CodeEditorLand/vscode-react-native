@@ -18,7 +18,9 @@ export interface PackageVersion {
 
 export interface RNPackageVersions {
 	reactNativeVersion: string;
+
 	reactNativeWindowsVersion: string;
+
 	reactNativeMacOSVersion: string;
 }
 
@@ -41,9 +43,12 @@ export function RNPackageVersionsToPackageVersion(
 	packageVersions: RNPackageVersions,
 ): PackageVersion[] {
 	const res: PackageVersion[] = [];
+
 	Object.keys(packageVersions).forEach((key) => {
 		const item: PackageVersion = {};
+
 		item[key] = packageVersions[key];
+
 		res.push(item);
 	});
 
@@ -176,6 +181,7 @@ export class ProjectVersionHelper {
 				InternalErrorCode.ReactNativePackageIsNotInstalled,
 			);
 		}
+
 		return {
 			reactNativeVersion: packageVersions["react-native"],
 			reactNativeWindowsVersion:

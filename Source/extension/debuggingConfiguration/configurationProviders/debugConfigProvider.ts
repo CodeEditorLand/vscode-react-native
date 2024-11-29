@@ -15,6 +15,7 @@ import { BaseConfigProvider } from "./baseConfigProvider";
 export class DebugConfigProvider extends BaseConfigProvider {
 	constructor() {
 		super();
+
 		this.maxStepCount = 2;
 	}
 
@@ -55,6 +56,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 					state.config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT
 				) {
 					this.maxStepCount = 3;
+
 					await this.configureUseHermesEngine(input, state.config);
 					// Direct iOS debugging using ios-webkit-debug-proxy is supported
 					// only with applications running on the device
@@ -66,15 +68,19 @@ export class DebugConfigProvider extends BaseConfigProvider {
 		} else if (state.config.platform === PlatformType.Exponent) {
 			return async () => {
 				await this.configureApplicationType(input, state.config);
+
 				await this.configureExpoHostType(input, state.config);
 			};
 		} else if (state.config.platform === PlatformType.ExpoWeb) {
 			return async () => {
 				await this.configureBrowserTarget(input, state.config);
+
 				await this.configureApplicationType(input, state.config);
+
 				state.config.url = "http://localhost:8081";
 			};
 		}
+
 		return;
 	}
 
@@ -107,6 +113,7 @@ export class DebugConfigProvider extends BaseConfigProvider {
 		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		delete config.useHermesEngine;
+
 		await this.configurationProviderHelper.shouldUseHermesEngine(
 			input,
 			config,

@@ -12,22 +12,36 @@ import { ReactNativeProjectHelper } from "../common/reactNativeProjectHelper";
 
 export class RNProjectObserver {
 	private _isRNMacosProject: boolean;
+
 	private _isRNWindowsProject: boolean;
+
 	private _isRNMacosHermesProject: boolean;
+
 	private _isRNWindowsHermesProject: boolean;
+
 	private _isRNAndroidHermesProject: boolean;
+
 	private _isRNIosHermesProject: boolean;
+
 	private _isRNHermesProject: boolean;
+
 	private _rnPackageVersions: RNPackageVersions;
 
 	constructor(projectRoot: string, rnPackageVersions: RNPackageVersions) {
 		this._isRNMacosProject = false;
+
 		this._isRNWindowsProject = false;
+
 		this._isRNMacosHermesProject = false;
+
 		this._isRNWindowsHermesProject = false;
+
 		this._isRNAndroidHermesProject = false;
+
 		this._isRNIosHermesProject = false;
+
 		this._isRNHermesProject = false;
+
 		this._rnPackageVersions = rnPackageVersions;
 
 		this.initialize(projectRoot, rnPackageVersions);
@@ -43,6 +57,7 @@ export class RNProjectObserver {
 			)
 		) {
 			this.updateRNWindowsProjectState(true);
+
 			this.updateRNWindowsHermesProjectState(
 				ReactNativeProjectHelper.isWindowsHermesEnabled(projectRoot),
 			);
@@ -54,6 +69,7 @@ export class RNProjectObserver {
 			)
 		) {
 			this.updateRNMacosProjectState(true);
+
 			this.updateRNMacosHermesProjectState(
 				ReactNativeProjectHelper.isMacOSHermesEnabled(projectRoot),
 			);
@@ -62,6 +78,7 @@ export class RNProjectObserver {
 		this.updateRNAndroidHermesProjectState(
 			ReactNativeProjectHelper.isAndroidHermesEnabled(projectRoot),
 		);
+
 		this.updateRNIosHermesProjectState(
 			ReactNativeProjectHelper.isIOSHermesEnabled(projectRoot),
 		);
@@ -110,6 +127,7 @@ export class RNProjectObserver {
 	public updateRNMacosProjectState(isRNMacosProject: boolean): void {
 		if (isRNMacosProject !== this._isRNMacosProject) {
 			this._isRNMacosProject = isRNMacosProject;
+
 			this.updateContextState(
 				CONTEXT_VARIABLES_NAMES.IS_RN_MACOS_PROJECT,
 				this._isRNMacosProject,
@@ -120,6 +138,7 @@ export class RNProjectObserver {
 	public updateRNWindowsProjectState(isRNWindowsProject: boolean): void {
 		if (isRNWindowsProject !== this._isRNWindowsProject) {
 			this._isRNWindowsProject = isRNWindowsProject;
+
 			this.updateContextState(
 				CONTEXT_VARIABLES_NAMES.IS_RN_WINDOWS_PROJECT,
 				this._isRNWindowsProject,
@@ -132,10 +151,12 @@ export class RNProjectObserver {
 	): void {
 		if (isRNMacosHermesProject !== this._isRNMacosHermesProject) {
 			this._isRNMacosHermesProject = isRNMacosHermesProject;
+
 			this.updateContextState(
 				CONTEXT_VARIABLES_NAMES.IS_RN_MACOS_HERMES_PROJECT,
 				this._isRNMacosHermesProject,
 			);
+
 			this.updateRNHermesProjectState();
 		}
 	}
@@ -145,10 +166,12 @@ export class RNProjectObserver {
 	): void {
 		if (isRNWindowsHermesProject !== this._isRNWindowsHermesProject) {
 			this._isRNWindowsHermesProject = isRNWindowsHermesProject;
+
 			this.updateContextState(
 				CONTEXT_VARIABLES_NAMES.IS_RN_WINDOWS_HERMES_PROJECT,
 				this._isRNWindowsHermesProject,
 			);
+
 			this.updateRNHermesProjectState();
 		}
 	}
@@ -158,10 +181,12 @@ export class RNProjectObserver {
 	): void {
 		if (isRNAndroidHermesProject !== this._isRNAndroidHermesProject) {
 			this._isRNAndroidHermesProject = isRNAndroidHermesProject;
+
 			this.updateContextState(
 				CONTEXT_VARIABLES_NAMES.IS_RN_ANDROID_HERMES_PROJECT,
 				this._isRNAndroidHermesProject,
 			);
+
 			this.updateRNHermesProjectState();
 		}
 	}
@@ -169,10 +194,12 @@ export class RNProjectObserver {
 	public updateRNIosHermesProjectState(isRNIosHermesProject: boolean): void {
 		if (isRNIosHermesProject !== this._isRNIosHermesProject) {
 			this._isRNIosHermesProject = isRNIosHermesProject;
+
 			this.updateContextState(
 				CONTEXT_VARIABLES_NAMES.IS_RN_IOS_HERMES_PROJECT,
 				this._isRNIosHermesProject,
 			);
+
 			this.updateRNHermesProjectState();
 		}
 	}

@@ -16,10 +16,15 @@ const channels: { [channelName: string]: OutputChannelLogger } = {};
 
 export class OutputChannelLogger implements ILogger {
 	public static MAIN_CHANNEL_NAME: string = "React Native";
+
 	private readonly channelLogFilePath: string | undefined;
+
 	private channelLogFileStream: fs.WriteStream;
+
 	private outputChannel: vscode.OutputChannel;
+
 	private logTimestamps: boolean;
+
 	private static forbiddenFileNameSymbols: RegExp = /\W/gi;
 
 	public static disposeChannel(channelName: string): void {
@@ -29,6 +34,7 @@ export class OutputChannelLogger implements ILogger {
 			if (channels[channelName].channelLogFileStream) {
 				channels[channelName].channelLogFileStream.end();
 			}
+
 			delete channels[channelName];
 		}
 	}
@@ -51,6 +57,7 @@ export class OutputChannelLogger implements ILogger {
 				logTimestamps,
 			);
 		}
+
 		return channels[channelName];
 	}
 
@@ -69,13 +76,16 @@ export class OutputChannelLogger implements ILogger {
 				OutputChannelLogger.forbiddenFileNameSymbols,
 				"",
 			);
+
 			this.channelLogFilePath = path.join(
 				channelLogFolder,
 				`${filename}.txt`,
 			);
+
 			this.channelLogFileStream = fs.createWriteStream(
 				this.channelLogFilePath,
 			);
+
 			this.channelLogFileStream.on("error", (err) => {
 				this.error(
 					`Error writing to log file at path: ${String(
@@ -84,8 +94,10 @@ export class OutputChannelLogger implements ILogger {
 				);
 			});
 		}
+
 		if (!lazy) {
 			this.channel = vscode.window.createOutputChannel(this.channelName);
+
 			this.channel.show(this.preserveFocus);
 		}
 	}
@@ -101,6 +113,7 @@ export class OutputChannelLogger implements ILogger {
 				LogLevel[level],
 				this.logTimestamps,
 			);
+
 			this.channel.appendLine(message);
 
 			if (this.channelLogFileStream) {
@@ -124,6 +137,7 @@ export class OutputChannelLogger implements ILogger {
 				tag,
 				this.logTimestamps,
 			);
+
 			this.channel.appendLine(message);
 
 			if (this.channelLogFileStream) {
@@ -150,6 +164,7 @@ export class OutputChannelLogger implements ILogger {
 			LogLevel[LogLevel.Error],
 			this.logTimestamps,
 		);
+
 		this.channel.appendLine(message);
 
 		if (this.channelLogFileStream) {
@@ -208,9 +223,11 @@ export class OutputChannelLogger implements ILogger {
 		if (this.outputChannel) {
 			return this.outputChannel;
 		}
+
 		this.outputChannel = vscode.window.createOutputChannel(
 			this.channelName,
 		);
+
 		this.outputChannel.show(this.preserveFocus);
 
 		return this.outputChannel;

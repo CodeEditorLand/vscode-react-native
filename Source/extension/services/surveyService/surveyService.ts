@@ -25,15 +25,21 @@ enum SurveyNotificationReaction {
 
 interface RemoteSurveyConfig extends IConfig {
 	shortPeriodToRemind: number;
+
 	longPeriodToRemind: number;
+
 	popCoveragePercent: number;
+
 	surveyName: string;
+
 	surveyUrl: string;
+
 	enabled: boolean;
 }
 
 export interface SurveyConfig extends RemoteSurveyConfig {
 	daysLeftBeforeSurvey: number;
+
 	lastExtensionUsageDate?: Date;
 }
 
@@ -41,16 +47,23 @@ export class SurveyService implements vscode.Disposable {
 	private static instance: SurveyService;
 
 	private readonly SURVEY_CONFIG_NAME: string = "surveyConfig";
+
 	private readonly MAX_WAIT_TIME_TO_SHOW_SURVEY_IN_MINUTES: number = 30;
+
 	private readonly MIN_WAIT_TIME_TO_SHOW_SURVEY_IN_MINUTES: number = 5;
+
 	private readonly endpointURL: string =
 		"https://microsoft.github.io/vscode-react-native/surveys/surveyConfig.json";
+
 	private readonly downloadConfigRequest: Promise<RemoteSurveyConfig>;
 
 	private cancellationTokenSource: vscode.CancellationTokenSource =
 		new vscode.CancellationTokenSource();
+
 	private _surveyConfig: SurveyConfig | null = null;
+
 	private extensionFirstTimeInstalled: boolean = false;
+
 	private promptDelayer: Delayer<Promise<void>> = new Delayer();
 
 	public static getInstance(): SurveyService {
@@ -81,8 +94,10 @@ export class SurveyService implements vscode.Disposable {
 			if (this.isCandidate()) {
 				void this.promptDelayer.runWihtDelay(async () => {
 					await this.showSurveyNotification();
+
 					this.surveyConfig.daysLeftBeforeSurvey =
 						this.surveyConfig.longPeriodToRemind;
+
 					this.saveSurveyConfig(this.surveyConfig);
 				}, this.calculateSurveyNotificationDelay());
 			} else {
@@ -98,6 +113,7 @@ export class SurveyService implements vscode.Disposable {
 		}
 
 		this.surveyConfig.lastExtensionUsageDate = curDate;
+
 		this.saveSurveyConfig(this.surveyConfig);
 	}
 
@@ -109,7 +125,9 @@ export class SurveyService implements vscode.Disposable {
 
 	public dispose(): void {
 		this.cancellationTokenSource.cancel();
+
 		this.cancellationTokenSource.dispose();
+
 		this.promptDelayer.dispose();
 	}
 
@@ -193,6 +211,7 @@ export class SurveyService implements vscode.Disposable {
 				SurveyNotificationReaction.CANCEL,
 			);
 		}
+
 		if (
 			selection === giveFeedbackButtonText &&
 			this.surveyConfig.surveyUrl
@@ -200,6 +219,7 @@ export class SurveyService implements vscode.Disposable {
 			void vscode.env.openExternal(
 				vscode.Uri.parse(this.surveyConfig.surveyUrl),
 			);
+
 			this.sendSurveyNotificationReactionTelemetry(
 				this.surveyConfig.surveyName,
 				SurveyNotificationReaction.ACCEPT,
@@ -219,6 +239,7 @@ export class SurveyService implements vscode.Disposable {
 				);
 			}
 		}
+
 		return this._surveyConfig as SurveyConfig;
 	}
 
@@ -232,6 +253,7 @@ export class SurveyService implements vscode.Disposable {
 				rawSurveyConfig.lastExtensionUsageDate,
 			);
 		}
+
 		return rawSurveyConfig;
 	}
 
@@ -239,11 +261,17 @@ export class SurveyService implements vscode.Disposable {
 		surveyConfig: SurveyConfig,
 	): Promise<SurveyConfig> {
 		const remoteConfig = await this.downloadConfigRequest;
+
 		surveyConfig.shortPeriodToRemind = remoteConfig.shortPeriodToRemind;
+
 		surveyConfig.longPeriodToRemind = remoteConfig.longPeriodToRemind;
+
 		surveyConfig.popCoveragePercent = remoteConfig.popCoveragePercent;
+
 		surveyConfig.surveyUrl = remoteConfig.surveyUrl;
+
 		surveyConfig.surveyName = remoteConfig.surveyName;
+
 		surveyConfig.enabled = remoteConfig.enabled;
 
 		return surveyConfig;

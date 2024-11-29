@@ -36,6 +36,7 @@ async function test(): Promise<ValidationResultT> {
 					"Please update macOS in case of errors",
 			};
 		}
+
 		if (result.versionCompare === undefined) {
 			return {
 				status: "failure",
@@ -48,6 +49,7 @@ async function test(): Promise<ValidationResultT> {
 			comment: createNotFoundMessage(label),
 		};
 	}
+
 	return {
 		status: "success",
 	};

@@ -19,6 +19,7 @@ export class LogCatMonitorManager {
 	public static delMonitor(deviceId: string): void {
 		if (this.logCatMonitorsCache[deviceId.toLowerCase()]) {
 			this.logCatMonitorsCache[deviceId.toLowerCase()].dispose();
+
 			delete this.logCatMonitorsCache[deviceId.toLowerCase()];
 		}
 	}

@@ -26,22 +26,36 @@ export class ReactNativeCDPProxy {
 	};
 
 	private server: Server | null;
+
 	private hostAddress: string;
+
 	private port: number;
+
 	private debuggerTarget: Connection | null;
+
 	private applicationTarget: Connection | null;
+
 	private logger: OutputChannelLogger;
+
 	private logLevel: LogLevel;
+
 	private debuggerEndpointHelper: DebuggerEndpointHelper;
+
 	private CDPMessageHandler: BaseCDPMessageHandler;
+
 	private applicationTargetPort: number;
+
 	private browserInspectUri: string;
+
 	private cancellationToken: CancellationToken | undefined;
+
 	private applicationTargetEventEmitter: EventEmitter<unknown> =
 		new EventEmitter();
+
 	private errorEventEmitter: EventEmitter<Error> = new EventEmitter();
 
 	public readonly onError = this.errorEventEmitter.event;
+
 	public readonly onApplicationTargetConnectionClosed =
 		this.applicationTargetEventEmitter.event;
 
@@ -51,15 +65,20 @@ export class ReactNativeCDPProxy {
 		logLevel: LogLevel = LogLevel.None,
 	) {
 		this.port = port;
+
 		this.hostAddress = hostAddress;
+
 		this.logger = OutputChannelLogger.getChannel(
 			"React Native Chrome Proxy",
 			process.env.REACT_NATIVE_TOOLS_LAZY_LOGS !== "false",
 			false,
 			true,
 		);
+
 		this.logLevel = logLevel;
+
 		this.browserInspectUri = "";
+
 		this.debuggerEndpointHelper = new DebuggerEndpointHelper();
 	}
 
@@ -69,28 +88,34 @@ export class ReactNativeCDPProxy {
 		cancellationToken?: CancellationToken,
 	): Promise<void> {
 		this.logLevel = logLevel;
+
 		this.CDPMessageHandler = CDPMessageHandler;
+
 		this.cancellationToken = cancellationToken;
 
 		this.server = await Server.create({
 			port: this.port,
 			host: this.hostAddress,
 		});
+
 		this.server.onConnection(this.onConnectionHandler.bind(this));
 	}
 
 	public async stopServer(): Promise<void> {
 		if (this.server) {
 			this.server.dispose();
+
 			this.server = null;
 		}
 
 		if (this.applicationTarget) {
 			await this.applicationTarget.close();
+
 			this.applicationTarget = null;
 		}
 
 		this.browserInspectUri = "";
+
 		this.cancellationToken = undefined;
 	}
 
@@ -134,11 +159,13 @@ export class ReactNativeCDPProxy {
 		this.applicationTarget.onError(
 			this.onApplicationTargetError.bind(this),
 		);
+
 		this.debuggerTarget.onError(this.onDebuggerTargetError.bind(this));
 
 		this.applicationTarget.onCommand(
 			this.handleApplicationTargetCommand.bind(this),
 		);
+
 		this.debuggerTarget.onCommand(
 			this.handleDebuggerTargetCommand.bind(this),
 		);
@@ -146,12 +173,15 @@ export class ReactNativeCDPProxy {
 		this.applicationTarget.onReply(
 			this.handleApplicationTargetReply.bind(this),
 		);
+
 		this.debuggerTarget.onReply(this.handleDebuggerTargetReply.bind(this));
 
 		this.applicationTarget.onEnd(this.onApplicationTargetClosed.bind(this));
+
 		this.debuggerTarget.onEnd(this.onDebuggerTargetClosed.bind(this));
 
 		this.CDPMessageHandler?.setApplicationTarget(this.applicationTarget);
+
 		this.CDPMessageHandler?.setDebuggerTarget(this.debuggerTarget);
 
 		// dequeue any messages we got in the meantime
@@ -240,12 +270,15 @@ export class ReactNativeCDPProxy {
 
 	private async onApplicationTargetClosed() {
 		this.applicationTarget = null;
+
 		this.applicationTargetEventEmitter.fire({});
 	}
 
 	private async onDebuggerTargetClosed() {
 		this.browserInspectUri = "";
+
 		this.CDPMessageHandler.processDebuggerCDPMessage({ method: "close" });
+
 		this.debuggerTarget = null;
 	}
 }

@@ -42,17 +42,25 @@ const localize = nls.loadMessageBundle();
 
 interface MetroEventData {
 	data: any;
+
 	type: string;
+
 	level: string;
+
 	mode: string;
 }
 
 export class Packager {
 	public static DEFAULT_PORT = 8081;
+
 	private packagerSocket?: WebSocket;
+
 	private packagerProcess: ChildProcess | undefined;
+
 	private packagerStatus: PackagerStatus;
+
 	private packagerStatusIndicator: PackagerStatusIndicator;
+
 	private logger: OutputChannelLogger = OutputChannelLogger.getChannel(
 		OutputChannelLogger.MAIN_CHANNEL_NAME,
 		true,
@@ -63,22 +71,35 @@ export class Packager {
 		new: "open-main.js",
 		old: "opn-main.js",
 	};
+
 	private static RN_VERSION_WITH_OPEN_PKG = "0.60.0";
+
 	private static NODE_AVAIABLE = "18.0.0";
+
 	private static RN_VERSION_WITH_PACKER_ISSUE = "0.73.0";
+
 	private static TS_VERSION_SUPPORTED = "0.70.0";
+
 	private static JS_INJECTOR_DIRPATH =
 		findFileInFolderHierarchy(__dirname, "js-patched") || __dirname;
+
 	private static NODE_MODULES_FODLER_NAME = "node_modules";
+
 	private static OPN_PACKAGE_NAME = {
 		new: "open",
 		old: "opn",
 	};
+
 	private static REACT_NATIVE_PACKAGE_NAME = "react-native";
+
 	private static OPN_PACKAGE_MAIN_FILENAME = "index.js";
+
 	private static fs: FileSystem = new FileSystem();
+
 	private expoHelper: ExponentHelper;
+
 	private runOptions?: IRunOptions;
+
 	private nodeVersion: string;
 
 	constructor(
@@ -88,6 +109,7 @@ export class Packager {
 		packagerStatusIndicator?: PackagerStatusIndicator,
 	) {
 		this.packagerStatus = PackagerStatus.PACKAGER_STOPPED;
+
 		this.packagerStatusIndicator =
 			packagerStatusIndicator || new PackagerStatusIndicator(projectPath);
 	}
@@ -107,6 +129,7 @@ export class Packager {
 				this.projectPath,
 			);
 		}
+
 		return this.expoHelper;
 	}
 
@@ -149,6 +172,7 @@ export class Packager {
 		const versionInfo = await ProjectVersionHelper.getReactNativeVersions(
 			this.projectPath,
 		);
+
 		this.nodeVersion = await getNodeVersion(this.projectPath, env);
 
 		if (this.nodeVersion) {
@@ -164,6 +188,7 @@ export class Packager {
 
 			return isRNWithPackerIssue && !isNodeSupported;
 		}
+
 		return false;
 	}
 
@@ -218,6 +243,7 @@ export class Packager {
 					await this.getExponentHelper().getExpPackagerOptions(
 						projectRoot,
 					);
+
 				Object.keys(packagerOptions).forEach((key) => {
 					args = args.concat([`--${key}`, packagerOptions[key]]);
 				});
@@ -230,6 +256,7 @@ export class Packager {
 				);
 			}
 		}
+
 		return args;
 	}
 
@@ -263,7 +290,9 @@ export class Packager {
 			const versions = await ProjectVersionHelper.getReactNativeVersions(
 				this.projectPath,
 			);
+
 			rnVersion = versions.reactNativeVersion;
+
 			await this.monkeyPatchOpnForRNPackager(rnVersion);
 
 			const args = await this.getPackagerArgs(
@@ -292,6 +321,7 @@ export class Packager {
 				);
 			} else {
 				const rootEnv = path.join(this.getProjectPath(), ".env");
+
 				env = GeneralPlatform.getEnvArgument(env, null, rootEnv);
 			}
 
@@ -348,12 +378,16 @@ export class Packager {
 				`React Native needs Node.js >= 18. You're currently on version ${this.nodeVersion}. Please upgrade Node.js to a supported version and try again.`,
 			);
 		}
+
 		await this.verifiyTSVersion();
+
 		await this.awaitStart();
 
 		if (executedStartPackagerCmd) {
 			this.logger.info(localize("PackagerStarted", "Packager started."));
+
 			this.packagerStatus = PackagerStatus.PACKAGER_STARTED;
+
 			void vscode.commands.executeCommand(
 				"setContext",
 				CONTEXT_VARIABLES_NAMES.IS_RN_PACKAGER_RUNNING,
@@ -376,6 +410,7 @@ export class Packager {
 						),
 					),
 				);
+
 				this.setPackagerStopStateUI();
 
 				return;
@@ -405,12 +440,14 @@ export class Packager {
 							),
 						),
 					);
+
 					this.logger.info(
 						"Packager is already running in this port, you can either stop the packager or use a different port for this project.",
 					);
 				}
 			} else {
 				await this.killPackagerProcess();
+
 				successfullyStopped = true;
 			}
 		} else {
@@ -424,9 +461,12 @@ export class Packager {
 					),
 				);
 			}
+
 			successfullyStopped = true;
 		}
+
 		this.setPackagerStopStateUI();
+
 		void vscode.commands.executeCommand(
 			"setContext",
 			CONTEXT_VARIABLES_NAMES.IS_RN_PACKAGER_RUNNING,
@@ -490,10 +530,13 @@ export class Packager {
 				}
 
 				const bundleURL = `http://${this.getHost()}/${bundleName}?platform=${platform}`;
+
 				this.logger.info(
 					localize("AboutToGetURL", "About to get: {0}", bundleURL),
 				);
+
 				await Request.request(bundleURL, true);
+
 				this.logger.warning(
 					localize(
 						"BundleCacheWasPrewarmed",
@@ -531,6 +574,7 @@ export class Packager {
 			this.packagerSocket.CLOSING
 		) {
 			const wsUrl = `ws://${this.getHost()}/events`;
+
 			this.packagerSocket = new WebSocket(wsUrl, {
 				origin: `http://${this.getHost()}/debugger-ui`, // random url because of packager bug
 			});
@@ -554,19 +598,26 @@ export class Packager {
 
 				if (value.includes(message)) {
 					assert(this.packagerSocket);
+
 					resolve();
+
 					this.packagerSocket.removeListener(
 						"message",
 						resolveHandler,
 					);
+
 					this.packagerSocket.removeListener("error", reject);
+
 					this.packagerSocket.removeListener("close", reject);
 				}
 			};
 
 			assert(this.packagerSocket);
+
 			this.packagerSocket.addListener("error", reject);
+
 			this.packagerSocket.addListener("close", reject);
+
 			this.packagerSocket.addListener("message", resolveHandler);
 		});
 	}
@@ -608,6 +659,7 @@ export class Packager {
 				Packager.NODE_MODULES_FODLER_NAME,
 				OPN_PACKAGE_NAME,
 			);
+
 			this.logger.info(
 				localize(
 					"VerifyOpenModuleMainFileAndEntry",
@@ -652,6 +704,7 @@ export class Packager {
 			if (packagePath) {
 				return packagePath;
 			}
+
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.OpnPackagerLocationNotFound,
 			);
@@ -703,6 +756,7 @@ export class Packager {
 					"Copy open-main.js to open module...",
 				),
 			);
+
 			await new FileSystem().copyFile(
 				JS_INJECTOR_FILEPATH,
 				path.resolve(path.dirname(destnFilePath), JS_INJECTOR_FILENAME),
@@ -718,6 +772,7 @@ export class Packager {
 
 			return opnPackage.setMainFile(JS_INJECTOR_FILENAME);
 		}
+
 		this.logger.info(
 			localize(
 				"OpenMainEntryIsExisting",
@@ -728,6 +783,7 @@ export class Packager {
 
 	private setPackagerStopStateUI() {
 		this.packagerStatus = PackagerStatus.PACKAGER_STOPPED;
+
 		this.packagerStatusIndicator.updatePackagerStatus(
 			PackagerStatus.PACKAGER_STOPPED,
 		);
@@ -744,6 +800,7 @@ export class Packager {
 			this.projectPath,
 			this.logger,
 		).killReactPackager(this.packagerProcess);
+
 		this.packagerProcess = undefined;
 
 		if (
@@ -756,6 +813,7 @@ export class Packager {
 
 			try {
 				await XDL.stopAll(this.projectPath);
+
 				this.logger.debug("Exponent Stopped");
 			} catch (error) {
 				if (error.code !== "NOT_LOGGED_IN") {

@@ -10,8 +10,11 @@ import { Command } from "./util/command";
 
 export class ReloadApp extends Command {
 	codeName = "reloadApp";
+
 	requiresTrust = false;
+
 	label = "ReloadApp";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.CommandFailed,
 		"React Native: Reload App",
@@ -19,6 +22,7 @@ export class ReloadApp extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await sendMessageToMetro("reload", this.project);
 	}
 }

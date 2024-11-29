@@ -37,10 +37,13 @@ export class IOSPlatform extends GeneralMobilePlatform {
 	private static readonly NEW_RN_CLI_BEHAVIOUR_VERSION = "0.60.0";
 
 	private plistBuddy = new PlistBuddy();
+
 	private iosProjectRoot: string;
+
 	private iosDebugModeManager: IOSDebugModeManager;
 
 	private defaultConfiguration: string = "Debug";
+
 	private configurationArgumentName: string = "--configuration";
 
 	protected target?: IOSTarget;
@@ -72,6 +75,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		super(runOptions, platformDeps);
 
 		this.targetManager = new IOSTargetManager();
+
 		this.runOptions.configuration = this.getConfiguration();
 
 		if (this.runOptions.iosRelativeProjectPath) {
@@ -89,6 +93,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			"--project-path",
 			false,
 		);
+
 		this.iosProjectRoot = path.join(
 			this.projectPath,
 			iosProjectFolderPath ||
@@ -101,6 +106,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			"--scheme",
 			false,
 		);
+
 		this.iosDebugModeManager = new IOSDebugModeManager(
 			this.iosProjectRoot,
 			this.projectPath,
@@ -150,6 +156,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 							this.runOptions.target,
 						),
 					);
+
 					this.target = IOSTarget.fromInterface(targets[0]);
 				} else {
 					throw ErrorHelper.getInternalError(
@@ -158,6 +165,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				}
 			}
 		}
+
 		return this.target;
 	}
 
@@ -190,6 +198,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				value: true,
 				isPii: false,
 			};
+
 			this.projectObserver?.updateRNIosHermesProjectState(true);
 		}
 
@@ -237,11 +246,13 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				) {
 					this.runArguments.push("--verbose");
 				}
+
 				const runIosSpawn = new CommandExecutor(
 					this.runOptions.nodeModulesRoot,
 					this.projectPath,
 					this.logger,
 				).spawnReactCommand("run-ios", this.runArguments, { env });
+
 				await new OutputVerifier(
 					() =>
 						this.generateSuccessPatterns(
@@ -313,6 +324,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		if (!(await this.getTarget()).isVirtualTarget) {
 			return;
 		}
+
 		return this.iosDebugModeManager.setAppRemoteDebuggingSetting(
 			/* enable=*/ false,
 			this.runOptions.configuration,
@@ -393,6 +405,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				if (target) {
 					return IOSTarget.fromInterface(target);
 				}
+
 				this.logger.warning(
 					localize(
 						"ThereIsNoIosTargetWithSuchUdid",
@@ -416,6 +429,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				if (target) {
 					return IOSTarget.fromInterface(target);
 				}
+
 				this.logger.warning(
 					localize(
 						"ThereIsNoIosDeviceWithSuchName",
@@ -439,6 +453,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				if (target) {
 					return IOSTarget.fromInterface(target);
 				}
+
 				this.logger.warning(
 					localize(
 						"ThereIsNoIosSimulatorWithSuchName",
@@ -471,8 +486,10 @@ export class IOSPlatform extends GeneralMobilePlatform {
 			} else {
 				successPatterns.push("INSTALLATION SUCCEEDED");
 			}
+
 			return successPatterns;
 		}
+
 		const bundleId = await this.getBundleId();
 
 		if (
@@ -485,6 +502,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 		} else {
 			successPatterns.push(`Launching ${bundleId}\n${bundleId}: `);
 		}
+
 		return successPatterns;
 	}
 
@@ -511,6 +529,7 @@ export class IOSPlatform extends GeneralMobilePlatform {
 				scheme = schemeFromArgs;
 			}
 		}
+
 		return this.plistBuddy.getBundleId(
 			this.iosProjectRoot,
 			this.projectPath,

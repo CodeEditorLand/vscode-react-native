@@ -5,10 +5,12 @@ import { OutputChannelLogger } from "./log/OutputChannelLogger";
 
 export abstract class AbstractDeviceTracker {
 	protected logger: OutputChannelLogger;
+
 	protected isStop: boolean;
 
 	constructor() {
 		this.logger = OutputChannelLogger.getMainChannel();
+
 		this.isStop = false;
 	}
 

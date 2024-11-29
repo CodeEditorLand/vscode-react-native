@@ -14,19 +14,23 @@ interface ISourceMap extends RawSourceMap {
 }
 interface ISourceMapSection {
 	map: ISourceMap;
+
 	offset: { column: number; line: number };
 }
 
 export interface IStrictUrl extends url.Url {
 	pathname: string;
+
 	href: string;
 }
 
 export class SourceMapUtil {
 	private static SourceMapURLGlobalRegex: RegExp =
 		/\/\/(#|@) sourceMappingURL=((?!data:)[^ ]+?)\s*$/gm;
+
 	private static SourceMapURLRegex: RegExp =
 		/\/\/(#|@) sourceMappingURL=((?!data:)[^ ]+?)\s*$/m;
+
 	private static SourceURLRegex: RegExp = /^\/\/[#@] ?sourceURL=(.+)$/m;
 
 	/**
@@ -44,7 +48,9 @@ export class SourceMapUtil {
 			this.getSourceMapRelativeUrl(scriptBody); // sourceMappingRelativeUrl = "/index.ios.map?platform=ios&dev=true"
 		if (sourceMappingRelativeUrl) {
 			const sourceMappingUrl = url.parse(sourceMappingRelativeUrl);
+
 			sourceMappingUrl.protocol = scriptUrl.protocol;
+
 			sourceMappingUrl.host = scriptUrl.host;
 			// parse() repopulates all the properties of the URL
 			result = <IStrictUrl>url.parse(url.format(sourceMappingUrl));
@@ -85,6 +91,7 @@ export class SourceMapUtil {
 			}
 
 			const sourceMapsCombinator = new SourceMapsCombinator();
+
 			sourceMap = sourceMapsCombinator.convert(sourceMap);
 
 			if (sourceMap.sources) {
@@ -101,7 +108,9 @@ export class SourceMapUtil {
 			}
 
 			delete sourceMap.sourcesContent;
+
 			sourceMap.sourceRoot = "";
+
 			sourceMap.file = scriptPath;
 
 			return JSON.stringify(sourceMap);
@@ -135,6 +144,7 @@ export class SourceMapUtil {
 				`//# sourceMappingURL=${path.basename(sourceMappingUrl.pathname)}`,
 			);
 		}
+
 		return scriptBody;
 	}
 
@@ -173,6 +183,7 @@ export class SourceMapUtil {
 
 			return macOsOrWin ? `http:${el}` : el;
 		}
+
 		return null;
 	}
 
@@ -203,12 +214,15 @@ export class SourceMapUtil {
 	) {
 		if (packagerRemoteRoot && packagerLocalRoot) {
 			packagerRemoteRoot = this.makeUnixStylePath(packagerRemoteRoot);
+
 			packagerLocalRoot = this.makeUnixStylePath(packagerLocalRoot);
+
 			sourcePath = sourcePath.replace(
 				packagerRemoteRoot,
 				packagerLocalRoot,
 			);
 		}
+
 		const relativeSourcePath = path.relative(sourcesRootPath, sourcePath);
 
 		return this.makeUnixStylePath(relativeSourcePath);

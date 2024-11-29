@@ -27,6 +27,7 @@ export class ImageFormatter implements IFormatter {
 		if (contentType.startsWith("image/") && response.data) {
 			return response.data;
 		}
+
 		return null;
 	}
 }

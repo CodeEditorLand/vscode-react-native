@@ -12,7 +12,9 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class Prebuild extends ReactNativeCommand {
 	codeName = "expoPrebuild";
+
 	label = "Expo Prebuild";
+
 	error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunPrebuild);
 
 	async baseFn(): Promise<void> {
@@ -30,7 +32,9 @@ export class Prebuild extends ReactNativeCommand {
 			projectRootPath,
 			logger,
 		);
+
 		logger.info("Running expo prebuild command...");
+
 		await commandExecutor.execute("npx expo prebuild");
 	}
 }

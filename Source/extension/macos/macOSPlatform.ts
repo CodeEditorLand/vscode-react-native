@@ -24,6 +24,7 @@ import { MacOSDebugModeManager } from "./macOSDebugModeManager";
  */
 export class MacOSPlatform extends GeneralPlatform {
 	private static SUCCESS_PATTERNS = ["Launching app"];
+
 	private static FAILURE_PATTERNS: PatternToFailure[] = [
 		{
 			pattern: "Unrecognized command 'run-macos'",
@@ -34,7 +35,9 @@ export class MacOSPlatform extends GeneralPlatform {
 	public static DEFAULT_MACOS_PROJECT_RELATIVE_PATH = "macos";
 
 	private macosProjectRoot: string;
+
 	private plistBuddy: PlistBuddy;
+
 	private macOSDebugModeManager: MacOSDebugModeManager;
 
 	constructor(
@@ -48,11 +51,13 @@ export class MacOSPlatform extends GeneralPlatform {
 			"--project-path",
 			false,
 		);
+
 		this.macosProjectRoot = path.join(
 			this.projectPath,
 			macosProjectFolderPath ||
 				MacOSPlatform.DEFAULT_MACOS_PROJECT_RELATIVE_PATH,
 		);
+
 		this.plistBuddy = new PlistBuddy();
 
 		const schemeFromArgs = MacOSPlatform.getOptFromRunArgs(
@@ -60,6 +65,7 @@ export class MacOSPlatform extends GeneralPlatform {
 			"--scheme",
 			false,
 		);
+
 		this.macOSDebugModeManager = new MacOSDebugModeManager(
 			this.macosProjectRoot,
 			this.projectPath,
@@ -82,6 +88,7 @@ export class MacOSPlatform extends GeneralPlatform {
 				value: true,
 				isPii: false,
 			};
+
 			this.projectObserver?.updateRNMacosHermesProjectState(true);
 		}
 
@@ -125,6 +132,7 @@ export class MacOSPlatform extends GeneralPlatform {
 					this.runArguments,
 					{ env },
 				);
+
 				await new OutputVerifier(
 					() => Promise.resolve(MacOSPlatform.SUCCESS_PATTERNS),
 					() => Promise.resolve(MacOSPlatform.FAILURE_PATTERNS),
@@ -229,6 +237,7 @@ export class MacOSPlatform extends GeneralPlatform {
 				scheme = schemeFromArgs;
 			}
 		}
+
 		return scheme;
 	}
 

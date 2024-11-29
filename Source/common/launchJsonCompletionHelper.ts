@@ -28,9 +28,11 @@ export class LaunchJsonCompletionHelper {
 			// If we already have a comma immediatley before the cursor, then no need of adding a comma.
 			return commaPosition === "BeforeCursor" ? json : `,${json}`;
 		}
+
 		if (cursorPosition === "BeforeItem") {
 			return `${json},`;
 		}
+
 		return json;
 	}
 
@@ -41,7 +43,9 @@ export class LaunchJsonCompletionHelper {
 		if (this.isConfigurationArrayEmpty(document)) {
 			return "InsideEmptyArray";
 		}
+
 		const scanner = createScanner(document.getText(), true);
+
 		scanner.setPosition(document.offsetAt(position));
 
 		const nextToken = scanner.scan();
@@ -52,6 +56,7 @@ export class LaunchJsonCompletionHelper {
 		) {
 			return "AfterItem";
 		}
+
 		if (nextToken === SyntaxKind.OpenBraceToken) {
 			return "BeforeItem";
 		}
@@ -90,8 +95,10 @@ export class LaunchJsonCompletionHelper {
 			if (lineText.trim().length !== 0) {
 				return false;
 			}
+
 			startLineNumber -= 1;
 		}
+
 		return false;
 	}
 

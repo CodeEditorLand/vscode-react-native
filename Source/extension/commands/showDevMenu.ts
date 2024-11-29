@@ -18,8 +18,11 @@ const localize = nls.loadMessageBundle();
 
 export class ShowDevMenu extends Command {
 	codeName = "showDevMenu";
+
 	requiresTrust = false;
+
 	label = "Show Dev Menu";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.CommandFailed,
 		localize(
@@ -30,6 +33,7 @@ export class ShowDevMenu extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await sendMessageToMetro("devMenu", this.project);
 	}
 }

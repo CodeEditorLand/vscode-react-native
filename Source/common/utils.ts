@@ -56,6 +56,7 @@ export function areSameDates(date1: Date, date2: Date): boolean {
 
 export function getRandomIntInclusive(min: number, max: number): number {
 	min = Math.ceil(min);
+
 	max = Math.floor(max);
 
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -98,19 +99,24 @@ export function stripJsonTrailingComma(str: string): any {
 
 	try {
 		logger.log("Start parsing .json file...");
+
 		objResult = JSON5.parse(result);
 	} catch {
 		logger.log("Failed to parse .json file. Try it again...");
+
 		objResult = JSON.parse(stripJsonComments(str));
 	}
+
 	return objResult;
 }
 
 export async function wait(time?: number): Promise<void> {
 	const times = time ? time : 2000;
+
 	await new Promise<void>((resolve) => {
 		const timer = setTimeout(() => {
 			clearTimeout(timer);
+
 			resolve();
 		}, times);
 	});
@@ -148,6 +154,7 @@ export function ipToBuffer(ip: string): Buffer {
 
 		return Buffer.from(address.toByteArray());
 	}
+
 	throw new Error("Invalid IP address format.");
 }
 
@@ -192,6 +199,8 @@ export async function switchBundleOptions(
 			"sourcePaths: options.sourcePaths",
 		);
 	}
+
 	const nodeFileSystem = new FileSystem();
+
 	await nodeFileSystem.writeFile(splitBundleOptionsPath, modifiedData);
 }

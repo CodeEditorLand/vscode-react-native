@@ -7,18 +7,23 @@ import { FileSystem } from "../../common/node/fileSystem";
 
 export class PackageNameResolver {
 	private static PackageNameRegexp: RegExp = /package="(.+?)"/;
+
 	private static ManifestName = "AndroidManifest.xml";
+
 	private static DefaultPackagePrefix = "com.";
+
 	private static SourceRootRelPath: string[] = [
 		"android",
 		"app",
 		"src",
 		"main",
 	];
+
 	private static DefaultManifestLocation: string[] =
 		PackageNameResolver.SourceRootRelPath.concat(
 			PackageNameResolver.ManifestName,
 		);
+
 	private applicationName: string;
 
 	constructor(applicationName: string) {
@@ -60,10 +65,13 @@ export class PackageNameResolver {
 						this.applicationName,
 					);
 				}
+
 				return packageName;
 			}
+
 			return this.getDefaultPackageName(this.applicationName);
 		}
+
 		return this.getDefaultPackageName(this.applicationName);
 	}
 

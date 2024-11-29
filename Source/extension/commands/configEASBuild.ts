@@ -22,8 +22,11 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class ConfigEASBuild extends ReactNativeCommand {
 	nodeModulesRoot: string;
+
 	codeName = "createExpoEASBuildConfigFile";
+
 	label = "Config Expo app with EAS build";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToConfigEASBuild,
 	);
@@ -34,6 +37,7 @@ export class ConfigEASBuild extends ReactNativeCommand {
 		const projectRootPath = this.project.getPackager().getProjectPath();
 
 		const expoHelper = this.project.getExponentHelper();
+
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",

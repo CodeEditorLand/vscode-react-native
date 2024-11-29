@@ -15,15 +15,20 @@ export class rnDoctor extends ReactNativeCommand {
 	private static RUN_DOCTOR_SUCCESS_PATTERNS: string[] = [
 		"run doctor succeeded",
 	];
+
 	private static RUN_DOCTOR_FAILURE_PATTERNS: PatternToFailure[] = [
 		{
 			pattern: "Failed to run doctor",
 			errorCode: InternalErrorCode.FailedToRunRNDoctor,
 		},
 	];
+
 	codeName = "doctor";
+
 	label = "React Native Doctor";
+
 	nodeModulesRoot: string;
+
 	error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunRNDoctor);
 
 	async baseFn(): Promise<void> {
@@ -52,6 +57,7 @@ export class rnDoctor extends ReactNativeCommand {
 			() => Promise.resolve(rnDoctor.RUN_DOCTOR_FAILURE_PATTERNS),
 			"run doctor",
 		).process(res);
+
 		await output;
 	}
 }

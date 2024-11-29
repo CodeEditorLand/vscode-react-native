@@ -35,6 +35,7 @@ async function test(): Promise<ValidationResultT> {
 			comment: createVersionErrorMessage(label),
 		};
 	}
+
 	return {
 		status: "failure",
 		comment: createNotFoundMessage(label),

@@ -6,10 +6,12 @@ import { DebugSession } from "vscode";
 
 export class RNSession {
 	private _sessionId: string;
+
 	private _vsCodeDebugSession: DebugSession;
 
 	constructor(vsCodeDebugSession: DebugSession) {
 		this._vsCodeDebugSession = vsCodeDebugSession;
+
 		this._sessionId = uuidv4();
 	}
 

@@ -7,6 +7,7 @@ import { IAttachRequestArgs } from "./debugSessionBase";
 
 export class JsDebugConfigAdapter {
 	private static RNVersion_Direct_Debug = "0.76.0";
+
 	public static createDebuggingConfigForPureRN(
 		attachArgs: IAttachRequestArgs,
 		cdpProxyPort: number,
@@ -106,19 +107,24 @@ export class JsDebugConfigAdapter {
 		if (attachArgs.env) {
 			existingExtraArgs.env = attachArgs.env;
 		}
+
 		if (attachArgs.envFile) {
 			existingExtraArgs.envFile = attachArgs.envFile;
 		}
+
 		existingExtraArgs.sourceMaps = attachArgs.sourceMaps;
+
 		existingExtraArgs.sourceMapRenames = attachArgs.sourceMapRenames;
 
 		if (attachArgs.sourceMapPathOverrides) {
 			existingExtraArgs.sourceMapPathOverrides =
 				attachArgs.sourceMapPathOverrides;
 		}
+
 		if (attachArgs.skipFiles) {
 			existingExtraArgs.skipFiles = attachArgs.skipFiles;
 		}
+
 		if (attachArgs.jsDebugTrace) {
 			existingExtraArgs.trace = attachArgs.jsDebugTrace;
 		}

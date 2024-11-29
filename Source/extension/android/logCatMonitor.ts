@@ -35,7 +35,9 @@ export class LogCatMonitor implements vscode.Disposable {
 	private _userProvidedLogCatArguments: any; // This is user input, we don't know what's here
 
 	private _logCatSpawn: ISpawnResult | null;
+
 	private adbHelper: AdbHelper;
+
 	public deviceId: string;
 
 	constructor(
@@ -44,9 +46,11 @@ export class LogCatMonitor implements vscode.Disposable {
 		userProvidedLogCatArguments?: string[],
 	) {
 		this.deviceId = deviceId;
+
 		this._userProvidedLogCatArguments = userProvidedLogCatArguments;
 
 		this._logger = OutputChannelLogger.getChannel(`LogCat - ${deviceId}`);
+
 		this.adbHelper = adbHelper;
 	}
 
@@ -56,6 +60,7 @@ export class LogCatMonitor implements vscode.Disposable {
 		const adbParameters = ["-s", this.deviceId, "logcat"].concat(
 			logCatArguments,
 		);
+
 		this._logger.debug(
 			`Monitoring LogCat for device ${this.deviceId} with arguments: ${String(
 				logCatArguments,
@@ -69,6 +74,7 @@ export class LogCatMonitor implements vscode.Disposable {
 		const filter = new ExecutionsFilterBeforeTimestamp(
 			/* delayInSeconds*/ 0.5,
 		);
+
 		this._logCatSpawn.stderr.on("data", (data: Buffer) => {
 			filter.execute(() => this._logger.info(data.toString()));
 		});
@@ -79,6 +85,7 @@ export class LogCatMonitor implements vscode.Disposable {
 
 		try {
 			await this._logCatSpawn.outcome;
+
 			this._logger.info(
 				localize(
 					"LogCatMonitoringStoppedBecauseTheProcessExited",
@@ -105,7 +112,9 @@ export class LogCatMonitor implements vscode.Disposable {
 	public dispose(): void {
 		if (this._logCatSpawn) {
 			const logCatSpawn = this._logCatSpawn;
+
 			this._logCatSpawn = null;
+
 			logCatSpawn.spawnedProcess.kill();
 		}
 

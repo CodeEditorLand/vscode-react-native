@@ -17,8 +17,11 @@ const localize = nls.loadMessageBundle();
 
 export interface DebugConfigurationState {
 	config: Partial<ILaunchRequestArgs>;
+
 	scenarioType: DebugScenarioType;
+
 	folder?: vscode.WorkspaceFolder;
+
 	token?: vscode.CancellationToken;
 }
 

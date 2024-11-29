@@ -24,7 +24,9 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class PublishToExpHost extends ReactNativeCommand {
 	codeName = "publishToExpHost";
+
 	label = "Publish To Expo Host";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToPublishToExpHost,
 	);

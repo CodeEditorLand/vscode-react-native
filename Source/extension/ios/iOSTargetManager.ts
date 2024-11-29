@@ -20,11 +20,13 @@ const localize = nls.loadMessageBundle();
 
 export interface IDebuggableIOSTarget extends IDebuggableMobileTarget {
 	name: string;
+
 	system: string;
 }
 
 export class IOSTarget extends MobileTarget implements IDebuggableIOSTarget {
 	protected _system: string;
+
 	protected _name: string;
 
 	public static fromInterface(obj: IDebuggableIOSTarget): IOSTarget {
@@ -45,6 +47,7 @@ export class IOSTarget extends MobileTarget implements IDebuggableIOSTarget {
 		system: string,
 	) {
 		super(isOnline, isVirtualTarget, id, name);
+
 		this._system = system;
 	}
 
@@ -63,19 +66,28 @@ export class IOSTarget extends MobileTarget implements IDebuggableIOSTarget {
 
 export class IOSTargetManager extends MobileTargetManager {
 	private static readonly XCRUN_COMMAND = "xcrun";
+
 	private static readonly SIMCTL_COMMAND = "simctl";
+
 	private static readonly BOOT_COMMAND = `boot`;
+
 	private static readonly SIMULATORS_LIST_COMMAND = `${IOSTargetManager.XCRUN_COMMAND} ${IOSTargetManager.SIMCTL_COMMAND} list devices available --json`;
+
 	private static readonly ALL_DEVICES_LIST_COMMAND = `${IOSTargetManager.XCRUN_COMMAND} xctrace list devices`;
+
 	private static readonly BOOTED_STATE = "Booted";
+
 	private static readonly SIMULATOR_START_TIMEOUT = 120;
+
 	private static readonly ANY_SYSTEM = "AnySystem";
 
 	private childProcess: ChildProcess = new ChildProcess();
+
 	private logger: OutputChannelLogger = OutputChannelLogger.getChannel(
 		OutputChannelLogger.MAIN_CHANNEL_NAME,
 		true,
 	);
+
 	protected targets?: IDebuggableIOSTarget[];
 
 	public async collectTargets(targetType?: TargetType): Promise<void> {
@@ -87,6 +99,7 @@ export class IOSTargetManager extends MobileTargetManager {
 					`${IOSTargetManager.SIMULATORS_LIST_COMMAND}`,
 				),
 			);
+
 			Object.keys(simulators.devices).forEach((rawSystem) => {
 				const temp = rawSystem.split(".").slice(-1)[0].split("-"); // "com.apple.CoreSimulator.SimRuntime.iOS-11-4" -> ["iOS", "11", "4"]
 				const system = `${temp[0]} ${temp.slice(1).join(".")}`; // ["iOS", "11", "4"] -> iOS 11.4
@@ -166,6 +179,7 @@ export class IOSTargetManager extends MobileTargetManager {
 				? this.launchSimulator(selectedTarget)
 				: IOSTarget.fromInterface(selectedTarget);
 		}
+
 		return undefined;
 	}
 
@@ -176,6 +190,7 @@ export class IOSTargetManager extends MobileTargetManager {
 			} else if (targetString === TargetType.Simulator) {
 				return true;
 			}
+
 			const target = (
 				await this.getTargetList(
 					(target) =>
@@ -187,6 +202,7 @@ export class IOSTargetManager extends MobileTargetManager {
 			if (target) {
 				return target.isVirtualTarget;
 			}
+
 			throw Error("There is no any target with specified target string");
 		} catch {
 			throw new Error(
@@ -213,6 +229,7 @@ export class IOSTargetManager extends MobileTargetManager {
 						: el.system === system),
 			)) as IDebuggableIOSTarget | undefined;
 		}
+
 		return;
 	}
 
@@ -226,6 +243,7 @@ export class IOSTargetManager extends MobileTargetManager {
 		if (!targets.find((target) => target.isVirtualTarget)) {
 			return IOSTargetManager.ANY_SYSTEM;
 		}
+
 		const names: Set<string> = new Set(
 			targets.map((target) => target.system),
 		);
@@ -243,8 +261,10 @@ export class IOSTargetManager extends MobileTargetManager {
 					"Select system version of iOS target",
 				),
 			};
+
 			result = await window.showQuickPick(systemsList, quickPickOptions);
 		}
+
 		return result?.toString();
 	}
 
@@ -266,9 +286,12 @@ export class IOSTargetManager extends MobileTargetManager {
 				},
 				true,
 			);
+
 			emulatorProcess.spawnedProcess.unref();
+
 			emulatorProcess.outcome.catch((e) => {
 				emulatorLaunchFailed = true;
+
 				this.logger.error(
 					localize(
 						"ErrorWhileLaunchingSimulator",
@@ -277,12 +300,14 @@ export class IOSTargetManager extends MobileTargetManager {
 						e,
 					),
 				);
+
 				reject(e);
 			});
 
 			const condition = async () => {
 				if (emulatorLaunchFailed)
 					throw new Error("iOS simulator launch failed unexpectedly");
+
 				await this.collectTargets(TargetType.Simulator);
 
 				const onlineTarget = (await this.getTargetList()).find(
@@ -301,6 +326,7 @@ export class IOSTargetManager extends MobileTargetManager {
 				(isBooted) => {
 					if (isBooted) {
 						virtualTarget.isOnline = true;
+
 						this.logger.info(
 							localize(
 								"SimulatorLaunched",
@@ -308,6 +334,7 @@ export class IOSTargetManager extends MobileTargetManager {
 								virtualTarget.name,
 							),
 						);
+
 						resolve(IOSTarget.fromInterface(virtualTarget));
 					} else {
 						reject(

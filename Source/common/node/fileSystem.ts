@@ -23,6 +23,7 @@ export class FileSystem {
 			if (err && err.code === "ENOENT") {
 				return this.mkDir(dir);
 			}
+
 			throw err;
 		}
 	}
@@ -47,6 +48,7 @@ export class FileSystem {
 			if (err && err.code === "ENOENT") {
 				return this.writeFile(file, contents);
 			}
+
 			throw err;
 		}
 	}
@@ -123,6 +125,7 @@ export class FileSystem {
 		if (!nodeFs.existsSync(folder)) {
 			mkdirp.sync(folder);
 		}
+
 		return nodeFs.promises.writeFile(path.join(folder, basename), data);
 	}
 
@@ -147,6 +150,7 @@ export class FileSystem {
 			if (err.code === "ENOENT") {
 				return false;
 			}
+
 			throw err;
 		}
 	}
@@ -169,6 +173,7 @@ export class FileSystem {
 
 			if (stats.isDirectory()) {
 				const childPaths = await this.readDir(p);
+
 				await Promise.all(
 					childPaths.map((childPath) =>
 						this.removePathRecursivelyAsync(
@@ -176,6 +181,7 @@ export class FileSystem {
 						),
 					),
 				);
+
 				await this.rmdir(p);
 			} else {
 				/* file */
@@ -190,9 +196,11 @@ export class FileSystem {
 
 			if (stats.isDirectory()) {
 				const contents = this.fs.readdirSync(p);
+
 				contents.forEach((childPath) =>
 					this.removePathRecursivelySync(path.join(p, childPath)),
 				);
+
 				this.fs.rmdirSync(p);
 			} else {
 				/* file */

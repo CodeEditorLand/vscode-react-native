@@ -12,9 +12,13 @@ import { Command } from "./util/command";
 
 export class SelectAndInsertDebugConfiguration extends Command {
 	codeName = "selectAndInsertDebugConfiguration";
+
 	label = "";
+
 	requiresTrust = false;
+
 	requiresProject = false;
+
 	error = ErrorHelper.getInternalError(InternalErrorCode.CommandFailed);
 
 	async baseFn(

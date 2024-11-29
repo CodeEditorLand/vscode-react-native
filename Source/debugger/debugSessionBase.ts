@@ -65,6 +65,7 @@ export enum DebugSessionStatus {
 
 export interface TerminateEventArgs {
 	debugSession: vscode.DebugSession;
+
 	args: any;
 }
 
@@ -73,17 +74,29 @@ export interface IAttachRequestArgs
 		IRunOptions,
 		vscode.DebugConfiguration {
 	webkitRangeMax: number;
+
 	webkitRangeMin: number;
+
 	cwd: string /* Automatically set by VS Code to the currently opened folder */;
+
 	port: number;
+
 	url?: string;
+
 	useHermesEngine: boolean;
+
 	address?: string;
+
 	trace?: string;
+
 	skipFiles?: [];
+
 	sourceMaps?: boolean;
+
 	sourceMapPathOverrides?: { [key: string]: string };
+
 	jsDebugTrace?: boolean;
+
 	browserTarget?: string;
 }
 
@@ -94,22 +107,33 @@ export interface ILaunchRequestArgs
 export abstract class DebugSessionBase extends LoggingDebugSession {
 	protected static rootSessionTerminatedEventEmitter: vscode.EventEmitter<TerminateEventArgs> =
 		new vscode.EventEmitter<TerminateEventArgs>();
+
 	public static readonly onDidTerminateRootDebugSession =
 		DebugSessionBase.rootSessionTerminatedEventEmitter.event;
 
 	protected readonly stopCommand: string;
+
 	protected readonly terminateCommand: string;
+
 	protected readonly pwaNodeSessionName: string;
 
 	protected appLauncher: AppLauncher;
+
 	protected projectRootPath: string;
+
 	protected isSettingsInitialized: boolean; // used to prevent parameters reinitialization when attach is called from launch function
 	protected previousAttachArgs: IAttachRequestArgs;
+
 	protected cdpProxyLogLevel: LogLevel;
+
 	protected debugSessionStatus: DebugSessionStatus;
+
 	protected nodeSession: vscode.DebugSession | null;
+
 	protected rnSession: RNSession;
+
 	protected vsCodeDebugSession: vscode.DebugSession;
+
 	protected cancellationTokenSource: vscode.CancellationTokenSource;
 
 	constructor(rnSession: RNSession) {
@@ -122,10 +146,15 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 
 		// variables definition
 		this.rnSession = rnSession;
+
 		this.vsCodeDebugSession = rnSession.vsCodeDebugSession;
+
 		this.isSettingsInitialized = false;
+
 		this.debugSessionStatus = DebugSessionStatus.FirstConnection;
+
 		this.cancellationTokenSource = new vscode.CancellationTokenSource();
+
 		this.nodeSession = null;
 	}
 
@@ -137,8 +166,11 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 		response.body = response.body || {};
 
 		response.body.supportsConfigurationDoneRequest = true;
+
 		response.body.supportsEvaluateForHovers = true;
+
 		response.body.supportTerminateDebuggee = true;
+
 		response.body.supportsCancelRequest = true;
 
 		response.body.exceptionBreakpointFilters = [
@@ -182,6 +214,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 					"DebugSessionLogs.txt",
 				);
 			}
+
 			let logLevel: string = args.trace;
 
 			if (logLevel) {
@@ -189,16 +222,19 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 					logLevel[0],
 					logLevel[0].toUpperCase(),
 				);
+
 				logger.setup(
 					Logger.LogLevel[logLevel],
 					chromeDebugCoreLogs || false,
 				);
+
 				this.cdpProxyLogLevel =
 					LogLevel[logLevel] === LogLevel.Verbose
 						? LogLevel.Custom
 						: LogLevel.None;
 			} else {
 				logger.setup(Logger.LogLevel.Log, chromeDebugCoreLogs || false);
+
 				this.cdpProxyLogLevel =
 					LogHelper.LOG_LEVEL === LogLevel.Trace
 						? LogLevel.Custom
@@ -238,9 +274,13 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 				await AppLauncher.getOrCreateAppLauncherByProjectRootPath(
 					projectRootPath,
 				);
+
 			this.appLauncher = appLauncher;
+
 			this.projectRootPath = projectRootPath;
+
 			this.isSettingsInitialized = true;
+
 			this.appLauncher.getOrUpdateNodeModulesRoot(true);
 
 			if (this.vsCodeDebugSession.workspaceFolder) {
@@ -248,6 +288,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 					this.vsCodeDebugSession.workspaceFolder.uri.fsPath,
 				);
 			}
+
 			const settingsPort =
 				this.appLauncher.getPackagerPort(projectRootPath);
 
@@ -268,6 +309,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 		}
 
 		this.cancellationTokenSource.cancel();
+
 		this.cancellationTokenSource.dispose();
 
 		// Then we tell the extension to stop monitoring the logcat, and then we disconnect the debugging session
@@ -289,6 +331,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 		}
 
 		this.debugSessionStatus = DebugSessionStatus.Stopped;
+
 		await logger.dispose();
 
 		DebugSessionBase.rootSessionTerminatedEventEmitter.fire({
@@ -333,7 +376,9 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 				{ reactNativeVersions },
 				this.appLauncher.prepareBaseRunOptions(args),
 			);
+
 			this.appLauncher.getPackager().setRunOptions(runOptions);
+
 			await this.appLauncher.getPackager().start();
 		}
 	}
@@ -348,6 +393,7 @@ export abstract class DebugSessionBase extends LoggingDebugSession {
 
 			return;
 		}
+
 		logger.error(error.message);
 	}
 

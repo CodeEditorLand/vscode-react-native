@@ -20,9 +20,11 @@ export class QRCodeContentProvider implements TextDocumentContentProvider {
 
 		if (!this.cache[stringUri]) {
 			const imageBuffer: Buffer = qr.imageSync(stringUri);
+
 			this.cache[stringUri] =
 				`data:image/png;base64,${imageBuffer.toString("base64")}`;
 		}
+
 		const message = localize(
 			"QRCodeInstructions",
 			'Expo is running. Open your Expo app at<br/><span style="text-decoration: underline">{0}</span><br/>or scan QR code below:',

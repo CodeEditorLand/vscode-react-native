@@ -64,17 +64,24 @@ export const NETWORK_INSPECTOR_LOG_CHANNEL_NAME = "Network Inspector";
 
 export class NetworkInspectorServer {
 	public static readonly SecureServerPort = 8088;
+
 	public static readonly InsecureServerPort = 8089;
 
 	private connections: Map<string, ClientDevice>;
+
 	private secureServer: RSocketServer<any, any> | null;
+
 	private insecureServer: RSocketServer<any, any> | null;
+
 	private certificateProvider: CertificateProvider;
+
 	private initialisePromise: Promise<void> | null;
+
 	private logger: OutputChannelLogger;
 
 	constructor() {
 		this.connections = new Map<string, ClientDevice>();
+
 		this.logger = OutputChannelLogger.getChannel(
 			NETWORK_INSPECTOR_LOG_CHANNEL_NAME,
 		);
@@ -84,23 +91,28 @@ export class NetworkInspectorServer {
 		this.logger.info(
 			localize("StartNetworkinspector", "Starting Network inspector"),
 		);
+
 		TipNotificationService.getInstance().setKnownDateForFeatureById(
 			"networkInspector",
 		);
+
 		TipNotificationService.getInstance().showTipNotification(
 			false,
 			"networkInspectorLogsColorTheme",
 		);
+
 		this.initialisePromise = new Promise(async (resolve, reject) => {
 			this.certificateProvider = new CertificateProvider(adbHelper);
 
 			try {
 				let options =
 					await this.certificateProvider.loadSecureServerConfig();
+
 				this.secureServer = await this.startServer(
 					NetworkInspectorServer.SecureServerPort,
 					options,
 				);
+
 				this.insecureServer = await this.startServer(
 					NetworkInspectorServer.InsecureServerPort,
 				);
@@ -114,6 +126,7 @@ export class NetworkInspectorServer {
 					"Network inspector is working",
 				),
 			);
+
 			resolve();
 		});
 
@@ -127,13 +140,16 @@ export class NetworkInspectorServer {
 			} catch (err) {
 				this.logger.error(err.toString());
 			}
+
 			if (this.secureServer) {
 				this.secureServer.stop();
 			}
+
 			if (this.insecureServer) {
 				this.insecureServer.stop();
 			}
 		}
+
 		this.logger.info(
 			localize(
 				"NetworkInspectorStopped",
@@ -154,6 +170,7 @@ export class NetworkInspectorServer {
 							onConnect(socket);
 						})
 					: net.createServer(onConnect);
+
 				transportServer
 					.on("error", (err) => {
 						this.logger.error(
@@ -163,6 +180,7 @@ export class NetworkInspectorServer {
 								port,
 							),
 						);
+
 						reject(err);
 					})
 					.on("listening", () => {
@@ -171,11 +189,13 @@ export class NetworkInspectorServer {
 								sslConfig ? "Secure" : "Certificate"
 							} server started on port ${port}`,
 						);
+
 						resolve(rsServer!);
 					});
 
 				return transportServer;
 			};
+
 			rsServer = new RSocketServer({
 				getRequestHandler: sslConfig
 					? this.trustedRequestHandler
@@ -185,6 +205,7 @@ export class NetworkInspectorServer {
 					serverFactory: serverFactory,
 				}),
 			});
+
 			rsServer && rsServer.start();
 		});
 	}
@@ -244,6 +265,7 @@ export class NetworkInspectorServer {
 								client.id,
 							),
 						);
+
 						server.removeConnection(client.id);
 					});
 				}
@@ -279,6 +301,7 @@ export class NetworkInspectorServer {
 		if (!payload.data) {
 			return {};
 		}
+
 		const clientData: ClientQuery = JSON.parse(payload.data);
 
 		return {
@@ -303,8 +326,11 @@ export class NetworkInspectorServer {
 
 				const json: {
 					method: "signCertificate";
+
 					csr: string;
+
 					destination: string;
+
 					medium: number | undefined; // OSS's older Client SDK might not send medium information. This is not an issue for internal FB users, as Flipper release is insync with client SDK through launcher.
 				} = rawData;
 
@@ -315,6 +341,7 @@ export class NetworkInspectorServer {
 
 					return new Single((subscriber) => {
 						subscriber.onSubscribe(undefined);
+
 						this.certificateProvider
 							.processCertificateSigningRequest(
 								csr,
@@ -334,10 +361,12 @@ export class NetworkInspectorServer {
 							})
 							.catch((e) => {
 								this.logger.error(e.toString());
+
 								subscriber.onError(e);
 							});
 					});
 				}
+
 				return new Single(() => {});
 			},
 
@@ -352,8 +381,11 @@ export class NetworkInspectorServer {
 				let json:
 					| {
 							method: "signCertificate";
+
 							csr: string;
+
 							destination: string;
+
 							medium: number | undefined;
 					  }
 					| undefined;
@@ -372,6 +404,7 @@ export class NetworkInspectorServer {
 					this.logger.debug("CSR received from device");
 
 					const { csr, destination, medium } = json;
+
 					this.certificateProvider
 						.processCertificateSigningRequest(
 							csr,
@@ -411,6 +444,7 @@ export class NetworkInspectorServer {
 				: Promise.resolve(query.device_id)
 		).then(async (csrId) => {
 			query.device_id = csrId;
+
 			query.app = appNameWithUpdateHint(query);
 
 			const id = buildClientId(
@@ -422,6 +456,7 @@ export class NetworkInspectorServer {
 				},
 				this.logger,
 			);
+
 			this.logger.info(
 				localize("NIDeviceConnected", "Device connected: {0}", id),
 			);
@@ -459,6 +494,7 @@ export class NetworkInspectorServer {
 
 		if (clientDevice) {
 			clientDevice.connection && clientDevice.connection.close();
+
 			this.connections.delete(id);
 		}
 	}

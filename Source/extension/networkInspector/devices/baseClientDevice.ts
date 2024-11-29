@@ -18,6 +18,7 @@ export class BaseClientDevice implements ITarget {
 	protected _isVirtualTarget: boolean;
 	// serial number for this device
 	protected _id: string;
+
 	protected _deviceStatus: DeviceStatus;
 
 	constructor(
@@ -27,9 +28,13 @@ export class BaseClientDevice implements ITarget {
 		name?: string,
 	) {
 		this._id = id;
+
 		this._name = name;
+
 		this._isVirtualTarget = isVirtualTarget;
+
 		this._os = os;
+
 		this._deviceStatus = DeviceStatus.NotPrepared;
 	}
 

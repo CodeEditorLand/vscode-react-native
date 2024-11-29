@@ -10,13 +10,16 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class StartPackager extends ReactNativeCommand {
 	codeName = "startPackager";
+
 	label = "Start Packager";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToStartPackager,
 	);
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 			this.project.getOrUpdateNodeModulesRoot(),
 		);
@@ -24,6 +27,7 @@ export class StartPackager extends ReactNativeCommand {
 		if (await this.project.getPackager().isRunning()) {
 			await this.project.getPackager().stop();
 		}
+
 		await this.project.getPackager().start();
 	}
 }

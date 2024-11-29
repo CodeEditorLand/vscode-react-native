@@ -10,12 +10,15 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class StopPackager extends ReactNativeCommand<[AppLauncher]> {
 	codeName = "stopPackager";
+
 	label = "Stop Packager";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToStopPackager,
 	);
 
 	requiresProject = false;
+
 	requiresTrust = false;
 
 	async onBeforeExecute(appLauncher: AppLauncher): Promise<void> {
@@ -31,6 +34,7 @@ export class StopPackager extends ReactNativeCommand<[AppLauncher]> {
 	// this function requires argument because we need it in extension 'deactivate' hook
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await this.project.getPackager()?.stop();
 	}
 }

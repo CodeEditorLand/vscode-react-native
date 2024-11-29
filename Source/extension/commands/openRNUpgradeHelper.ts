@@ -22,7 +22,9 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class OpenRNUpgradeHelper extends Command {
 	codeName = "openRNUpgradeHelper";
+
 	label = "Open react native upgrade helper in web page";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToOpenRNUpgradeHelper,
 	);

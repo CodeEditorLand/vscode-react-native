@@ -60,19 +60,33 @@ export class AppLauncher {
 	private readonly cdpProxyPort = generateRandomPortNumber();
 	/** localhost */
 	private readonly cdpProxyHostAddress = "127.0.0.1";
+
 	public static readonly CHROME_DATA_DIR = "chrome_sandbox_dir";
+
 	public static readonly EDGE_DATA_DIR = "edge_sandbox_dir";
+
 	private appWorker: MultipleLifetimesAppWorker | null;
+
 	private packager: Packager;
+
 	private exponentHelper: ExponentHelper;
+
 	private reactNativeVersions?: RNPackageVersions;
+
 	private rnCdpProxy: ReactNativeCDPProxy;
+
 	private logger: OutputChannelLogger = OutputChannelLogger.getMainChannel();
+
 	private mobilePlatform: GeneralPlatform;
+
 	private launchScenariosManager: LaunchScenariosManager;
+
 	private debugConfigurationRoot: string;
+
 	private nodeModulesRoot?: string;
+
 	private browserProc: child_process.ChildProcess | null;
+
 	private browserStopEventEmitter: vscode.EventEmitter<Error | undefined> =
 		new vscode.EventEmitter();
 
@@ -103,11 +117,13 @@ export class AppLauncher {
 
 			if (appLauncherFolder) {
 				await onFolderAdded(appLauncherFolder);
+
 				appLauncher =
 					ProjectsStorage.projectsCache[
 						appLauncherFolder.uri.fsPath.toLocaleLowerCase()
 					];
 			}
+
 			if (!appLauncher) {
 				throw new Error(
 					`Could not find AppLauncher by the project root path ${projectRootPath}`,
@@ -141,17 +157,21 @@ export class AppLauncher {
 		this.launchScenariosManager = new LaunchScenariosManager(
 			this.debugConfigurationRoot,
 		);
+
 		this.exponentHelper = new ExponentHelper(
 			this.debugConfigurationRoot,
 			projectRootPath,
 		);
+
 		this.packager = new Packager(
 			this.debugConfigurationRoot,
 			projectRootPath,
 			SettingsHelper.getPackagerPort(workspaceFolder.uri.fsPath),
 			new PackagerStatusIndicator(this.debugConfigurationRoot),
 		);
+
 		this.packager.setExponentHelper(this.exponentHelper);
+
 		this.rnCdpProxy = new ReactNativeCDPProxy(
 			this.cdpProxyHostAddress,
 			this.cdpProxyPort,
@@ -161,6 +181,7 @@ export class AppLauncher {
 	public updateDebugConfigurationRoot(debugConfigurationRoot: string): void {
 		if (this.debugConfigurationRoot !== debugConfigurationRoot) {
 			this.debugConfigurationRoot = debugConfigurationRoot;
+
 			this.launchScenariosManager = new LaunchScenariosManager(
 				this.debugConfigurationRoot,
 			);
@@ -236,7 +257,9 @@ export class AppLauncher {
 
 	public dispose(): void {
 		this.packager.getStatusIndicator().dispose();
+
 		void this.packager.stop(true);
+
 		this.mobilePlatform.dispose();
 	}
 
@@ -251,7 +274,9 @@ export class AppLauncher {
 		const editor = await vscode.window.showTextDocument(document);
 
 		const range = editor.document.lineAt(lineNumber - 1).range;
+
 		editor.selection = new vscode.Selection(range.start, range.end);
+
 		editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
 	}
 
@@ -313,6 +338,7 @@ export class AppLauncher {
 			packager: this.packager,
 			projectObserver: this.projectObserver,
 		};
+
 		this.mobilePlatform = new PlatformResolver().resolveMobilePlatform(
 			launchArgs.platform,
 			mobilePlatformOptions,
@@ -341,7 +367,9 @@ export class AppLauncher {
 						launchArgs,
 					),
 				);
+
 			mobilePlatformOptions.reactNativeVersions = versions;
+
 			extProps =
 				TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 					launchArgs,
@@ -358,6 +386,7 @@ export class AppLauncher {
 							this.mobilePlatform instanceof GeneralMobilePlatform
 						) {
 							generator.step("resolveMobileTarget");
+
 							await this.resolveAndSaveMobileTarget(
 								launchArgs,
 								this.mobilePlatform,
@@ -367,33 +396,39 @@ export class AppLauncher {
 						await this.mobilePlatform.beforeStartPackager();
 
 						generator.step("checkPlatformCompatibility");
+
 						TargetPlatformHelper.checkTargetPlatformSupport(
 							mobilePlatformOptions.platform,
 						);
 
 						generator.step("startPackager");
+
 						await this.mobilePlatform.startPackager();
 
 						// We've seen that if we don't prewarm the bundle cache, the app fails on the first attempt to connect to the debugger logic
 						// and the user needs to Reload JS manually. We prewarm it to prevent that issue
 						generator.step("prewarmBundleCache");
+
 						this.logger.info(
 							localize(
 								"PrewarmingBundleCache",
 								"Prewarming bundle cache. This may take a while ...",
 							),
 						);
+
 						await this.mobilePlatform.prewarmBundleCache();
 
 						generator
 							.step("mobilePlatform.runApp")
 							.add("target", mobilePlatformOptions.target, false);
+
 						this.logger.info(
 							localize(
 								"BuildingAndRunningApplication",
 								"Building and running application.",
 							),
 						);
+
 						await this.mobilePlatform.runApp();
 
 						if (mobilePlatformOptions.isDirect) {
@@ -440,26 +475,31 @@ export class AppLauncher {
 									);
 								}
 							}
+
 							generator.step(
 								"mobilePlatform.disableJSDebuggingMode",
 							);
+
 							this.logger.info(
 								localize(
 									"DisableJSDebugging",
 									"Disable JS Debugging",
 								),
 							);
+
 							await this.mobilePlatform.disableJSDebuggingMode();
 						} else {
 							generator.step(
 								"mobilePlatform.enableJSDebuggingMode",
 							);
+
 							this.logger.info(
 								localize(
 									"EnableJSDebugging",
 									"Enable JS Debugging",
 								),
 							);
+
 							await this.mobilePlatform.enableJSDebuggingMode();
 						}
 					} catch (error) {
@@ -472,7 +512,9 @@ export class AppLauncher {
 							// since the error doesn't affects an application launch process
 							return;
 						}
+
 						generator.addError(error);
+
 						this.logger.error(error);
 
 						throw error;
@@ -503,6 +545,7 @@ export class AppLauncher {
 					);
 				}
 			}
+
 			this.logger.error(error);
 
 			throw error;
@@ -516,6 +559,7 @@ export class AppLauncher {
 			packager: this.packager,
 			projectObserver: this.projectObserver,
 		};
+
 		this.mobilePlatform = new PlatformResolver().resolveMobilePlatform(
 			launchArgs.platform,
 			platformOptions,
@@ -544,7 +588,9 @@ export class AppLauncher {
 						launchArgs,
 					),
 				);
+
 			platformOptions.reactNativeVersions = versions;
+
 			extProps =
 				TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 					launchArgs,
@@ -560,14 +606,17 @@ export class AppLauncher {
 						await this.mobilePlatform.beforeStartPackager();
 
 						generator.step("checkPlatformCompatibility");
+
 						TargetPlatformHelper.checkTargetPlatformSupport(
 							platformOptions.platform,
 						);
 
 						generator.step("startPackager");
+
 						await this.mobilePlatform.startPackager();
 					} catch (error) {
 						generator.addError(error);
+
 						this.logger.error(error);
 
 						throw error;
@@ -598,6 +647,7 @@ export class AppLauncher {
 					);
 				}
 			}
+
 			this.logger.error(error);
 
 			throw error;
@@ -629,6 +679,7 @@ export class AppLauncher {
 						execa,
 					);
 			}
+
 			const browserPath = (await browserFinder.findAll())[0];
 
 			if (browserPath) {
@@ -641,23 +692,30 @@ export class AppLauncher {
 						shell: true,
 					},
 				);
+
 				this.browserProc.unref();
+
 				this.browserProc.on("error", (err) => {
 					const errMsg = localize(
 						"BrowserError",
 						"Browser error: {0}",
 						err.message,
 					);
+
 					this.logger.error(errMsg);
+
 					this.browserStopEventEmitter.fire(err);
 				});
+
 				this.browserProc.once("exit", (code: number) => {
 					const exitMessage = localize(
 						"BrowserExit",
 						"Browser has been closed with exit code: {0}",
 						code,
 					);
+
 					this.logger.info(exitMessage);
+
 					this.browserStopEventEmitter.fire(undefined);
 				});
 			}
@@ -691,6 +749,7 @@ export class AppLauncher {
 		if (launchArgs.url) {
 			args.push(launchArgs.url);
 		}
+
 		return args;
 	}
 
@@ -748,6 +807,7 @@ export class AppLauncher {
 
 		if (args.platform === PlatformType.Exponent) {
 			mobilePlatformOptions.expoHostType = args.expoHostType || "lan";
+
 			mobilePlatformOptions.openExpoQR =
 				typeof args.openExpoQR !== "boolean" ? true : args.openExpoQR;
 		}
@@ -761,10 +821,12 @@ export class AppLauncher {
 				args.target || "simulator",
 				workspaceFolder.uri,
 			);
+
 			mobilePlatformOptions.runArguments = runArgs;
 		} else {
 			mobilePlatformOptions.runArguments = args.runArguments;
 		}
+
 		return mobilePlatformOptions;
 	}
 

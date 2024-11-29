@@ -12,13 +12,18 @@ export enum ValidationCategoryE {
 
 export type ValidationResultT = {
 	status: "failure" | "success" | "partial-success";
+
 	comment?: string;
 };
 
 export interface IValidation {
 	label: string;
+
 	description: string;
+
 	platform?: (typeof process.platform)[];
+
 	category: ValidationCategoryE;
+
 	exec: () => Promise<ValidationResultT>;
 }

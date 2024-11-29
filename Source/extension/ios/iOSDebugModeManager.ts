@@ -7,13 +7,16 @@ import { SimulatorPlist } from "./simulatorPlist";
 
 export class IOSDebugModeManager extends ApplePlatformDebugModeManager {
 	public static WEBSOCKET_EXECUTOR_NAME = "RCTWebSocketExecutor";
+
 	private static EXECUTOR_CLASS_SETTING_NAME = ":RCTDevMenu:executorClass";
 
 	private simulatorPlist: SimulatorPlist;
 
 	constructor(iosProjectRoot: string, projectRoot: string, scheme?: string) {
 		super(iosProjectRoot, projectRoot);
+
 		this.projectRoot = projectRoot;
+
 		this.simulatorPlist = new SimulatorPlist(
 			this.platformProjectRoot,
 			this.projectRoot,
@@ -46,6 +49,7 @@ export class IOSDebugModeManager extends ApplePlatformDebugModeManager {
 					plistFile,
 					IOSDebugModeManager.EXECUTOR_CLASS_SETTING_NAME,
 				));
+
 		await plistBuddy.setPlistBooleanProperty(
 			plistFile,
 			IOSDebugModeManager.REMOTE_DEBUGGING_SETTING_NAME,

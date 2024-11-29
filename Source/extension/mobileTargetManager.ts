@@ -29,6 +29,7 @@ export abstract class MobileTargetManager {
 		if (!this.targets) {
 			await this.collectTargets();
 		}
+
 		return filter
 			? (this.targets as IMobileTarget[]).filter(filter)
 			: (this.targets as IMobileTarget[]);
@@ -44,9 +45,11 @@ export abstract class MobileTargetManager {
 		if (target === TargetType.Device) {
 			return false;
 		}
+
 		if (target === TargetType.Simulator) {
 			return true;
 		}
+
 		throw new Error(
 			localize(
 				"CouldNotRecognizeTargetType",
@@ -81,6 +84,7 @@ export abstract class MobileTargetManager {
 					"Select target device for launch application",
 				),
 			};
+
 			result = await window.showQuickPick(
 				targetList.map<string>(
 					(target) => (target?.name || target?.id) as string,
@@ -88,6 +92,7 @@ export abstract class MobileTargetManager {
 				quickPickOptions,
 			);
 		}
+
 		return result
 			? targetList.find(
 					(target) => target.name === result || target.id === result,

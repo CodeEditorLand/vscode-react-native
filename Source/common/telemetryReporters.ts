@@ -5,14 +5,19 @@ import { Telemetry } from "./telemetry";
 
 export class RemoteTelemetryReporter implements Telemetry.ITelemetryReporter {
 	private extensionId: string;
+
 	private extensionVersion: string;
+
 	private appInsightsKey: string;
 
 	constructor(extensionId: string, extensionVersion: string, key: string) {
 		this.extensionId = extensionId;
+
 		this.extensionVersion = extensionVersion;
+
 		this.appInsightsKey = key;
 	}
+
 	public sendTelemetryEvent(
 		eventName: string,
 		properties?: Telemetry.ITelemetryEventProperties,

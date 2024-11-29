@@ -7,6 +7,7 @@ import { ICDPMessageHandler, ProcessedCDPMessage } from "./ICDPMessageHandler";
 
 export abstract class BaseCDPMessageHandler implements ICDPMessageHandler {
 	protected debuggerTarget: Connection | null;
+
 	protected applicationTarget: Connection | null;
 
 	public processDebuggerCDPMessage(event: any): ProcessedCDPMessage {

@@ -13,7 +13,9 @@ import { Command } from "./util/command";
 // #todo> codeName differs from Class Name
 export class LaunchAndroidEmulator extends Command {
 	codeName = "launchAndroidSimulator";
+
 	label = "Launch Android Emulator";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToStartAndroidEmulator,
 	);
@@ -28,7 +30,9 @@ export class LaunchAndroidEmulator extends Command {
 		const adbHelper = new AdbHelper(projectPath, nodeModulesRoot);
 
 		const androidEmulatorManager = new AndroidTargetManager(adbHelper);
+
 		await androidEmulatorManager.collectTargets(TargetType.Simulator);
+
 		await androidEmulatorManager.selectAndPrepareTarget(
 			(target) => target.isVirtualTarget,
 		);

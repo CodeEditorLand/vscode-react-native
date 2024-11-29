@@ -21,6 +21,7 @@ interface IHostPlatform {
 	setEnvironmentVariable(name: string, value: string): Promise<void>;
 
 	getUserID(): string;
+
 	isCompatibleWithTarget(targetPlatformId: TargetPlatformId): boolean;
 }
 

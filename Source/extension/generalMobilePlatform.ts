@@ -20,6 +20,7 @@ const localize = nls.loadMessageBundle();
 
 export abstract class GeneralMobilePlatform extends GeneralPlatform {
 	protected targetManager: MobileTargetManager;
+
 	protected target?: MobileTarget;
 
 	public async getTargetsCountByFilter(
@@ -39,13 +40,17 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 
 		if (targetString.toLowerCase() === TargetType.Simulator) {
 			isAnyTarget = true;
+
 			isVirtualTarget = true;
 		} else if (targetString.toLowerCase() === TargetType.Device) {
 			isAnyTarget = true;
+
 			isVirtualTarget = false;
 		} else {
 			await this.targetManager.collectTargets();
+
 			collectTargetsCalled = true;
+
 			isVirtualTarget =
 				await this.targetManager.isVirtualTarget(targetString);
 		}
@@ -61,6 +66,7 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 			this.runOptions.target = isVirtualTarget
 				? TargetType.Simulator
 				: TargetType.Device;
+
 			this.runArguments = this.getRunArguments();
 		};
 
@@ -89,12 +95,14 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 						targetString,
 					),
 				);
+
 				this.logger.warning(
 					localize(
 						"ContinueWithRnCliWorkflow",
 						"Continue using standard RN CLI workflow.",
 					),
 				);
+
 				cleanupTargetModifications();
 			} else {
 				// For iOS we should pass exact target id,
@@ -123,6 +131,7 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 				);
 
 				this.logger.warning(error);
+
 				this.logger.warning(
 					localize(
 						"ContinueWithRnCliWorkflow",
@@ -151,6 +160,7 @@ export abstract class GeneralMobilePlatform extends GeneralPlatform {
 
 	protected addTargetToRunArgs(target: MobileTarget): void {
 		this.runOptions.target = target.id;
+
 		this.runArguments = this.getRunArguments();
 	}
 

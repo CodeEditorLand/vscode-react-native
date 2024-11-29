@@ -24,10 +24,14 @@ import { InspectorView } from "./inspectorView";
 
 interface ConsoleNetworkRequestDataView {
 	title: string;
+
 	networkRequestData: {
 		URL: string;
+
 		Method: string;
+
 		Status: number;
+
 		Duration: string;
 		"Request Headers": Record<string, string>;
 		"Response Headers": Record<string, string>;
@@ -39,8 +43,10 @@ interface ConsoleNetworkRequestDataView {
 
 export class InspectorConsoleView extends InspectorView {
 	private readonly maxResponseBodyLength = 75000;
+
 	private readonly openDeveloperToolsCommand =
 		"workbench.action.toggleDevTools";
+
 	private readonly consoleLogsColors = {
 		Blue: "#0000ff",
 		Orange: "#f28b54",
@@ -51,6 +57,7 @@ export class InspectorConsoleView extends InspectorView {
 	public async init(): Promise<void> {
 		if (!this.isInitialized) {
 			this.isInitialized = true;
+
 			await vscode.commands.executeCommand(
 				this.openDeveloperToolsCommand,
 			);
@@ -148,8 +155,10 @@ export class InspectorConsoleView extends InspectorView {
 			};
 
 			newPartialResponseEntry = Object.assign({}, partialResponseEntry);
+
 			newPartialResponseEntry.followupChunks[followupChunk.index] =
 				followupChunk.data;
+
 			responseId = followupChunk.id;
 		} else {
 			// It's an initial chunk
@@ -160,18 +169,22 @@ export class InspectorConsoleView extends InspectorView {
 			) ?? {
 				followupChunks: {},
 			};
+
 			newPartialResponseEntry = {
 				...partialResponseEntry,
 				initialResponse: partialResponse,
 			};
+
 			responseId = partialResponse.id;
 		}
+
 		const response = this.assembleChunksIfResponseIsComplete(
 			newPartialResponseEntry,
 		);
 
 		if (response) {
 			this.handleResponse(response);
+
 			this.partialResponses.delete(responseId);
 		} else {
 			this.partialResponses.set(responseId, newPartialResponseEntry);
@@ -279,6 +292,7 @@ export class InspectorConsoleView extends InspectorView {
 		searchParams: URLSearchParams,
 	): Record<string, string> {
 		const formattedSearchParams: Record<string, string> = {};
+
 		searchParams.forEach((value: string, key: string) => {
 			formattedSearchParams[key] = value;
 		});

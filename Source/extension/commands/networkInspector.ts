@@ -25,7 +25,9 @@ const localize = nls.loadMessageBundle();
 
 interface NetworkInspectorModule {
 	networkInspector: NetworkInspectorServer;
+
 	androidDeviceTracker: AndroidDeviceTracker;
+
 	iOSDeviceTracker: IOSDeviceTracker | undefined;
 }
 
@@ -34,8 +36,11 @@ let networkInspectorModule: NetworkInspectorModule | undefined;
 
 export class StartNetworkInspector extends Command {
 	codeName = "startNetworkInspector";
+
 	label = "Run Network Inspector";
+
 	requiresTrust = false;
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.CouldNotStartNetworkInspector,
 	);
@@ -79,8 +84,11 @@ export class StartNetworkInspector extends Command {
 			if (iOSDeviceTracker) {
 				await iOSDeviceTracker.start();
 			}
+
 			await androidDeviceTracker.start();
+
 			await networkInspector.start(adbHelper);
+
 			void vscode.commands.executeCommand(
 				"setContext",
 				CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,
@@ -96,8 +104,11 @@ export class StartNetworkInspector extends Command {
 
 export class StopNetworkInspector extends Command {
 	codeName = "stopNetworkInspector";
+
 	label = "Stop Network Inspector";
+
 	requiresTrust = false;
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.CouldNotStopNetworkInspector,
 	);
@@ -109,10 +120,15 @@ export class StopNetworkInspector extends Command {
 
 async function stopNetworkInspector() {
 	networkInspectorModule?.androidDeviceTracker?.stop();
+
 	networkInspectorModule?.iOSDeviceTracker?.stop();
+
 	await networkInspectorModule?.networkInspector?.stop();
+
 	networkInspectorModule = undefined;
+
 	InspectorViewFactory.clearCache();
+
 	void vscode.commands.executeCommand(
 		"setContext",
 		CONTEXT_VARIABLES_NAMES.IS_RNT_NETWORK_INSPECTOR_RUNNING,

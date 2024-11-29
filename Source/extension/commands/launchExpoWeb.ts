@@ -19,7 +19,9 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class launchExpoWeb extends Command {
 	codeName = "launchExpoWeb";
+
 	label = "Launch ExpoWeb";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToLaunchExpoWeb,
 	);
@@ -28,6 +30,7 @@ export class launchExpoWeb extends Command {
 		assert(this.project);
 
 		const expoHelper = this.project.getExponentHelper();
+
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",
@@ -44,6 +47,7 @@ export class launchExpoWeb extends Command {
 
 			return;
 		}
+
 		await runExpoWeb(this.project);
 	}
 }
@@ -55,8 +59,10 @@ async function runExpoWeb(project: AppLauncher) {
 			packager: project.getPackager(),
 		},
 	);
+
 	platform;
 
 	await platform.beforeStartPackager();
+
 	await platform.startPackager();
 }

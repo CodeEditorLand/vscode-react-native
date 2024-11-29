@@ -13,14 +13,18 @@ interface IPackageDependencyDict {
 
 export interface IPackageInformation {
 	name: string;
+
 	version: string;
+
 	dependencies?: IPackageDependencyDict;
+
 	main?: string;
 	[key: string]: any;
 }
 
 export class Package {
 	private INFORMATION_PACKAGE_FILENAME = "package.json";
+
 	private DEPENDENCIES_SUBFOLDER = "node_modules";
 
 	private fileSystem: FileSystem;
@@ -29,6 +33,7 @@ export class Package {
 
 	constructor(path: string, { fileSystem = new FileSystem() } = {}) {
 		this._path = path;
+
 		this.fileSystem = fileSystem;
 	}
 
@@ -65,6 +70,7 @@ export class Package {
 		if (typeof version === "string") {
 			return version;
 		}
+
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.CouldNotParsePackageVersion,
 			this.informationJsonFilePath(),
@@ -74,6 +80,7 @@ export class Package {
 
 	public async setMainFile(value: string): Promise<void> {
 		const packageInformation = await this.parsePackageInformation();
+
 		packageInformation.main = value;
 
 		return this.fileSystem.writeFile(

@@ -3,7 +3,9 @@
 
 export interface ITarget {
 	name?: string;
+
 	id?: string;
+
 	isVirtualTarget: boolean;
 }
 
@@ -17,8 +19,11 @@ export interface IDebuggableMobileTarget extends IMobileTarget {
 
 export class MobileTarget implements IDebuggableMobileTarget {
 	protected _name?: string;
+
 	protected _id: string;
+
 	protected _isOnline: boolean;
+
 	protected _isVirtualTarget: boolean;
 
 	constructor(
@@ -28,8 +33,11 @@ export class MobileTarget implements IDebuggableMobileTarget {
 		name?: string,
 	) {
 		this._isOnline = isOnline;
+
 		this._isVirtualTarget = isVirtualTarget;
+
 		this._name = name;
+
 		this._id = id;
 	}
 

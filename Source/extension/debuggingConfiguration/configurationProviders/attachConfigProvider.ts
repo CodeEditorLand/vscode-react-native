@@ -16,7 +16,9 @@ export class AttachConfigProvider extends BaseConfigProvider {
 
 	constructor() {
 		super();
+
 		this.defaultAddress = "localhost";
+
 		this.maxStepCount = 3;
 	}
 
@@ -25,6 +27,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 		state: DebugConfigurationState,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		this.maxStepCount = 3;
+
 		state.config = {};
 
 		const config: Partial<ILaunchRequestArgs> = {
@@ -50,6 +53,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 
 			return () => this.configureDirectPlatform(input, state.config);
 		}
+
 		return () => this.configureAddress(input, state.config);
 	}
 
@@ -58,6 +62,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		delete config.platform;
+
 		await this.configurationProviderHelper.selectPlatform(
 			input,
 			config,
@@ -68,6 +73,7 @@ export class AttachConfigProvider extends BaseConfigProvider {
 
 		if (!config.platform) {
 			delete config.platform;
+
 			delete config.useHermesEngine;
 		} else {
 			config.useHermesEngine = false;

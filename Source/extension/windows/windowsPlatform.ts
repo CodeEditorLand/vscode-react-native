@@ -23,7 +23,9 @@ export class WindowsPlatform extends GeneralPlatform {
 	protected static NO_PACKAGER_VERSION = "0.53.0";
 
 	private static readonly RNW_CLI_EXISTS_VERSION = "0.63.0";
+
 	private static SUCCESS_PATTERNS = ["Starting the app"];
+
 	private static FAILURE_PATTERNS: PatternToFailure[] = [
 		{
 			pattern: "Unrecognized command 'run-windows'",
@@ -65,6 +67,7 @@ export class WindowsPlatform extends GeneralPlatform {
 				value: true,
 				isPii: false,
 			};
+
 			this.projectObserver?.updateRNWindowsHermesProjectState(true);
 		}
 
@@ -128,6 +131,7 @@ export class WindowsPlatform extends GeneralPlatform {
 					this.runArguments,
 					{ env },
 				);
+
 				await new OutputVerifier(
 					() => Promise.resolve(WindowsPlatform.SUCCESS_PATTERNS),
 					() => Promise.resolve(WindowsPlatform.FAILURE_PATTERNS),

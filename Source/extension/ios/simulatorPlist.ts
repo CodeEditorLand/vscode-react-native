@@ -21,11 +21,17 @@ const localize = nls.loadMessageBundle();
 
 export class SimulatorPlist {
 	private iosProjectRoot: string;
+
 	private projectRoot: string;
+
 	private scheme?: string;
+
 	private logger: OutputChannelLogger = OutputChannelLogger.getMainChannel();
+
 	private nodeFileSystem: FileSystem;
+
 	private plistBuddy: PlistBuddy;
+
 	private nodeChildProcess: ChildProcess;
 
 	constructor(
@@ -39,10 +45,15 @@ export class SimulatorPlist {
 		} = {},
 	) {
 		this.iosProjectRoot = iosProjectRoot;
+
 		this.projectRoot = projectRoot;
+
 		this.scheme = scheme;
+
 		this.nodeFileSystem = nodeFileSystem;
+
 		this.plistBuddy = plistBuddy || new PlistBuddy();
+
 		this.nodeChildProcess = nodeChildProcess;
 	}
 
@@ -79,6 +90,7 @@ export class SimulatorPlist {
 		);
 		// Look through $SIMULATOR_HOME/Containers/Data/Application/*/Library/Preferences to find $BUNDLEID.plist
 		const apps = await this.nodeFileSystem.readDir(pathBefore);
+
 		this.logger.info(
 			`About to search for plist in base folder: ${pathBefore} pathAfter: ${pathAfter} in each of the apps: ${String(
 				apps,
@@ -93,6 +105,7 @@ export class SimulatorPlist {
 			throw new Error(`Unable to find plist file for ${bundleId}`);
 		} else if (plistCandidates.length > 1) {
 			TelemetryHelper.sendSimpleEvent("multipleDebugPlistFound");
+
 			this.logger.warning(
 				ErrorHelper.getWarning(
 					localize(
@@ -102,6 +115,7 @@ export class SimulatorPlist {
 				),
 			);
 		}
+
 		return plistCandidates[0];
 	}
 }

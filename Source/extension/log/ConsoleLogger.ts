@@ -11,6 +11,7 @@ export class ConsoleLogger implements ILogger {
 
 		if (level >= LogHelper.LOG_LEVEL) {
 			message = ConsoleLogger.getFormattedMessage(message, level);
+
 			console.log(message);
 		}
 	}

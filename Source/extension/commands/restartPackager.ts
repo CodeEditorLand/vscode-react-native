@@ -11,7 +11,9 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class RestartPackager extends ReactNativeCommand {
 	codeName = "restartPackager";
+
 	label = "Restart Packager";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToRestartPackager,
 	);
@@ -20,6 +22,7 @@ export class RestartPackager extends ReactNativeCommand {
 		assert(this.project);
 
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
+
 		await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 			nodeModulesRoot,
 		);

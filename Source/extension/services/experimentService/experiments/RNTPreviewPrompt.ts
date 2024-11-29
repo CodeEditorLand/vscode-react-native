@@ -57,6 +57,7 @@ export default class RNTPreviewPrompt implements IExperiment {
 
 		if (newExpConfig.popCoveragePercent > Math.random()) {
 			const buttonText = "Open extension";
+
 			void vscode.window
 				.showInformationMessage(
 					PROMPT_TITLES.RNT_PREVIEW_PROMPT,
@@ -68,6 +69,7 @@ export default class RNTPreviewPrompt implements IExperiment {
 							"workbench.extensions.search",
 							promptParameters.extensionId,
 						);
+
 						void vscode.commands.executeCommand(
 							"extension.open",
 							promptParameters.extensionId,

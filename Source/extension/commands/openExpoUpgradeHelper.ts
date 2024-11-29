@@ -13,7 +13,9 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class openExpoUpgradeHelper extends Command {
 	codeName = "openExpoUpgradeHelper";
+
 	label = "Open expo upgrade helper in web page";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToOpenExpoUpgradeHelper,
 	);
@@ -22,7 +24,9 @@ export class openExpoUpgradeHelper extends Command {
 		assert(this.project);
 
 		const ExpoUrl = "https://docs.expo.dev/bare/upgrade";
+
 		logger.info("Open expo upgrade helper in web browser.");
+
 		await vscode.env.openExternal(vscode.Uri.parse(ExpoUrl));
 	}
 }

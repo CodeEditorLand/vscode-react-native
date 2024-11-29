@@ -29,7 +29,9 @@ class RunAsError extends Error {
 
 	constructor(code: RunAsErrorCode, message?: string) {
 		super(message);
+
 		this.code = code;
+
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
 }
@@ -128,6 +130,7 @@ async function _pushFile(
 			deviceId,
 			`push ${sourceFilepath} ${tmpFilePath}`,
 		);
+
 		logger?.debug(pushRes);
 
 		const command = `cp "${tmpFilePath}" "${destFilepath}" && chmod 644 "${destFilepath}"`;
@@ -138,6 +141,7 @@ async function _pushFile(
 			app,
 			command,
 		);
+
 		logger?.debug(appCommandRes);
 	} finally {
 		await adbHelper.executeShellCommand(deviceId, `rm ${tmpFilePath}`);
@@ -160,6 +164,7 @@ function validateAppName(app: string): Promise<string> {
 	if (app.match(allowedAppNameRegex)) {
 		return Promise.resolve(app);
 	}
+
 	return Promise.reject(new Error(`Disallowed run-as user: ${app}`));
 }
 
@@ -167,6 +172,7 @@ function validateFilePath(filePath: string): Promise<string> {
 	if (!filePath.match(/'/)) {
 		return Promise.resolve(filePath);
 	}
+
 	return Promise.reject(
 		new Error(`Disallowed escaping filepath: ${filePath}`),
 	);
@@ -176,6 +182,7 @@ function validateFileContent(content: string): Promise<string> {
 	if (!content.match(/"/)) {
 		return Promise.resolve(content);
 	}
+
 	return Promise.reject(
 		new Error(`Disallowed escaping file content: ${content}`),
 	);
@@ -206,6 +213,7 @@ function _push(
 						throw error;
 					});
 			}
+
 			throw error;
 		});
 }
@@ -235,6 +243,7 @@ function _pull(
 					throw error;
 				});
 			}
+
 			throw error;
 		},
 	);
@@ -281,17 +290,20 @@ function _executeCommandWithRunner(
 					`Android package ${app} is not an application. To use it with Flipper, either run adb as root or add an <application> tag to AndroidManifest.xml`,
 				);
 			}
+
 			if (output.match(appNotDebuggableRegex)) {
 				throw new RunAsError(
 					RunAsErrorCode.NotDebuggable,
 					`Android app ${app} is not debuggable. To use it with Flipper, add android:debuggable="true" to the application section of AndroidManifest.xml`,
 				);
 			}
+
 			if (output.toLowerCase().match(operationNotPermittedRegex)) {
 				throw new Error(
 					`Your android device (${deviceId}) does not support the adb shell run-as command. We're tracking this at https://github.com/facebook/flipper/issues/92`,
 				);
 			}
+
 			return output;
 		});
 }

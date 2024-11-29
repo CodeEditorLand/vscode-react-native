@@ -66,11 +66,15 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	];
 
 	private packageName: string;
+
 	private adbHelper: AdbHelper;
+
 	private logCatMonitor: LogCatMonitor | null = null;
+
 	private needsToLaunchApps: boolean = false;
 
 	protected targetManager: AndroidTargetManager;
+
 	protected target?: AndroidTarget;
 
 	// We set remoteExtension = null so that if there is an instance of androidPlatform that wants to have it's custom remoteExtension it can. This is specifically useful for tests.
@@ -79,11 +83,13 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		platformDeps: MobilePlatformDeps = {},
 	) {
 		super(runOptions, platformDeps);
+
 		this.adbHelper = new AdbHelper(
 			this.runOptions.projectRoot,
 			runOptions.nodeModulesRoot,
 			this.logger,
 		);
+
 		this.targetManager = new AndroidTargetManager(this.adbHelper);
 	}
 
@@ -135,6 +141,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 							this.runOptions.target,
 						),
 					);
+
 					this.target = AndroidTarget.fromInterface(onlineTargets[0]);
 				} else {
 					throw ErrorHelper.getInternalError(
@@ -143,6 +150,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				}
 			}
 		}
+
 		return this.target;
 	}
 
@@ -161,6 +169,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				value: true,
 				isPii: false,
 			};
+
 			this.projectObserver?.updateRNAndroidHermesProjectState(true);
 		}
 
@@ -209,6 +218,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 						"--main-activity",
 						this.runOptions.debugLaunchActivity,
 					);
+
 					this.adbHelper.setLaunchActivity(
 						this.runOptions.debugLaunchActivity,
 					);
@@ -246,7 +256,9 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 					} finally {
 						targetId =
 							await this.getTargetIdForRunApp(onlineTargetsIds);
+
 						this.packageName = await this.getPackageName();
+
 						devicesIdsForLaunch = [targetId];
 					}
 				} catch (error) {
@@ -254,6 +266,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 						targetId =
 							await this.getTargetIdForRunApp(onlineTargetsIds);
 					}
+
 					if (
 						error.message ===
 							ErrorHelper.getInternalError(
@@ -264,6 +277,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 					) {
 						/* If it failed due to multiple devices, we'll apply this workaround to make it work anyways */
 						this.needsToLaunchApps = true;
+
 						devicesIdsForLaunch = shouldLaunchInAllDevices
 							? onlineTargetsIds
 							: [targetId];
@@ -315,6 +329,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 			if (this.runOptions.variant) {
 				runArguments.push("--variant", this.runOptions.variant);
 			}
+
 			if (this.runOptions.target) {
 				if (
 					this.runOptions.target !== TargetType.Device &&
@@ -331,6 +346,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 	public dispose(): void {
 		if (this.logCatMonitor) {
 			LogCatMonitorManager.delMonitor(this.logCatMonitor.deviceId);
+
 			this.logCatMonitor = null;
 		}
 	}
@@ -353,6 +369,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				);
 			}
 		}
+
 		return undefined;
 	}
 
@@ -370,6 +387,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				"--deviceId",
 			);
 		}
+
 		return deviceId
 			? deviceId
 			: this.runOptions.target &&
@@ -386,6 +404,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 		if (appIdSuffixIndex > -1) {
 			return this.runArguments[appIdSuffixIndex + 1];
 		}
+
 		return undefined;
 	}
 
@@ -401,6 +420,7 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 				deviceId,
 			);
 		}
+
 		return this.startMonitoringLogCat(
 			deviceId,
 			this.runOptions.logCatArguments,
@@ -466,11 +486,14 @@ export class AndroidPlatform extends GeneralMobilePlatform {
 			this.adbHelper,
 			logCatArguments,
 		);
+
 		LogCatMonitorManager.addMonitor(this.logCatMonitor);
+
 		this.logCatMonitor
 			.start() // The LogCat will continue running forever, so we don't wait for it
 			.catch((error) => {
 				this.logger.warning(error);
+
 				this.logger.warning(
 					localize(
 						"ErrorWhileMonitoringLogCat",

@@ -18,8 +18,11 @@
 
 export type ResponseFollowupChunk = {
 	id: string;
+
 	totalChunks: number;
+
 	index: number;
+
 	data: string;
 };
 
@@ -27,54 +30,81 @@ export type RequestId = string;
 
 export type Header = {
 	key: string;
+
 	value: string;
 };
 
 export type Insights = {
 	dnsLookupTime: number | null | undefined;
+
 	connectTime: number | null | undefined;
+
 	sslHandshakeTime: number | null | undefined;
+
 	preTransferTime: number | null | undefined;
+
 	redirectsTime: number | null | undefined;
+
 	timeToFirstByte: number | null | undefined;
+
 	transferTime: number | null | undefined;
+
 	postProcessingTime: number | null | undefined;
 	// Amount of transferred data can be different from total size of payload.
 	bytesTransfered: number | null | undefined;
+
 	transferSpeed: number | null | undefined;
+
 	retries: RetryInsights | null | undefined;
 };
 
 export type RetryInsights = {
 	count: number;
+
 	limit: number;
+
 	timeSpent: number;
 };
 
 export type Request = {
 	id: RequestId;
+
 	timestamp: number;
+
 	method: string;
+
 	url: string;
+
 	headers: Array<Header>;
+
 	data?: string | null;
 };
 
 export type Response = {
 	id: RequestId;
+
 	timestamp: number;
+
 	status: number;
+
 	reason: string;
+
 	headers: Array<Header>;
+
 	data?: string | null;
+
 	isMock: boolean;
+
 	insights?: Insights | null;
+
 	totalChunks?: number;
+
 	index?: number;
 };
 
 export type PartialResponse = {
 	initialResponse?: Response;
+
 	followupChunks: { [id: number]: string };
 };
 

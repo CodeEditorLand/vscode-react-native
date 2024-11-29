@@ -12,6 +12,7 @@ export class RnCDPMessageHandler extends BaseCDPMessageHandler {
 
 	constructor() {
 		super();
+
 		this.firstStop = true;
 	}
 
@@ -53,8 +54,10 @@ export class RnCDPMessageHandler extends BaseCDPMessageHandler {
 
 		if (params.reason && params.reason === "other") {
 			this.firstStop = false;
+
 			params.reason = "Break on start";
 		}
+
 		return params;
 	}
 

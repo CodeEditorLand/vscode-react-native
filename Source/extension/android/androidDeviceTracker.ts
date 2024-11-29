@@ -14,16 +14,19 @@ export class AndroidDeviceTracker extends AbstractDeviceTracker {
 
 	constructor(adbHelper: AdbHelper) {
 		super();
+
 		this.adbHelper = adbHelper;
 	}
 
 	public async start(): Promise<void> {
 		this.logger.debug("Start Android device tracker");
+
 		await this.queryDevicesLoop();
 	}
 
 	public stop(): void {
 		this.logger.debug("Stop Android device tracker");
+
 		this.isStop = true;
 	}
 
@@ -47,7 +50,9 @@ export class AndroidDeviceTracker extends AbstractDeviceTracker {
 					onlineDevice.isVirtualTarget,
 					ClientOS.Android,
 				);
+
 				await this.initAndroidDevice(androidDevice);
+
 				DeviceStorage.devices.set(androidDevice.id, androidDevice);
 			}
 		}
@@ -62,10 +67,12 @@ export class AndroidDeviceTracker extends AbstractDeviceTracker {
 			androidDevice.id,
 			NetworkInspectorServer.InsecureServerPort,
 		);
+
 		await this.adbHelper.reverseAdb(
 			androidDevice.id,
 			NetworkInspectorServer.SecureServerPort,
 		);
+
 		androidDevice.deviceStatus = DeviceStatus.Prepared;
 	}
 }

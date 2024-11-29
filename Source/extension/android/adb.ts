@@ -42,13 +42,18 @@ enum KeyEvents {
 
 export class AdbHelper {
 	private nodeModulesRoot: string;
+
 	private launchActivity: string;
+
 	private childProcess: ChildProcess = new ChildProcess();
+
 	private commandExecutor: CommandExecutor;
+
 	private adbExecutable: string = "";
 
 	private static readonly AndroidRemoteTargetPattern =
 		/^((?:\d{1,3}\.){3}\d{1,3}:\d{1,5}|.*_adb-tls-con{2}ect\._tcp.*)$/gm;
+
 	public static readonly AndroidSDKEmulatorPattern = /^emulator-\d{1,5}$/;
 
 	constructor(
@@ -58,8 +63,11 @@ export class AdbHelper {
 		launchActivity: string = "MainActivity",
 	) {
 		this.nodeModulesRoot = nodeModulesRoot;
+
 		this.adbExecutable = this.getAdbPath(projectRoot, logger);
+
 		this.commandExecutor = new CommandExecutor(this.nodeModulesRoot);
+
 		this.launchActivity = launchActivity;
 	}
 
@@ -96,6 +104,7 @@ export class AdbHelper {
 				emulatorsNames.splice(indexOfBlank, 1);
 			}
 		}
+
 		return emulatorsNames;
 	}
 
@@ -138,6 +147,7 @@ export class AdbHelper {
 		const enableDebugCommand = `${this.adbExecutable} ${
 			debugTarget ? `-s ${debugTarget}` : ""
 		} shell am broadcast -a "${packageName}.RELOAD_APP_ACTION" --ez jsproxy ${String(enable)}`;
+
 		await new CommandExecutor(this.nodeModulesRoot, projectRoot).execute(
 			enableDebugCommand,
 		);
@@ -241,6 +251,7 @@ export class AdbHelper {
 					),
 				);
 			}
+
 			return null;
 		}
 
@@ -252,6 +263,7 @@ export class AdbHelper {
 				.replace(/\\\\/g, "\\")
 				.replace("\\:", ":");
 		}
+
 		if (logger) {
 			logger.info(
 				localize(
@@ -283,6 +295,7 @@ export class AdbHelper {
 			if (isExist) {
 				return `"${localPropertiesSdkPath}"`;
 			}
+
 			if (logger) {
 				logger.warning(
 					localize(
@@ -291,8 +304,10 @@ export class AdbHelper {
 					),
 				);
 			}
+
 			return "adb";
 		}
+
 		return "adb";
 	}
 
@@ -326,8 +341,10 @@ export class AdbHelper {
 				isOnline: match[2] === "device",
 				isVirtualTarget: this.isVirtualTarget(match[1]),
 			});
+
 			match = regex.exec(input);
 		}
+
 		return result;
 	}
 
@@ -367,6 +384,7 @@ export class AdbHelper {
 					),
 				);
 			}
+
 			return null;
 		}
 
@@ -385,6 +403,7 @@ export class AdbHelper {
 					e,
 					e.stack,
 				);
+
 				logger.info(
 					localize(
 						"UsingAndroidSDKLocationFromPATH",
@@ -392,8 +411,10 @@ export class AdbHelper {
 					),
 				);
 			}
+
 			return null;
 		}
+
 		return this.parseSdkLocation(fileContent, logger);
 	}
 }

@@ -27,13 +27,16 @@ const localize = nls.loadMessageBundle();
 
 export interface RNAppMessage {
 	method: string;
+
 	url?: string;
 	// These objects have also other properties but that we don't currently use
 }
 
 export interface IDebuggeeWorker {
 	start(): Promise<any>;
+
 	stop(): void;
+
 	postMessage(message: RNAppMessage): void;
 }
 
@@ -102,10 +105,12 @@ function getNativeModules() {
             NativeModules = global.__r(nativeModuleId);
           }
         }
+
         catch (err) {
             // suppress errors
         }
     }
+
     return NativeModules;
 }
 
@@ -169,7 +174,9 @@ console.trace = (function() {
                 };
             // Node uses 10, but usually it's not enough for RN app trace
             Error.stackTraceLimit = 30;
+
             Error.captureStackTrace(err, console.trace);
+
             console.log(err.stack);
         } catch (e) {
             console.error(e);
@@ -207,6 +214,7 @@ self.fetch = fetch;
 function fetch(url) {
     return new Promise((resolve, reject) => {
         var data = require('fs').readFileSync(fileUrlToPath(url), 'utf8');
+
         resolve(
             {
                 text: function () {
@@ -219,19 +227,31 @@ function fetch(url) {
 `;
 
 	private packagerAddress: string;
+
 	private packagerPort: number;
+
 	private sourcesStoragePath: string;
+
 	private projectRootPath: string;
+
 	private packagerRemoteRoot?: string;
+
 	private packagerLocalRoot?: string;
+
 	private debuggerWorkerUrlPath?: string;
+
 	private socketToApp: WebSocket;
+
 	private cancellationToken: vscode.CancellationToken;
+
 	private singleLifetimeWorker: IDebuggeeWorker | null;
+
 	private webSocketConstructor: (url: string) => WebSocket;
 
 	private executionLimiter = new ExecutionsLimiter();
+
 	private nodeFileSystem = new FileSystem();
+
 	private scriptImporter: ScriptImporter;
 
 	constructor(
@@ -242,21 +262,31 @@ function fetch(url) {
 		{ webSocketConstructor = (url: string) => new WebSocket(url) } = {},
 	) {
 		super();
+
 		this.packagerAddress = attachRequestArguments.address || "localhost";
+
 		this.packagerPort = attachRequestArguments.port;
+
 		this.packagerRemoteRoot = attachRequestArguments.remoteRoot;
+
 		this.packagerLocalRoot = attachRequestArguments.localRoot;
+
 		this.debuggerWorkerUrlPath =
 			attachRequestArguments.debuggerWorkerUrlPath;
+
 		this.sourcesStoragePath = sourcesStoragePath;
+
 		this.projectRootPath = projectRootPath;
+
 		this.cancellationToken = cancellationToken;
 
 		if (!this.sourcesStoragePath)
 			throw ErrorHelper.getInternalError(
 				InternalErrorCode.SourcesStoragePathIsNullOrEmpty,
 			);
+
 		this.webSocketConstructor = webSocketConstructor;
+
 		this.scriptImporter = new ScriptImporter(
 			this.packagerAddress,
 			this.packagerPort,
@@ -281,12 +311,14 @@ function fetch(url) {
 		if (!retryAttempt) {
 			await this.downloadAndPatchDebuggerWorker();
 		}
+
 		return this.createSocketToApp(retryAttempt);
 	}
 
 	public stop(): void {
 		if (this.socketToApp) {
 			this.socketToApp.removeAllListeners();
+
 			this.socketToApp.close();
 		}
 
@@ -360,9 +392,11 @@ function fetch(url) {
 			this.packagerRemoteRoot,
 			this.packagerLocalRoot,
 		);
+
 		logger.verbose("A new app worker lifetime was created.");
 
 		const startedEvent = await this.singleLifetimeWorker.start();
+
 		this.emit("connected", startedEvent);
 	}
 
@@ -373,9 +407,11 @@ function fetch(url) {
 			this.socketToApp = this.webSocketConstructor(
 				this.debuggerProxyUrl(),
 			);
+
 			this.socketToApp.on("open", () => {
 				this.onSocketOpened();
 			});
+
 			this.socketToApp.on("close", () => {
 				this.executionLimiter.execute(
 					"onSocketClose.msg",
@@ -398,6 +434,7 @@ function fetch(url) {
 								),
 							);
 						}
+
 						logger.log(
 							localize(
 								"DisconnectedFromThePackagerToReactNative",
@@ -413,9 +450,11 @@ function fetch(url) {
 					}, 100);
 				}
 			});
+
 			this.socketToApp.on("message", (message: any) =>
 				this.onMessage(message),
 			);
+
 			this.socketToApp.on("error", (error: Error) => {
 				if (retryAttempt) {
 					printDebuggingError(
@@ -455,7 +494,9 @@ function fetch(url) {
 
 	private killWorker() {
 		if (!this.singleLifetimeWorker) return;
+
 		this.singleLifetimeWorker.stop();
+
 		this.singleLifetimeWorker = null;
 	}
 
@@ -518,7 +559,9 @@ function fetch(url) {
 
 		try {
 			stringified = JSON.stringify(message);
+
 			logger.verbose(`To RN APP: ${stringified}`);
+
 			this.socketToApp.send(stringified);
 		} catch (exception) {
 			const messageToShow = stringified || String(message); // Try to show the stringified version, but show the toString if unavailable

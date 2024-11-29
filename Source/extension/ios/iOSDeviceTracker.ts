@@ -13,18 +13,23 @@ import { IDebuggableIOSTarget, IOSTargetManager } from "./iOSTargetManager";
 
 export class IOSDeviceTracker extends AbstractDeviceTracker {
 	private readonly portForwardingClientPath: string;
+
 	private iOSTargetManager: IOSTargetManager;
+
 	private portForwarders: Array<ChildProcess>;
 
 	constructor() {
 		super();
+
 		this.portForwardingClientPath = `${
 			findFileInFolderHierarchy(
 				__dirname,
 				"static/PortForwardingMacApp.app",
 			) || __dirname
 		}/Contents/MacOS/PortForwardingMacApp`;
+
 		this.iOSTargetManager = new IOSTargetManager();
+
 		this.portForwarders = [];
 	}
 
@@ -34,20 +39,25 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 		if (await isXcodeDetected()) {
 			this.startDevicePortForwarders();
 		}
+
 		await this.queryDevicesLoop();
 	}
 
 	public stop(): void {
 		this.logger.debug("Stop iOS device tracker");
+
 		this.isStop = true;
+
 		this.portForwarders.forEach((process) => process.kill());
 	}
 
 	protected async queryDevices(): Promise<void> {
 		const simulators = await this.getRunningSimulators();
+
 		this.processDevices(simulators, true);
 
 		const devices = await this.getActiveDevices();
+
 		this.processDevices(devices, false);
 	}
 
@@ -76,6 +86,7 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 					activeDevice.isOnline,
 					activeDevice.name,
 				);
+
 				DeviceStorage.devices.set(iosDevice.id, iosDevice);
 			}
 		}
@@ -144,10 +155,13 @@ export class IOSDeviceTracker extends AbstractDeviceTracker {
 				}
 			},
 		);
+
 		this.logger.debug(`Port forwarding app started for ${port} port`);
+
 		childProcess.addListener("error", (err) => {
 			this.logger.error("Port forwarding app error", err);
 		});
+
 		childProcess.addListener("exit", (code) => {
 			this.logger.debug(
 				`Port forwarding app exited with code ${String(code)}`,

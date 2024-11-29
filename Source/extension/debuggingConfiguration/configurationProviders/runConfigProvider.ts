@@ -15,6 +15,7 @@ import { BaseConfigProvider } from "./baseConfigProvider";
 export class RunConfigProvider extends BaseConfigProvider {
 	constructor() {
 		super();
+
 		this.maxStepCount = 2;
 	}
 
@@ -53,6 +54,7 @@ export class RunConfigProvider extends BaseConfigProvider {
 					state.config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT
 				) {
 					this.maxStepCount = 3;
+
 					await this.configureUseHermesEngine(input, state.config);
 					// Direct iOS debugging using ios-webkit-debug-proxy is supported
 					// only with applications running on the device
@@ -83,6 +85,7 @@ export class RunConfigProvider extends BaseConfigProvider {
 		config: Partial<ILaunchRequestArgs>,
 	): Promise<InputStep<DebugConfigurationState> | void> {
 		delete config.useHermesEngine;
+
 		await this.configurationProviderHelper.shouldUseHermesEngine(
 			input,
 			config,

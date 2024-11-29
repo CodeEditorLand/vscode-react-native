@@ -35,11 +35,17 @@ const localize = nls.loadMessageBundle();
 
 export class WebDebugSession extends DebugSessionBase {
 	private appWorker: MultipleLifetimesAppWorker | null;
+
 	private onDidStartDebugSessionHandler: vscode.Disposable;
+
 	private onDidTerminateDebugSessionHandler: vscode.Disposable;
+
 	private cdpProxy: ReactNativeCDPProxy;
+
 	private readonly pwaSessionName: string = "pwa-chrome";
+
 	private cdpProxyErrorHandlerDescriptor?: vscode.Disposable;
+
 	private attachRetryCount: number = 2;
 
 	constructor(rnSession: RNSession) {
@@ -68,15 +74,21 @@ export class WebDebugSession extends DebugSessionBase {
 		try {
 			try {
 				await this.initializeSettings(launchArgs);
+
 				logger.log("Launching the application");
+
 				logger.verbose(
 					`Launching the application: ${JSON.stringify(launchArgs, null, 2)}`,
 				);
 
 				await this.updateWebpackMetroConfig(launchArgs);
+
 				await this.verifyExpoWebRequiredDependencies(launchArgs);
+
 				await this.appLauncher.launchExpoWeb(launchArgs);
+
 				await this.waitExpoWebIsRunning(launchArgs);
+
 				await this.appLauncher.launchBrowser(launchArgs);
 			} catch (error) {
 				throw ErrorHelper.getInternalError(
@@ -86,6 +98,7 @@ export class WebDebugSession extends DebugSessionBase {
 			}
 			// if debugging is enabled start attach request
 			await this.vsCodeDebugSession.customRequest("attach", launchArgs);
+
 			this.sendResponse(response);
 		} catch (error) {
 			this.terminateWithErrorResponse(error, response);
@@ -100,6 +113,7 @@ export class WebDebugSession extends DebugSessionBase {
 		const doAttach = async (attachArgs: IAttachRequestArgs) => {
 			try {
 				await this.initializeSettings(attachArgs);
+
 				attachArgs.port = attachArgs.port || 9222;
 
 				await TelemetryHelper.generate(
@@ -107,6 +121,7 @@ export class WebDebugSession extends DebugSessionBase {
 					attachArgs,
 					async (generator) => {
 						generator.add("platform", attachArgs.platform, false);
+
 						generator.add(
 							"browser",
 							attachArgs.browserTarget,
@@ -114,7 +129,9 @@ export class WebDebugSession extends DebugSessionBase {
 						);
 
 						this.cdpProxy = this.appLauncher.getRnCdpProxy();
+
 						this.cdpProxy.setApplicationTargetPort(attachArgs.port);
+
 						await this.cdpProxy.initializeServer(
 							new RnCDPMessageHandler(),
 							this.cdpProxyLogLevel,
@@ -136,19 +153,25 @@ export class WebDebugSession extends DebugSessionBase {
 								processedAttachArgs.webSocketDebuggerUrl,
 							);
 						}
+
 						this.cdpProxyErrorHandlerDescriptor =
 							this.cdpProxy.onError(async (err: Error) => {
 								if (this.attachRetryCount > 0) {
 									this.debugSessionStatus =
 										DebugSessionStatus.ConnectionPending;
+
 									this.attachRetryCount--;
+
 									void doAttach(attachArgs);
 								} else {
 									this.showError(err);
+
 									void this.terminate();
+
 									this.cdpProxyErrorHandlerDescriptor?.dispose();
 								}
 							});
+
 						await this.establishDebugSession(processedAttachArgs);
 
 						this.debugSessionStatus =
@@ -164,6 +187,7 @@ export class WebDebugSession extends DebugSessionBase {
 
 		try {
 			await doAttach(attachArgs);
+
 			this.sendResponse(response);
 		} catch (error) {
 			this.terminateWithErrorResponse(error, response);
@@ -181,6 +205,7 @@ export class WebDebugSession extends DebugSessionBase {
 		}
 
 		this.onDidStartDebugSessionHandler.dispose();
+
 		this.onDidTerminateDebugSessionHandler.dispose();
 
 		return super.disconnectRequest(response, args, request);
@@ -266,6 +291,7 @@ export class WebDebugSession extends DebugSessionBase {
 		if (parseInt(sdkVersion.substring(0, 2)) >= 49) {
 			// If Expo SDK >= 49, add web metro bundler in app.json for expo web debugging
 			logger.log("Check and add metro bundler field to app.json.");
+
 			await ReactNativeProjectHelper.UpdateMertoBundlerForExpoWeb(
 				launchArgs,
 			);

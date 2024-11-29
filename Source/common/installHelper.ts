@@ -42,6 +42,7 @@ export async function installAndroidApplication(
 		} catch {
 			throw new Error(`Failed to install application: ${appPath}.`);
 		}
+
 		logger.logStream(`Install Android application is completed. \n`);
 	}
 }
@@ -100,6 +101,7 @@ export async function installiOSApplication(
 		} catch {
 			throw new Error(`Failed to install application: ${appPath}.`);
 		}
+
 		logger.logStream(`Install iOS application is completed. \n`);
 	}
 }

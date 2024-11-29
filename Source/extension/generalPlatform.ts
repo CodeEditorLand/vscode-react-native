@@ -23,6 +23,7 @@ const localize = nls.loadMessageBundle();
 
 export interface MobilePlatformDeps {
 	projectObserver?: RNProjectObserver;
+
 	packager?: Packager;
 }
 
@@ -33,9 +34,13 @@ export enum TargetType {
 
 export class GeneralPlatform {
 	protected projectPath: string;
+
 	protected platformName: string;
+
 	protected packager: Packager;
+
 	protected logger: OutputChannelLogger;
+
 	protected projectObserver?: RNProjectObserver;
 
 	protected static NO_PACKAGER_VERSION = "0.42.0";
@@ -47,7 +52,9 @@ export class GeneralPlatform {
 		platformDeps: MobilePlatformDeps = {},
 	) {
 		this.platformName = this.runOptions.platform;
+
 		this.projectPath = this.runOptions.projectRoot;
+
 		this.packager =
 			platformDeps.packager ||
 			new Packager(
@@ -56,8 +63,11 @@ export class GeneralPlatform {
 				SettingsHelper.getPackagerPort(this.runOptions.workspaceRoot),
 				new PackagerStatusIndicator(this.projectPath),
 			);
+
 		this.projectObserver = platformDeps.projectObserver;
+
 		this.packager.setRunOptions(runOptions);
+
 		this.logger = OutputChannelLogger.getChannel(
 			localize(
 				"ReactNativeRunPlatform",
@@ -66,7 +76,9 @@ export class GeneralPlatform {
 			),
 			true,
 		);
+
 		this.logger.clear();
+
 		this.runArguments = this.getRunArguments();
 	}
 
@@ -120,6 +132,7 @@ export class GeneralPlatform {
 			) {
 				await this.packager.stop();
 			}
+
 			this.logger.info(
 				localize(
 					"AttachingToRunningReactNativePackager",
@@ -127,6 +140,7 @@ export class GeneralPlatform {
 				),
 			);
 		}
+
 		await this.packager.start();
 	}
 
@@ -164,6 +178,7 @@ export class GeneralPlatform {
 			if (isBinary && !value) {
 				GeneralPlatform.removeRunArgument(runArguments, optName, true);
 			}
+
 			if (!isBinary) {
 				runArguments[optIdx + 1] = value;
 			}
@@ -171,8 +186,10 @@ export class GeneralPlatform {
 			if (isBinary && value) {
 				runArguments.push(optName);
 			}
+
 			if (!isBinary) {
 				runArguments.push(optName);
+
 				runArguments.push(value);
 			}
 		}
@@ -197,6 +214,7 @@ export class GeneralPlatform {
 							result = true;
 						} else {
 							const tokens = arg.split("=");
+
 							result =
 								tokens.length > 1
 									? tokens[1].trim()
@@ -243,6 +261,7 @@ export class GeneralPlatform {
 				: `v${newVersion}`;
 
 			const regex = /versions\/node\/v?\d+\.\d+\.\d+/g;
+
 			nodeEnv = {
 				NVM_BIN: processEnv.NVM_BIN?.replace(
 					regex,
@@ -258,6 +277,7 @@ export class GeneralPlatform {
 				),
 			};
 		}
+
 		const modifyEnv = Object.assign({}, processEnv, nodeEnv);
 
 		if (envFile) {
@@ -286,6 +306,7 @@ export class GeneralPlatform {
 				}
 			}
 		}
+
 		return modifyEnv;
 	}
 
@@ -315,12 +336,14 @@ export class GeneralPlatform {
 					) {
 						value = value.replace(/\\n/gm, "\n");
 					}
+
 					result[key] = value.replace(/(^["']|["']$)/g, "");
 				}
 			});
 
 			return result;
 		}
+
 		return null;
 	}
 }

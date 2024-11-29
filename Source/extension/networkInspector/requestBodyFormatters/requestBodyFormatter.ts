@@ -31,10 +31,12 @@ export interface IFormatter {
 
 export class RequestBodyFormatter {
 	protected logger: OutputChannelLogger;
+
 	private formatters: Array<IFormatter>;
 
 	constructor(logger: OutputChannelLogger) {
 		this.logger = logger;
+
 		this.formatters = [
 			new ImageFormatter(),
 			new GraphQLFormatter(this.logger),
@@ -161,6 +163,7 @@ export function getHeaderValue(headers: Array<Header>, key: string): string {
 			return header.value;
 		}
 	}
+
 	return "";
 }
 

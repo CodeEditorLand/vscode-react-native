@@ -16,10 +16,13 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class EnableExpoHermes extends Command {
 	codeName = "expoHermesEnable";
+
 	label = "Enable Expo Hermes";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToEnableExpoHermes,
 	);
+
 	private nodeFileSystem = new FileSystem();
 
 	async baseFn(): Promise<void> {
@@ -39,6 +42,7 @@ export class EnableExpoHermes extends Command {
 		if (!platform || !jsEngine) {
 			return;
 		}
+
 		const projectRoot = this.project.getPackager().getProjectPath();
 
 		const appJsonPath = path.join(projectRoot, "app.json");
@@ -48,6 +52,7 @@ export class EnableExpoHermes extends Command {
 
 			return;
 		}
+
 		const appJson = fs.readFileSync(appJsonPath, "utf-8");
 
 		const regex = new RegExp(
@@ -61,6 +66,7 @@ export class EnableExpoHermes extends Command {
 				/"jsEngine":\s*"[^"]*/,
 				`"jsEngine": "${jsEngine}`,
 			);
+
 			await this.nodeFileSystem.writeFile(appJsonPath, updatedJsEngine);
 		} else {
 			const appJsonObj = JSON.parse(appJson);
@@ -71,6 +77,7 @@ export class EnableExpoHermes extends Command {
 				appJsonObj.expo[platform.toLocaleLowerCase()].jsEngine =
 					jsEngine;
 			}
+
 			await this.nodeFileSystem.writeFile(
 				appJsonPath,
 				JSON.stringify(appJsonObj, null, 2),

@@ -7,22 +7,30 @@ import { ProcessedCDPMessage } from "./ICDPMessageHandler";
 
 interface ExecutionContext {
 	id: number;
+
 	origin: string;
+
 	name: string;
+
 	auxData?: {
 		isDefault: boolean;
+
 		type?: "default" | "page";
+
 		frameId?: string;
 	};
 }
 
 export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 	private isBackcompatConfigured: boolean;
+
 	private customMessageLastId: number;
 
 	constructor() {
 		super();
+
 		this.isBackcompatConfigured = false;
+
 		this.customMessageLastId = 0;
 	}
 
@@ -34,9 +42,12 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 			event.method === CDP_API_NAMES.RUNTIME_ENABLE
 		) {
 			this.configureTargetForIWDPCommunication();
+
 			this.configureDebuggerForIWDPCommunication();
+
 			this.isBackcompatConfigured = true;
 		}
+
 		return {
 			event,
 			sendBack,
@@ -47,9 +58,11 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 		if (event.method === CDP_API_NAMES.CONSOLE_MESSAGE_ADDED) {
 			event = this.processDeprecatedConsoleMessage(event);
 		}
+
 		if (event.result && event.result.properties) {
 			event.result = { result: event.result.properties };
 		}
+
 		return {
 			event,
 			sendBack: false,
@@ -78,6 +91,7 @@ export class IOSDirectCDPMessageHandler extends BaseCDPMessageHandler {
 	private configureTargetForIWDPCommunication(): void {
 		try {
 			this.applicationTarget?.api.Console.enable({});
+
 			this.applicationTarget?.api.Debugger.setBreakpointsActive({
 				active: true,
 			});

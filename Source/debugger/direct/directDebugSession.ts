@@ -36,16 +36,24 @@ const localize = nls.loadMessageBundle();
 
 export class DirectDebugSession extends DebugSessionBase {
 	private debuggerEndpointHelper: DebuggerEndpointHelper;
+
 	private onDidTerminateDebugSessionHandler: vscode.Disposable;
+
 	private onDidStartDebugSessionHandler: vscode.Disposable;
+
 	private appTargetConnectionClosedHandlerDescriptor?: vscode.Disposable;
+
 	private attachSession: vscode.DebugSession | null;
+
 	private iOSWKDebugProxyHelper: IWDPHelper;
 
 	constructor(rnSession: RNSession) {
 		super(rnSession);
+
 		this.debuggerEndpointHelper = new DebuggerEndpointHelper();
+
 		this.iOSWKDebugProxyHelper = new IWDPHelper();
+
 		this.attachSession = null;
 
 		this.onDidTerminateDebugSessionHandler =
@@ -87,8 +95,11 @@ export class DirectDebugSession extends DebugSessionBase {
 						launchArgs.cwd,
 					);
 				}
+
 				await this.initializeSettings(launchArgs);
+
 				logger.log("Launching the application");
+
 				logger.verbose(
 					`Launching the application: ${JSON.stringify(launchArgs, null, 2)}`,
 				);
@@ -100,6 +111,7 @@ export class DirectDebugSession extends DebugSessionBase {
 							launchArgs,
 						),
 					);
+
 				extProps =
 					TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 						launchArgs,
@@ -127,6 +139,7 @@ export class DirectDebugSession extends DebugSessionBase {
 			}
 			// if debugging is enabled start attach request
 			await this.vsCodeDebugSession.customRequest("attach", launchArgs);
+
 			this.sendResponse(response);
 		} catch (error) {
 			this.terminateWithErrorResponse(error, response);
@@ -151,6 +164,7 @@ export class DirectDebugSession extends DebugSessionBase {
 		};
 
 		attachArgs.webkitRangeMin = attachArgs.webkitRangeMin || 9223;
+
 		attachArgs.webkitRangeMax = attachArgs.webkitRangeMax || 9322;
 
 		this.previousAttachArgs = attachArgs;
@@ -159,6 +173,7 @@ export class DirectDebugSession extends DebugSessionBase {
 			await this.initializeSettings(attachArgs);
 
 			const packager = this.appLauncher.getPackager();
+
 			const args: Parameters<typeof packager.forMessage> = [
 				// message indicates that another debugger has connected
 				"Already connected:",
@@ -176,12 +191,14 @@ export class DirectDebugSession extends DebugSessionBase {
 							InternalErrorCode.AnotherDebuggerConnectedToPackager,
 						),
 					);
+
 					void this.terminate();
 				},
 				() => {},
 			);
 
 			logger.log("Attaching to the application");
+
 			logger.verbose(
 				`Attaching to the application: ${JSON.stringify(attachArgs, null, 2)}`,
 			);
@@ -212,14 +229,18 @@ export class DirectDebugSession extends DebugSessionBase {
 							? attachArgs.port ||
 								IWDPHelper.iOS_WEBKIT_DEBUG_PROXY_DEFAULT_PORT
 							: null;
+
 					if (port === null) {
 						throw ErrorHelper.getInternalError(
 							InternalErrorCode.CouldNotDirectDebugWithoutHermesEngine,
 							attachArgs.platform,
 						);
 					}
+
 					attachArgs.port = port;
+
 					logger.log(`Connecting to ${attachArgs.port} port`);
+
 					await this.appLauncher.getRnCdpProxy().stopServer();
 
 					const cdpMessageHandler: BaseCDPMessageHandler | null =
@@ -235,6 +256,7 @@ export class DirectDebugSession extends DebugSessionBase {
 							attachArgs.platform,
 						);
 					}
+
 					await this.appLauncher
 						.getRnCdpProxy()
 						.initializeServer(
@@ -252,10 +274,12 @@ export class DirectDebugSession extends DebugSessionBase {
 							attachArgs.webkitRangeMin,
 							attachArgs.webkitRangeMax,
 						);
+
 						const results =
 							await this.iOSWKDebugProxyHelper.getSimulatorProxyPort(
 								attachArgs,
 							);
+
 						attachArgs.port = results.targetPort;
 					}
 
@@ -279,6 +303,7 @@ export class DirectDebugSession extends DebugSessionBase {
 									) {
 										void this.terminate();
 									}
+
 									this.appTargetConnectionClosedHandlerDescriptor?.dispose();
 								}
 							});
@@ -286,6 +311,7 @@ export class DirectDebugSession extends DebugSessionBase {
 					const settingsPorts = SettingsHelper.getPackagerPort(
 						attachArgs.cwd,
 					);
+
 					const browserInspectUri =
 						await this.debuggerEndpointHelper.retryGetWSEndpoint(
 							`http://localhost:${attachArgs.port}`,
@@ -300,8 +326,10 @@ export class DirectDebugSession extends DebugSessionBase {
 						await this.debuggerEndpointHelper.getDebuggerTpye(
 							`http://localhost:${attachArgs.port}`,
 						);
+
 					if (debuggerType == "expo") {
 						const expoBrowserInspectUri = `${browserInspectUri.split("&")[0]}&page=2`;
+
 						this.appLauncher
 							.getRnCdpProxy()
 							.setBrowserInspectUri(expoBrowserInspectUri);
@@ -314,6 +342,7 @@ export class DirectDebugSession extends DebugSessionBase {
 					await this.establishDebugSession(attachArgs);
 				},
 			);
+
 			this.sendResponse(response);
 		} catch (error) {
 			this.terminateWithErrorResponse(
@@ -334,10 +363,15 @@ export class DirectDebugSession extends DebugSessionBase {
 		this.debugSessionStatus = DebugSessionStatus.Stopping;
 
 		this.iOSWKDebugProxyHelper.cleanUp();
+
 		this.onDidTerminateDebugSessionHandler.dispose();
+
 		this.onDidStartDebugSessionHandler.dispose();
+
 		this.appLauncher.getPackager().closeWsConnection();
+
 		this.appTargetConnectionClosedHandlerDescriptor?.dispose();
+
 		return super.disconnectRequest(response, args, request);
 	}
 
@@ -359,6 +393,7 @@ export class DirectDebugSession extends DebugSessionBase {
 				consoleMode: vscode.DebugConsoleMode.MergeWithParent,
 			},
 		);
+
 		if (!childDebugSessionStarted) {
 			throw new Error(
 				localize(
@@ -389,6 +424,7 @@ export class DirectDebugSession extends DebugSessionBase {
 		) {
 			this.attachSession = debugSession;
 		}
+
 		if (
 			debugSession.configuration.rnDebugSessionId ===
 				this.rnSession.sessionId &&
@@ -400,6 +436,7 @@ export class DirectDebugSession extends DebugSessionBase {
 
 	protected async initializeSettings(args: any): Promise<any> {
 		await super.initializeSettings(args);
+
 		if (args.useHermesEngine === undefined) {
 			args.useHermesEngine = true;
 		}

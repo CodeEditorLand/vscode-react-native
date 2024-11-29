@@ -16,6 +16,7 @@ export abstract class ReactNativeCommand<
 	/** Execute base command with some telemetry */
 	async executeLocally(...args: ArgT): Promise<void> {
 		await this.onBeforeExecute(...args);
+
 		await this.executeInContext(this.baseFn.bind(this, ...args));
 	}
 
@@ -56,6 +57,7 @@ export abstract class ReactNativeCommand<
 			},
 			async (generator) => {
 				generator.add("command", this.codeName, false);
+
 				generator.add("isRNProject", isRNProject, false);
 
 				if (!isRNProject) {
@@ -67,6 +69,7 @@ export abstract class ReactNativeCommand<
 				}
 
 				logger.setFocusOnLogChannel();
+
 				await operation();
 			},
 		);

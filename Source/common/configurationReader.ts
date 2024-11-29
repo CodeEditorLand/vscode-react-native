@@ -9,6 +9,7 @@ export class ConfigurationReader {
 		if (this.isString(value)) {
 			return value;
 		}
+
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedStringValue,
 			value,
@@ -21,6 +22,7 @@ export class ConfigurationReader {
 		} else if (value === "true" || value === "false") {
 			return value === "true";
 		}
+
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedBooleanValue,
 			value,
@@ -31,6 +33,7 @@ export class ConfigurationReader {
 		if (this.isArray(value)) {
 			return value;
 		}
+
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedArrayValue,
 			value,
@@ -41,6 +44,7 @@ export class ConfigurationReader {
 		if (this.isObject(value)) {
 			return value;
 		}
+
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedObjectValue,
 			value,
@@ -54,6 +58,7 @@ export class ConfigurationReader {
 		} else if (this.isString(value)) {
 			return parseInt(value, 10);
 		}
+
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.ExpectedIntegerValue,
 			value,

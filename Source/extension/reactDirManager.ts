@@ -16,11 +16,14 @@ import { OutputChannelLogger } from "./log/OutputChannelLogger";
  */
 export class ReactDirManager implements vscode.Disposable {
 	public vscodeDirPath: string;
+
 	public reactDirPath: string;
+
 	public isDisposed: boolean = false;
 
 	constructor(rootPath: string) {
 		this.vscodeDirPath = path.join(rootPath || "", ".vscode");
+
 		this.reactDirPath = path.join(this.vscodeDirPath, ".react");
 	}
 
@@ -34,11 +37,13 @@ export class ReactDirManager implements vscode.Disposable {
 		if (!fs.existsSync(this.vscodeDirPath)) {
 			await fs.mkDir(this.vscodeDirPath);
 		}
+
 		await fs.mkDir(this.reactDirPath);
 	}
 
 	public dispose(): void {
 		this.isDisposed = true;
+
 		void new EntryPointHandler(
 			ProcessType.Extension,
 			OutputChannelLogger.getMainChannel(),

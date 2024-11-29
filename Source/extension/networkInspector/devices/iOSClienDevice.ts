@@ -15,6 +15,7 @@ export class IOSClienDevice extends BaseClientDevice {
 		name?: string,
 	) {
 		super(id, isVirtualTarget, os, name);
+
 		this._isOnline = isOnline;
 	}
 

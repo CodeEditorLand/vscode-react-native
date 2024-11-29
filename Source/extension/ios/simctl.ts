@@ -24,6 +24,7 @@ export class SimctrlHelper {
 		appPath: string,
 	): Promise<void> {
 		const installCommand = `xcrun simctl install ${targetId} ${appPath}`;
+
 		await childProcess.execToString(installCommand);
 	}
 }

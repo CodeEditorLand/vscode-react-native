@@ -17,26 +17,35 @@ import url = require("url");
 
 export interface DownloadedScript {
 	contents: string;
+
 	filepath: string;
 }
 
 interface IStrictUrl extends url.Url {
 	pathname: string;
+
 	href: string;
 }
 
 export class ScriptImporter {
 	public static DEBUGGER_WORKER_FILE_BASENAME = "debuggerWorker";
+
 	public static DEBUGGER_WORKER_FILENAME = `${ScriptImporter.DEBUGGER_WORKER_FILE_BASENAME}.js`;
 
 	private static readonly REMOVE_SOURCE_URL_VERSION = "0.61.0";
+
 	private static readonly DEBUGGER_UI_SUPPORTED_VERSION = "0.50.0";
 
 	private packagerAddress: string;
+
 	private packagerPort: number;
+
 	private sourcesStoragePath: string;
+
 	private packagerRemoteRoot?: string;
+
 	private packagerLocalRoot?: string;
+
 	private sourceMapUtil: SourceMapUtil;
 
 	constructor(
@@ -47,10 +56,15 @@ export class ScriptImporter {
 		packagerLocalRoot?: string,
 	) {
 		this.packagerAddress = packagerAddress;
+
 		this.packagerPort = packagerPort;
+
 		this.sourcesStoragePath = sourcesStoragePath;
+
 		this.packagerRemoteRoot = packagerRemoteRoot;
+
 		this.packagerLocalRoot = packagerLocalRoot;
+
 		this.sourceMapUtil = new SourceMapUtil();
 	}
 
@@ -86,6 +100,7 @@ export class ScriptImporter {
 					"bundle",
 					"map",
 				);
+
 				scriptBody = this.sourceMapUtil.appendSourceMapPaths(
 					scriptBody,
 					sourceMapPathUrl,
@@ -126,9 +141,11 @@ export class ScriptImporter {
 				}
 			});
 		}
+
 		await waitForSourceMapping;
 
 		const scriptFilePath = await this.writeAppScript(scriptBody, scriptUrl);
+
 		logger.verbose(
 			`Script ${overriddenScriptUrlString} downloaded to ${scriptFilePath}`,
 		);
@@ -164,6 +181,7 @@ export class ScriptImporter {
 			sourcesStoragePath,
 			ScriptImporter.DEBUGGER_WORKER_FILENAME,
 		);
+
 		logger.verbose(
 			`About to download: ${debuggerWorkerURL} to: ${debuggerWorkerLocalPath}`,
 		);
@@ -196,8 +214,10 @@ export class ScriptImporter {
 			) {
 				newPackager = "debugger-ui/";
 			}
+
 			debuggerWorkerURL = `http://${this.packagerAddress}:${this.packagerPort}/${newPackager}${ScriptImporter.DEBUGGER_WORKER_FILENAME}`;
 		}
+
 		return debuggerWorkerURL;
 	}
 
@@ -250,7 +270,9 @@ export class ScriptImporter {
 	 */
 	private overridePackagerPort(urlToOverride: string): string {
 		const components = url.parse(urlToOverride);
+
 		components.port = this.packagerPort.toString();
+
 		delete components.host; // We delete the host, if not the port change will be ignored
 		return url.format(components);
 	}

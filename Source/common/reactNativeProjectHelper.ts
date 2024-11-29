@@ -12,6 +12,7 @@ import { stripJsonTrailingComma } from "./utils";
 
 export interface ParsedPackage {
 	packageName: string;
+
 	useSemverCoerce: boolean;
 }
 
@@ -153,6 +154,7 @@ export class ReactNativeProjectHelper {
 
 		if (!appJson.expo.web.bundler) {
 			appJson.expo.web.bundler = "metro";
+
 			await fs.writeFile(appJsonPath, JSON.stringify(appJson, null, 2));
 		}
 	}

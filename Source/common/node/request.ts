@@ -13,9 +13,11 @@ export class Request {
 		return new Promise((resolve, reject) => {
 			const req = (isHttps ? https : http).get(url, (res) => {
 				let responseString = "";
+
 				res.on("data", (data: Buffer) => {
 					responseString += data.toString();
 				});
+
 				res.on("end", () => {
 					if (expectStatusOK && res.statusCode !== 200) {
 						reject(new Error(responseString));
@@ -24,6 +26,7 @@ export class Request {
 					}
 				});
 			});
+
 			req.on("error", (err: Error) => {
 				reject(err);
 			});

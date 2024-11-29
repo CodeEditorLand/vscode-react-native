@@ -32,6 +32,7 @@ export class InspectorViewFactory {
 				);
 			}
 		}
+
 		return InspectorViewFactory.cachedInspectorViews.get(
 			inspectorViewType,
 		) as InspectorView;
@@ -41,6 +42,7 @@ export class InspectorViewFactory {
 		InspectorViewFactory.cachedInspectorViews.forEach((inspectorView) => {
 			inspectorView.dispose();
 		});
+
 		InspectorViewFactory.cachedInspectorViews.clear();
 	}
 }

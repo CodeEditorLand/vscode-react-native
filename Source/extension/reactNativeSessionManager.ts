@@ -15,6 +15,7 @@ export class ReactNativeSessionManager
 	implements vscode.DebugAdapterDescriptorFactory, vscode.Disposable
 {
 	private servers = new Map<string, Net.Server>();
+
 	private connections = new Map<string, Net.Socket>();
 
 	public createDebugAdapterDescriptor(
@@ -36,18 +37,23 @@ export class ReactNativeSessionManager
 				this.connections.set(session.id, socket);
 
 				rnDebugSession.setRunAsServer(true);
+
 				rnDebugSession.start(<NodeJS.ReadableStream>socket, socket);
 			});
 		} else {
 			debugServer = Net.createServer((socket) => {
 				const webDebugSession = new WebDebugSession(rnSession);
+
 				webDebugSession.setRunAsServer(true);
+
 				this.connections.set(session.id, socket);
+
 				webDebugSession.start(<NodeJS.ReadableStream>socket, socket);
 			});
 		}
 
 		debugServer.listen(0);
+
 		this.servers.set(session.id, debugServer);
 
 		// make VS Code connect to debug server
@@ -68,6 +74,7 @@ export class ReactNativeSessionManager
 			if (terminateEvent.args.forcedStop) {
 				this.destroyConnection(connection);
 			}
+
 			this.connections.delete(terminateEvent.debugSession.id);
 		}
 	}
@@ -76,21 +83,26 @@ export class ReactNativeSessionManager
 		this.servers.forEach((server, key) => {
 			this.destroyServer(key, server);
 		});
+
 		this.connections.forEach((conn, key) => {
 			this.destroyConnection(conn);
+
 			this.connections.delete(key);
 		});
 	}
 
 	private destroyConnection(connection: Net.Socket) {
 		connection.removeAllListeners();
+
 		connection.on("error", () => undefined);
+
 		connection.destroy();
 	}
 
 	private destroyServer(sessionId: string, server?: Net.Server) {
 		if (server) {
 			server.close();
+
 			this.servers.delete(sessionId);
 		}
 	}

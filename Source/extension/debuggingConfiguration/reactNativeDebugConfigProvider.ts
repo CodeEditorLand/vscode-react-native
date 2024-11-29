@@ -220,11 +220,15 @@ export class ReactNativeDebugConfigProvider
 				const selected: string[] = configPicker.selectedItems.map(
 					(element) => element.label,
 				);
+
 				chosenConfigsEvent.properties.selectedItems = selected;
+
 				Telemetry.send(chosenConfigsEvent);
 
 				const launchConfig = this.gatherDebugScenarios(selected);
+
 				disposables.forEach((d) => d.dispose());
+
 				resolve(launchConfig);
 			};
 
@@ -252,6 +256,7 @@ export class ReactNativeDebugConfigProvider
 		};
 
 		const multiStep = new MultiStepInput<DebugConfigurationState>();
+
 		await multiStep.run(
 			(input, s) => this.pickDebugConfiguration(input, s),
 			state,
@@ -260,6 +265,7 @@ export class ReactNativeDebugConfigProvider
 		if (Object.keys(state.config).length === 0) {
 			return;
 		}
+
 		if (state.config.platform !== PlatformType.ExpoWeb) {
 			if (state.config.type === DEBUG_TYPES.REACT_NATIVE_DIRECT) {
 				if (
@@ -341,12 +347,16 @@ export class ReactNativeDebugConfigProvider
 
 	private prepareDebugConfigPicker(): vscode.QuickPick<vscode.QuickPickItem> {
 		const debugConfigPicker = vscode.window.createQuickPick();
+
 		debugConfigPicker.canSelectMany = true;
+
 		debugConfigPicker.ignoreFocusOut = true;
+
 		debugConfigPicker.title = localize(
 			"DebugConfigQuickPickLabel",
 			"Pick debug configurations",
 		);
+
 		debugConfigPicker.items = this.initialPickConfig;
 		// QuickPickItem property `picked` doesn't work, so this line will check first item in the list
 		// which is supposed to be Debug Android

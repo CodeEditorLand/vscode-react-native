@@ -80,6 +80,7 @@ export class PromiseUtil {
 				rejectTimeout = setTimeout(() => {
 					// eslint-disable-next-line @typescript-eslint/no-use-before-define
 					cleanup();
+
 					resolve(null);
 				}, timeout);
 			}
@@ -88,6 +89,7 @@ export class PromiseUtil {
 				if (rejectTimeout) {
 					clearTimeout(rejectTimeout);
 				}
+
 				if (сheckInterval) {
 					clearInterval(сheckInterval);
 				}
@@ -99,11 +101,14 @@ export class PromiseUtil {
 
 					if (result) {
 						cleanup();
+
 						resolve(result);
 					}
+
 					return !!result;
 				} catch (err) {
 					cleanup();
+
 					reject(err);
 
 					return false;
@@ -132,6 +137,7 @@ export class PromiseUtil {
 			if (!promise) {
 				promise = func.apply(context, args) as Promise<T>;
 			}
+
 			return promise;
 		};
 	}
@@ -179,16 +185,24 @@ export class PromiseUtil {
 
 export class Delayer<T> implements Disposable {
 	private timeout: any;
+
 	private completionPromise: Promise<any> | null;
+
 	private doResolve: ((value?: any | Promise<any>) => void) | null;
+
 	private doReject: ((err: any) => void) | null;
+
 	private task: { (): T | Promise<T> } | null;
 
 	constructor() {
 		this.timeout = null;
+
 		this.completionPromise = null;
+
 		this.doResolve = null;
+
 		this.doReject = null;
+
 		this.task = null;
 	}
 
@@ -197,22 +211,27 @@ export class Delayer<T> implements Disposable {
 		delay: number,
 	): Promise<T> {
 		this.task = task;
+
 		this.cancelTimeout();
 
 		if (!this.completionPromise) {
 			this.completionPromise = new Promise((resolve, reject) => {
 				this.doResolve = resolve;
+
 				this.doReject = reject;
 			}).then(() => {
 				this.completionPromise = null;
+
 				this.doResolve = null;
 
 				if (this.task) {
 					const task = this.task;
+
 					this.task = null;
 
 					return task();
 				}
+
 				return undefined;
 			});
 		}
@@ -239,6 +258,7 @@ export class Delayer<T> implements Disposable {
 			if (this.doReject) {
 				this.doReject(new Error("Canceled"));
 			}
+
 			this.completionPromise = null;
 		}
 	}
@@ -250,6 +270,7 @@ export class Delayer<T> implements Disposable {
 	private cancelTimeout(): void {
 		if (this.timeout !== null) {
 			clearTimeout(this.timeout);
+
 			this.timeout = null;
 		}
 	}

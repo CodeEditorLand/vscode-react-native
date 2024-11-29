@@ -13,7 +13,9 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class RunExponent extends ReactNativeCommand {
 	codeName = "runExponent";
+
 	label = "Run Expo";
+
 	error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunExponent);
 
 	async baseFn(): Promise<void> {
@@ -25,6 +27,7 @@ export class RunExponent extends ReactNativeCommand {
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				nodeModulesRoot,
 			);
+
 		this.project.setReactNativeVersions(versions);
 
 		const platform = new ExponentPlatform(
@@ -35,13 +38,17 @@ export class RunExponent extends ReactNativeCommand {
 		);
 
 		await platform.beforeStartPackager();
+
 		await platform.startPackager();
+
 		await platform.runApp();
 	}
 
 	async onBeforeExecute(): Promise<void> {
 		await super.onBeforeExecute();
+
 		assert(this.project);
+
 		await loginToExponent(this.project);
 	}
 }

@@ -46,20 +46,27 @@ export class AndroidTarget extends MobileTarget {
 
 export class AndroidTargetManager extends MobileTargetManager {
 	private static readonly EMULATOR_COMMAND = "emulator";
+
 	private static readonly EMULATOR_AVD_START_COMMAND = "-avd";
+
 	private static readonly EMULATOR_START_TIMEOUT = 120;
 
 	private logger: OutputChannelLogger;
+
 	private adbHelper: AdbHelper;
+
 	private childProcess: ChildProcess;
 
 	constructor(adbHelper: AdbHelper) {
 		super();
+
 		this.adbHelper = adbHelper;
+
 		this.logger = OutputChannelLogger.getChannel(
 			OutputChannelLogger.MAIN_CHANNEL_NAME,
 			true,
 		);
+
 		this.childProcess = new ChildProcess();
 	}
 
@@ -73,6 +80,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			) {
 				return true;
 			}
+
 			const onlineTarget =
 				await this.adbHelper.findOnlineTargetById(target);
 
@@ -81,6 +89,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			} else if ((await this.adbHelper.getAvdsNames()).includes(target)) {
 				return true;
 			}
+
 			throw new Error("There is no such target");
 		} catch (error) {
 			throw ErrorHelper.getNestedError(
@@ -100,12 +109,14 @@ export class AndroidTargetManager extends MobileTargetManager {
 			if (!selectedTarget.isOnline && selectedTarget.isVirtualTarget) {
 				return this.launchSimulator(selectedTarget);
 			}
+
 			if (selectedTarget.id) {
 				return AndroidTarget.fromInterface(
 					<IDebuggableMobileTarget>selectedTarget,
 				);
 			}
 		}
+
 		return undefined;
 	}
 
@@ -121,6 +132,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			if (collectSimulators) {
 				const emulatorsNames: string[] =
 					await this.adbHelper.getAvdsNames();
+
 				targetList.push(
 					...emulatorsNames.map((name) => ({
 						name,
@@ -135,6 +147,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 			if (targetType === TargetType.Simulator) {
 				throw error;
 			}
+
 			this.logger.warning(
 				localize(
 					"CouldNotUseEmulators",
@@ -156,6 +169,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 
 				if (emulatorTarget) {
 					emulatorTarget.isOnline = true;
+
 					emulatorTarget.id = device.id;
 				}
 			} else if (!device.isVirtualTarget && collectDevices) {
@@ -193,6 +207,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 				},
 				true,
 			);
+
 			emulatorProcess.outcome.catch((error) => {
 				emulatorLaunchFailed = true;
 
@@ -208,12 +223,14 @@ export class AndroidTargetManager extends MobileTargetManager {
 						),
 					);
 				}
+
 				reject(
 					new Error(
 						`Virtual device launch finished with an exception: ${String(error)}`,
 					),
 				);
 			});
+
 			emulatorProcess.spawnedProcess.unref();
 
 			const condition = async () => {
@@ -234,6 +251,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 						return target.id;
 					}
 				}
+
 				return null;
 			};
 
@@ -245,7 +263,9 @@ export class AndroidTargetManager extends MobileTargetManager {
 				(emulatorId) => {
 					if (emulatorId) {
 						emulatorTarget.id = emulatorId;
+
 						emulatorTarget.isOnline = true;
+
 						this.logger.info(
 							localize(
 								"EmulatorLaunched",
@@ -253,6 +273,7 @@ export class AndroidTargetManager extends MobileTargetManager {
 								emulatorTarget.name,
 							),
 						);
+
 						resolve(
 							AndroidTarget.fromInterface(
 								<IDebuggableMobileTarget>emulatorTarget,

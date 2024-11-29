@@ -8,9 +8,13 @@ import { stripJsonTrailingComma } from "../common/utils";
 
 export interface IConfiguration {
 	name: string;
+
 	platform?: string;
+
 	target?: string;
+
 	type?: string;
+
 	request?: string;
 }
 export interface ILaunchScenarios {
@@ -19,6 +23,7 @@ export interface ILaunchScenarios {
 
 export class LaunchScenariosManager {
 	private pathToLaunchFile: string;
+
 	private launchScenarios: ILaunchScenarios;
 
 	constructor(rootPath: string) {
@@ -36,6 +41,7 @@ export class LaunchScenariosManager {
 	public readLaunchScenarios(): void {
 		if (fs.existsSync(this.pathToLaunchFile)) {
 			const content = fs.readFileSync(this.pathToLaunchFile, "utf8");
+
 			this.launchScenarios = stripJsonTrailingComma(content);
 		}
 	}
@@ -53,6 +59,7 @@ export class LaunchScenariosManager {
 				launchScenarios.configurations[launchConfigIndex],
 				updates,
 			);
+
 			this.writeLaunchScenarios(launchScenarios);
 		}
 	}
@@ -63,7 +70,9 @@ export class LaunchScenariosManager {
 		if (this.launchScenarios.configurations) {
 			for (
 				let i = 0;
+
 				i < this.launchScenarios.configurations.length;
+
 				i++
 			) {
 				const config = this.launchScenarios.configurations[i];
@@ -78,6 +87,7 @@ export class LaunchScenariosManager {
 				}
 			}
 		}
+
 		return null;
 	}
 

@@ -14,8 +14,11 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 	protected static REMOTE_DEBUGGING_FLAG_NAME = "isDebuggingRemotely";
 
 	private scheme?: string;
+
 	private nodeFileSystem: FileSystem;
+
 	private plistBuddy: PlistBuddy;
+
 	private defaultsHelper: DefaultsHelper;
 
 	constructor(
@@ -25,9 +28,13 @@ export class MacOSDebugModeManager extends ApplePlatformDebugModeManager {
 		{ nodeFileSystem = new FileSystem(), plistBuddy = undefined } = {},
 	) {
 		super(macosProjectRoot, projectRoot);
+
 		this.scheme = scheme;
+
 		this.nodeFileSystem = nodeFileSystem;
+
 		this.plistBuddy = plistBuddy || new PlistBuddy();
+
 		this.defaultsHelper = new DefaultsHelper();
 	}
 

@@ -22,6 +22,7 @@ async function test(
 	androidHomeVariableName: string = "ANDROID_HOME",
 ): Promise<ValidationResultT> {
 	const envVars: Record<string, string | undefined> = {};
+
 	envVars[androidHomeVariableName] = process.env[androidHomeVariableName];
 
 	const resolvedEnv = fromEntries(

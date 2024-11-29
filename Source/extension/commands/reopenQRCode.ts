@@ -11,10 +11,13 @@ import { Command } from "./util/command";
 
 export class ReopenQRCode extends Command {
 	codeName = "reopenQRCode";
+
 	label = "Reopen QR Code in Expo";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToReopenQRCode,
 	);
+
 	private qrCodeContentProvider: QRCodeContentProvider =
 		new QRCodeContentProvider();
 
@@ -26,6 +29,7 @@ export class ReopenQRCode extends Command {
 				vscode.ViewColumn.Two,
 				{},
 			);
+
 			exponentPage.webview.html =
 				this.qrCodeContentProvider.provideTextDocumentContent(
 					vscode.Uri.parse(getQRCodeUrl()),

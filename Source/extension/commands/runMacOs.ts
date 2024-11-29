@@ -19,7 +19,9 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class RunMacOS extends ReactNativeCommand {
 	codeName = "runMacOS";
+
 	label = "Run MacOS";
+
 	error = ErrorHelper.getInternalError(InternalErrorCode.FailedToRunOnMacOS);
 
 	async baseFn(): Promise<void> {
@@ -34,7 +36,9 @@ export class RunMacOS extends ReactNativeCommand {
 
 		try {
 			await platform.beforeStartPackager();
+
 			await platform.startPackager();
+
 			await platform.disableJSDebuggingMode();
 		} catch (e) {}
 
@@ -43,7 +47,9 @@ export class RunMacOS extends ReactNativeCommand {
 
 	async onBeforeExecute(): Promise<void> {
 		await super.onBeforeExecute();
+
 		assert(this.project);
+
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
 			"debuggingRNWAndMacOSApps",
 		);
@@ -51,6 +57,7 @@ export class RunMacOS extends ReactNativeCommand {
 		const additionalPackagesToCheck: ParsedPackage[] = [
 			REACT_NATIVE_PACKAGES.REACT_NATIVE_MACOS,
 		];
+
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.macOS);
 
 		const versions =
@@ -58,6 +65,7 @@ export class RunMacOS extends ReactNativeCommand {
 				this.project.getOrUpdateNodeModulesRoot(),
 				additionalPackagesToCheck,
 			);
+
 		this.project.setReactNativeVersions(versions);
 	}
 }

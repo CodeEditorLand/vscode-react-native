@@ -19,6 +19,7 @@ abstract class RunIos extends ReactNativeCommand {
 
 	async onBeforeExecute(): Promise<void> {
 		await super.onBeforeExecute();
+
 		assert(this.project);
 
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
@@ -27,27 +28,33 @@ abstract class RunIos extends ReactNativeCommand {
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				nodeModulesRoot,
 			);
+
 		this.project.setReactNativeVersions(versions);
+
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.iOS);
 	}
 }
 
 export class RunIosDevice extends RunIos {
 	codeName = "runIosDevice";
+
 	label = "Run iOS on Device";
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await runIos(TargetType.Device, this.project);
 	}
 }
 
 export class RunIosSimulator extends RunIos {
 	codeName = "runIosSimulator";
+
 	label = "Run iOS on Simulator";
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await runIos(TargetType.Simulator, this.project);
 	}
 }
@@ -62,7 +69,9 @@ async function runIos(target: TargetType, project: AppLauncher) {
 
 	try {
 		await platform.resolveMobileTarget(target);
+
 		await platform.beforeStartPackager();
+
 		await platform.startPackager();
 		// Set the Debugging setting to disabled, because in iOS it's persisted across runs of the app
 		await platform.disableJSDebuggingMode();

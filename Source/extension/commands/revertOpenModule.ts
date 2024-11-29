@@ -25,8 +25,11 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class RevertOpenModule extends ReactNativeCommand {
 	nodeModulesRoot: string;
+
 	codeName = "revertOpenModule";
+
 	label = "Revert extension input in open package module";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToRevertOpenModule,
 	);
@@ -95,6 +98,7 @@ export class RevertOpenModule extends ReactNativeCommand {
 			if (packageJson.main == "open-main.js") {
 				try {
 					delete packageJson.main;
+
 					await fs.writeFileSync(
 						packageFilePath,
 						JSON.stringify(<Record<string, any>>packageJson),
@@ -115,6 +119,7 @@ export class RevertOpenModule extends ReactNativeCommand {
 					),
 				);
 			}
+
 			logger.info(
 				localize(
 					"CompleteOpenModuleCleaUp",

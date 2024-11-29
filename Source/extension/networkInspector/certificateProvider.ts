@@ -82,9 +82,13 @@ const x509SubjectCNRegex = /[=,]\s*CN=([^,]*)(,.*)?$/;
 
 export type SecureServerConfig = {
 	key: Buffer;
+
 	cert: Buffer;
+
 	ca: Buffer;
+
 	requestCert: boolean;
+
 	rejectUnauthorized: boolean;
 };
 
@@ -101,12 +105,16 @@ export type SecureServerConfig = {
  */
 export class CertificateProvider {
 	private adbHelper: AdbHelper;
+
 	private certificateSetup: Promise<void>;
+
 	private logger: OutputChannelLogger;
 
 	constructor(adbHelper: AdbHelper) {
 		this.adbHelper = adbHelper;
+
 		this.certificateSetup = this.ensureServerCertExists();
+
 		this.logger = OutputChannelLogger.getChannel(
 			NETWORK_INSPECTOR_LOG_CHANNEL_NAME,
 		);
@@ -137,6 +145,7 @@ export class CertificateProvider {
 				new Error(`Received empty CSR from ${os} device`),
 			);
 		}
+
 		this.ensureOpenSSLIsAvailable();
 
 		const rootFolder = (await tmp.dir()).path;
@@ -220,6 +229,7 @@ export class CertificateProvider {
 				if (!matches || matches.length < 2) {
 					throw new Error(`Cannot extract CN from ${subject}`);
 				}
+
 				return matches[1];
 			})
 			.then((appName) => {
@@ -228,6 +238,7 @@ export class CertificateProvider {
 						`Disallowed app name in CSR: ${appName}. Only alphanumeric characters and '.' allowed.`,
 					);
 				}
+
 				return appName;
 			});
 	}
@@ -245,6 +256,7 @@ export class CertificateProvider {
 		} else if (os == ClientOS.MacOS) {
 			return Promise.resolve("");
 		}
+
 		return Promise.resolve("unknown");
 	}
 
@@ -287,6 +299,7 @@ export class CertificateProvider {
 		if (matches && matches.length === 2) {
 			return matches[1];
 		}
+
 		throw new Error("Path didn't match expected pattern: " + absolutePath);
 	}
 
@@ -332,6 +345,7 @@ export class CertificateProvider {
 								),
 							);
 					}
+
 					return androidUtil.push(
 						this.adbHelper,
 						deviceId,
@@ -343,6 +357,7 @@ export class CertificateProvider {
 				},
 			);
 		}
+
 		if (
 			os === ClientOS.iOS ||
 			os === ClientOS.Windows ||
@@ -376,12 +391,14 @@ export class CertificateProvider {
 								);
 							});
 					}
+
 					throw new Error(
 						`Invalid appDirectory recieved from ${os} device: ${destination}: ` +
 							err.toString(),
 					);
 				});
 		}
+
 		return Promise.reject(new Error(`Unsupported device os: ${os}`));
 	}
 
@@ -394,6 +411,7 @@ export class CertificateProvider {
 	): Promise<void> {
 		return tmp.dir({ unsafeCleanup: true }).then((dir) => {
 			const filePath = path.resolve(dir.path, filename);
+
 			fs.promises
 				.writeFile(filePath, contents)
 				.then(() =>
@@ -417,6 +435,7 @@ export class CertificateProvider {
 			if (devices.length === 0) {
 				throw new Error("No Android devices found");
 			}
+
 			const deviceMatchList = devices.map((device) =>
 				this.androidDeviceHasMatchingCSR(
 					deviceCsrFilePath,
@@ -452,11 +471,13 @@ export class CertificateProvider {
 					if (erroredDevice) {
 						throw erroredDevice.error;
 					}
+
 					const foundCsrs = devices
 						.filter((d) => d.foundCsr !== null)
 						.map((d) =>
 							d.foundCsr ? encodeURI(d.foundCsr) : "null",
 						);
+
 					this.logger.error(`Looking for CSR (url encoded):
 
             ${encodeURI(this.santitizeString(csr))}
@@ -469,11 +490,13 @@ export class CertificateProvider {
 						`No matching device found for app: ${appName}`,
 					);
 				}
+
 				if (matchingIds.length > 1) {
 					this.logger.error(
 						`More than one matching device found for CSR:\n${csr}`,
 					);
 				}
+
 				return matchingIds[0];
 			});
 		});
@@ -490,10 +513,12 @@ export class CertificateProvider {
 			// It's a simulator, the deviceId is in the filepath.
 			return Promise.resolve(matches[1]);
 		}
+
 		return iosUtil.targets().then((targets) => {
 			if (targets.length === 0) {
 				throw new Error("No iOS devices found");
 			}
+
 			const deviceMatchList = targets.map((target) =>
 				this.iOSDeviceHasMatchingCSR(
 					deviceCsrFilePath,
@@ -515,6 +540,7 @@ export class CertificateProvider {
 						`No matching device found for app: ${appName}`,
 					);
 				}
+
 				return matchingIds[0];
 			});
 		});
@@ -578,9 +604,11 @@ export class CertificateProvider {
 						if (items.length > 1) {
 							throw new Error("Conflict in temp dir");
 						}
+
 						if (items.length === 0) {
 							throw new Error("Failed to pull CSR from device");
 						}
+
 						return items[0];
 					})
 					.then((fileName) => {
@@ -606,6 +634,7 @@ export class CertificateProvider {
 		if (!fs.existsSync(caKey)) {
 			return this.generateCertificateAuthority();
 		}
+
 		return this.checkCertIsValid(caCert).catch(() =>
 			this.generateCertificateAuthority(),
 		);
@@ -658,6 +687,7 @@ export class CertificateProvider {
 						"Cannot parse certificate expiry date. Assuming it has expired.",
 					);
 				}
+
 				if (
 					expiryDate <=
 					Date.now() + minCertExpiryWindowSeconds * 1000
@@ -673,6 +703,7 @@ export class CertificateProvider {
 		const options: {
 			[key: string]: any;
 		} = { CAfile: caCert };
+
 		options[serverCert] = false;
 
 		return openssl("verify", options).then((output) => {
@@ -692,6 +723,7 @@ export class CertificateProvider {
 		if (!fs.existsSync(getFilePath(""))) {
 			mkdirp.sync(getFilePath(""));
 		}
+
 		return openssl("genrsa", { out: caKey, "2048": false })
 			.then(() =>
 				openssl("req", {

@@ -81,6 +81,7 @@ export function isWorkspaceTrusted(): boolean {
 	if (typeof (vscode.workspace as any).isTrusted === "boolean") {
 		return (vscode.workspace as any).isTrusted;
 	}
+
 	return true;
 }
 
@@ -103,5 +104,6 @@ export async function getVersionFromExtensionNodeModules(
 			return null;
 		}
 	}
+
 	return null;
 }

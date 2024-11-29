@@ -30,6 +30,7 @@ export class EditorColorThemesHelper {
 				? SystemColorTheme.Dark
 				: SystemColorTheme.Light;
 		}
+
 		throw new Error(
 			"Couldn't detect the current system color theme: 'window.autoDetectColorScheme' parameter is disabled",
 		);

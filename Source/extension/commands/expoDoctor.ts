@@ -13,7 +13,9 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class expoDoctor extends ReactNativeCommand {
 	codeName = "ExpoDoctor";
+
 	label = "Expo Doctor";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToRunExpoDoctor,
 	);
@@ -26,9 +28,11 @@ export class expoDoctor extends ReactNativeCommand {
 		const res = await new ChildProcess().exec("npx expo-doctor", {
 			cwd: projectRootPath,
 		});
+
 		logger.info("Running diagnostics...");
 
 		const outcome = await res.outcome;
+
 		logger.info(outcome);
 	}
 }

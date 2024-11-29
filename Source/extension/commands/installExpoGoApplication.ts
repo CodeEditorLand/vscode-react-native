@@ -29,7 +29,9 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class InstallExpoGoApplication extends Command {
 	codeName = "installExpoGoApplication";
+
 	label = "Download and install Expo Go on simulator or device";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToInstallExpoGo,
 	);
@@ -49,6 +51,7 @@ export class InstallExpoGoApplication extends Command {
 		);
 
 		const expoHelper = this.project.getExponentHelper();
+
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",
@@ -73,6 +76,7 @@ export class InstallExpoGoApplication extends Command {
 				void vscode.window.showInformationMessage(
 					"Downloading Expo Go for Android.",
 				);
+
 				logger.logStream(
 					localize(
 						"DownloadAndroidExpoGo",
@@ -130,9 +134,11 @@ export class InstallExpoGoApplication extends Command {
 						),
 					);
 				}
+
 				void vscode.window.showInformationMessage(
 					"Downloading Expo Go for iOS.",
 				);
+
 				logger.logStream(
 					localize(
 						"DownloadiOSExpoGo",
@@ -202,19 +208,25 @@ export class InstallExpoGoApplication extends Command {
 async function fetchJson(url: string): Promise<string> {
 	return new Promise<string>((fulfill, reject) => {
 		const requestOptions: https.RequestOptions = {};
+
 		requestOptions.rejectUnauthorized = false; // CodeQL [js/disabling-certificate-validation] Debug extension does not need to verify certificate
 
 		const request = https.get(url, requestOptions, (response) => {
 			let data = "";
+
 			response.setEncoding("utf8");
+
 			response.on("data", (chunk: string) => {
 				data += chunk;
 			});
+
 			response.on("end", () => fulfill(data));
+
 			response.on("error", reject);
 		});
 
 		request.on("error", reject);
+
 		request.end();
 	});
 }

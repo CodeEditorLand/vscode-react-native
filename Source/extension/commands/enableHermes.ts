@@ -18,10 +18,13 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class EnableHermes extends Command {
 	codeName = "hermesEnable";
+
 	label = "Enable Hermes";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToEnableHermes,
 	);
+
 	private nodeFileSystem = new FileSystem();
 
 	async baseFn(): Promise<void> {
@@ -75,7 +78,9 @@ export class EnableHermes extends Command {
 					/:hermes_enabled\s*=>\s*\w+/,
 					`:hermes_enabled => ${isHermesEnabled}`,
 				);
+
 				await this.nodeFileSystem.writeFile(podfilePath, updatedHermes);
+
 				await commandExecutor.spawn("pod", ["install"]);
 			} else if (rnMatches) {
 				let content = rnMatches[1];
@@ -85,16 +90,20 @@ export class EnableHermes extends Command {
 				if (!content.trim().endsWith(",")) {
 					content += ",";
 				}
+
 				content += `\n    :hermes_enabled => ${isHermesEnabled}`;
 
 				const newData = podfileContent.replace(
 					regex,
 					content + closing,
 				);
+
 				await this.nodeFileSystem.writeFile(podfilePath, newData);
+
 				await commandExecutor.spawn("pod", ["install"]);
 			}
 		}
+
 		if (type === "Android") {
 			const gradleFilePath = path.join(
 				projectRoot,
@@ -119,12 +128,14 @@ export class EnableHermes extends Command {
 					/hermesEnabled\s*=\s*\w*/,
 					`hermesEnabled=${isHermesEnabled}`,
 				);
+
 				await this.nodeFileSystem.writeFile(
 					gradleFilePath,
 					updatedHermes,
 				);
 			} else {
 				const updatedGradle = `${gradleFileContent} \nhermesEnabled=${isHermesEnabled}`;
+
 				await this.nodeFileSystem.writeFile(
 					gradleFilePath,
 					updatedGradle,

@@ -18,9 +18,13 @@ export interface IHasErrorCode {
 
 export abstract class TelemetryGeneratorBase {
 	protected telemetryProperties: ICommandTelemetryProperties = {};
+
 	private componentName: string;
+
 	private currentStepStartTime: [number, number];
+
 	private currentStep: string = "initialStep";
+
 	private errorIndex: number = -1; // In case we have more than one error (We start at -1 because we increment it before using it)
 	private extendedTelemetryProperties: ICommandTelemetryProperties = {};
 
@@ -29,7 +33,9 @@ export abstract class TelemetryGeneratorBase {
 		extendedProps: ICommandTelemetryProperties = {},
 	) {
 		this.componentName = componentName;
+
 		this.extendedTelemetryProperties = extendedProps;
+
 		this.currentStepStartTime = process.hrtime();
 	}
 
@@ -85,6 +91,7 @@ export abstract class TelemetryGeneratorBase {
 
 		const errorCode =
 			errorWithErrorCode.errorCode || InternalErrorCode.UnknownError;
+
 		this.add(`error.code${++this.errorIndex}`, errorCode, /* isPii*/ false);
 
 		return this;
@@ -112,11 +119,14 @@ export abstract class TelemetryGeneratorBase {
 	public step(name: string): TelemetryGeneratorBase {
 		// First we finish measuring this step time, and we send a telemetry event for this step
 		this.finishTime(this.currentStep, this.currentStepStartTime);
+
 		this.sendCurrentStep();
 
 		// Then we prepare to start gathering information about the next step
 		this.currentStep = name;
+
 		this.telemetryProperties = {};
+
 		this.currentStepStartTime = process.hrtime();
 
 		return this;
@@ -135,6 +145,7 @@ export abstract class TelemetryGeneratorBase {
 
 		const telemetryEvent: Telemetry.TelemetryEvent =
 			new Telemetry.TelemetryEvent(this.componentName);
+
 		TelemetryHelper.addTelemetryEventProperties(
 			telemetryEvent,
 			Object.assign(
@@ -142,6 +153,7 @@ export abstract class TelemetryGeneratorBase {
 				this.extendedTelemetryProperties,
 			),
 		);
+
 		this.sendTelemetryEvent(telemetryEvent);
 	}
 
@@ -198,6 +210,7 @@ export abstract class TelemetryGeneratorBase {
 		if (name) {
 			// not a ghost step
 			const endTime: [number, number] = process.hrtime(startTime);
+
 			this.add(
 				this.combine(name, "time"),
 				String(endTime[0] * 1000 + endTime[1] / 1000000),

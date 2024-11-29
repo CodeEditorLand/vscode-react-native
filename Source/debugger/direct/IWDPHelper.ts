@@ -14,6 +14,7 @@ import { IAttachRequestArgs } from "../debugSessionBase";
  */
 export class IWDPHelper {
 	private iOSWebkitDebugProxyProcess: cp.ChildProcess | null;
+
 	public static readonly iOS_WEBKIT_DEBUG_PROXY_DEFAULT_PORT: number = 9221;
 
 	constructor() {
@@ -29,11 +30,13 @@ export class IWDPHelper {
 			this.cleanUp();
 
 			const portRange = `null:${proxyPort},:${proxyRangeStart}-${proxyRangeEnd}`;
+
 			this.iOSWebkitDebugProxyProcess = cp.spawn(
 				"ios_webkit_debug_proxy",
 				["-c", portRange],
 				{ shell: true },
 			);
+
 			this.iOSWebkitDebugProxyProcess.on("error", (err) => {
 				reject(
 					new Error(
@@ -90,6 +93,7 @@ export class IWDPHelper {
 	public cleanUp(): void {
 		if (this.iOSWebkitDebugProxyProcess) {
 			this.iOSWebkitDebugProxyProcess.kill();
+
 			this.iOSWebkitDebugProxyProcess = null;
 		}
 	}

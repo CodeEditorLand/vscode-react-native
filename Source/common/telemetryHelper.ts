@@ -13,6 +13,7 @@ import { IHasErrorCode, TelemetryGenerator } from "./telemetryGenerators";
 
 export interface ITelemetryPropertyInfo {
 	value: any;
+
 	isPii: boolean;
 }
 
@@ -37,6 +38,7 @@ export class TelemetryHelper {
 			eventName,
 			properties,
 		);
+
 		Telemetry.send(event);
 	}
 
@@ -91,6 +93,7 @@ export class TelemetryHelper {
 					InternalErrorCode.ReactNativeWindowsIsNotInstalled,
 				);
 			}
+
 			properties = TelemetryHelper.addPropertyToTelemetryProperties(
 				versions.reactNativeWindowsVersion,
 				"reactNativeWindowsVersion",
@@ -108,6 +111,7 @@ export class TelemetryHelper {
 					InternalErrorCode.ReactNativemacOSIsNotInstalled,
 				);
 			}
+
 			properties = TelemetryHelper.addPropertyToTelemetryProperties(
 				versions.reactNativeMacOSVersion,
 				"reactNativeMacOSVersion",
@@ -150,12 +154,14 @@ export class TelemetryHelper {
 		errorDescription?: string,
 	): void {
 		const event = TelemetryHelper.createTelemetryEvent(eventName);
+
 		TelemetryHelper.addTelemetryEventErrorProperty(
 			event,
 			error,
 			errorDescription,
 			"",
 		);
+
 		Telemetry.send(event);
 	}
 
@@ -170,6 +176,7 @@ export class TelemetryHelper {
 		if (properties) {
 			TelemetryHelper.addTelemetryEventProperties(event, properties);
 		}
+
 		Telemetry.send(event);
 	}
 
@@ -256,6 +263,7 @@ export class TelemetryHelper {
 	): ICommandTelemetryProperties {
 		// We parse only the known options, to avoid potential private information that may appear on the command line
 		let unknownOptionIndex = 1;
+
 		Object.keys(commandOptions).forEach((key: string) => {
 			const value: any = commandOptions[key];
 
@@ -273,9 +281,11 @@ export class TelemetryHelper {
 				// This is a not known option. We"ll assume that both the option and the value are pii
 				telemetryProperties[`unknownOption${unknownOptionIndex}.name`] =
 					this.telemetryProperty(key, /* isPii*/ true);
+
 				telemetryProperties[
 					`unknownOption${unknownOptionIndex}.value`
 				] = this.telemetryProperty(value, /* isPii*/ true);
+
 				unknownOptionIndex++;
 			}
 		});

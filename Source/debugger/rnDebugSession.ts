@@ -33,7 +33,9 @@ const localize = nls.loadMessageBundle();
 
 export class RNDebugSession extends DebugSessionBase {
 	private appWorker: MultipleLifetimesAppWorker | null;
+
 	private onDidStartDebugSessionHandler: vscode.Disposable;
+
 	private onDidTerminateDebugSessionHandler: vscode.Disposable;
 
 	constructor(rnSession: RNSession) {
@@ -66,8 +68,11 @@ export class RNDebugSession extends DebugSessionBase {
 						launchArgs.cwd,
 					);
 				}
+
 				await this.initializeSettings(launchArgs);
+
 				logger.log("Launching the application");
+
 				logger.verbose(
 					`Launching the application: ${JSON.stringify(launchArgs, null, 2)}`,
 				);
@@ -87,6 +92,7 @@ export class RNDebugSession extends DebugSessionBase {
 			}
 			// if debugging is enabled start attach request
 			await this.vsCodeDebugSession.customRequest("attach", launchArgs);
+
 			this.sendResponse(response);
 		} catch (error) {
 			this.terminateWithErrorResponse(error, response);
@@ -111,7 +117,9 @@ export class RNDebugSession extends DebugSessionBase {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
 				await this.initializeSettings(attachArgs);
+
 				logger.log("Attaching to the application");
+
 				logger.verbose(
 					`Attaching to the application: ${JSON.stringify(attachArgs, null, 2)}`,
 				);
@@ -123,6 +131,7 @@ export class RNDebugSession extends DebugSessionBase {
 							attachArgs,
 						),
 					);
+
 				extProps =
 					TelemetryHelper.addPlatformPropertiesToTelemetryProperties(
 						attachArgs,
@@ -140,7 +149,9 @@ export class RNDebugSession extends DebugSessionBase {
 							this.appLauncher.getPackagerPort(attachArgs.cwd);
 
 						const cdpProxy = this.appLauncher.getRnCdpProxy();
+
 						await cdpProxy.stopServer();
+
 						await cdpProxy.initializeServer(
 							new RnCDPMessageHandler(),
 							this.cdpProxyLogLevel,
@@ -168,6 +179,7 @@ export class RNDebugSession extends DebugSessionBase {
 						);
 						// Create folder if not exist to avoid problems if
 						// RN project root is not a ${workspaceFolder}
+
 						mkdirp.sync(sourcesStoragePath);
 
 						// If launch is invoked first time, appWorker is undefined, so create it here
@@ -178,6 +190,7 @@ export class RNDebugSession extends DebugSessionBase {
 							this.cancellationTokenSource.token,
 							undefined,
 						);
+
 						this.appLauncher.setAppWorker(this.appWorker);
 
 						this.appWorker.on("connected", (port: number) => {
@@ -211,6 +224,7 @@ export class RNDebugSession extends DebugSessionBase {
 							) {
 								this.debugSessionStatus =
 									DebugSessionStatus.FirstConnectionPending;
+
 								this.establishDebugSession(attachArgs, resolve);
 							} else if (
 								this.debugSessionStatus ===
@@ -219,6 +233,7 @@ export class RNDebugSession extends DebugSessionBase {
 								if (this.nodeSession) {
 									this.debugSessionStatus =
 										DebugSessionStatus.ConnectionPending;
+
 									void this.nodeSession.customRequest(
 										this.terminateCommand,
 									);
@@ -232,6 +247,7 @@ export class RNDebugSession extends DebugSessionBase {
 						) {
 							return this.appWorker.stop();
 						}
+
 						return await this.appWorker.start();
 					},
 				);
@@ -264,6 +280,7 @@ export class RNDebugSession extends DebugSessionBase {
 		}
 
 		this.onDidStartDebugSessionHandler.dispose();
+
 		this.onDidTerminateDebugSessionHandler.dispose();
 
 		return super.disconnectRequest(response, args, request);
@@ -294,17 +311,21 @@ export class RNDebugSession extends DebugSessionBase {
 					if (childDebugSessionStarted) {
 						this.debugSessionStatus =
 							DebugSessionStatus.ConnectionDone;
+
 						this.setConnectionAllowedIfPossible();
 
 						if (resolve) {
 							this.debugSessionStatus =
 								DebugSessionStatus.ConnectionAllowed;
+
 							resolve();
 						}
 					} else {
 						this.debugSessionStatus =
 							DebugSessionStatus.ConnectionFailed;
+
 						this.setConnectionAllowedIfPossible();
+
 						this.resetFirstConnectionStatus();
 
 						throw new Error("Cannot start child debug session");
@@ -313,7 +334,9 @@ export class RNDebugSession extends DebugSessionBase {
 				(err) => {
 					this.debugSessionStatus =
 						DebugSessionStatus.ConnectionFailed;
+
 					this.setConnectionAllowedIfPossible();
+
 					this.resetFirstConnectionStatus();
 
 					throw err;

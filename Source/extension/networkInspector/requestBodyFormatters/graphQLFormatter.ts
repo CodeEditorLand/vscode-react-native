@@ -35,16 +35,20 @@ export class GraphQLFormatter implements IFormatter {
 			if (!decoded) {
 				return null;
 			}
+
 			const data = querystring.parse(decoded);
 
 			if (typeof data.variables === "string") {
 				data.variables = JSON.parse(data.variables);
 			}
+
 			if (typeof data.query_params === "string") {
 				data.query_params = JSON.parse(data.query_params);
 			}
+
 			return data;
 		}
+
 		return null;
 	}
 
@@ -73,6 +77,7 @@ export class GraphQLFormatter implements IFormatter {
 					.map((json) => JSON.parse(json));
 			}
 		}
+
 		return null;
 	}
 }

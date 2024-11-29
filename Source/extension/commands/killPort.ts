@@ -15,12 +15,16 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class killPort extends ReactNativeCommand {
 	codeName = "killPort";
+
 	label = "Kill Port";
+
 	error = ErrorHelper.getInternalError(InternalErrorCode.FailedToKillPort);
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await wait();
+
 		await vscode.window
 			.showInputBox({
 				placeHolder: "please enter the port you want to kill",
@@ -30,10 +34,13 @@ export class killPort extends ReactNativeCommand {
 					const res = await new ChildProcess().exec(
 						`npx kill-port ${value}`,
 					);
+
 					logger.info(
 						`killing port ${value}, it may take a while...`,
 					);
+
 					const outcome = await res.outcome;
+
 					logger.info(outcome);
 				}
 			});

@@ -97,6 +97,7 @@ export class SourceMapsCombinator {
 
 				// Update mapping w/ mapped position values
 				mapping.source = tsPosition.source;
+
 				mapping.name = tsPosition.name || mapping.name;
 
 				if (tsPosition.line !== null && tsPosition.column !== null) {
@@ -138,6 +139,7 @@ export class SourceMapsCombinator {
 		if (result === null) {
 			return null;
 		}
+
 		return new SourceMapConsumer(result.map);
 	}
 }

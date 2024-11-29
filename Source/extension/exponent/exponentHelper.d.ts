@@ -3,19 +3,29 @@
 
 declare interface AppJson {
     public name: string;
+
     public displayName?: string;
+
     public expo: ExpConfig;
 }
 
 declare interface ExpConfig {
     public name: string;
+
     public slug: string;
+
     public sdkVersion: string;
+
     public version?: string;
+
     public entryPoint?: string;
+
     public packagerOpts?: ExpConfigPackager;
+
     public android?: [];
+
     public ios?: [];
+
     public web?:[];
 }
 

@@ -25,19 +25,25 @@ import { InspectorViewFactory } from "./views/inspectorViewFactory";
 
 export interface ClientIdConstituents {
 	app: string;
+
 	os: ClientOS;
+
 	device: string;
+
 	device_id: string;
 }
 
 export interface UninitializedClient {
 	os: ClientOS;
+
 	deviceName: string;
+
 	appName: string;
 }
 
 export interface ClientCsrQuery {
 	csr?: string;
+
 	csr_path?: string;
 }
 
@@ -51,13 +57,17 @@ export interface SecureClientQuery extends ClientQuery, ClientCsrQuery {
 
 export interface RequestParams {
 	api: string;
+
 	method: string;
+
 	params?: Record<string, any>;
 }
 
 type RequestMetadata = {
 	method: string;
+
 	id: number;
+
 	params: RequestParams | undefined;
 };
 
@@ -67,19 +77,28 @@ export class ClientDevice {
 	private readonly networkInspectorPluginName: string;
 
 	private _id: string;
+
 	private _query: ClientQuery;
+
 	private _connection: ReactiveSocket<any, any> | null | undefined;
+
 	private logger: OutputChannelLogger;
+
 	private messageIdCounter: number;
+
 	private sdkVersion: number;
+
 	private activePlugins: Set<string>;
+
 	private inspectorView: InspectorView;
 
 	private requestCallbacks: Map<
 		number,
 		{
 			resolve: (data: any) => void;
+
 			reject: (err: Error) => void;
+
 			metadata: RequestMetadata;
 		}
 	>;
@@ -94,13 +113,21 @@ export class ClientDevice {
 		this.networkInspectorPluginName = "Network";
 
 		this._id = id;
+
 		this._query = query;
+
 		this._connection = connection;
+
 		this.logger = logger;
+
 		this.messageIdCounter = 0;
+
 		this.sdkVersion = query.sdk_version || 0;
+
 		this.activePlugins = new Set();
+
 		this.requestCallbacks = new Map();
+
 		this.inspectorView =
 			InspectorViewFactory.getInspectorView(inspectorViewType);
 	}
@@ -123,6 +150,7 @@ export class ClientDevice {
 		if (plugins.includes(this.networkInspectorPluginName)) {
 			this.initNetworkInspectorPlugin();
 		}
+
 		await this.inspectorView.init();
 	}
 
@@ -143,9 +171,13 @@ export class ClientDevice {
 
 		const data: {
 			id?: number;
+
 			method?: string;
+
 			params?: RequestParams;
+
 			success?: Record<string, any>;
+
 			error?: ErrorType;
 		} = rawData;
 
@@ -161,6 +193,7 @@ export class ClientDevice {
 			} else if (data.method === "execute" && data.params) {
 				this.inspectorView.handleMessage(data.params);
 			}
+
 			return; // method === "execute";
 		}
 
@@ -170,13 +203,16 @@ export class ClientDevice {
 			if (!callbacks) {
 				return;
 			}
+
 			this.requestCallbacks.delete(data.id);
+
 			this.onResponse(data, callbacks.resolve, callbacks.reject);
 		}
 	}
 
 	private initNetworkInspectorPlugin(): void {
 		this.activePlugins.add(this.networkInspectorPluginName);
+
 		this.rawSend("init", { plugin: this.networkInspectorPluginName });
 	}
 
@@ -232,6 +268,7 @@ export class ClientDevice {
 						data: JSON.stringify(data),
 					});
 				}
+
 				return;
 			}
 
@@ -246,6 +283,7 @@ export class ClientDevice {
 						) {
 							const response: {
 								success?: Record<string, any>;
+
 								error?: ErrorType;
 							} = JSON.parse(payload.data);
 
@@ -269,6 +307,7 @@ export class ClientDevice {
 	private onResponse(
 		data: {
 			success?: Record<string, any>;
+
 			error?: ErrorType;
 		},
 		resolve: ((a: any) => any) | undefined,

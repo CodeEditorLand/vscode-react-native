@@ -31,6 +31,7 @@ export async function downloadFile(url: any, targetFile: any) {
 				);
 
 				response.pipe(file);
+
 				response.on("data", async function (chunk) {
 					newProgress += chunk.length;
 
@@ -41,6 +42,7 @@ export async function downloadFile(url: any, targetFile: any) {
 
 					if (currentProgress - progress >= 5) {
 						progress = currentProgress;
+
 						logger.logStream(
 							`Current progress: ${currentProgress}%, please wait... \n`,
 						);
@@ -49,9 +51,11 @@ export async function downloadFile(url: any, targetFile: any) {
 
 				file.on("finish", async () => {
 					file.close();
+
 					logger.logStream(
 						`Download Expo Go Completed: ${targetFile as string} \n`,
 					);
+
 					void vscode.window.showInformationMessage(
 						"Download Expo Go Completed.",
 					);

@@ -51,6 +51,7 @@ export class JSONFormatter implements IFormatter {
 				return body.split("\n").map((json) => JSON.parse(json));
 			}
 		}
+
 		return null;
 	}
 }

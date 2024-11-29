@@ -9,7 +9,9 @@ import { Command } from "./util/command";
 
 export class LaunchIOSSimulator extends Command {
 	codeName = "launchIOSSimulator";
+
 	label = "Launch iOS Simulator";
+
 	requiresProject = false;
 
 	error = ErrorHelper.getInternalError(
@@ -18,7 +20,9 @@ export class LaunchIOSSimulator extends Command {
 
 	async baseFn(): Promise<void> {
 		const targetManager = new IOSTargetManager();
+
 		await targetManager.collectTargets(TargetType.Simulator);
+
 		await targetManager.selectAndPrepareTarget(
 			(target) => target.isVirtualTarget,
 		);

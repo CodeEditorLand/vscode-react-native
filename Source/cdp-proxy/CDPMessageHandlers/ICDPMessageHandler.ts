@@ -14,10 +14,12 @@ export declare type ProtocolMessage =
 
 export interface ProcessedCDPMessage {
 	event: ProtocolMessage;
+
 	sendBack: boolean;
 }
 
 export interface ICDPMessageHandler {
 	processDebuggerCDPMessage: (event: any) => ProcessedCDPMessage;
+
 	processApplicationCDPMessage: (event: any) => ProcessedCDPMessage;
 }

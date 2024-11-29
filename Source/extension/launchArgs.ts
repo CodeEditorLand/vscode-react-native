@@ -10,20 +10,31 @@ import { RNPackageVersions } from "../common/projectVersionHelper";
 
 export interface IBaseArgs {
 	platform: string;
+
 	workspaceRoot: string;
+
 	projectRoot: string;
+
 	nodeModulesRoot: string;
+
 	env?: any;
+
 	envFile?: string;
+
 	isDirect?: boolean;
+
 	packagerPort?: number;
 }
 
 export interface ILaunchArgs extends IBaseArgs {
 	reactNativeVersions: RNPackageVersions;
+
 	target?: string;
+
 	debugAdapterPort?: number;
+
 	runArguments?: string[];
+
 	enableDebug?: boolean;
 }
 
@@ -44,13 +55,17 @@ export type ExpoHostType = "tunnel" | "lan" | "local";
 
 export interface IAndroidRunOptions extends ILaunchArgs {
 	variant?: string;
+
 	logCatArguments?: any;
+
 	debugLaunchActivity?: string;
 }
 
 export interface ImacOSRunOptions extends ILaunchArgs {
 	scheme?: string;
+
 	configuration?: string;
+
 	productName?: string;
 }
 
@@ -62,6 +77,7 @@ export interface IExponentRunOptions
 	extends IAndroidRunOptions,
 		IIOSRunOptions {
 	expoHostType?: ExpoHostType;
+
 	openExpoQR?: boolean;
 }
 

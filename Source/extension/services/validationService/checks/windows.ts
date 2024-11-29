@@ -24,6 +24,7 @@ async function test(): Promise<ValidationResultT> {
 			status: "success",
 		};
 	}
+
 	return {
 		status: "failure",
 		comment: `Unsupported version of Windows detected - ${version}. Please, update Windows in case of errors.`,

@@ -25,6 +25,7 @@ async function test(): Promise<ValidationResultT> {
 			status: "success",
 		};
 	}
+
 	return {
 		status: "failure",
 		comment: createNotFoundMessage(label),

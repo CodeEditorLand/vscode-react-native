@@ -89,6 +89,7 @@ export class EntryPointHandler {
 			const isDebugeeProcess = this.processType === ProcessType.Debugee;
 
 			const shouldLogStack = !errorsAreFatal || isDebugeeProcess;
+
 			this.logger.error(
 				error.message,
 				ErrorHelper.wrapError(error, reason),

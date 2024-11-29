@@ -35,8 +35,10 @@ export class FormUrlencodedFormatter implements IFormatter {
 			if (!decoded) {
 				return null;
 			}
+
 			return querystring.parse(decoded);
 		}
+
 		return null;
 	}
 }

@@ -20,10 +20,15 @@ export enum LogLevel {
 
 export interface ILogger {
 	log: (message: string, level: LogLevel) => void;
+
 	info: (message: string) => void;
+
 	warning: (message: string) => void;
+
 	error: (errorMessage: string, error?: Error, stack?: boolean) => void;
+
 	debug: (message: string) => void;
+
 	logStream: (data: Buffer | string, stream?: NodeJS.WritableStream) => void;
 }
 
@@ -57,10 +62,12 @@ export function getLoggingDirectory(): string | null {
 		if (!path.isAbsolute(dirPath)) {
 			return null;
 		}
+
 		mkdirp.sync(dirPath);
 
 		return dirPath;
 	}
+
 	return null;
 }
 

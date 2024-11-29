@@ -7,6 +7,7 @@ import { InputStep, MultiStepInput } from "../multiStepInput";
 
 export abstract class BaseConfigProvider {
 	protected configurationProviderHelper: ConfigurationProviderHelper;
+
 	protected maxStepCount: number;
 
 	constructor() {

@@ -33,7 +33,9 @@ interface EnvironmentOptions {
 
 interface Options {
 	env?: EnvironmentOptions;
+
 	verbosity?: CommandVerbosity;
+
 	cwd?: string;
 }
 
@@ -44,6 +46,7 @@ export enum CommandStatus {
 
 export class CommandExecutor {
 	public static ReactNativeCommand: string | null;
+
 	private childProcess = new Node.ChildProcess();
 
 	constructor(
@@ -68,7 +71,9 @@ export class CommandExecutor {
 				cwd: this.currentWorkingDirectory,
 				env: options.env,
 			});
+
 			this.logger.info(stdout);
+
 			this.logger.debug(
 				CommandExecutor.getCommandStatusString(
 					command,
@@ -150,10 +155,12 @@ export class CommandExecutor {
 				const res = await this.childProcess.exec(
 					`taskkill /pid ${packagerProcess.pid} /T /F`,
 				);
+
 				await res.outcome;
 			} else {
 				packagerProcess.kill();
 			}
+
 			this.logger.info(localize("PackagerStopped", "Packager stopped"));
 		} else {
 			this.logger.warning(
@@ -223,6 +230,7 @@ export class CommandExecutor {
 
 			if (now - lastDotTime > timeBetweenDots) {
 				lastDotTime = now;
+
 				this.logger.logStream(".", process.stdout);
 			}
 		};
@@ -265,6 +273,7 @@ export class CommandExecutor {
 					),
 				);
 			}
+
 			this.logger.logStream("\n", process.stdout);
 		} catch (reason) {
 			return this.generateRejectionForCommand(commandWithArgs, reason);

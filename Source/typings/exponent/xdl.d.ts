@@ -15,6 +15,7 @@ declare module xdl {
 
     var User: {
         loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
+
         logoutAsync(): Promise<void>;
 
         getCurrentUserAsync(): Promise<IUser>;
@@ -22,6 +23,7 @@ declare module xdl {
 
     var UserManager: {
         loginAsync(loginType: string, options: ILoginOptions): Promise<IUser>;
+
         logoutAsync(): Promise<void>;
 
         getCurrentUserAsync(): Promise<IUser>;
@@ -57,22 +59,37 @@ declare module xdl {
 
     interface SDKVersion {
         androidExpoViewUrl?: string;
+
         expoReactNativeTag: string;
         /* deprecated */ exponentReactNativeTag?: string;
+
         expokitNpmPackage?: string;
+
         facebookReactNativeVersion: string;
+
         facebookReactVersion?: string;
+
         iosExpoViewUrl?: string;
         /* deprecated */ iosExponentViewUrl?: string;
+
         iosVersion?: string;
+
         isDeprecated?: boolean;
+
         packagesToInstallWhenEjecting?: { [name: string]: string };
+
         releaseNoteUrl?: string;
+
         iosClientUrl?: string;
+
         iosClientVersion?: string;
+
         androidClientUrl?: string;
+
         androidClientVersion?: string;
+
         relatedPackages?: { [name: string]: string };
+
         beta?: boolean;
     }
 
@@ -82,15 +99,23 @@ declare module xdl {
 
     var Project: {
         startAsync(projectRoot: string, options?: IStartOptions): Promise<void>;
+
         stopAsync(projectRoot: string): Promise<void>;
 
         getUrlAsync(projectRoot: string, options?: IUrlOptions): Promise<string>;
+
         publishAsync(projectRoot: string, options?: IPublishOptions): Promise<IPublishResponse>;
+
         startExpoServerAsync(projectRoot: string): Promise<void>;
+
         stopExpoServerAsync(projectRoot: string): Promise<void>;
+
         startReactNativeServerAsync(projectRoot: string, options?: IReactNativeServerOptions): Promise<void>;
+
         stopReactNativeServerAsync(projectRoot: string): Promise<void>;
+
         startTunnelsAsync(projectRoot: string): Promise<void>;
+
         stopTunnelsAsync(projectRoot: string): Promise<void>;
     }
 
@@ -104,11 +129,13 @@ declare module xdl {
 
     var Versions: {
         sdkVersionsAsync(): Promise<SDKVersions>;
+
         releasedSdkVersionsAsync(): Promise<SDKVersions>;
     }
 
     var Android: {
         startAdbReverseAsync(projectRoot: string): Promise<boolean>;
+
         stopAdbReverseAsync(projectRoot: string): Promise<void>;
     }
 
@@ -139,11 +166,17 @@ declare module xdl {
 
     interface IBunyanStream {
         type?: string;
+
         level?: number | string;
+
         path?: string;
+
         stream?: NodeJS.WritableStream | IBunyanStream;
+
         closeOnExit?: boolean;
+
         period?: string;
+
         count?: number;
     }
 

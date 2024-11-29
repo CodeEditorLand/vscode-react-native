@@ -37,12 +37,15 @@ const startDebug = (
 	);
 
 	debugConfig.isDynamic = true;
+
 	void vscode.debug.startDebugging(project.getWorkspaceFolder(), debugConfig);
 };
 
 export class AttachHermesApplicationExperimental extends Command {
 	codeName = "debugScenario.attachHermesApplicationExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.ATTACH_TO_HERMES_APPLICATION,
@@ -50,6 +53,7 @@ export class AttachHermesApplicationExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.ATTACH_TO_HERMES_APPLICATION
@@ -61,7 +65,9 @@ export class AttachHermesApplicationExperimental extends Command {
 
 export class AttachDirectIosExperimental extends Command {
 	codeName = "debugScenario.attachDirectIosExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.ATTACH_TO_DIRECT_IOS_EXPERIMENTAL,
@@ -69,6 +75,7 @@ export class AttachDirectIosExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.ATTACH_TO_DIRECT_IOS_EXPERIMENTAL
@@ -80,7 +87,9 @@ export class AttachDirectIosExperimental extends Command {
 
 export class AttachToPackager extends Command {
 	codeName = "debugScenario.attachToPackager";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.ATTACH_TO_PACKAGER,
@@ -88,6 +97,7 @@ export class AttachToPackager extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.ATTACH_TO_PACKAGER],
 			this.project,
@@ -97,7 +107,9 @@ export class AttachToPackager extends Command {
 
 export class DebugAndroid extends Command {
 	codeName = "debugScenario.debugAndroid";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID,
@@ -105,6 +117,7 @@ export class DebugAndroid extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID],
 			this.project,
@@ -114,7 +127,9 @@ export class DebugAndroid extends Command {
 
 export class DebugIos extends Command {
 	codeName = "debugScenario.debugIos";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_IOS,
@@ -122,6 +137,7 @@ export class DebugIos extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.DEBUG_IOS],
 			this.project,
@@ -131,7 +147,9 @@ export class DebugIos extends Command {
 
 export class DebugWindows extends Command {
 	codeName = "debugScenario.debugWindows";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS,
@@ -139,6 +157,7 @@ export class DebugWindows extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS],
 			this.project,
@@ -148,7 +167,9 @@ export class DebugWindows extends Command {
 
 export class DebugMacos extends Command {
 	codeName = "debugScenario.debugMacos";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS,
@@ -156,6 +177,7 @@ export class DebugMacos extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS],
 			this.project,
@@ -165,7 +187,9 @@ export class DebugMacos extends Command {
 
 export class DebugInExponent extends Command {
 	codeName = "debugScenario.debugInExponent";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT,
@@ -173,6 +197,7 @@ export class DebugInExponent extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT],
 			this.project,
@@ -182,7 +207,9 @@ export class DebugInExponent extends Command {
 
 export class DebugInHermesExponent extends Command {
 	codeName = "debugScenario.debugInHermesExponentExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT_HERMES_EXPERIMENTAL,
@@ -190,6 +217,7 @@ export class DebugInHermesExponent extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT_HERMES_EXPERIMENTAL
@@ -201,7 +229,9 @@ export class DebugInHermesExponent extends Command {
 
 export class DebugInExponentWeb extends Command {
 	codeName = "debugScenario.debugInExponentWebExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT_WEB_EXPERIMENTAL,
@@ -209,6 +239,7 @@ export class DebugInExponentWeb extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.DEBUG_IN_EXPONENT_WEB_EXPERIMENTAL
@@ -220,7 +251,9 @@ export class DebugInExponentWeb extends Command {
 
 export class DebugAndroidHermesExperimental extends Command {
 	codeName = "debugScenario.debugAndroidHermesExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID_HERMES,
@@ -228,6 +261,7 @@ export class DebugAndroidHermesExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID_HERMES],
 			this.project,
@@ -237,7 +271,9 @@ export class DebugAndroidHermesExperimental extends Command {
 
 export class DebugDirectIosExperimental extends Command {
 	codeName = "debugScenario.debugDirectIosExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_DIRECT_IOS_EXPERIMENTAL,
@@ -245,6 +281,7 @@ export class DebugDirectIosExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.DEBUG_DIRECT_IOS_EXPERIMENTAL
@@ -256,7 +293,9 @@ export class DebugDirectIosExperimental extends Command {
 
 export class DebugIosHermesExperimental extends Command {
 	codeName = "debugScenario.debugIosHermesExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_IOS_HERMES,
@@ -264,6 +303,7 @@ export class DebugIosHermesExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.DEBUG_IOS_HERMES],
 			this.project,
@@ -273,7 +313,9 @@ export class DebugIosHermesExperimental extends Command {
 
 export class DebugMacosHermesExperimental extends Command {
 	codeName = "debugScenario.debugMacosHermesExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS_HERMES_EXPERIMENTAL,
@@ -281,6 +323,7 @@ export class DebugMacosHermesExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS_HERMES_EXPERIMENTAL
@@ -292,7 +335,9 @@ export class DebugMacosHermesExperimental extends Command {
 
 export class DebugWindowsHermesExperimental extends Command {
 	codeName = "debugScenario.debugWindowsHermesExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS_HERMES_EXPERIMENTAL,
@@ -300,6 +345,7 @@ export class DebugWindowsHermesExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS_HERMES_EXPERIMENTAL
@@ -311,7 +357,9 @@ export class DebugWindowsHermesExperimental extends Command {
 
 export class RunAndroid extends Command {
 	codeName = "debugScenario.runAndroid";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.RUN_ANDROID,
@@ -319,6 +367,7 @@ export class RunAndroid extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.RUN_ANDROID],
 			this.project,
@@ -328,7 +377,9 @@ export class RunAndroid extends Command {
 
 export class RunIos extends Command {
 	codeName = "debugScenario.runIos";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.RUN_IOS,
@@ -336,6 +387,7 @@ export class RunIos extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.RUN_IOS],
 			this.project,
@@ -345,7 +397,9 @@ export class RunIos extends Command {
 
 export class RunAndroidHermesExperimental extends Command {
 	codeName = "debugScenario.runAndroidHermesExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.RUN_ANDROID_HERMES,
@@ -353,6 +407,7 @@ export class RunAndroidHermesExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.RUN_ANDROID_HERMES],
 			this.project,
@@ -362,7 +417,9 @@ export class RunAndroidHermesExperimental extends Command {
 
 export class RunIosHermesExperimental extends Command {
 	codeName = "debugScenario.runIosHermesExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.RUN_IOS_HERMES,
@@ -370,6 +427,7 @@ export class RunIosHermesExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[DEBUG_CONFIGURATION_NAMES.RUN_IOS_HERMES],
 			this.project,
@@ -379,7 +437,9 @@ export class RunIosHermesExperimental extends Command {
 
 export class RunDirectIosExperimental extends Command {
 	codeName = "debugScenario.runDirectIosExperimental";
+
 	label = "";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.DebuggingCommandFailed,
 		DEBUG_CONFIGURATION_NAMES.RUN_DIRECT_IOS_EXPERIMENTAL,
@@ -387,6 +447,7 @@ export class RunDirectIosExperimental extends Command {
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		startDebug(
 			debugConfigurations[
 				DEBUG_CONFIGURATION_NAMES.RUN_DIRECT_IOS_EXPERIMENTAL

@@ -17,9 +17,13 @@ import { Command } from "./util/command";
 
 export class TestDevEnvironment extends Command {
 	codeName = "testDevEnvironment";
+
 	label = "Check development environment configuration";
+
 	requiresTrust = false;
+
 	requiresProject = false;
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToTestDevEnvironment,
 	);

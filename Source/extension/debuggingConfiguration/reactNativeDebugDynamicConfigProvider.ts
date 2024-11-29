@@ -62,6 +62,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS
 				];
+
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.DEBUG_WINDOWS_HERMES_EXPERIMENTAL
 				];
@@ -85,6 +86,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS
 				];
+
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.DEBUG_MACOS_HERMES_EXPERIMENTAL
 				];
@@ -104,6 +106,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.DEBUG_ANDROID_HERMES
 				];
+
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.RUN_ANDROID_HERMES
 				];
@@ -113,6 +116,7 @@ export class ReactNativeDebugDynamicConfigProvider
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.DEBUG_IOS_HERMES
 				];
+
 				delete debugConfigurationsToShow[
 					DEBUG_CONFIGURATION_NAMES.RUN_IOS_HERMES
 				];
@@ -133,6 +137,7 @@ export class ReactNativeDebugDynamicConfigProvider
 		const debugConfigurationsToShowList = Object.values(
 			debugConfigurationsToShow,
 		);
+
 		debugConfigurationsToShowList.forEach((config) => {
 			config.isDynamic = true;
 		});
@@ -152,11 +157,13 @@ export class ReactNativeDebugDynamicConfigProvider
 					selectedConfiguration: config.name,
 				},
 			);
+
 			Telemetry.send(chosenConfigsEvent);
 
 			if (config.request === "attach") {
 				await this.configureAttachScenario(folder, config, token);
 			}
+
 			if (config.platform === PlatformType.Exponent) {
 				await this.configureExpoScenario(folder, config, token);
 			}
@@ -180,6 +187,7 @@ export class ReactNativeDebugDynamicConfigProvider
 		const picker = new MultiStepInput<DebugConfigurationState>();
 
 		const configurationProviderHelper = new ConfigurationProviderHelper();
+
 		await picker.run(async (input, s) => {
 			await configurationProviderHelper.selectExpoHostType(
 				input,

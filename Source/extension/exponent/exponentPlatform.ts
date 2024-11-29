@@ -26,7 +26,9 @@ let QRCodeUrl = "";
 
 export class ExponentPlatform extends GeneralPlatform {
 	private exponentTunnelPath: string | null;
+
 	private exponentHelper: ExponentHelper;
+
 	private qrCodeContentProvider: QRCodeContentProvider =
 		new QRCodeContentProvider();
 
@@ -35,7 +37,9 @@ export class ExponentPlatform extends GeneralPlatform {
 		platformDeps: MobilePlatformDeps = {},
 	) {
 		super(runOptions, platformDeps);
+
 		this.exponentHelper = this.packager.getExponentHelper();
+
 		this.exponentTunnelPath = null;
 	}
 
@@ -60,7 +64,9 @@ export class ExponentPlatform extends GeneralPlatform {
 				await this.loginToExponentOrSkip(this.runOptions.expoHostType);
 
 				const port = this.packager.getPort();
+
 				await XDL.setOptions(this.projectPath, { packagerPort: port });
+
 				await XDL.startExponentServer(this.projectPath);
 
 				// the purpose of this is to save the same sequence of handling 'adb reverse' command execution as in Expo
@@ -126,7 +132,9 @@ export class ExponentPlatform extends GeneralPlatform {
 
 				// Make sure expo app url port is switched to customization
 				const urlString = url.parse(exponentUrl);
+
 				urlString.port = port.toString();
+
 				exponentUrl = `exp://${String(urlString.hostname)}:${String(urlString.port)}`;
 
 				if (!exponentUrl) {
@@ -142,6 +150,7 @@ export class ExponentPlatform extends GeneralPlatform {
 					"Expo server is running. Open your Expo app at {0} to see it.",
 					this.exponentTunnelPath,
 				);
+
 				this.logger.info(outputMessage);
 
 				if (this.runOptions.openExpoQR) {
@@ -151,6 +160,7 @@ export class ExponentPlatform extends GeneralPlatform {
 						vscode.ViewColumn.Two,
 						{},
 					);
+
 					exponentPage.webview.html =
 						this.qrCodeContentProvider.provideTextDocumentContent(
 							vscode.Uri.parse(exponentUrl),
@@ -160,7 +170,9 @@ export class ExponentPlatform extends GeneralPlatform {
 						"QRCodeOutputInstructions",
 						"Scan below QR code to open your app:",
 					);
+
 					this.logger.info(outputMessage);
+
 					qrcode.generate(
 						exponentUrl,
 						{ small: true },
@@ -217,6 +229,7 @@ export class ExponentPlatform extends GeneralPlatform {
 						InternalErrorCode.UserCancelledExpoLogin,
 					);
 				}
+
 				return "";
 			},
 		);
@@ -242,6 +255,7 @@ export class ExponentPlatform extends GeneralPlatform {
 	private async prepareExpoTunnels(): Promise<void> {
 		try {
 			await this.exponentHelper.findOrInstallNgrokGlobally();
+
 			await XDL.startTunnels(this.projectPath);
 		} finally {
 			this.exponentHelper.removeNodeModulesPathFromEnvIfWasSet();

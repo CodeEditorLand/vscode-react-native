@@ -37,9 +37,11 @@ const localize = nls.loadMessageBundle();
 
 	if (process.argv.length === 3) {
 		fullpath = process.argv[2];
+
 		workspace = "";
 	} else {
 		fullpath = process.argv[3];
+
 		workspace = process.argv[2];
 	}
 
@@ -84,6 +86,7 @@ async function getReactNativeWorkspaceForFile(
 	if (workspace) {
 		return workspace;
 	}
+
 	try {
 		return await getPathForRNParentWorkspace(path.dirname(file));
 	} catch (reason) {
@@ -102,11 +105,13 @@ async function getPathForRNParentWorkspace(dir: string): Promise<string> {
 	if (isRNProject) {
 		return dir;
 	}
+
 	if (dir === "" || dir === "." || dir === "/" || dir === path.dirname(dir)) {
 		throw ErrorHelper.getInternalError(
 			InternalErrorCode.WorkspaceNotFound,
 			"React Native project workspace not found.",
 		);
 	}
+
 	return getPathForRNParentWorkspace(path.dirname(dir));
 }

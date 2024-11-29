@@ -22,14 +22,19 @@ enum TipNotificationAction {
 
 export interface TipNotificationConfig extends IConfig {
 	firstTimeMinDaysToRemind: number;
+
 	firstTimeMaxDaysToRemind: number;
+
 	minDaysToRemind: number;
+
 	maxDaysToRemind: number;
+
 	daysAfterLastUsage: number;
 }
 
 export interface TipInfo {
 	knownDate?: Date;
+
 	shownDate?: Date;
 }
 
@@ -39,18 +44,23 @@ export interface Tips {
 
 export interface AllTips {
 	generalTips: Tips;
+
 	specificTips: Tips;
 }
 
 export interface TipsConfig extends TipNotificationConfig {
 	daysLeftBeforeGeneralTip: number;
+
 	lastExtensionUsageDate?: Date;
+
 	allTipsShownFirstly: boolean;
+
 	tips: AllTips;
 }
 
 export interface GeneratedTipResponse {
 	selection: string | undefined;
+
 	tipKey: string;
 }
 
@@ -58,15 +68,23 @@ export class TipNotificationService implements vscode.Disposable {
 	private static instance: TipNotificationService;
 
 	private readonly TIPS_NOTIFICATIONS_LOG_CHANNEL_NAME: string;
+
 	private readonly TIPS_CONFIG_NAME: string;
+
 	private readonly endpointURL: string;
+
 	private readonly downloadConfigRequest: Promise<TipNotificationConfig>;
+
 	private readonly getMoreInfoButtonText: string;
+
 	private readonly doNotShowTipsAgainButtonText: string;
 
 	private cancellationTokenSource: vscode.CancellationTokenSource;
+
 	private _tipsConfig: TipsConfig | null;
+
 	private logger: OutputChannelLogger;
+
 	private showTips: boolean;
 
 	public static getInstance(): TipNotificationService {
@@ -79,24 +97,33 @@ export class TipNotificationService implements vscode.Disposable {
 
 	public dispose(): void {
 		this.cancellationTokenSource.cancel();
+
 		this.cancellationTokenSource.dispose();
 	}
 
 	private constructor() {
 		this.endpointURL =
 			"https://microsoft.github.io/vscode-react-native/tipsNotifications/tipsNotificationsConfig.json";
+
 		this.TIPS_NOTIFICATIONS_LOG_CHANNEL_NAME = "Tips Notifications";
+
 		this.TIPS_CONFIG_NAME = "tipsConfig";
+
 		this.getMoreInfoButtonText = "Get more info";
+
 		this.doNotShowTipsAgainButtonText = "Don't show tips again";
 
 		this.cancellationTokenSource = new vscode.CancellationTokenSource();
+
 		this._tipsConfig = null;
+
 		this.downloadConfigRequest = retryDownloadConfig<TipNotificationConfig>(
 			this.endpointURL,
 			this.cancellationTokenSource,
 		);
+
 		this.showTips = SettingsHelper.getShowTips();
+
 		this.logger = OutputChannelLogger.getChannel(
 			this.TIPS_NOTIFICATIONS_LOG_CHANNEL_NAME,
 			true,
@@ -147,6 +174,7 @@ export class TipNotificationService implements vscode.Disposable {
 		}
 
 		this.tipsConfig.lastExtensionUsageDate = curDate;
+
 		ExtensionConfigManager.config.set(
 			this.TIPS_CONFIG_NAME,
 			this.tipsConfig,
@@ -189,6 +217,7 @@ export class TipNotificationService implements vscode.Disposable {
 		);
 
 		this._tipsConfig = tipsConfig;
+
 		ExtensionConfigManager.config.set(this.TIPS_CONFIG_NAME, tipsConfig);
 	}
 
@@ -225,6 +254,7 @@ export class TipNotificationService implements vscode.Disposable {
 				);
 			}
 		}
+
 		return this._tipsConfig;
 	}
 
@@ -266,7 +296,9 @@ export class TipNotificationService implements vscode.Disposable {
 				tipKey,
 				TipNotificationAction.DO_NOT_SHOW_AGAIN,
 			);
+
 			this.showTips = false;
+
 			await SettingsHelper.setShowTips(this.showTips);
 		}
 	}
@@ -428,6 +460,7 @@ export class TipNotificationService implements vscode.Disposable {
 			this.getSpecificTipNotificationTextByKey(tipKey);
 
 		this.tipsConfig.tips.specificTips[tipKey].shownDate = new Date();
+
 		ExtensionConfigManager.config.set(
 			this.TIPS_CONFIG_NAME,
 			this.tipsConfig,
@@ -451,12 +484,17 @@ export class TipNotificationService implements vscode.Disposable {
 		tipsConfig: TipsConfig,
 	): Promise<TipsConfig> {
 		const remoteConfig = await this.downloadConfigRequest;
+
 		tipsConfig.firstTimeMinDaysToRemind =
 			remoteConfig.firstTimeMinDaysToRemind;
+
 		tipsConfig.firstTimeMaxDaysToRemind =
 			remoteConfig.firstTimeMaxDaysToRemind;
+
 		tipsConfig.minDaysToRemind = remoteConfig.minDaysToRemind;
+
 		tipsConfig.maxDaysToRemind = remoteConfig.maxDaysToRemind;
+
 		tipsConfig.daysAfterLastUsage = remoteConfig.daysAfterLastUsage;
 
 		return tipsConfig;
@@ -527,6 +565,7 @@ export class TipNotificationService implements vscode.Disposable {
 						tip.knownDate,
 					);
 				}
+
 				if (tip.shownDate) {
 					if (tip.shownDate) {
 						rawTipsConfig.tips[tipsType][tipKey].shownDate =
@@ -540,6 +579,7 @@ export class TipNotificationService implements vscode.Disposable {
 			Object.keys(rawTipsConfig.tips.specificTips),
 			"specificTips",
 		);
+
 		parseDatesInTips(
 			Object.keys(rawTipsConfig.tips.generalTips),
 			"generalTips",

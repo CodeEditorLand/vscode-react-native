@@ -26,13 +26,16 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 		const that = this as any;
 
 		const result = Command.instances.get(that) || new that();
+
 		Command.instances.set(that, result);
 
 		return result;
 	}
 
 	abstract readonly codeName: string;
+
 	abstract readonly label: string;
+
 	abstract readonly error: InternalError;
 
 	get platform(): string {
@@ -73,6 +76,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 			const resultFn = async (generator: TelemetryGenerator) => {
 				try {
 					await this.onBeforeExecute(...args);
+
 					await fn.bind(this)(...args);
 				} catch (error) {
 					switch (error.errorCode) {
@@ -152,6 +156,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 	/** Execute base command without telemetry */
 	async executeLocally(...args: ArgT): Promise<void> {
 		await this.onBeforeExecute(...args);
+
 		await this.baseFn(...args);
 	}
 
@@ -162,6 +167,7 @@ export abstract class Command<ArgT extends unknown[] = never[]> {
 			this.entryPointHandler = entryPointHandler;
 
 			assert(!isCalled, "Command can only be registered once");
+
 			isCalled = true;
 
 			return vscode.commands.registerCommand(

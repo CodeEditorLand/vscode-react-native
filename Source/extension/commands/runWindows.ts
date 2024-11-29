@@ -19,7 +19,9 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class RunWindows extends ReactNativeCommand {
 	codeName = "runWindows";
+
 	label = "Run Windows";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToRunOnWindows,
 	);
@@ -33,14 +35,19 @@ export class RunWindows extends ReactNativeCommand {
 				packager: this.project.getPackager(),
 			},
 		);
+
 		await platform.beforeStartPackager();
+
 		await platform.startPackager();
+
 		await platform.runApp(false);
 	}
 
 	async onBeforeExecute(): Promise<void> {
 		await super.onBeforeExecute();
+
 		assert(this.project);
+
 		void TipNotificationService.getInstance().setKnownDateForFeatureById(
 			"debuggingRNWAndMacOSApps",
 		);
@@ -48,6 +55,7 @@ export class RunWindows extends ReactNativeCommand {
 		const additionalPackagesToCheck: ParsedPackage[] = [
 			REACT_NATIVE_PACKAGES.REACT_NATIVE_WINDOWS,
 		];
+
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.Windows);
 
 		const versions =
@@ -55,6 +63,7 @@ export class RunWindows extends ReactNativeCommand {
 				this.project.getOrUpdateNodeModulesRoot(),
 				additionalPackagesToCheck,
 			);
+
 		this.project.setReactNativeVersions(versions);
 	}
 }

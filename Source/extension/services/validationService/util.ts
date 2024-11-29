@@ -29,6 +29,7 @@ export const basicCheck = async (arg: {
 	command: string;
 
 	getVersion?: () => Promise<string | null | undefined>;
+
 	versionRange?: semver.Range | string;
 }): Promise<IBasicCheckResult> => {
 	const result = {
@@ -73,6 +74,7 @@ export const parseVersion = async (
 	if (!data) {
 		return null;
 	}
+
 	const text = normizeStr(data[prop]);
 
 	return semver.coerce(reg ? reg.exec(text)?.[0] : text);

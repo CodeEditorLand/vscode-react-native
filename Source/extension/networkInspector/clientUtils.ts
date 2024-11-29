@@ -28,8 +28,11 @@ export enum ClientOS {
 export function buildClientId(
 	clientInfo: {
 		app: string;
+
 		os: ClientOS;
+
 		device: string;
+
 		device_id: string;
 	},
 	logger: OutputChannelLogger,
@@ -43,6 +46,7 @@ export function buildClientId(
 			);
 		}
 	}
+
 	const escapedName = escape(clientInfo.app);
 
 	return `${escapedName}#${clientInfo.os}#${clientInfo.device}#${clientInfo.device_id}`;
@@ -75,6 +79,7 @@ export function appNameWithUpdateHint(query: ClientQuery): string {
 	) {
 		return query.app + " (Outdated SDK)";
 	}
+
 	return query.app;
 }
 

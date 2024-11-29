@@ -12,7 +12,9 @@ import { ReactNativeCommand } from "./util/reactNativeCommand";
 
 export class PrebuildClean extends ReactNativeCommand {
 	codeName = "expoPrebuildClean";
+
 	label = "Expo Prebuild Clean";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToRunPrebuildClean,
 	);
@@ -35,7 +37,9 @@ export class PrebuildClean extends ReactNativeCommand {
 			projectRootPath,
 			logger,
 		);
+
 		logger.info("Running expo prebuild clean command...");
+
 		await commandExecutor.execute("npx expo prebuild --clean");
 	}
 }

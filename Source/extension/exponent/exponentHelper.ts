@@ -51,10 +51,15 @@ const NGROK_PACKAGE = "@expo/ngrok";
 
 export class ExponentHelper {
 	private workspaceRootPath: string;
+
 	private projectRootPath: string;
+
 	private fs: FileSystem;
+
 	private hasInitialized: boolean;
+
 	private nodeModulesGlobalPathAddedToEnv: boolean;
+
 	private logger: OutputChannelLogger = OutputChannelLogger.getMainChannel();
 
 	public constructor(
@@ -63,8 +68,11 @@ export class ExponentHelper {
 		fs: FileSystem = new FileSystem(),
 	) {
 		this.workspaceRootPath = workspaceRootPath;
+
 		this.projectRootPath = projectRootPath;
+
 		this.fs = fs;
+
 		this.hasInitialized = false;
 		// Constructor is slim by design. This is to add as less computation as possible
 		// to the initialization of the extension. If a public method is added, make sure
@@ -88,12 +96,14 @@ export class ExponentHelper {
 
 	public async configureExponentEnvironment(): Promise<void> {
 		await this.lazilyInitialize();
+
 		this.logger.logStream(
 			localize(
 				"CheckingIfThisIsExpoApp",
 				"Checking if this is an Expo app.",
 			),
 		);
+
 		this.logger.logStream("\n");
 
 		const packageJson = await this.getAppPackageInformation();
@@ -114,16 +124,20 @@ export class ExponentHelper {
 				// Expo requires expo package to be installed inside RN application in order to be able to run it
 				// https://github.com/expo/expo-cli/issues/255#issuecomment-453214632
 				this.logger.logStream("\n");
+
 				this.logger.logStream(
 					localize(
 						"ExpoPackageIsNotInstalled",
 						'[Warning] Please make sure that expo package is installed locally for your project, otherwise further errors may occur. Please, run "npm install expo --save-dev" inside your project to install it.',
 					),
 				);
+
 				this.logger.logStream("\n");
 			}
 		}
+
 		this.logger.logStream(".\n");
+
 		await this.patchAppJson(isExpo);
 	}
 
@@ -158,8 +172,10 @@ export class ExponentHelper {
 				localize("ExpoPassword", "Expo password"),
 				true,
 			);
+
 			user = await XDL.login(username, password);
 		}
+
 		return user;
 	}
 
@@ -197,6 +213,7 @@ export class ExponentHelper {
 
 			return true;
 		}
+
 		return false;
 	}
 
@@ -233,10 +250,12 @@ export class ExponentHelper {
 
 		try {
 			await this.addNodeModulesPathToEnvIfNotPresent();
+
 			ngrokInstalled = await XDL.isNgrokInstalled(this.projectRootPath);
 		} catch (e) {
 			ngrokInstalled = false;
 		}
+
 		if (!ngrokInstalled) {
 			const ngrokVersion =
 				SettingsHelper.getExpoDependencyVersion("@expo/ngrok");
@@ -273,6 +292,7 @@ export class ExponentHelper {
 					ngrokPackageConfig,
 					this.projectRootPath,
 				);
+
 				this.logger.info(
 					localize(
 						"NgrokInstalledGlobally",
@@ -292,6 +312,7 @@ export class ExponentHelper {
 	public removeNodeModulesPathFromEnvIfWasSet(): void {
 		if (this.nodeModulesGlobalPathAddedToEnv) {
 			delete process.env.NODE_MODULES;
+
 			this.nodeModulesGlobalPathAddedToEnv = false;
 		}
 	}
@@ -299,6 +320,7 @@ export class ExponentHelper {
 	public async addNodeModulesPathToEnvIfNotPresent(): Promise<void> {
 		if (!process.env.NODE_MODULES) {
 			process.env.NODE_MODULES = await getNodeModulesGlobalPath();
+
 			this.nodeModulesGlobalPathAddedToEnv = true;
 		}
 	}
@@ -309,6 +331,7 @@ export class ExponentHelper {
 		if (packageJson.dependencies && packageJson.dependencies.expokit) {
 			return false;
 		}
+
 		if (
 			packageJson.devDependencies &&
 			packageJson.devDependencies.expokit
@@ -324,6 +347,7 @@ export class ExponentHelper {
 		if (xcodeprojFiles.length) {
 			return true;
 		}
+
 		const gradleFiles = globSync("android/**/*.gradle", {
 			absolute: true,
 			cwd: this.projectRootPath,
@@ -353,6 +377,7 @@ export class ExponentHelper {
 		if (isAbsolute) {
 			paths = [this.workspaceRootPath].concat(...paths);
 		}
+
 		return path.join(...paths);
 	}
 
@@ -406,8 +431,10 @@ require('${entryPoint}');`;
 		} catch {
 			// If app.json doesn't exist, we will create it
 			logger.log("Cannot get existing app.json file. Create new one.");
+
 			appJson = <AppJson>{};
 		}
+
 		const packageName = await this.getPackageName();
 
 		const expoConfig = <ExpConfig>(appJson.expo || {});
@@ -417,7 +444,9 @@ require('${entryPoint}');`;
 				expoConfig.slug ||
 				appJson.name ||
 				packageName.replace(" ", "-");
+
 			expoConfig.name = expoConfig.name || appJson.name || packageName;
+
 			appJson.expo = expoConfig;
 		}
 
@@ -427,6 +456,7 @@ require('${entryPoint}');`;
 
 		if (!appJson.expo.sdkVersion) {
 			const sdkVersion = await this.exponentSdk(true);
+
 			appJson.expo.sdkVersion = sdkVersion;
 		}
 
@@ -459,6 +489,7 @@ require('${entryPoint}');`;
 		if (showProgress) {
 			this.logger.logStream(".");
 		}
+
 		const sdkVersion =
 			await this.mapFacebookReactNativeVersionToExpoVersion(
 				versions.reactNativeVersion,
@@ -473,6 +504,7 @@ require('${entryPoint}');`;
 				supportedVersions.join(", "),
 			);
 		}
+
 		return sdkVersion;
 	}
 
@@ -514,6 +546,7 @@ require('${entryPoint}');`;
 				currentSdkVersion = version;
 			}
 		}
+
 		return currentSdkVersion;
 	}
 
@@ -535,6 +568,7 @@ require('${entryPoint}');`;
 
 				return appJson.expo || {};
 			}
+
 			throw err;
 		}
 	}
@@ -558,6 +592,7 @@ require('${entryPoint}');`;
 
 	private async readAppJson(): Promise<AppJson> {
 		const appJsonPath = this.pathToFileInWorkspace(APP_JSON);
+
 		logger.log(`Getting app.json path: ${appJsonPath}`);
 
 		return this.fs.readFile(appJsonPath).then((content) => {
@@ -567,6 +602,7 @@ require('${entryPoint}');`;
 
 	private async writeAppJson(config: AppJson): Promise<AppJson> {
 		const appJsonPath = this.pathToFileInWorkspace(APP_JSON);
+
 		await this.fs.writeFile(appJsonPath, JSON.stringify(config, null, 2));
 
 		return config;
@@ -593,13 +629,17 @@ require('${entryPoint}');`;
 	private async lazilyInitialize(): Promise<void> {
 		if (!this.hasInitialized) {
 			this.hasInitialized = true;
+
 			await this.preloadExponentDependency();
+
 			void XDL.configReactNativeVersionWarnings();
+
 			void XDL.attachLoggerStream(this.projectRootPath, {
 				stream: {
 					write: (chunk: any) => {
 						if (chunk.level <= 30) {
 							this.logger.logStream(chunk.msg);
+
 							this.logger.logStream("\n");
 						} else if (chunk.level === 40) {
 							this.logger.warning(chunk.msg);

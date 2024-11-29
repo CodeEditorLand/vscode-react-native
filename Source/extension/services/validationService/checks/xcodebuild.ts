@@ -39,6 +39,7 @@ async function test(requiredVersion?: string): Promise<ValidationResultT> {
 			comment: createNotFoundMessage(label),
 		};
 	}
+
 	if (requiredVersion) {
 		if (result.versionCompare === -1) {
 			return {
@@ -48,6 +49,7 @@ async function test(requiredVersion?: string): Promise<ValidationResultT> {
 					"Please update Xcode in case of errors",
 			};
 		}
+
 		if (result.versionCompare === undefined) {
 			return {
 				status: "failure",
@@ -55,6 +57,7 @@ async function test(requiredVersion?: string): Promise<ValidationResultT> {
 			};
 		}
 	}
+
 	return { status: "success" };
 }
 

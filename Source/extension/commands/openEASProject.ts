@@ -21,8 +21,11 @@ const logger = OutputChannelLogger.getMainChannel();
 
 export class OpenEASProject extends ReactNativeCommand {
 	nodeModulesRoot: string;
+
 	codeName = "openEASProjectInWebPage";
+
 	label = "Open the eas project in a web page";
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.FailedToOpenProjectPage,
 	);
@@ -31,6 +34,7 @@ export class OpenEASProject extends ReactNativeCommand {
 		assert(this.project);
 
 		const expoHelper = this.project.getExponentHelper();
+
 		logger.info(
 			localize(
 				"CheckExpoEnvironment",
@@ -43,16 +47,19 @@ export class OpenEASProject extends ReactNativeCommand {
 		if (isExpo) {
 			try {
 				let id = null;
+
 				await expoHelper.getExpoEasProjectId().then((result) => {
 					id = result;
 				});
 
 				let owner = null;
+
 				await expoHelper.getExpoEasProjectOwner().then((result) => {
 					owner = result;
 				});
 
 				let name = null;
+
 				await expoHelper.getExpoEasProjectName().then((result) => {
 					name = result;
 				});
@@ -62,11 +69,14 @@ export class OpenEASProject extends ReactNativeCommand {
 						"ExpoProjectNotLinkToEAS",
 						"Your app not link to EAS project. Please run 'eas init' firstly to bind your app to EAS project.",
 					);
+
 					void vscode.window.showErrorMessage(error);
+
 					logger.error(error);
 				} else if (name != null) {
 					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 					const url = `https://expo.dev/accounts/${owner}/projects/${name}`;
+
 					await vscode.env.openExternal(vscode.Uri.parse(url));
 				}
 			} catch {

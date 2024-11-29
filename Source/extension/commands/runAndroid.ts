@@ -21,6 +21,7 @@ abstract class RunAndroid extends ReactNativeCommand {
 
 	async onBeforeExecute(): Promise<void> {
 		await super.onBeforeExecute();
+
 		assert(this.project);
 
 		const nodeModulesRoot = this.project.getOrUpdateNodeModulesRoot();
@@ -29,27 +30,33 @@ abstract class RunAndroid extends ReactNativeCommand {
 			await ProjectVersionHelper.getReactNativePackageVersionsFromNodeModules(
 				nodeModulesRoot,
 			);
+
 		this.project.setReactNativeVersions(versions);
+
 		TargetPlatformHelper.checkTargetPlatformSupport(PlatformType.Android);
 	}
 }
 
 export class RunAndroidDevice extends RunAndroid {
 	codeName = "runAndroidDevice";
+
 	label = "Run Android on Device";
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await runAndroid(TargetType.Device, this.project);
 	}
 }
 
 export class RunAndroidSimulator extends RunAndroid {
 	codeName = "runAndroidSimulator";
+
 	label = "Run Android on Emulator";
 
 	async baseFn(): Promise<void> {
 		assert(this.project);
+
 		await runAndroid(TargetType.Simulator, this.project);
 	}
 }
@@ -63,8 +70,12 @@ async function runAndroid(target: TargetType, project: AppLauncher) {
 	);
 
 	await platform.resolveMobileTarget(target);
+
 	await platform.beforeStartPackager();
+
 	await platform.startPackager();
+
 	await platform.runApp(true);
+
 	await platform.disableJSDebuggingMode();
 }

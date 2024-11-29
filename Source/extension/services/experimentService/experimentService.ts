@@ -17,18 +17,23 @@ export enum ExperimentStatuses {
 
 export interface ExperimentConfig extends IConfig {
 	experimentName: string;
+
 	popCoveragePercent: number;
+
 	enabled: boolean;
 }
 
 export interface ExperimentParameters extends ExperimentConfig {
 	[key: string]: any;
+
 	extensionId?: string;
 }
 
 export interface ExperimentResult {
 	resultStatus: ExperimentStatuses;
+
 	updatedExperimentParameters: ExperimentParameters;
+
 	error?: Error;
 }
 
@@ -36,9 +41,13 @@ export class ExperimentService implements vscode.Disposable {
 	private static instance: ExperimentService;
 
 	private readonly endpointURL: string;
+
 	private downloadedExperimentsConfig: Array<ExperimentConfig> | null;
+
 	private experimentsInstances: Map<string, IExperiment>;
+
 	private downloadConfigRequest: Promise<ExperimentConfig[]>;
+
 	private cancellationTokenSource: vscode.CancellationTokenSource;
 
 	public static create(): ExperimentService {
@@ -52,6 +61,7 @@ export class ExperimentService implements vscode.Disposable {
 	public async runExperiments(): Promise<void> {
 		if (!this.downloadedExperimentsConfig) {
 			this.downloadedExperimentsConfig = await this.downloadConfigRequest;
+
 			this.experimentsInstances =
 				await this.initializeExperimentsInstances();
 		}
@@ -67,13 +77,16 @@ export class ExperimentService implements vscode.Disposable {
 
 	public dispose(): void {
 		this.cancellationTokenSource.cancel();
+
 		this.cancellationTokenSource.dispose();
 	}
 
 	private constructor() {
 		this.endpointURL =
 			"https://microsoft.github.io/vscode-react-native/experiments/experimentsConfig.json";
+
 		this.cancellationTokenSource = new vscode.CancellationTokenSource();
+
 		this.downloadedExperimentsConfig = null;
 
 		this.downloadConfigRequest = retryDownloadConfig<ExperimentConfig[]>(
@@ -101,6 +114,7 @@ export class ExperimentService implements vscode.Disposable {
 					expConfig,
 					curExperimentParameters,
 				);
+
 				ExtensionConfigManager.config.set(
 					expConfig.experimentName,
 					expResult.updatedExperimentParameters,
@@ -133,6 +147,7 @@ export class ExperimentService implements vscode.Disposable {
 					const expClass = await import(
 						`./experiments/${expConfig.experimentName}`
 					);
+
 					expInstances.set(
 						expConfig.experimentName,
 						new expClass.default(),

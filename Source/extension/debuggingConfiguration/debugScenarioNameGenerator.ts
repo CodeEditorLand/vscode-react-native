@@ -6,9 +6,13 @@ import { DEBUG_TYPES, DebugScenarioType } from "./debugConfigTypesAndConstants";
 
 interface DebugScenarioName {
 	debugScenarioType: string;
+
 	prePlatformTypeDescription?: string;
+
 	platformType?: string;
+
 	postPlatformTypeDescription?: string;
+
 	experimentalDescription?: string;
 }
 
@@ -22,6 +26,7 @@ export class DebugScenarioNameGenerator {
 	): string {
 		const debugScenarioName: DebugScenarioName =
 			this.createScenarioAccordingToDebugScenarioType(debugScenarioType);
+
 		debugScenarioName.platformType = this.getPlatformTypeName(platformType);
 
 		if (debugType === DEBUG_TYPES.REACT_NATIVE) {
@@ -82,6 +87,7 @@ export class DebugScenarioNameGenerator {
 		if (debugScenarioType === DebugScenarioType.AttachApp) {
 			debugScenarioName.platformType = "packager";
 		}
+
 		if (platformType === PlatformType.Exponent) {
 			debugScenarioName.prePlatformTypeDescription = "in";
 		}
@@ -100,11 +106,13 @@ export class DebugScenarioNameGenerator {
 					? "Hermes application"
 					: "Hermes";
 		}
+
 		switch (platformType) {
 			case PlatformType.iOS:
 				if (!useHermesEngine) {
 					debugScenarioName.prePlatformTypeDescription = "Direct";
 				}
+
 				break;
 		}
 	}
@@ -144,12 +152,15 @@ export class DebugScenarioNameGenerator {
 		if (debugScenarioName.prePlatformTypeDescription) {
 			debugScenarioNameStr += ` ${debugScenarioName.prePlatformTypeDescription}`;
 		}
+
 		if (debugScenarioName.platformType) {
 			debugScenarioNameStr += ` ${debugScenarioName.platformType}`;
 		}
+
 		if (debugScenarioName.postPlatformTypeDescription) {
 			debugScenarioNameStr += ` ${debugScenarioName.postPlatformTypeDescription}`;
 		}
+
 		if (debugScenarioName.experimentalDescription) {
 			debugScenarioNameStr += ` ${debugScenarioName.experimentalDescription}`;
 		}

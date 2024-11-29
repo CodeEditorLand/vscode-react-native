@@ -8,6 +8,7 @@ import { ISpawnResult } from "./node/childProcess";
 
 export interface PatternToFailure {
 	pattern: string | RegExp;
+
 	errorCode: number;
 }
 
@@ -15,10 +16,13 @@ export interface PatternToFailure {
    are found on stdout, and none of the failure patterns were found on stderr */
 export class OutputVerifier {
 	private generatePatternsForSuccess: () => Promise<string[]>;
+
 	private generatePatternToFailure: () => Promise<PatternToFailure[]>;
+
 	private platformName: string;
 
 	private output = "";
+
 	private errors = "";
 
 	constructor(
@@ -27,7 +31,9 @@ export class OutputVerifier {
 		platformName: string,
 	) {
 		this.generatePatternsForSuccess = generatePatternsForSuccess;
+
 		this.generatePatternToFailure = generatePatternToFailure;
+
 		this.platformName = platformName;
 	}
 
@@ -38,6 +44,7 @@ export class OutputVerifier {
 
 			return this.output;
 		});
+
 		this.store(spawnResult.stderr, (newContent) => {
 			this.errors += newContent;
 
@@ -62,6 +69,7 @@ export class OutputVerifier {
 
 				throw processError;
 			}
+
 			throw patternsError;
 		} else if (processError) {
 			throw processError;
@@ -101,6 +109,7 @@ export class OutputVerifier {
 
 				return matches && matches.length;
 			}
+
 			return errorsAndOutput.includes(pattern.pattern as string);
 		});
 
@@ -117,8 +126,10 @@ export class OutputVerifier {
 					matches.join("\n"),
 				);
 			}
+
 			return ErrorHelper.getInternalError(errorCode);
 		}
+
 		return null;
 	}
 

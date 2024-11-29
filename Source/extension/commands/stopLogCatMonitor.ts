@@ -12,16 +12,20 @@ import { Command } from "./util/command";
 
 export class StopLogCatMonitor extends Command {
 	codeName = "stopLogCatMonitor";
+
 	label = "Stop React Native LogCat Monitor";
 
 	requiresTrust = false;
+
 	requiresProject = false;
+
 	error = ErrorHelper.getInternalError(
 		InternalErrorCode.AndroidCouldNotStopLogCatMonitor,
 	);
 
 	async baseFn(): Promise<void> {
 		const monitor = await selectLogCatMonitor();
+
 		LogCatMonitorManager.delMonitor(monitor.deviceId);
 	}
 }
@@ -47,6 +51,7 @@ function selectLogCatMonitor() {
 			}
 
 			assert(selected, "Selection canceled");
+
 			logger.debug(
 				`Command palette: selected LogCat monitor ${selected}`,
 			);

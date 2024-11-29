@@ -27,6 +27,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 			event = this.handleBreakpointSetting(event);
 		} else if (event.method === CDP_API_NAMES.RUNTIME_CALL_FUNCTION_ON) {
 			event = this.handleCallFunctionOnEvent(event);
+
 			sendBack = true;
 		}
 
@@ -76,6 +77,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 		if (Array.isArray(event.result.result)) {
 			const results: Cdp.Runtime.PropertyDescriptor[] =
 				event.result.result;
+
 			results.forEach((resultObj) => {
 				if (
 					resultObj.value &&
@@ -88,6 +90,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 
 			event.result.result = results;
 		}
+
 		return event;
 	}
 
@@ -100,6 +103,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 				callFrame.location.scriptId !==
 					this.HERMES_NATIVE_FUNCTION_SCRIPT_ID,
 		);
+
 		event.params.callFrames = callFrames;
 
 		return event;
@@ -109,6 +113,7 @@ export class HermesCDPMessageHandler extends BaseCDPMessageHandler {
 		if (event.params) {
 			delete event.params.location.columnNumber;
 		}
+
 		return event;
 	}
 }

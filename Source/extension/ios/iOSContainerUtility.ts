@@ -31,11 +31,17 @@ const idbLogLevel = "DEBUG";
 
 type IdbTarget = {
 	name: string;
+
 	udid: string;
+
 	state: string;
+
 	type: string;
+
 	target_type?: string;
+
 	os_version: string;
+
 	architecture: string;
 };
 
@@ -48,6 +54,7 @@ function isAvailable(): Promise<boolean> {
 	if (!idbPath) {
 		return Promise.resolve(false);
 	}
+
 	return fs.promises
 		.access(idbPath, fs.constants.X_OK)
 		.then(() => true)
@@ -130,6 +137,7 @@ async function targets(): Promise<Array<DeviceTarget>> {
 	if (process.platform !== "darwin") {
 		return [];
 	}
+
 	const isXcodeInstalled = await isXcodeDetected();
 
 	if (!isXcodeInstalled) {
@@ -167,7 +175,9 @@ async function targets(): Promise<Array<DeviceTarget>> {
 
 					for (
 						let i = firstDevicesIndex;
+
 						i <= lastDevicesIndex;
+
 						i++
 					) {
 						const line = lines[i];
@@ -193,6 +203,7 @@ async function targets(): Promise<Array<DeviceTarget>> {
 							});
 						}
 					}
+
 					return targets;
 				})
 				.catch((e) => {
@@ -212,6 +223,7 @@ async function push(
 	logger?: OutputChannelLogger,
 ): Promise<void> {
 	const cp = new ChildProcess();
+
 	await checkIdbIsInstalled();
 
 	return wrapWithErrorMessage(
@@ -235,6 +247,7 @@ async function pull(
 	logger?: OutputChannelLogger,
 ): Promise<void> {
 	const cp = new ChildProcess();
+
 	await checkIdbIsInstalled();
 
 	return wrapWithErrorMessage(
@@ -273,6 +286,7 @@ function handleMissingIdb(e: Error): void {
 			`idb doesn't appear to be installed. Run "${idbPath} list-targets" to fix this.`,
 		);
 	}
+
 	throw e;
 }
 
