@@ -30,7 +30,7 @@ After using one of the suggested methods of launching the application, wait for
 the application to launch.
 
 Once app is loaded and running,
-[`open the developer menu`](HTTPS://reactnative.dev/docs/debugging#accessing-the-in-app-developer-menu)
+[`open the developer menu`](https://reactnative.dev/docs/debugging#accessing-the-in-app-developer-menu)
 inside your application and enable remote debugging by clicking on
 `Debug JS Remotely` button. After that, please wait until the extension attaches
 to your application.
