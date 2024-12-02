@@ -1443,7 +1443,6 @@
 	"name": "vscode-react-native",
 	"scripts": {
 		"build": "gulp build",
-		"prepare": "husky install",
 		"prepare-smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install",
 		"quick-smoke-tests": "cd test/smoke/vscode/test/smoke && yarn mocha --skip-setup",
 		"smoke-tests": "cd test/smoke && gulp prepare-smoke-tests && yarn --cwd ./vscode install && yarn --cwd ./vscode/test/smoke mocha",
