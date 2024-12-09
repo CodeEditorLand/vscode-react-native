@@ -1,8 +1,8 @@
 {
-	"dependencies": {},
-	"devDependencies": {},
 	"name": "SampleApplication",
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start"
-	}
+	},
+	"dependencies": {},
+	"devDependencies": {}
 }
