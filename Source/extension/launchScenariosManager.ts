@@ -70,9 +70,7 @@ export class LaunchScenariosManager {
 		if (this.launchScenarios.configurations) {
 			for (
 				let i = 0;
-
 				i < this.launchScenarios.configurations.length;
-
 				i++
 			) {
 				const config = this.launchScenarios.configurations[i];

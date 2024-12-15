@@ -175,9 +175,7 @@ async function targets(): Promise<Array<DeviceTarget>> {
 
 					for (
 						let i = firstDevicesIndex;
-
 						i <= lastDevicesIndex;
-
 						i++
 					) {
 						const line = lines[i];
